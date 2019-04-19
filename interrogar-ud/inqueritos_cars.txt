@@ -1,0 +1,83 @@
+issue-259-xcomp_advcl.py
+misc
+obj -- obj MC
+det --> PRON
+querido - adj
+aposto MC
+como/tais como
+ficar ADJ-->xcomp
+advcl -->xcomp
+xcomp MC
+nem mesmo fixed CCONJ/cc
+nmod appos
+appos conj
+appos appos:parataxis
+nmod-appos 
+det appos
+em torno de mwe fixed  ADP/case
+correcoes variadas MC 2.4 VERB NOUN
+appos - parataxis
+nmod_obl
+de=novo fixed ADV/advmod
+por=fim fixed/ADV advmod
+obl_nmod
+nsubj obj
+MWE
+do_que
+ADJ com lema de verbo
+correções appos:parataxis
+Correção AUX-VERB Claudia
+issue-255-ADP_case.py
+issue-255-adp_mark.py
+uniformização dos verbos
+nmod filho de verbo
+correção de AUX uso restrito
+issue-254-passado.py
+correção de QUE PRON
+Variados resultado do validador UD
+Pontuacao
+Correção obl (derivada de matriz confusão)
+correção "bem como" (fixed - cc)
+correção "bem como" (fixed - adp)
+issue-251-obl-nmod.py
+Correção obl 
+eliminar-npmod.py
+Correção aleatória nmod:npmod ELVIS
+Correção aleatória nmod:npmod CLAUDIA
+issue-242-NUM-appos_parataxis.py
+issue-251-det.py
+eliminação de nmod_npmod
+issue-251-nmod_tmod-vira-nmod.py
+nmod_ntmod-vira-nmod
+"poder" em locução verbal é AUX
+eliminação de AUX_root
+nmod:n[pt]mod
+xcomp X ccomp:parataxis
+Correção oque ELVIS
+issue-250-ADP_aux.py
+ADP_aux
+VERB VERB ou AUX VERB
+Correção oque CLAUDIA
+Correção oque
+issue-249-nmod-flat.manual
+issue-249-nmod-flat.py
+Correção AUX-VERB
+obl-obj_iobj
+correção de noun_num e nummod
+correção de nmod_appos:parataxis
+correção da correção nmod_appos:parataxis
+N<PRED correções
+dep-ccomp
+#issue-242-APPOS-APPOS_PARATAXIS_CORREÇÃO
+N<PRED appos:parataxis
+ICL-<PRED.*dep
+revisões random aposto ICL-PRED>.*dep--> acl_ Elvis
+revisões random aposto ICL-PRED>.*dep--> acl
+revisões random aposto ICL-PRED>.*dep
+"o que" como appos/acl
+Correções de POS: Convergência
+Correções Convergências
+Elimina dep 1
+Correção de orações adverbiais; envolvem xpostag=@Aadp sem feature
+Correção de orações adverbiais; envolvem xpostag=@A<ARG
+adp sem feature

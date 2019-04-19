@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
+    <title>Arquivos UD: Interrogatório</title>
+    <link href="/interrogar-ud/style.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="header">
+      <h1>Arquivos UD</h1>
+      <h2><a href="/cgi-bin/interrogatorio.cgi">interrogações recentes</a> - <a href="/cgi-bin/interrogar.cgi">nova interrogação</a></h2>
+    </div>
+    <div class="content">
+      <form action="/cgi-bin/arquivo_ud.cgi" method="post" enctype="multipart/form-data"> <label for="arquivo">Novo arquivo UD:<br>
+          <input name="file" value="Escolher arquivo" required="required" type="file"> </label><input class="btn-gradient orange mini" value="Enviar" onclick="document.getElementById('submeter').value = 'Enviando...'" id=submeter type="submit"></form>
+      <br>
+      <br>
+      <!--SPLIT--> </div>
+      <script>
+      function apagar(conllu){
+      	if (confirm('Apagar arquivo "' + conllu + '"?')) {
+      		window.location = '/cgi-bin/apagar_ud.cgi?ud=' + conllu
+      	}
+      }
+      </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+!@#<h3>Critério 1: Regex</h3>
+Se a expressão regular for encontrada em alguma sentença, retorná-la.
+<br><br>Dica: Cada grupo da expressão regular será mostrado com uma cor diferente.
+<br>Dica 2: Em um arquivo <i>.conllu</i>, "\t" separa as colunas, e "\n", as palavras.
+<h4>Exemplos:</h4>
+1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".
+<ul><li>
+<a id="1" style="cursor:pointer" onclick="pesquisa('1')">1 (.*dizer.*)\n(.*PROPN)</a>
+</li></ul>
+2) Retornar sentenças com substantivos seguidos ou não de adjetivos, além de um nome próprio que seja aposto.
+<ul><li>
+<a id="2" style="cursor:pointer" onclick="pesquisa('2')">1 (.*NOUN.*)(\n.*ADJ.*)*\n(.*PROPN.*appos)</a>
+</li></ul>
+3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "NUMMOD".
+<ul><li>
+<a id="nummod" style="cursor:pointer" onclick="pesquisa('nummod')">1 .*\t.*\t.*\tNUM\t(?!.*nummod)</a>
+</li></ul>
+
+!@#<h3>Critério 2: Ausência de B apontando para A</h3>
+Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.
+<br><br>Parâmetros: A#X#B#Y
+<br><br>Dica: O parâmetro B aceita o operador lógico '|' (ou).
+<h4>Exemplos:</h4>
+1) Retornar sentenças em que o 'root' não tenha nenhum 'nsubj' ou 'csubj' apontando para ele.
+<ul><li>
+<a id="3" style="cursor:pointer" onclick="pesquisa('3')">2 root#8#nsubj|csubj#8</a>
+</li></ul>
+
+!@#<h3>Critério 3: Regex Independentes</h3>
+Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.
+<br><br>Parâmetros:<br>Regex 1 :: Regex 2 :: . . . :: Regex N
+<br><br>Dica: Utilize '!' para negar uma expressão regular.
+<h4>Exemplos:</h4>
+1) Procurar por sentenças em que o 'root' seja 'VERB', e que não tenham nenhum 'nsubj' nem 'csubj'.
+<ul><li>
+<a id="4" style="cursor:pointer" onclick="pesquisa('4')">3 VERB.*root::!nsubj::!csubj</a>
+</li></ul>
+
+!@#<h3>Critério 4: Pais e filhos</h3>
+Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
+<br><br>Parâmetros:<br>Regex 1 :: Regex 2
+<br><br>Dica: Utilize '!' para negar a presença de um filho ou de um pai.
+<h4>Exemplos:</h4>
+1) Procurar por sentenças em que uma palavra com classe "NOUN" que também é sujeito esteja apontando para um "ADV".
+<ul><li>
+<a id="5" style="cursor:pointer" onclick="pesquisa('5')">4 \tNOUN\t.*nsubj :: \tADV\t</a>
+</li></ul>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"
+      name="viewport">
+    <link href="/interrogar-ud/style_inquerito.css" rel="stylesheet"
+      type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <script src="/interrogar-ud/resultados.js"></script>
+    <button onclick="topFunction()" id="myBtn" title="Voltar ao topo">Voltar ao topo</button>
+    <title>Sistema de inquéritos</title>
+  </head>
+  <body>
+    <div class="header">
+      <!--form action="/cgi-bin/inquerito.py" method="POST">
+        <p> <label for="textheader"></label></p>
+        <div class="tooltip">Novo inquérito (?):<span class="tooltiptext">Insira o
+            "# sent_id" ou "# text" da sentença para a qual deseja abrir
+            inquérito, sem a identificação do metadado.</span></div>
+        <br>
+        <input name="textheader" id="textheader" type="text" required>
+        <p></p>
+        <p>
+          <select name="conllu">
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </p>
+        <p><input value="Abrir inquérito" class="btn-gradient blue" style="margin-left:0px"
+type="submit"> </p>
+      </form-->
+      <p><h1>Relatório de inquéritos</h1></p>
+    </div>
+    <div class="content">
+    <!--SPLIT-->
+    </div>
+  </body>
+<script>
+function confirmar(etiqueta) {
+	if (confirm('Apagar a etiqueta "' + etiqueta + '" e seus respectivos inquéritos?') == true) {
+		return true;
+	}
+}
+function enviar() {
+  var fields, i;
+  fields = document.getElementsByClassName("field");
+  for (i = 0; i < fields.length; i++) {
+    fields[i].value = document.getElementById(fields[i].name).innerHTML.replace('<br>', '').replace('</div>', '').replace('<div>', '');
+  }
+  document.getElementById('dados_inquerito').submit();
+}
+</script>
+</html>

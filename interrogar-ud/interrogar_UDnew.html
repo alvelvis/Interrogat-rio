@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
+    <title>Nova interrogação: Interrogatório</title>
+    <link href="/interrogar-ud/style.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="header">
+      <h1>Interrogatório</h1>
+      <h2><a href="/cgi-bin/interrogatorio.cgi">interrogações recentes</a> - nova interrogação</h2>
+    </div>
+    <div class="content">
+    <div style="display: flex">
+    <div style="width: 520px; margin: 0px 30px">
+      <form action="/cgi-bin/interrogar.cgi" method="post">
+        <p><div class="tooltip" style="display:inline">Pesquisa: (?)<span class="tooltiptext"><h3>Sintaxe da pesquisa:</h3>nº do critério + espaço + parâmetros<br><br>Consulte os critérios no quadro à direita.<br><br>Caso nenhum critério seja escolhido, valerá o critério 1: expressão regular.<h3>Colunas UD:</h3>1: ID | 2: WORD | 3: LEMMA | 4: UPOS | 5: XPOS | 6: FEATS | 7: DEPHEAD | 8: DEPREL | 9: DEPS | 10: MISC</span></div><br>
+          <input name="pesquisa" id="pesquisa" required="required" type="text" autofocus></p>
+          <p><select name="conllu">
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+        </p>
+        <p><input type=radio name=meth value="teste" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'none'" checked>Teste</input> <input type=radio name=meth value="salvar" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').value = document.getElementById('pesquisa').value; document.getElementById('nome').select();" >Salvar</input></p>
+      <p><div id="meth_salvar" style="display:none">Nome da pesquisa:<br>
+        <input id="nome" name="nome" type="text"></div></p>
+        <p><input name="enviar" id="enviar" value="Pesquisar" class="btn-gradient orange" style="margin:0px"
+type="submit" onclick="document.getElementById('enviar').value='Pesquisando...'"></p>
+        <br>
+      </form>
+      </div>
+      <div style="flex: flex-grow: 1; max-height: 500px; overflow: auto;">
+      <!--SPLIT-->
+      </div>
+      </div>
+      <br>
+      <h3>Links úteis:</h3>
+      <div class="container">
+        <p><a href="/cgi-bin/inquerito.py" target="_blank">Sistema de inquéritos</a></p>
+        <p><a href="/cgi-bin/arquivo_ud.cgi">Acessar repositório dos arquivos UD</a></p>
+        <p><a href="http://github.com/alvelvis/ACDC-UD" target="_blank">Acessar GitHub do projeto</a></p>
+      </div>
+    </div>
+    <body>
+    <script>
+        function pesquisa(numero) {
+            document.getElementById('pesquisa').value = document.getElementById(numero).innerHTML.replace(/&amp;/g, '&').replace(/&gt;/g, '>');
+        }
+    </script>
+  </body>
+</html>
