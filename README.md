@@ -10,12 +10,20 @@ You can find a demo of the website at [http://comcorhd.tronco.me/](http://comcor
 
 # How to install
 
-After downloading the repository and extracting it to a local folder, open a terminal inside it. In order to easen the process of installation, create links for two of the folders to your root folder:
+The recommended way to download the repository is by simply cloning it. In a terminal, execute:
 
-	# sudo ln -rs cgi-bin/ /; sudo ln -rs interrogar-ud/ /
+	$ git clone https://github.com/alvelvis/Interrogat-rio.git
+
+That way, whenever you want to update the repository, you can simply pull the updates inside the folder:
+
+	$ git pull
+
+After downloading the repository, open a terminal inside it. In order to easen the process of installation, create symbolic links for two of the folders to your root folder:
+
+	$ sudo ln -rs cgi-bin/ /; sudo ln -rs interrogar-ud/ /
 
 Then, if you don't have a server installed in your computer, you can simply initialize the machine by opening a terminal in the Interrogatório folder and executing the command:
 
 	$ python3 -m http.server --cgi
 
-and accessing the local site [http://localhost:8000/interrogar-ud/](http://localhost:8000/interrogar-ud/).
+All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/interrogar-ud/](http://localhost:8000/interrogar-ud/).
