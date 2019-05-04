@@ -21,19 +21,19 @@ import re
 
 def printar(coluna = '', valor = ''):
 	from estrutura_dados import slugify as slugify
-	html = open('/interrogar-ud/index1.html', 'r').read()
+	html = open('../interrogar-ud/index1.html', 'r').read()
 
-	if not os.path.isfile('/interrogar-ud/queries.txt'): open('/interrogar-ud/queries.txt', 'w').write('')
-	queries = open('/interrogar-ud/queries.txt', 'r').read().splitlines()
+	if not os.path.isfile('../interrogar-ud/queries.txt'): open('../interrogar-ud/queries.txt', 'w').write('')
+	queries = open('../interrogar-ud/queries.txt', 'r').read().splitlines()
 	queries = [x for x in queries if x.strip() != '']
 
 	novo_html = ''
 
-	criterios = open('/interrogar-ud/criterios.txt', 'r').read().split('!@#')
+	criterios = open('../interrogar-ud/criterios.txt', 'r').read().split('!@#')
 
-	novo_html += '<form id=pesquisa action="/cgi-bin/interrogatorio.cgi" method="POST"><table><tr><td style="padding-bottom:0px; margin-bottom:0px;">Filtrar pesquisas:</td></tr><tr><td style="padding-right:0px;"><select id=coluna name="coluna" required><option value=":">Tudo</option><option value="1">Nome</option><option value="3">Critério de busca</option><option value="4">Expressão de busca</option><option value="5">CoNLLU</option><option value="6">Data</option></select></td><td style="width:100%"><input type=text style="width:100%; max-width:100%;" id=valor name=valor value="' + valor + '" autofocus=true required></td><td style="padding-left:0px;"><input type=submit class="btn-gradient mini orange" value="Realizar filtro" style="display:inline-block">'
+	novo_html += '<form id=pesquisa action="../cgi-bin/interrogatorio.cgi" method="POST"><table><tr><td style="padding-bottom:0px; margin-bottom:0px;">Filtrar pesquisas:</td></tr><tr><td style="padding-right:0px;"><select id=coluna name="coluna" required><option value=":">Tudo</option><option value="1">Nome</option><option value="3">Critério de busca</option><option value="4">Expressão de busca</option><option value="5">CoNLLU</option><option value="6">Data</option></select></td><td style="width:100%"><input type=text style="width:100%; max-width:100%;" id=valor name=valor value="' + valor + '" autofocus=true required></td><td style="padding-left:0px;"><input type=submit class="btn-gradient mini orange" value="Realizar filtro" style="display:inline-block">'
 
-	if coluna: novo_html += ' <center><a style="display:inline-block" class="close-thik" href="/cgi-bin/interrogatorio.cgi">Cancelar </a></center>'
+	if coluna: novo_html += ' <center><a style="display:inline-block" class="close-thik" href="../cgi-bin/interrogatorio.cgi">Cancelar </a></center>'
 
 	novo_html += '</td></tr></table></form><br>'
 	html_query = ''

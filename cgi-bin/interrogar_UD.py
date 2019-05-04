@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import estrutura_dados
 import re
+import copy
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros):
@@ -200,6 +201,31 @@ def main(arquivoUD, criterio, parametros):
 				qualquercoisa[a][acheifilho[1]] = ('<b>@RED/' + '\t'.join(qualquercoisa[a][acheifilho[1]]) + '/FONT</b>').split('\t')
 				output.append(qualquercoisa[a])
 
+	#Python
+	if criterio == 5:
+		import estrutura_ud
+		with open(arquivoUD, "r") as f:
+			corpus = estrutura_ud.Corpus(recursivo=True)
+			corpus.build(f.read())
+
+		casos = 0
+		for sentid, sentence in corpus.sentences.items():
+			for t, token in enumerate(sentence.tokens):
+				executar = "if " + parametros.replace(" = ", " == ").strip() + ''' :
+					sentence2 = copy.copy(sentence)
+					sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+					sentence2.print = sentence2.tokens_to_str().replace(token.to_str(), "<b>@RED/" + token.to_str() + "/FONT</b>")'''
+				if "token.head_token" in parametros:
+					executar += '''
+					sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+					sentence2.print = sentence2.print.replace(token.head_token.to_str(), "<b>@BLUE/" + token.head_token.to_str() + "/FONT</b>")'''
+				exec(executar + '''
+					output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
+		
+		for a, sentence in enumerate(output):
+			output[a] = sentence.splitlines()
+			for b, linha in enumerate(output[a]):
+				output[a][b] = linha.split("\t")
 
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	for a, sentence in enumerate(output):
@@ -212,12 +238,16 @@ def main(arquivoUD, criterio, parametros):
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web
 if __name__ == '__main__':
-	arquivoUD= input('arraste arquivo:\n').replace("'","").replace('"','').strip()
+	import sys
+	if len(sys.argv) < 2:
+		arquivoUD= input('arraste arquivo:\n').replace("'","").replace('"','').strip()
+	else:
+		arquivoUD = sys.argv[1]
 	qualquercoisa = estrutura_dados.LerUD(arquivoUD)
-	criterio=int(input('qual criterio de procura?'))
-	while criterio > 3:
+	criterio=int(input('qual criterio de procura? '))
+	while criterio > 5:
 	    print('em desenvolvimento')
-	    criterio=int(input('qual criterio de procura?'))
+	    criterio=int(input('qual criterio de procura? '))
 
 	if criterio == 1 or criterio == 3:
 		parametros = input('Expressão regular:\n')
@@ -235,6 +265,9 @@ if __name__ == '__main__':
 		pai = input('Pai: ')
 		parametros = filho + ' :: ' + pai
 
+	if criterio == 5:
+		parametros = input("Expressão de busca:\n")
+
 	#Chama a função principal e printo o resultado, dando a ela os parâmetros dos inputs
 	printar = main(arquivoUD, criterio, parametros)['output']
 	
@@ -244,7 +277,7 @@ if __name__ == '__main__':
 			if isinstance(linha, list):
 				printar[a][i] = '\t'.join(printar[a][i])
 		printar[a] = '\n'.join(printar[a])
-	printar = '\n\n'.join(printar) 
+	printar = '\n\n'.join(printar)
 	
 	print(printar)
 

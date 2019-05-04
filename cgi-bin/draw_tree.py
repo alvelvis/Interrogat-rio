@@ -123,7 +123,7 @@ class Forest:
 if os.environ['REQUEST_METHOD'] == 'POST':
 	form = cgi.FieldStorage()
 
-	with open('/interrogar-ud/conllu/' + form['conllu'].value, 'r') as f:
+	with open('../interrogar-ud/conllu/' + form['conllu'].value, 'r') as f:
 		arquivo = f.read()
 
 	conllu = estrutura_ud.Corpus()

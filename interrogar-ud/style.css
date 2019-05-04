@@ -1,3 +1,15 @@
+#pesquisa_filtro {
+    width: 400px;
+}
+
+#nome_pesquisa {
+    width: 400px;
+}
+
+#nome_pesquisa_sel {
+    width: 400px;
+}
+
 #myBtn {
   display: none; /* Hidden by default */
   position: fixed; /* Fixed/sticky position */

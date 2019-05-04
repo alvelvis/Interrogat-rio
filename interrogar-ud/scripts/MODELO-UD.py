@@ -30,10 +30,10 @@ conllu = sys.argv[1]
 action = sys.argv[2]
 issue = sys.argv[3]
 
-headers = [x.lower() for x in open('/interrogar-ud/scripts/headers.txt', 'r').read().splitlines()]
+headers = [x.lower() for x in open('../interrogar-ud/scripts/headers.txt', 'r').read().splitlines()]
 
 arquivo_ud = estrutura_ud.Corpus(recursivo=True)
-with open('/interrogar-ud/conllu/' + conllu, 'r') as f:
+with open('../interrogar-ud/conllu/' + conllu, 'r') as f:
 	arquivo_ud.build(f.read())
 
 novo_inquerito = list()
@@ -51,7 +51,7 @@ for head in arquivo_ud.sentences:
 	if alterar:
 		for n, token in enumerate(tokens):
 
-			with open('/interrogar-ud/scripts/' + issue, 'r') as f:
+			with open('../interrogar-ud/scripts/' + issue, 'r') as f:
 				codigo = f.read().splitlines()
 
 			token_var = 'token'
@@ -67,8 +67,8 @@ for head in arquivo_ud.sentences:
 
 			exec("\n".join(codigo))
 										
-if action == 'sim': open('/interrogar-ud/scripts/sim.txt', 'w').write('\n\n'.join(sim))
-if action == 'exec': open('/interrogar-ud/scripts/novos_inqueritos.txt', 'w').write('\n'.join(novo_inquerito))
+if action == 'sim': open('../interrogar-ud/scripts/sim.txt', 'w').write('\n\n'.join(sim))
+if action == 'exec': open('../interrogar-ud/scripts/novos_inqueritos.txt', 'w').write('\n'.join(novo_inquerito))
 if action == 'exec':
-	with open('/interrogar-ud/conllu/' + conllu + '_script', 'w') as f:
+	with open('../interrogar-ud/conllu/' + conllu + '_script', 'w') as f:
 		f.write(arquivo_ud.to_str())

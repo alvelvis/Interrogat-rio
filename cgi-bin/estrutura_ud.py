@@ -13,6 +13,7 @@ class Token:
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
+		#self.head_token = ""
 
 	def build(self, txt):
 		coluna = txt.split(self.separator)
@@ -39,7 +40,7 @@ class Sentence:
 		self.sent_id = ""
 		self.source = ""
 		self.id = ""
-		self.metadados = []
+		self.metadados = {}
 		self.recursivo = recursivo
 
 		f = "_\t" * 10
@@ -55,47 +56,61 @@ class Sentence:
 			if tok.id == token.dephead:
 				token.head_token = tok
 				break
+			token.head_token = self.default_token
 
 		return token
 
 	def build(self, txt):
 		if '# text = ' in txt:
 			self.text = txt.split('# text = ')[1].split('\n')[0]
+			self.metadados['text'] = self.text
 		if '# sent_id = ' in txt:
 			self.sent_id = txt.split('# sent_id = ')[1].split('\n')[0]
+			self.metadados['sent_id'] = self.sent_id
 		if '# source = ' in txt:
 			self.source = txt.split('# source = ')[1].split('\n')[0]
+			self.metadados['source'] = self.source
 		if '# id = ' in txt:
 			self.id = txt.split('# id = ')[1].split('\n')[0]
+			self.metadados["id"] = self.id
 		
 		tokens_incompletos = list()
 		for linha in txt.split(self.separator):
-			if linha and "#" == linha[0]:
-				self.metadados.append(linha)
+			if linha and "#" == linha[0] and "=" in linha:
+				identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
+				if identificador not in ["text", "sent_id", "source", "id"]:
+					valor = linha.split('=', 1)[1].strip()
+					self.metadados[identificador] = valor
 			if "\t" in linha:
 				tok = Token()
 				tok.build(linha)
 				if not self.recursivo: self.tokens.append(tok)
 				if self.recursivo: self.tokens_incompletos.append(tok)
+
+		if not self.recursivo:
+			for token in self.tokens:
+				for _token in self.tokens:
+					if token.dephead == _token.id:
+						token.head_token = _token
+						break
+					token.head_token = self.default_token
 		
 		if self.recursivo:
 			for token in self.tokens_incompletos:
 				self.tokens.append(self.get_head(token))
 
-			for i in range(2):
+			for i in range(4):
 				for token in self.tokens:
 					token = self.get_head(token)
 
 	def tokens_to_str(self):
-		lista = list()
+		return "\n".join([tok.to_str() for tok in self.tokens])
 
-		for tok in self.tokens:
-			lista.append(tok.to_str())
-
-		return "\n".join(lista)
+	def metadados_to_str(self):
+		return "\n".join(["# " + x + " = " + self.metadados[x] for x in self.metadados])
 
 	def to_str(self):
-		return "\n".join(self.metadados) + "\n" + self.tokens_to_str()
+		return self.metadados_to_str() + "\n" + self.tokens_to_str()
 
 
 class Corpus:
@@ -128,4 +143,12 @@ class Corpus:
 		for sentence in self.sentences.values():
 			retorno.append(sentence.to_str())
 		
-		return "\n\n".join(retorno) + '\n'
+		return "\n\n".join(retorno) + '\n\n'
+
+	def load(self, path):
+		with open(path, "r") as f:
+			self.build(f.read())
+
+	def save(self, path):
+		with open(path, "w") as f:
+			f.write(self.to_str())

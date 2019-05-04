@@ -45,3 +45,14 @@ Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
 <ul><li>
 <a id="5" style="cursor:pointer" onclick="pesquisa('5')">4 \tNOUN\t.*nsubj :: \tADV\t</a>
 </li></ul>
+
+!@#<h3>Critério 5: Python</h3>
+Realiza uma condição seguindo a sintaxe em Python 3.
+<br><br>Parâmetros: uma condição em sintaxe Python 3.
+<br><br>Os objetos a serem pesquisados são do tipo "token", e os seus atributos são: id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token.
+<h4>Exemplos:</h4>
+1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB.
+<ul><li>
+<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word == "é" and token.upos == "AUX" and token.head_token.upos != "VERB"</a>
+</li></ul>
+

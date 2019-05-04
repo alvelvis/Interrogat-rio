@@ -21,10 +21,10 @@ import html as webpage
 	#json.dump(dict(os.environ), fp)
 
 arquivos = list()
-for i, arquivo in enumerate(os.listdir('/interrogar-ud/conllu')):
+for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
 	arquivos.append('<option value="'+arquivo+'">'+arquivo+'</option>')
 
-html = open('/interrogar-ud/inquerito.html', 'r').read()
+html = open('../interrogar-ud/inquerito.html', 'r').read()
 html = html.split('<select name="conllu">')[0] + '<select name="conllu">' + "\n".join(arquivos) + '</select>' + html.split('</select>')[1]
 
 html1 = html.split('<!--SPLIT-->')[0]
@@ -44,12 +44,12 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 
 	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Relatório de inquéritos: Interrogatório</title>')
 
-	html1 += '<form name="form_pesquisa" id="form_pesquisa" action="/cgi-bin/inquerito.py?action=filtrar" method="POST"><hr><div id="div_filtro">Filtrar relatório:<br><select name="coluna" id=coluna required><option value=":">Tudo</option><option value="6">Etiqueta</option><option value="0"># text</option><option value="7"># sent_id</option><option value="2">CoNLLU</option><option value="3">Data</option><option value="4">Página no Interrogatório</option></select> <input type=text autofocus="true" name=valor id=valor value="' + valor.replace('"', '&quot;') + '" required> <input name="submit_search" type=submit value="Realizar filtro" style="display:block-inline">'
-	if coluna: html1 += ' <a style="display:block-inline" class="close-thik" href="/cgi-bin/inquerito.py"></a>'
+	html1 += '<form name="form_pesquisa" id="form_pesquisa" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><hr><div id="div_filtro">Filtrar relatório:<br><select name="coluna" id=coluna required><option value=":">Tudo</option><option value="6">Etiqueta</option><option value="0"># text</option><option value="7"># sent_id</option><option value="2">CoNLLU</option><option value="3">Data</option><option value="4">Página no Interrogatório</option></select> <input type=text autofocus="true" name=valor id=valor value="' + valor.replace('"', '&quot;') + '" required> <input name="submit_search" type=submit value="Realizar filtro" style="display:block-inline">'
+	if coluna: html1 += ' <a style="display:block-inline" class="close-thik" href="../cgi-bin/inquerito.py"></a>'
 
 	html1 += '<br><br><input type=checkbox name=onlysent checked>Apenas sentenças</input>' if onlysent else '<br><br><input type=checkbox name=onlysent >Apenas sentenças</input>'
 
-	html1 += '''</form> - <a href="/interrogar-ud/relatorio.txt" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="/cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
+	html1 += '''</form> - <a href="../interrogar-ud/relatorio.txt" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="../cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
 	relatorio = str(datetime.now()).replace(' ', '_').split('.')[0] + '\nRelatório de Inquéritos - ' + os.environ['HTTP_HOST']
 	if coluna: relatorio += '\nFiltro: ' + valor
 	relatorio += '\nMostrando apenas as sentenças que foram alteradas' if onlysent else '\nMostrando todas as alterações em todas as sentenças'
@@ -59,19 +59,19 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 
 	html1 += '<br><br>'
 
-	if not os.path.isfile('/interrogar-ud/inqueritos.txt'):
-		open('/interrogar-ud/inqueritos.txt', 'w').write('')
+	if not os.path.isfile('../interrogar-ud/inqueritos.txt'):
+		open('../interrogar-ud/inqueritos.txt', 'w').write('')
 
 	html42 = ''
 	total = 0
 	javistos = list()
-	inqueritos = open('/interrogar-ud/inqueritos.txt', 'r').read()
+	inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read()
 	for a, linha in enumerate(inqueritos.splitlines()):
 		if linha.strip() != '':
 			if not managetags:
 				if (coluna != ':' and valor and len(linha.split('!@#')) > int(coluna) and (re.search(valor, linha.split('!@#')[int(coluna)], flags=re.I|re.M)) and linha.split('!@#')[int(coluna)] != 'NONE') or (not coluna) or (coluna == ':' and re.search(valor, linha, flags=re.I|re.M)):
 					if (not onlysent) or (onlysent and not linha.split('!@#')[0] in javistos):
-						html42 += '<div class="container"><form target="_blank" id="form_' + str(a) + '" action="/cgi-bin/inquerito.py" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
+						html42 += '<div class="container"><form target="_blank" id="form_' + str(a) + '" action="../cgi-bin/inquerito.py" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
 						relatorio42 += '\n\n-------------------------'
 						if len(linha.split('!@#')) >= 7 and linha.split('!@#')[6] != 'NONE':
 							html42 += '<p><small><a href="#" onclick="document.getElementById(\'coluna\').value=\'6\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[6].replace('"', '&quot;') + '\'; document.getElementById(\'form_pesquisa\').submit();">#' + linha.split('!@#')[6].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></small></p>'
@@ -96,25 +96,25 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 			
 			elif managetags:
 				if len(linha.split('!@#')) >= 7 and not linha.split('!@#')[6] in javistos and linha.split('!@#')[6] != 'NONE':
-					html42 += '''<div class=container><form method="POST" action="/cgi-bin/inquerito.py"><input name="delete_tag" type=hidden value="''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''"><a style="cursor:pointer" onclick="document.getElementsByName('coluna')[0].value = '6'; document.getElementsByName('valor')[0].value = \'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\'; document.getElementsByName('form_pesquisa')[0].submit();">#''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''</a> <a style="cursor:pointer" onclick="if (confirmar(\'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\') == true) { this.parentNode.submit(); return false; }" class="close-thik"></a></form></div>'''
+					html42 += '''<div class=container><form method="POST" action="../cgi-bin/inquerito.py"><input name="delete_tag" type=hidden value="''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''"><a style="cursor:pointer" onclick="document.getElementsByName('coluna')[0].value = '6'; document.getElementsByName('valor')[0].value = \'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\'; document.getElementsByName('form_pesquisa')[0].submit();">#''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''</a> <a style="cursor:pointer" onclick="if (confirmar(\'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\') == true) { this.parentNode.submit(); return false; }" class="close-thik"></a></form></div>'''
 					total += 1
 					javistos.append(linha.split('!@#')[6])
 
 
 	html = html1 + 'Inquéritos: ' + str(total) + '<br><br>' + html42 + html2
-	open('/interrogar-ud/relatorio.txt', 'w').write(relatorio + '\n\n' + 'Inquéritos: ' + str(total) + '\n\nResumo: ' + str(len(lista_sentences)) + ' sentenças alteradas\n' + '\n'.join(lista_sentences) + relatorio42)
+	open('../interrogar-ud/relatorio.txt', 'w').write(relatorio + '\n\n' + 'Inquéritos: ' + str(total) + '\n\nResumo: ' + str(len(lista_sentences)) + ' sentenças alteradas\n' + '\n'.join(lista_sentences) + relatorio42)
 
 
 if os.environ['REQUEST_METHOD'] == 'POST':
 	form = cgi.FieldStorage()
 	if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
-		html = '<script>window.location = "/interrogar-ud/autenticar.html"</script>'
+		html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'
 		print(html)
 		exit()
 
 if os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
-	inqueritos = open('/interrogar-ud/inqueritos.txt', 'r').read()
-	tags = open('/interrogar-ud/inqueritos_cars.txt', 'r').read()
+	inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read()
+	tags = open('../interrogar-ud/inqueritos_cars.txt', 'r').read()
 
 	novo_inqueritos = list()
 	for inquerito in inqueritos.splitlines():
@@ -130,17 +130,17 @@ if os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
 		else:
 			novo_tags.append(tag)
 
-	with open('/interrogar-ud/inqueritos.txt', 'w') as f:
+	with open('../interrogar-ud/inqueritos.txt', 'w') as f:
 		f.write('\n'.join(novo_inqueritos))
 
-	with open('/interrogar-ud/inqueritos_cars.txt', 'w') as f:
+	with open('../interrogar-ud/inqueritos_cars.txt', 'w') as f:
 		f.write('\n'.join(novo_tags))
 
-	html = '<script>window.location = "/cgi-bin/inquerito.py"</script>'
+	html = '<script>window.location = "../cgi-bin/inquerito.py"</script>'
 
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form['action'].value == 'script':
-	inqueritos = open('/interrogar-ud/inqueritos.txt').read().splitlines()
+	inqueritos = open('../interrogar-ud/inqueritos.txt').read().splitlines()
 
 	#pega os headers
 	headers = list()
@@ -148,49 +148,49 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		if '# text = ' in linha:
 			headers.append(re.sub(r'\<.*?\>', '', linha))
 
-	open('/interrogar-ud/scripts/headers.txt', 'w').write("\n".join(headers))
-	call('python3 "/interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + form['script'].value + '"', shell=True)
+	open('../interrogar-ud/scripts/headers.txt', 'w').write("\n".join(headers))
+	call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + form['script'].value + '"', shell=True)
 
 	if form['executar'].value == 'exec':
-		for linha in open('/interrogar-ud/scripts/novos_inqueritos.txt', 'r').read().splitlines():
+		for linha in open('../interrogar-ud/scripts/novos_inqueritos.txt', 'r').read().splitlines():
 			if form['nome_interrogatorio'].value != 'teste':
 				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')!@#' + form['link_interrogatorio'].value + '!@#' + form['script'].value + '!@#' + linha.rsplit('!@#', 1)[1])
 			else:
 				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#NONE!@#NONE!@#' + form['script'].value + '!@#' + linha.rsplit('!@#', 1)[1])
 
-		cars = open('/interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines()
+		cars = open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines()
 		if not form['script'].value in cars:
-			with open('/interrogar-ud/inqueritos_cars.txt', 'w') as f:
+			with open('../interrogar-ud/inqueritos_cars.txt', 'w') as f:
 				f.write(form['script'].value + '\n' + "\n".join(cars))
 
-		open('/interrogar-ud/inqueritos.txt', 'w').write('\n'.join(inqueritos))
-		html = '''<form id="submeter" action="/cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['script'].value + '"></form>'
+		open('../interrogar-ud/inqueritos.txt', 'w').write('\n'.join(inqueritos))
+		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['script'].value + '"></form>'
 		html += '<script>document.getElementById("submeter").submit();</script>'
 
-		os.remove('/interrogar-ud/conllu/' + form['conllu'].value)
-		os.rename('/interrogar-ud/conllu/' + form['conllu'].value + '_script', '/interrogar-ud/conllu/' + form['conllu'].value)
-		os.remove('/interrogar-ud/scripts/novos_inqueritos.txt')
+		os.remove('../interrogar-ud/conllu/' + form['conllu'].value)
+		os.rename('../interrogar-ud/conllu/' + form['conllu'].value + '_script', '../interrogar-ud/conllu/' + form['conllu'].value)
+		os.remove('../interrogar-ud/scripts/novos_inqueritos.txt')
 			
 	elif form['executar'].value == 'sim':
 		html = 'Simulação:'
-		html += '<pre>' + open('/interrogar-ud/scripts/sim.txt', 'r').read().replace('<', '&lt;').replace('>','&gt;')
+		html += '<pre>' + open('../interrogar-ud/scripts/sim.txt', 'r').read().replace('<', '&lt;').replace('>','&gt;')
 		html += '</pre>'
-		html += '<br><form action="/cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['script'].value + '''" name="script"><input type=submit value="Executar script"></form>'''
-		os.remove('/interrogar-ud/scripts/sim.txt')
+		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['script'].value + '''" name="script"><input type=submit value="Executar script"></form>'''
+		os.remove('../interrogar-ud/scripts/sim.txt')
 
-	os.remove('/interrogar-ud/scripts/headers.txt')
+	os.remove('../interrogar-ud/scripts/headers.txt')
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or (form['action'].value != 'alterar' and form['action'].value != 'filtrar' and form['action'].value != 'script' and form['action'].value != 'manage_tags')):
 	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>')
 	ud = form['conllu'].value
 	colored_ud = ud
-	if not os.path.isfile('/interrogar-ud/conllu/' + ud):
+	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
 		ud = 'bosque_UD_2.4.conllu'
-	conlluzao = estrutura_dados.LerUD('/interrogar-ud/conllu/' + ud)
+	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	if 'finalizado' in form: html1 += '<span style="background-color: cyan">Alteração realizada com sucesso!</span><br><br><br>'
 
-	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="/cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a href="javascript:window.close()">Encerrar inquérito</a></div>' + html1.split('</div>', 2)[2]
+	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a href="javascript:window.close()">Encerrar inquérito</a></div>' + html1.split('</div>', 2)[2]
 
 	achou = False
 	for i, sentence in enumerate(conlluzao):
@@ -212,8 +212,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			html1 += '''Tipo de inquérito:<br><br><input type="text" style="border-width: 0px; border-radius: 10px; text-align: center;" placeholder="Crie uma etiqueta para este tipo de inquérito" id=tag name="tag" list="cars" required>'''
 			html1 += '<script>var x = document.cookie.split("tag=")[1]; if (x && x != "NONE") { document.getElementById("tag").value = x }; </script>'
 			html1 += '''<datalist id="cars">'''
-			if not os.path.isfile('/interrogar-ud/inqueritos_cars.txt'): open('/interrogar-ud/inqueritos_cars.txt', 'w').write('')
-			for linha in open('/interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines():
+			if not os.path.isfile('../interrogar-ud/inqueritos_cars.txt'): open('../interrogar-ud/inqueritos_cars.txt', 'w').write('')
+			for linha in open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines():
 				if linha:
 					html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
 			html1 += '</datalist> <input style="display: inline-block;" type="button" onclick="enviar()" value="Realizar alteração"><!--br><br><br-->'
@@ -257,7 +257,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	text = form['textheader'].value
 	tag = form['tag'].value.replace('&lt;','<').replace('&gt;','>').replace(';', '_') if 'tag' in form else 'NONE'
 	if tag[0] == '#': tag = tag[1:]
-	conlluzao = estrutura_dados.LerUD('/interrogar-ud/conllu/' + ud)	
+	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	data = str(datetime.now()).replace(' ','_').split('.')[0]
 	inqueritos_concluidos = list()
 
@@ -289,15 +289,15 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				inquerito_concluido += '!@#' + form['sentid'].value if 'sentid' in form else '!@#NONE'
 				inqueritos_concluidos.append(inquerito_concluido)
 
-	if not os.path.isfile('/interrogar-ud/inqueritos.txt'):
-		open('/interrogar-ud/inqueritos.txt', 'w').write('')
+	if not os.path.isfile('../interrogar-ud/inqueritos.txt'):
+		open('../interrogar-ud/inqueritos.txt', 'w').write('')
 
-	inqueritos = open('/interrogar-ud/inqueritos.txt', 'r').read()
-	open('/interrogar-ud/inqueritos.txt', 'w').write("\n".join(inqueritos_concluidos) + '\n' + inqueritos)
-	inqueritos_cars = open('/interrogar-ud/inqueritos_cars.txt', 'r').read()
+	inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read()
+	open('../interrogar-ud/inqueritos.txt', 'w').write("\n".join(inqueritos_concluidos) + '\n' + inqueritos)
+	inqueritos_cars = open('../interrogar-ud/inqueritos_cars.txt', 'r').read()
 
-	if tag != 'NONE' and not tag in inqueritos_cars: open('/interrogar-ud/inqueritos_cars.txt', 'w').write(tag + '\n' + inqueritos_cars)
-	estrutura_dados.EscreverUD(conlluzao, '/interrogar-ud/conllu/' + ud)
+	if tag != 'NONE' and not tag in inqueritos_cars: open('../interrogar-ud/inqueritos_cars.txt', 'w').write(tag + '\n' + inqueritos_cars)
+	estrutura_dados.EscreverUD(conlluzao, '../interrogar-ud/conllu/' + ud)
 
 	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="/cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
 	if 'tag' in form: html += '<input type=hidden name=tag value="' + form['tag'].value + '">'
