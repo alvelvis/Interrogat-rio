@@ -80,7 +80,7 @@ else:
 	#Abre o arquivo LINK1 e dá replace no FILTRAR e CONLLU
 	html = open('../interrogar-ud/resultados/link1.html', 'r').read()
 	html = html.replace('../cgi-bin/filtrar.cgi', '../cgi-bin/filtrar.cgi?html=' + slugify(nome) + '_' + data + '&udoriginal=' + ud)
-	html = html.replace('../cgi-bin/conllu.cgi', '../cgi-bin/conllu.cgi?html=/interrogar-ud/resultados/' + slugify(nome) + '_' + data + '.html')
+	html = html.replace('../cgi-bin/conllu.cgi', '../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(nome) + '_' + data + '.html')
 
 	#código em si
 	html1 = html.split('<!--SPLIT-->')[0]
@@ -194,7 +194,7 @@ else:
 	if not os.path.isdir('../interrogar-ud/scripts/'):
 		os.mkdir('../interrogar-ud/scripts')
 	for item in os.listdir('../interrogar-ud/scripts/'):
-		if '.py' in item and not 'estrutura_dados' in item:
+		if '.py' in item and not item in ["estrutura_dados.py", "estrutura_ud.py", "MODELO-UD.py"]:
 			html1 += '<option value="' + item + '">' + item + '</option>'
 	html1 += '</datalist> <input type="submit" value="Executar"></form>'
 	html = html1 + html2
