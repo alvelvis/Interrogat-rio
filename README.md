@@ -22,11 +22,11 @@ That way, whenever you want to update the repository, you can simply pull the up
 
 	$ git pull
 
-3) After downloading the repository, open a terminal inside it. Make two links before you can start the server and give them reading and writing permission:
+After downloading the repository, 3) open a terminal inside it. Make two links before you can start the server and give them reading and writing permission:
 
 	$ sudo ln -rs www/interrogar-ud/ .; sudo ln -rs www/cgi-bin/ .; sudo chmod -R a+rwx *
 
-4) Then, if you don't intend to publish the platform in a remote server, you can simply initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
+Then, if you don't intend to publish the platform in a remote server, 4) you can simply initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
 
 	$ python3 -m http.server --cgi
 
