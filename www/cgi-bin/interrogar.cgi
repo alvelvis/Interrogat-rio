@@ -15,6 +15,9 @@ from datetime import datetime
 import functions
 from functions import tabela
 
+if not os.path.isdir("../interrogar-ud/conllu"):
+	os.mkdir("../interrogar-ud/conllu")
+
 #if not 'REQUEST_METHOD' in os.environ:
 #	os.environ['REQUEST_METHOD'] = 'POST'
 

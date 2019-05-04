@@ -28,6 +28,6 @@ After downloading the repository, 3) open a terminal inside it. Make two links b
 
 Then, if you don't intend to publish the platform in a remote server, 4) you can simply initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
 
-	$ python3 -m http.server --cgi
+	$ cd www; python3 -m http.server --cgi; cd ..
 
-All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/interrogar-ud/](http://localhost:8000/interrogar-ud/).
+All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/interrogar-ud/](http://localhost:8000/interrogar-ud/). End the server by pressing "Ctrl+C" in the terminal window.

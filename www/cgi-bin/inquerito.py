@@ -49,6 +49,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 
 	html1 += '<br><br><input type=checkbox name=onlysent checked>Apenas sentenças</input>' if onlysent else '<br><br><input type=checkbox name=onlysent >Apenas sentenças</input>'
 
+	if not "HTTP_HOST" in os.environ: os.environ["HTTP_HOST"] = "localhost:8000"
 	html1 += '''</form> - <a href="../interrogar-ud/relatorio.txt" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="../cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
 	relatorio = str(datetime.now()).replace(' ', '_').split('.')[0] + '\nRelatório de Inquéritos - ' + os.environ['HTTP_HOST']
 	if coluna: relatorio += '\nFiltro: ' + valor
