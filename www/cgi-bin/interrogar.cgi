@@ -79,8 +79,8 @@ else:
 
 	#Abre o arquivo LINK1 e dá replace no FILTRAR e CONLLU
 	html = open('../interrogar-ud/resultados/link1.html', 'r').read()
-	html = html.replace('../cgi-bin/filtrar.cgi', '../cgi-bin/filtrar.cgi?html=' + slugify(nome) + '_' + data + '&udoriginal=' + ud)
-	html = html.replace('../cgi-bin/conllu.cgi', '../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(nome) + '_' + data + '.html')
+	html = html.replace('../../cgi-bin/filtrar.cgi', '../../cgi-bin/filtrar.cgi?html=' + slugify(nome) + '_' + data + '&udoriginal=' + ud)
+	html = html.replace('../../cgi-bin/conllu.cgi', '../../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(nome) + '_' + data + '.html')
 
 	#código em si
 	html1 = html.split('<!--SPLIT-->')[0]
@@ -106,9 +106,9 @@ else:
 		#SENTID
 		if sentid != '': html1 += '''<p><input class="cb" id="checkbox_'''+str(i+1)+'''" style="margin-left:0px;" title="Selecionar sentença para filtragem" type="checkbox"> '''+sentid.replace('/BOLD','</b>').replace('@BOLD','<b>')+'''</p>'''
 		#OPÇÕES
-		html1 += '''<form action="../cgi-bin/inquerito.py?conllu=''' + ud + '''" target="_blank" method="POST" id="form_'''+str(i+1)+'''"><input type=hidden name=sentid value="''' + sentid.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome.replace('"', '&quot;') + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"></form>'''
-		html1 += '''<form action="../cgi-bin/udpipe.py?conllu=''' + ud + '''" target="_blank" method="POST" id="udpipe_'''+str(i+1)+'''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"></form>'''
-		html1 += '<form action="../cgi-bin/draw_tree.py?conllu=' + ud + '" target="_blank" method="POST" id="tree_' + str(i+1) + '"><input type=hidden name=sent_id value="' + sentid.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"><input type=hidden name=text value="' + text.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"></form>'
+		html1 += '''<form action="../../cgi-bin/inquerito.py?conllu=''' + ud + '''" target="_blank" method="POST" id="form_'''+str(i+1)+'''"><input type=hidden name=sentid value="''' + sentid.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome.replace('"', '&quot;') + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"></form>'''
+		html1 += '''<form action="../../cgi-bin/udpipe.py?conllu=''' + ud + '''" target="_blank" method="POST" id="udpipe_'''+str(i+1)+'''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"></form>'''
+		html1 += '<form action="../../cgi-bin/draw_tree.py?conllu=' + ud + '" target="_blank" method="POST" id="tree_' + str(i+1) + '"><input type=hidden name=sent_id value="' + sentid.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"><input type=hidden name=text value="' + text.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"></form>'
 		#TEXT
 		html1 += '''<p><span id="text_'''+str(i+1)+'''">'''+ text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color="' + tabela['yellow'] + '">').replace('@PURPLE/', '<font color="' + tabela['purple'] + '">').replace('@BLUE/', '<font color="' + tabela['blue'] + '">').replace('@RED/', '<font color="' + tabela['red'] + '">').replace('@CYAN/', '<font color="' + tabela['cyan'] + '">').replace('/FONT', '</font>')+ '''</span></p>
 <p>'''
@@ -188,13 +188,13 @@ else:
 	#<!--script-->
 	html1 = html.split('<!--script-->')[0]
 	html2 = html.split('<!--script-->')[1]
-	html1 += '<form method="POST" action="../cgi-bin/inquerito.py?action=script&executar=sim" target="_blank">'
+	html1 += '<form method="POST" action="../../cgi-bin/inquerito.py?action=script&executar=sim" target="_blank">'
 	html1 += '''<input type=hidden name="nome_interrogatorio" value="''' + nome.replace('"', '&quot;') + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name="conllu" value="''' + ud + '''">'''
 	html1 += '<input type=text name="script" list="lista" required><datalist id="lista">'
 	if not os.path.isdir('../interrogar-ud/scripts/'):
 		os.mkdir('../interrogar-ud/scripts')
 	for item in os.listdir('../interrogar-ud/scripts/'):
-		if '.py' in item and not item in ["estrutura_dados.py", "estrutura_ud.py", "MODELO-UD.py"]:
+		if '.py' in item and not item in ["estrutura_dados.py", "estrutura_ud.py", "MODELO-UD.py", "MODELO.py"]:
 			html1 += '<option value="' + item + '">' + item + '</option>'
 	html1 += '</datalist> <input type="submit" value="Executar"></form>'
 	html = html1 + html2

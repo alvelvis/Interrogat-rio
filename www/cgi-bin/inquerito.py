@@ -186,7 +186,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
-		ud = 'bosque_UD_2.4.conllu'
+		ud = 'bosque_generico.conllu'
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	if 'finalizado' in form: html1 += '<span style="background-color: cyan">Alteração realizada com sucesso!</span><br><br><br>'
 

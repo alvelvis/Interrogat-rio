@@ -23,13 +23,13 @@ function topFunction() {
 }
 
 function excluir_selection() {
-    document.getElementById("pesquisa").value = "";
+    document.getElementById("pesquisa_filtro").value = "";
 
     var checkboxes, i;
     checkboxes = document.getElementsByClassName("cb");
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
-            document.getElementById("pesquisa").value = document.getElementById("pesquisa").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML) + "$|";
+            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML) + "$|";
         }
     }
 
@@ -40,7 +40,7 @@ function excluir_selection() {
 
     document.getElementById("nome_pesquisa").value = document.getElementById("nome_pesquisa_sel").value;
 
-    document.getElementById("pesquisa").value = document.getElementById("pesquisa").value.rsplit('|',1)[0];
+    document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value.rsplit('|',1)[0];
     document.getElementById("filtrar").click();
 }
 
@@ -132,7 +132,7 @@ function contexto(nome, botao) {
 
 function apagar() {
     if (confirm('Apagar interrogação "' + document.getElementById("combination").innerHTML.replace('&lt;', '<').replace('&gt;', '>') + '"?')) {
-        window.location = "/cgi-bin/apagar.cgi?query=" + document.getElementById("apagar_link").value;
+        window.location = "../cgi-bin/apagar.cgi?query=" + document.getElementById("apagar_link").value;
     }
 }
 
