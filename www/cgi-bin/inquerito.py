@@ -203,7 +203,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 		if '# text = ' in form['textheader'].value or '# sent_id = ' in form['textheader'].value:
 			form['textheader'].value = form['textheader'].value.split(' = ', 1)[1]
 		if ('# text = ' + form['textheader'].value + '\n' in sentence2) or ('# sent_id = ' + form['textheader'].value + '\n' in sentence2) or ('sentid' in form and '# sent_id = ' + form['sentid'].value + '\n' in sentence2):
-			html1 += '<form action="/cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
+			html1 += '<form action="../cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
 			if 'sentid' in form: html1 = html1 + '<input type=hidden name=sentid value="' + form['sentid'].value.replace('"', '\"') + '">'
 			if 'link_interrogatorio' in form and 'teste' != form['link_interrogatorio'].value:
 				html1 = html1 + '<input type=hidden name=link_interrogatorio value="' + form['link_interrogatorio'].value + '">'
@@ -300,7 +300,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	if tag != 'NONE' and not tag in inqueritos_cars: open('../interrogar-ud/inqueritos_cars.txt', 'w').write(tag + '\n' + inqueritos_cars)
 	estrutura_dados.EscreverUD(conlluzao, '../interrogar-ud/conllu/' + ud)
 
-	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="/cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
+	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="../cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
 	if 'tag' in form: html += '<input type=hidden name=tag value="' + form['tag'].value + '">'
 	html += '''</form><script>document.cookie = "tag=''' + tag.replace('"', '\\"').replace(";", "_") + '''"; document.getElementById('reenviar').submit();</script></body></html>'''
 
