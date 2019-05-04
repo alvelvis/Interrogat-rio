@@ -14,7 +14,7 @@ The recommended way to download the repository is by simply cloning it. In a ter
 
 	$ git clone https://github.com/alvelvis/Interrogat-rio.git
 
-2) and change to the newly created directory:
+and 2) change to the newly created directory:
 
 	$ cd Interrogat-rio
 
