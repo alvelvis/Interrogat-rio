@@ -1,6 +1,6 @@
 # Interrogatório
 
-Interrogatório (Interrogatory) is an enviroment developed and used by the research group ComCorHd (Computational Linguistics, Corpus and Digital Humanities), from the Linguistics Department of PUC-Rio (Brazil) in the scope of the project Linguistic resources for Portuguese Natural Language Processing (loose translation).
+Interrogatório (Interrogatory) is an enviroment developed and used by the research group ComCorHd (Computational Linguistics, Corpus and Digital Humanities), from the Linguistics Department of PUC-Rio, in Brazil, in the scope of the project Linguistic resources for Portuguese Natural Language Processing (loose translation).
 
 Interrogatório is meant to be used for making refined queries and revising annotated corpora in the [Universal Dependencies](http://universaldependencies.org) format, and it requires a computer running Linux and Python 3 at least.
 
