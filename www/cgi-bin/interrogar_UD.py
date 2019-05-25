@@ -62,6 +62,7 @@ def main(arquivoUD, criterio, parametros):
 			descarta = False
 			for i, linha in enumerate(sentence):
 				if isinstance(linha, list):
+					#print(linha)
 					if y == linha[z-1]:
 						achei = linha[0]
 						token = linha[1]
@@ -208,19 +209,27 @@ def main(arquivoUD, criterio, parametros):
 			corpus = estrutura_ud.Corpus(recursivo=True)
 			corpus.build(f.read())
 
+		parametros = parametros.split(";")
 		casos = 0
 		for sentid, sentence in corpus.sentences.items():
-			for t, token in enumerate(sentence.tokens):
-				executar = "if " + parametros.replace(" = ", " == ").strip() + ''' :
-					sentence2 = copy.copy(sentence)
-					sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-					sentence2.print = sentence2.tokens_to_str().replace(token.to_str(), "<b>@RED/" + token.to_str() + "/FONT</b>")'''
-				if "token.head_token" in parametros:
-					executar += '''
-					sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-					sentence2.print = sentence2.print.replace(token.head_token.to_str(), "<b>@BLUE/" + token.head_token.to_str() + "/FONT</b>")'''
-				exec(executar + '''
-					output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
+			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
+			for k, pesquisa in enumerate(parametros):
+				condition += '''
+'''+("\t"*(k+k))+'''for ''' + pesquisa.split(".")[0].strip() + ''' in sentence.tokens:
+	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
+				condition += '''
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+pesquisa.split(".")[0].strip()+'''.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+pesquisa.split(".")[0].strip()+'''.to_str(), "<b>@RED/" + '''+pesquisa.split(".")[0].strip()+'''.to_str() + "/FONT</b>")
+		'''+("\t"*(k+k))+'''sim += 1'''
+				if pesquisa.split(".")[0].strip() + ".head_token" in parametros:
+					condition += '''
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+pesquisa.split(".")[0].strip()+'''.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+pesquisa.split(".")[0].strip()+'''.head_token.to_str(), "<b>@BLUE/" + '''+pesquisa.split(".")[0].strip()+'''.head_token.to_str() + "/FONT</b>")'''
+			#print(condition + '''
+		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
+			#exit()
+			exec(condition + '''
+		'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
 		
 		for a, sentence in enumerate(output):
 			output[a] = sentence.splitlines()
