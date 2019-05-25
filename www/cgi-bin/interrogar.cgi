@@ -26,7 +26,8 @@ if os.environ['REQUEST_METHOD'] != "POST":
 
 	arquivos = list()
 	for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
-		arquivos.append('<option value ="'+arquivo+'">'+arquivo+'</option>')
+		if ".conllu" in arquivo:
+			arquivos.append('<option value ="'+arquivo+'">'+arquivo+'</option>')
 	html = open('../interrogar-ud/interrogar_UDnew.html', 'r').read()
 	html1 = html.split('<!--SPLIT-->')[0]
 	html2 = html.split('<!--SPLIT-->')[1]
