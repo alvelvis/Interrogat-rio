@@ -13,6 +13,7 @@ class Token:
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
+		self.col = dict()
 		#self.head_token = ""
 
 	def build(self, txt):
@@ -28,6 +29,17 @@ class Token:
 		self.deprel = coluna[7]
 		self.deps = coluna[8]
 		self.misc = coluna[9]
+		self.col["id"] = self.id
+		self.col["word"] = self.word
+		self.col["lemma"] = self.lemma
+		self.col["upos"] = self.upos
+		self.col["xpos"] = self.xpos
+		self.col["feats"] = self.feats
+		self.col["dephead"] = self.dephead
+		self.col["deprel"] = self.deprel
+		self.col["deps"] = self.deps
+		self.col["misc"] = self.misc
+
 
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
