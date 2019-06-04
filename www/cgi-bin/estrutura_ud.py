@@ -1,6 +1,6 @@
 class Token:
 	
-	def __init__(self, separator='\t'):
+	def __init__(self, separator='\t', sent_id="NONE", text="NONE"):
 		self.id = "0"
 		self.word = "_"
 		self.lemma = "_"
@@ -14,6 +14,9 @@ class Token:
 		self.children = []
 		self.separator = separator
 		self.col = dict()
+		self.sent_id = sent_id
+		self.text = text
+		self.color = ""
 		#self.head_token = ""
 
 	def build(self, txt):
@@ -94,7 +97,7 @@ class Sentence:
 					valor = linha.split('=', 1)[1].strip()
 					self.metadados[identificador] = valor
 			if "\t" in linha:
-				tok = Token()
+				tok = Token(sent_id = self.sent_id, text = self.text)
 				tok.build(linha)
 				if not self.recursivo: self.tokens.append(tok)
 				if self.recursivo: self.tokens_incompletos.append(tok)
