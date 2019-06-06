@@ -74,7 +74,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	conllu_completo = open('../interrogar-ud/conllu/' + udoriginal, 'r').read().split('\n\n')
 
 	ocorrencias = str(len(lista_ocorrencias))
-	html = open('../interrogar-ud/resultados/link1.html', 'r').read().replace('../','../../')
+	html = open('../interrogar-ud/resultados/link1.html', 'r').read().replace('../../','../../../')
 
 	#alterações
 	html1 = html.split('<!--SPLIT-->')[0]
@@ -227,7 +227,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	open(link + '_anterior', 'w').write(open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'r').read())
 	open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'w').write(html_original)
 
-	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../../../interrogar-ud/resultados/' + form['html'].value + '.html" }</script></body>')
+	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../interrogar-ud/resultados/' + form['html'].value + '.html" }</script></body>')
 
 elif form['action'].value == 'desfazer':
 	html = form['html'].value
@@ -239,4 +239,4 @@ elif form['action'].value == 'desfazer':
 	os.remove(html.rsplit('_anterior', 1)[0])
 	os.remove(html)
 
-	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../../../interrogar-ud/resultados/' + original + '.html" }</script></body>')
+	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../interrogar-ud/resultados/' + original + '.html" }</script></body>')
