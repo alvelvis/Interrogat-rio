@@ -45,16 +45,17 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     uds = [x for x in os.listdir('../interrogar-ud/conllu') if os.path.isfile('../interrogar-ud/conllu/' + x)]
 
     for ud in uds:
-        try:
-            leitura = open('../interrogar-ud/conllu/' + ud, 'r').read()
-            n_sent = str(len(leitura.split('\n\n')))
-            n_tokens = 0
-            for linha in leitura.splitlines():
-            	if len(linha.split('\t')) > 2:
-            		n_tokens += 1
-            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; ' + n_sent + ' sentenças &nbsp;&nbsp; ' + str(n_tokens) + ' tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud))).split('.')[0] + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a target="_blank" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
-        except:
-            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; MemoryError &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud))).split('.')[0] + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''" target="_blank">validar</a></div>\n'''
+    	if ud != 'README':
+	        try:
+	            leitura = open('../interrogar-ud/conllu/' + ud, 'r').read()
+	            n_sent = str(len(leitura.split('\n\n')))
+	            n_tokens = 0
+	            for linha in leitura.splitlines():
+	            	if len(linha.split('\t')) > 2:
+	            		n_tokens += 1
+	            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; ' + n_sent + ' sentenças &nbsp;&nbsp; ' + str(n_tokens) + ' tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud))).split('.')[0] + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a target="_blank" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
+	        except:
+	            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; MemoryError &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud))).split('.')[0] + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''" target="_blank">validar</a></div>\n'''
 
     novo_html = html1 + html2
 
