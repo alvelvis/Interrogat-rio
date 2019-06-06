@@ -8,7 +8,7 @@ To understand better how to use the tools, check our Wiki in the tab above.
 
 You can find a demo of the website at [http://comcorhd.tronco.me/](http://comcorhd.tronco.me/UD_Portuguese-Bosque).
 
-# How to install
+# 4-steps Tutorial
 
 The recommended way to download the repository is by simply cloning it. In a terminal, 1) execute the following command:
 
