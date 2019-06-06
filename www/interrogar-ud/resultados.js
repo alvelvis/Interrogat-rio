@@ -25,11 +25,12 @@ function topFunction() {
 function excluir_selection() {
     document.getElementById("pesquisa_filtro").value = "";
 
-    var checkboxes, i;
+    var checkboxes, i, negrito;
     checkboxes = document.getElementsByClassName("cb");
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
-            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML) + "$|";
+            negrito = document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.split("<b>")[1].split("</b>")[0].replace("<b>", "").replace("</b>", "");
+            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML) + "$" + "(.*\\n)*.*" + negrito + "|";
         }
     }
 
