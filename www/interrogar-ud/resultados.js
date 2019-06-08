@@ -1,6 +1,6 @@
 function abrir_script() {
     if (document.getElementById("script").style.display == "none") {
-        document.getElementById("script").style.display = "block" }
+        document.getElementById("script").style.display = "inline" }
     else {
         document.getElementById("script").style.display = "none" }
 }

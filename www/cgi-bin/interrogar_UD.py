@@ -214,17 +214,20 @@ def main(arquivoUD, criterio, parametros):
 		for sentid, sentence in corpus.sentences.items():
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
 			for k, pesquisa in enumerate(parametros):
+				if (".id" in pesquisa or ".dephead" in pesquisa):
+					pesquisa = re.sub(r"((\s|^).+\.(id|dephead)\b)", r"int(\1)", pesquisa)
+				identificador = pesquisa.split(".")[0].strip().replace("int(", "")
 				condition += '''
-'''+("\t"*(k+k))+'''for ''' + pesquisa.split(".")[0].strip() + ''' in sentence.tokens:
+'''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
 	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
 				condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+pesquisa.split(".")[0].strip()+'''.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+pesquisa.split(".")[0].strip()+'''.to_str(), "<b>@RED/" + '''+pesquisa.split(".")[0].strip()+'''.to_str() + "/FONT</b>")
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "<b>@RED/" + '''+ identificador +'''.to_str() + "/FONT</b>")
 		'''+("\t"*(k+k))+'''sim += 1'''
-				if pesquisa.split(".")[0].strip() + ".head_token" in parametros:
+				if identificador + ".head_token" in parametros:
 					condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+pesquisa.split(".")[0].strip()+'''.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+pesquisa.split(".")[0].strip()+'''.head_token.to_str(), "<b>@BLUE/" + '''+pesquisa.split(".")[0].strip()+'''.head_token.to_str() + "/FONT</b>")'''
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "<b>@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT</b>")'''
 			#print(condition + '''
 		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
 			#exit()

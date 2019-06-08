@@ -176,7 +176,7 @@ else:
 
 		#Fim contexto e anotação
 		#Opções
-		html1 += '''<p style="display:none" id="optdiv_''' + str(i+1) + '''"><a style="cursor:pointer" onclick='filtraragora("'''+str(i+1)+'''")'>Remover sentença</a><br>'''
+		html1 += '''<p style="display:none" id="optdiv_''' + str(i+1) + '''"><a style="cursor:pointer" onclick='filtraragora("'''+str(i+1)+'''")'>Separar sentença</a><br>'''
 		html1 += '''<a style="cursor:pointer" onclick='anotarudpipe("udpipe_'''+str(i+1)+'''")'>Anotar no UDPipe</a><br>'''
 		html1 += '''<a style="cursor:pointer" onclick='drawtree("tree_'''+str(i+1)+'''")'>Visualizar árvore</a>'''
 		html1 += '''</p>'''

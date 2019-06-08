@@ -29,7 +29,7 @@
       <div class="tabcontent" id="ver"> <br>
       <br>
       <br>
-      <p><a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotações</a><br><a style="cursor:pointer" onclick="tudo('fechar')">Fechar anotações</a><br><a style="cursor:pointer" onclick="tudo('marcar')">Marcar tudo</a><br><a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar tudo</a><br><a style="cursor:pointer" onclick="abrir_script()">Executar script</a> <div id="script" style="display:none"><!--script--></div><!--br><a style="cursor:pointer" onclick="paginacao()">Remover paginação</a--></p>
+      <p><a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotações</a><br><a style="cursor:pointer" onclick="tudo('fechar')">Fechar anotações</a><br><a style="cursor:pointer" onclick="tudo('marcar')">Marcar todas as sentenças</a><br><a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar todas as sentenças</a><br><a style="cursor:pointer" onclick="abrir_script()"><div class="tooltip">Executar script<div class="tooltiptext">O script deve estar na pasta "interrogar-ud/scripts" e será executado nas sentenças presentes na página atual. Antes de efetivar as alterações, será feita uma simulação.</div></div></a> <div id="script" style="display:none"><!--script--></div><!--br><a style="cursor:pointer" onclick="paginacao()">Remover paginação</a--></p>
       </div>
       <div class="tabcontent" id="filtrar_tab"> <br>
         <br>
@@ -37,22 +37,25 @@
         <form action="../../cgi-bin/filtrar.cgi" method="POST"> <p><label for="pesquisa">
             <table>
               <tr>
+              	<th>Filtrar com nova pesquisa</th>
+              	<td></td>
+              	<th>Separar frases selecionadas</th>
+              </tr>
+              <tr>
                 <td>
                   <div class="tooltip">Expressão do filtro (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à pesquisa original posteriormente.<br><br>Sintaxe: nº do critério + espaço + parâmetros</span></div><br>
                   <input id="pesquisa_filtro" name="pesquisa" type="text" required></label>
                   <br><br> <label for="nome_pesquisa">Nome do filtro (opcional):<br>
       <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label>
                   <br> <input id="filtrar"
-      value="Filtrar pesquisa" class="btn-gradient orange mini" style="margin-left:0px" type="submit">
+      value="Filtrar" class="btn-gradient orange mini" style="margin-left:0px" type="submit">
                 </td>
-                <td>
-                  ou
-                </td>
+                <td>ou</td>
                 <td>
                   <label for="nome_pesquisa_sel">Nome do filtro (opcional):<br>
                   <input id="nome_pesquisa_sel" type="text" ></label>
                   <br>
-                  <input id="filtrarsel" style="margin-left:0px" value="Filtrar itens selecionados" class="btn-gradient orange mini" type="button" onclick="excluir_selection()"></p></form>
+                  <input id="filtrarsel" style="margin-left:0px" value="Separar" class="btn-gradient orange mini" type="button" onclick="excluir_selection()"></p></form>
                 </td>
               </tr>
             </table>
