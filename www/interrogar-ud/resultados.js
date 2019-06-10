@@ -29,7 +29,9 @@ function excluir_selection() {
     checkboxes = document.getElementsByClassName("cb");
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
-            negrito = document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.split("<b>")[1].split("</b>")[0].replace("<b>", "").replace("</b>", "");
+            if (document.getElementById("text_" + checkboxes[i].id.split('_')[1]).indexOf("<b>") > 0){
+                negrito = document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.split("<b>")[1].split("</b>")[0].replace("<b>", "").replace("</b>", "");
+            } else { negrito = ""; }
             document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML) + "$" + "(.*\\n)*.*" + negrito + "|";
         }
     }

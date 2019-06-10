@@ -215,7 +215,7 @@ def main(arquivoUD, criterio, parametros):
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
 			for k, pesquisa in enumerate(parametros):
 				if (".id" in pesquisa or ".dephead" in pesquisa):
-					pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
+					pesquisa = re.sub(r"((\s|^).+\.(id|dephead)\b)", r"int(\1)", pesquisa)
 				identificador = pesquisa.split(".")[0].strip().replace("int(", "")
 				condition += '''
 '''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
