@@ -182,7 +182,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	os.remove('../interrogar-ud/scripts/headers.txt')
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or (form['action'].value != 'alterar' and form['action'].value != 'filtrar' and form['action'].value != 'script' and form['action'].value != 'manage_tags')):
-	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>')
+	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>') if not 'finalizado' in form else html1.replace('<title>Sistema de inquéritos</title>', '<title>Inquérito realizado com sucesso: Interrogatório</title>')
 	ud = form['conllu'].value
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
