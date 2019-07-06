@@ -1,3 +1,11 @@
+function dist(coluna){
+    document.getElementById("corpus_dist").value = document.getElementById("corpus").innerHTML
+    document.getElementById("expressao_dist").value = document.getElementById("expressao").innerHTML
+    document.getElementById("combination_dist").value = document.getElementById("titulo").innerHTML.replace('<span id="combination">', '').replace('</span>', '')
+    document.getElementById("coluna_dist").value = coluna
+    document.getElementById("dist").submit()
+}
+
 function abrir_script() {
     if (document.getElementById("script").style.display == "none") {
         document.getElementById("script").style.display = "inline" }

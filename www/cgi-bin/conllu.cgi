@@ -22,7 +22,7 @@ form = cgi.FieldStorage()
 with open(form['html'].value, 'r') as f:
 	html = f.read()
 	html = web.unescape(html)
-	html = re.split(r'\<pre.*?\>', html)
+	html = re.split(r'\<pre id=.*?\>', html)
 	html = [x.split('</pre>')[0] for x in html[1:]]
 	open('../interrogar-ud/tmp/' + slugify(form['nomeconllu'].value) + '.conllu', 'w').write(web.unescape("\n\n".join(html).replace('<b>','').replace('</b>','').replace('<font color="' + tabela['yellow'] + '">','').replace('<font color="' + tabela['red'] + '">','').replace('<font color="' + tabela['cyan'] + '">','').replace('<font color="' + tabela['blue'] + '">','').replace('<font color="' + tabela['purple'] + '">','').replace('</font>','') + '\n\n'))
 

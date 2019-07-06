@@ -76,6 +76,10 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	ocorrencias = str(len(lista_ocorrencias))
 	html = open('../interrogar-ud/resultados/link1.html', 'r').read().replace('../../','../../../')
 
+	#dist
+	if criterio == "5":
+		html = html.replace("!--DIST", "").replace("DIST-->", "><form id=dist action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='"+link+"'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+
 	#alterações
 	html1 = html.split('<!--SPLIT-->')[0]
 	html2 = html.split('<!--SPLIT-->')[1]
@@ -212,11 +216,11 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	novo_html = re.sub(re.escape('<title>link de pesquisa 1 (203): Interrogatório</title>'), '<title>' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + ' (' + ocorrencias + '): Interrogatório</title>', html)
 
 	#h1
-	novo_html = re.sub(re.escape('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>'), '<h1><span id="combination">' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + '</span> (' + ocorrencias + ')</h1><br>Casos: ' + str(interrogarud['casos']), novo_html)
+	novo_html = re.sub(re.escape('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>'), '<h1><a id="titulo"><span id="combination">' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + '</span> (' + ocorrencias + ')</a></h1><br>Casos: ' + str(interrogarud['casos']), novo_html)
 
 	#h2
 	criterios = open('../interrogar-ud/criterios.txt', 'r').read().split('!@#')
-	novo_html = re.sub(re.escape('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;'), '<p><div class="tooltip">' + criterio + ' ' + parametros.replace('\\','\\\\').replace('<','&lt;').replace('>','&gt;') + '<span class="tooltiptext">' + criterios[int(criterio)].replace('\\','\\\\').split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <div class="tooltip">' + udoriginal + '<span class="tooltiptext">Página é resultado da filtragem de uma interrogação anterior.</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <span id="data">' + data.replace('_', ' ') + '</span> &nbsp;&nbsp;&nbsp;&nbsp; ', novo_html)
+	novo_html = re.sub(re.escape('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;'), '<p><div class="tooltip"><span id="expressao">' + criterio + ' ' + parametros.replace('\\','\\\\').replace('<','&lt;').replace('>','&gt;') + '</span><span class="tooltiptext">' + criterios[int(criterio)].replace('\\','\\\\').split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <div class="tooltip"><span id=corpus>' + udoriginal + '</span><span class="tooltiptext">Página é resultado da filtragem de uma interrogação anterior.</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <span id="data">' + data.replace('_', ' ') + '</span> &nbsp;&nbsp;&nbsp;&nbsp; ', novo_html)
 
 	#apagar.cgi
 	novo_html = re.sub('\<a.*onclick="apagar.*\</a\>', '', novo_html)

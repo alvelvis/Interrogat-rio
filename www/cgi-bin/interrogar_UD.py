@@ -216,21 +216,40 @@ def main(arquivoUD, criterio, parametros):
 			for k, pesquisa in enumerate(parametros):
 				if (".id" in pesquisa or ".dephead" in pesquisa):
 					pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
-				identificador = pesquisa.split(".")[0].strip().replace("int(", "")
-				condition += '''
+				identificador = pesquisa.split(".head_token")[0].split(".")[0].strip().replace("int(", "")
+				
+				if k == 0: #para garantir a distribuição só no primeiro token
+					condition += '''
 '''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
 	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
-				condition += '''
+					condition += '''
 		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
 		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "<b>@RED/" + '''+ identificador +'''.to_str() + "/FONT</b>")
 		'''+("\t"*(k+k))+'''sim += 1'''
-				if identificador + ".head_token" in parametros:
-					condition += '''
+					if identificador + ".head_token" in parametros:
+						condition += '''
 		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
 		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "<b>@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT</b>")'''
 			#print(condition + '''
 		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
 			#exit()
+				
+				else:
+					condition += '''
+'''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
+	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
+					condition += '''
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
+		'''+("\t"*(k+k))+'''sim += 1'''
+					if identificador + ".head_token" in parametros:
+						condition += '''
+		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
+			#print(condition + '''
+		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
+			#exit()
+			
 			exec(condition + '''
 		'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
 		
@@ -292,18 +311,4 @@ if __name__ == '__main__':
 	printar = '\n\n'.join(printar)
 	
 	print(printar)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
