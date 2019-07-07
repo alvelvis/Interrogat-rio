@@ -66,12 +66,18 @@ class Sentence:
 		self.tokens_incompletos = list()
 		self.separator = separator
 
+
 	def get_head(self, token):
 		for tok in self.tokens_incompletos:
 			if tok.id == token.dephead:
 				token.head_token = tok
-				break
-			token.head_token = self.default_token
+
+			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id:
+				if int(token.id) == int(tok.id) - 1:
+					token.next_token = tok
+				if int(token.id) == int(tok.id) + 1:
+					token.previous_token = tok
+
 
 		return token
 
@@ -99,22 +105,30 @@ class Sentence:
 			if "\t" in linha:
 				tok = Token(sent_id = self.sent_id, text = self.text)
 				tok.build(linha)
+				tok.head_token = self.default_token
+				tok.next_token = self.default_token
+				tok.previous_token = self.default_token
 				if not self.recursivo: self.tokens.append(tok)
 				if self.recursivo: self.tokens_incompletos.append(tok)
 
-		if not self.recursivo:
+		'''if not self.recursivo:
 			for token in self.tokens:
 				for _token in self.tokens:
 					if token.dephead == _token.id:
 						token.head_token = _token
-						break
-					token.head_token = self.default_token
-		
-		if self.recursivo:
+					if not "-" in token.id and not "/" in token.id:
+						if not "-" in _token.id and not "/" in _token.id:
+							if int(token.id) == int(_token.id) - 1:
+								token.next_token = _token
+							if int(token.id) == int(_token.id) + 1:
+								token.previous_token = _token'''
+
+		if (isinstance(self.recursivo, bool) and self.recursivo) or (isinstance(self.recursivo, int)):
 			for token in self.tokens_incompletos:
 				self.tokens.append(self.get_head(token))
 
-			for i in range(4):
+			x = self.recursivo if isinstance(self.recursivo, int) else 4
+			for i in range(x):
 				for token in self.tokens:
 					token = self.get_head(token)
 

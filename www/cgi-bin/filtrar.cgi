@@ -78,15 +78,15 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	#dist
 	if criterio == "5":
-		html = html.replace("!--DIST", "").replace("DIST-->", "><form id=dist action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='"+link+"'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+		html = html.replace("!--DIST", "").replace("DIST-->", "><form id=dist action='../../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='"+link+"'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
 
 	#alterações
 	html1 = html.split('<!--SPLIT-->')[0]
 	html2 = html.split('<!--SPLIT-->')[1]
 	html_original = open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'r').read().replace('<div class="content">','<div class="content"> > <a href="' + form['html'].value + '/' + slugify(nome) + '_' + data + '.html">' + nome.replace('<','&lt;').replace('>','&gt;') + ' (' + ocorrencias  + ')</a>&nbsp;<!--a class="close-thik" alt="Desfazer filtro" href="../../../cgi-bin/filtrar.cgi?action=desfazer&html=' + link + '_anterior&original=' + form['html'].value + '"></a-->&nbsp;')
 	if not 'Com filtros: ' in html_original:
-		ocorrencias_anterior = int(re.search(r'\((\d+)\)\</h1\>', html_original).group(1))
-		html_original = re.sub(r'(\(.*?\)\</h1\>)', r'\1<br>Com filtros: ' + str(ocorrencias_anterior - int(ocorrencias)), html_original)
+		ocorrencias_anterior = int(re.search(r'\((\d+)\)\</a\>\</h1\>', html_original).group(1))
+		html_original = re.sub(r'(\(.*?\)\</a\>\</h1\>)', r'\1<br>Com filtros: ' + str(ocorrencias_anterior - int(ocorrencias)), html_original)
 	else:
 		ocorrencias_anterior = int(re.search(r'Com filtros: (\d+)', html_original).group(1))
 		html_original = re.sub(r'Com filtros: \d+', 'Com filtros: ' + str(ocorrencias_anterior - int(ocorrencias)), html_original)

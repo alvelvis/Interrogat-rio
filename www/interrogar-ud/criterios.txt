@@ -47,12 +47,13 @@ Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
 </li></ul>
 
 !@#<h3>Critério 5: Python</h3>
-Realiza uma condição seguindo a sintaxe em Python 3.
-<br><br>Parâmetros: uma condição em sintaxe Python 3.
-<br><br>Os objetos a serem pesquisados são do tipo "token", e os seus atributos são: id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token.
+Realiza uma condição seguindo a sintaxe em Python.
+<br><br>Parâmetros: uma condição em sintaxe Python.
+<br><br>São atributos de um token: id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token e previous_token.
+<br>Opcional: Utilize um "@" para indicar qual token deve ser negritado.
 <h4>Exemplos:</h4>
-1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB.
+1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
 <ul><li>
-<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word == "é" and token.upos == "AUX" and token.head_token.upos != "VERB"</a>
+<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word = "é" and token.upos = "AUX" and @token.head_token.upos != "VERB"</a>
 </li></ul>
 

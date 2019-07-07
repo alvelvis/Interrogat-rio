@@ -206,52 +206,60 @@ def main(arquivoUD, criterio, parametros):
 	if criterio == 5:
 		import estrutura_ud
 		with open(arquivoUD, "r") as f:
-			corpus = estrutura_ud.Corpus(recursivo=True)
+			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+				qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
+				corpus = estrutura_ud.Corpus(recursivo=qtd)
+			else:
+				corpus = estrutura_ud.Corpus(recursivo=False)
 			corpus.build(f.read())
 
-		parametros = parametros.split(";")
+		pesquisa = parametros
 		casos = 0
 		for sentid, sentence in corpus.sentences.items():
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
-			for k, pesquisa in enumerate(parametros):
-				if (".id" in pesquisa or ".dephead" in pesquisa):
-					pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
-				identificador = pesquisa.split(".head_token")[0].split(".")[0].strip().replace("int(", "")
-				
-				if k == 0: #para garantir a distribuição só no primeiro token
-					condition += '''
-'''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
-	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
-					condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"<b>@RED/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "<b>@RED/" + '''+ identificador +'''.to_str() + "/FONT</b>")
-		'''+("\t"*(k+k))+'''sim += 1'''
-					if identificador + ".head_token" in parametros:
-						condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"<b>@BLUE/\\1/FONT</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "<b>@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT</b>")'''
-			#print(condition + '''
-		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
-			#exit()
-				
-				else:
-					condition += '''
-'''+("\t"*(k+k))+'''for ''' + identificador + ''' in sentence.tokens:
-	'''+("\t"*(k+k))+'''if ''' + pesquisa.replace(" = ", " == ").strip() + ''' :'''
-					condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
-		'''+("\t"*(k+k))+'''sim += 1'''
-					if identificador + ".head_token" in parametros:
-						condition += '''
-		'''+("\t"*(k+k))+'''sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		'''+("\t"*(k+k))+'''sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
-			#print(condition + '''
-		#'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
-			#exit()
+			pesquisa = pesquisa.replace(" = ", " == ").replace(" @", " ").strip()
+			if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa):
+				pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
+			identificador = pesquisa.split("head_token")[0].split("next_token")[0].split("previous_token")[0].split(".")[0].strip().replace("  ", " ").replace("int(", "").split(")")[0].replace("(", "")
+			if " in " in identificador: identificador = identificador.split(" in ")[1]
+			if "@" in identificador: identificador = identificador.split("@")[1]
+			if " @" in parametros:
+				arroba = parametros.split(" @")[1].strip().replace("int(", "").split(")")[0].split(" ")[0].rsplit(".", 1)[0].replace("(", "")
+			else:
+				arroba = identificador
+			if " in " in arroba: arroba = arroba.split(" in ")[1]
+
+			condition += '''
+for ''' + identificador + ''' in sentence.tokens:
+	if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :'''
+			condition += '''
+		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")'''
+			if identificador + ".head_token" in parametros:
+				condition += '''
+		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
+			if identificador + ".previous_token" in parametros:
+				condition += '''
+		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.previous_token.word) + r')\\b', r"@GREEN/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		sentence2.print = sentence2.print.replace('''+ identificador +'''.previous_token.to_str(), "@GREEN/" + '''+ identificador +'''.previous_token.to_str() + "/FONT")'''
+			if identificador + ".next_token" in parametros:
+				condition += '''
+		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.next_token.word) + r')\\b', r"@PURPLE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		sentence2.print = sentence2.print.replace('''+ identificador +'''.next_token.to_str(), "@PURPLE/" + '''+ identificador +'''.next_token.to_str() + "/FONT")'''
 			
+			condition += '''
+		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+		final = sentence2.metadados_to_str() + "\\n" + sentence2.print
+		final = final.splitlines()
+		arroba = '''+arroba+'''.id
+		for l, linha in enumerate(final):
+			if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
+				final[l] = "<b>" + final[l] + "</b>"
+		final = "\\n".join(final)
+		'''
 			exec(condition + '''
-		'''+("\t"*(k+k))+'''output.append(sentence2.metadados_to_str() + "\\n" + sentence2.print)''')
+		output.append(final)''')
 		
 		for a, sentence in enumerate(output):
 			output[a] = sentence.splitlines()
