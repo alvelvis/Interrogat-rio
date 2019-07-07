@@ -210,7 +210,7 @@ def main(arquivoUD, criterio, parametros):
 				qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
 				corpus = estrutura_ud.Corpus(recursivo=qtd)
 			else:
-				corpus = estrutura_ud.Corpus(recursivo=False)
+				corpus = estrutura_ud.Corpus(recursivo=0)
 			corpus.build(f.read())
 
 		pesquisa = parametros
@@ -231,35 +231,29 @@ def main(arquivoUD, criterio, parametros):
 
 			condition += '''
 for ''' + identificador + ''' in sentence.tokens:
-	if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :'''
-			condition += '''
-		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")'''
+	try:
+		if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
+'''#try por causa de não ter um next_token no fim de sentença, por ex.
 			if identificador + ".head_token" in parametros:
 				condition += '''
-		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
-			if identificador + ".previous_token" in parametros:
-				condition += '''
-		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.previous_token.word) + r')\\b', r"@GREEN/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		sentence2.print = sentence2.print.replace('''+ identificador +'''.previous_token.to_str(), "@GREEN/" + '''+ identificador +'''.previous_token.to_str() + "/FONT")'''
-			if identificador + ".next_token" in parametros:
-				condition += '''
-		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.next_token.word) + r')\\b', r"@PURPLE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		sentence2.print = sentence2.print.replace('''+ identificador +'''.next_token.to_str(), "@PURPLE/" + '''+ identificador +'''.next_token.to_str() + "/FONT")'''
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
 			
 			condition += '''
-		sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-		final = sentence2.metadados_to_str() + "\\n" + sentence2.print
-		final = final.splitlines()
-		arroba = '''+arroba+'''.id
-		for l, linha in enumerate(final):
-			if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
-				final[l] = "<b>" + final[l] + "</b>"
-		final = "\\n".join(final)
-		'''
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			final = sentence2.metadados_to_str() + "\\n" + sentence2.print
+			final = final.splitlines()
+			arroba = '''+arroba+'''.id
+			for l, linha in enumerate(final):
+				if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
+					final[l] = "<b>" + final[l] + "</b>"
+			final = "\\n".join(final)'''
 			exec(condition + '''
-		output.append(final)''')
+			output.append(final)
+	except:
+		pass''')
 		
 		for a, sentence in enumerate(output):
 			output[a] = sentence.splitlines()

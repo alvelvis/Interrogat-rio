@@ -67,12 +67,12 @@ with open(form['html'].value, 'r') as f:
 	for entrada in freq:
 		lista_freq.append((entrada, freq[entrada]))
 
-	pagina += "<table>"
+	pagina += "<table style='border-spacing: 20px 0px;'>"
 	for entrada in sorted(lista, key=lambda x: x[1], reverse=True):
 		pagina += "<tr><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"
 	pagina += "</table>"
 
-	pagina += "<br><br><table><tr><th>Frequência</th><th>Quantidade de "+form["coluna"].value+" diferentes</th></tr>"
+	pagina += "<br><br><table style='border-spacing: 20px 0px;'><tr><th>#</th><th>"+form["coluna"].value+" diferentes</th></tr>"
 	for entrada in sorted(lista_freq, key=lambda x: (x[1], x[0]), reverse=True):
 		pagina += "<tr><td>" + str(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td></tr>"
 	pagina += "</table>"

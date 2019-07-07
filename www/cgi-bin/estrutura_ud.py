@@ -17,7 +17,6 @@ class Token:
 		self.sent_id = sent_id
 		self.text = text
 		self.color = ""
-		#self.head_token = ""
 
 	def build(self, txt):
 		coluna = txt.split(self.separator)
@@ -43,14 +42,13 @@ class Token:
 		self.col["deps"] = self.deps
 		self.col["misc"] = self.misc
 
-
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
 
 
 class Sentence:
 
-	def __init__(self, separator="\n", recursivo=False):
+	def __init__(self, separator="\n", recursivo=0):
 		self.text = ""
 		self.sent_id = ""
 		self.source = ""
@@ -68,16 +66,25 @@ class Sentence:
 
 
 	def get_head(self, token):
-		for tok in self.tokens_incompletos:
+		next_t = False
+		previous_t = False
+		for tok in self.tokens:
 			if tok.id == token.dephead:
 				token.head_token = tok
 
 			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id:
 				if int(token.id) == int(tok.id) - 1:
 					token.next_token = tok
+					next_t = True
 				if int(token.id) == int(tok.id) + 1:
 					token.previous_token = tok
-
+					previous_t = True
+			if next_t and previous_t:
+				break
+		if not next_t:
+			token.next_token = self.default_token
+		if not previous_t:
+			token.previous_token = self.default_token
 
 		return token
 
@@ -108,8 +115,8 @@ class Sentence:
 				tok.head_token = self.default_token
 				tok.next_token = self.default_token
 				tok.previous_token = self.default_token
-				if not self.recursivo: self.tokens.append(tok)
-				if self.recursivo: self.tokens_incompletos.append(tok)
+				if self.recursivo == 0: self.tokens.append(tok)
+				else: self.tokens_incompletos.append(tok)
 
 		'''if not self.recursivo:
 			for token in self.tokens:
@@ -123,14 +130,13 @@ class Sentence:
 							if int(token.id) == int(_token.id) + 1:
 								token.previous_token = _token'''
 
-		if (isinstance(self.recursivo, bool) and self.recursivo) or (isinstance(self.recursivo, int)):
-			for token in self.tokens_incompletos:
-				self.tokens.append(self.get_head(token))
+		for token in self.tokens_incompletos:
+			self.tokens.append(self.get_head(token))
 
-			x = self.recursivo if isinstance(self.recursivo, int) else 4
-			for i in range(x):
-				for token in self.tokens:
-					token = self.get_head(token)
+		x = self.recursivo if isinstance(self.recursivo, int) else 4
+		for i in range(x):
+			for token in self.tokens:
+				token = self.get_head(token)
 
 	def tokens_to_str(self):
 		return "\n".join([tok.to_str() for tok in self.tokens])
@@ -144,7 +150,7 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=False):
+	def __init__(self, separator="\n\n", recursivo=0):
 		self.len = 0
 		self.sentences = {}
 		self.separator = separator
