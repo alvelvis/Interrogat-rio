@@ -54,6 +54,6 @@ Realiza uma condição seguindo a sintaxe em Python.
 <h4>Exemplos:</h4>
 1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
 <ul><li>
-<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word = "é" and token.upos = "AUX" and @token.head_token.upos != "VERB"</a>
+<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
 

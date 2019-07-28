@@ -133,10 +133,11 @@ class Sentence:
 		for token in self.tokens_incompletos:
 			self.tokens.append(self.get_head(token))
 
-		x = self.recursivo if isinstance(self.recursivo, int) else 4
-		for i in range(x):
-			for token in self.tokens:
-				token = self.get_head(token)
+		if isinstance(self.recursivo, int) and self.recursivo > 0:
+			x = self.recursivo if isinstance(self.recursivo, int) else 4
+			for i in range(1):
+				for token in self.tokens:
+					token = self.get_head(token)
 
 	def tokens_to_str(self):
 		return "\n".join([tok.to_str() for tok in self.tokens])

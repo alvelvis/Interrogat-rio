@@ -84,8 +84,8 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 							html42 += '<p>sent_id = <a href="#" onclick="document.getElementById(\'coluna\').value=\'7\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[7] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split('!@#')[7] + '</a></p><input name="sentid" type="hidden" value="' + linha.split('!@#')[7] + '">'
 							relatorio42 += '\nsent = ' + linha.split('!@#')[7]
 						if len(linha.split('!@#')) >= 6 and linha.split('!@#')[4] != 'NONE' and linha.split('!@#')[5] != 'NONE':
-							html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + linha.split('!@#')[4].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
-							relatorio42 += '\n\nPágina no interrogatório: ' + linha.split('!@#')[4].replace('<b>', '').replace('</b>', '')
+							html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
+							relatorio42 += '\n\nPágina no interrogatório: ' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '').replace('</b>', '')
 						if not onlysent:
 							html42 += '<pre>ANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre><pre>DEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre>'
 							relatorio42 += '\n\nANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '').replace('</b>','') + '\nDEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','').replace('</b>','')
@@ -187,7 +187,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
-		ud = 'bosque_generico.conllu'
+		ud = 'bosque_organico.conllu'
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	if 'finalizado' in form: html1 += '<span style="background-color: cyan">Alteração realizada com sucesso!</span><br><br><br>'
 
@@ -227,14 +227,14 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td id="''' +str(a)+ '''-''' + ''':" contenteditable=True colspan="42" style="cursor:pointer; color:black;">''' + linha + '</td></tr>'
+					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="plaintext" colspan="42" style="cursor:pointer; color:black;">''' + linha + '</td></tr>'
 				else:
 					html1 += '<tr>'
 					for b, coluna in enumerate(linha.split('\t')):
 						#if b == 6 and re.search(r'^\d+$', coluna) and coluna in dicionario.keys():
-							#html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" contenteditable=True style="cursor:pointer; color:black;" onclick="this.Focus(); this.Select();"><div class="tooltip">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '<span class="tooltiptextfix">' + dicionario[coluna].split('\t', 1)[1].replace('<','&lt;').replace('>','&gt;') + '</span></div></td>'
+							#html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" contenteditable=True class="plaintext" style="cursor:pointer; color:black;" onclick="this.Focus(); this.Select();"><div class="tooltip">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '<span class="tooltiptextfix">' + dicionario[coluna].split('\t', 1)[1].replace('<','&lt;').replace('>','&gt;') + '</span></div></td>'
 						#else:
-						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" contenteditable=True style="cursor:pointer; color:black;">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
+						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" class="plaintext" contenteditable=True style="cursor:pointer; color:black;">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
 
 			html1 += '</table><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
@@ -243,7 +243,32 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			break
 	if not achou: html1 += 'Sentença não encontrada.'
 
-	html = html1 + html2
+	html = html1 + '''<script>function insertTextAtCursor(text) {
+  var sel, range, html;
+  if (window.getSelection) {
+    sel = window.getSelection();
+    if (sel.getRangeAt && sel.rangeCount) {
+      range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(text));
+    }
+  } else if (document.selection && document.selection.createRange) {
+    document.selection.createRange().text = text;
+  }
+}
+
+
+document.querySelector(".plaintext[contenteditable]").addEventListener("paste", function(e) {
+  e.preventDefault();
+  if (e.clipboardData && e.clipboardData.getData) {
+    var text = e.clipboardData.getData("text/plain");
+    document.execCommand("insertHTML", false, text);
+  } else if (window.clipboardData && window.clipboardData.getData) {
+    var text = window.clipboardData.getData("Text");
+    insertTextAtCursor(text);
+  }
+});</script>
+''' + html2
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar':
 	ud = form['conllu'].value
