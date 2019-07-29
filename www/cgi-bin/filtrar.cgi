@@ -37,10 +37,10 @@ if not 'pesquisa' in form and not 'action' in form:
 	print(html)
 
 elif not 'action' in form or form['action'].value != 'desfazer':
-	if ' ' in form['pesquisa'].value: parametros = form['pesquisa'].value.split(' ', 1)[1].replace('<b>', '').replace('<\\/b>','').replace('<font color="' + tabela['yellow'] + '">','').replace('<font color="' + tabela['red'] + '">','').replace('<font color="' + tabela['cyan'] + '">','').replace('<font color="' + tabela['blue'] + '">','').replace('<font color="' + tabela['purple'] + '">','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
+	if ' ' in form['pesquisa'].value: parametros = form['pesquisa'].value.split(' ', 1)[1].replace('<b>', '').replace('<\\/b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
 	if not re.match('^\d+$', form['pesquisa'].value.split(' ')[0]):
 		criterio = '1'
-		parametros = form['pesquisa'].value.replace('<b>','').replace('<\\/b>','').replace('<font color="' + tabela['yellow'] + '">','').replace('<font color="' + tabela['red'] + '">','').replace('<font color="' + tabela['cyan'] + '">','').replace('<font color="' + tabela['blue'] + '">','').replace('<font color="' + tabela['purple'] + '">','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
+		parametros = form['pesquisa'].value.replace('<b>','').replace('<\\/b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
 		if not '^# text = ' in form['pesquisa'].value: print('<script>window.alert("Critério não especificado. Utilizando expressão regular (critério 1).")</script>')
 	else:
 		criterio = form['pesquisa'].value.split(' ')[0]
@@ -53,13 +53,13 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 		html = f.read()
 		html = re.split(r'\<pre.*?\>', html)
 		html = [x.split('</pre>')[0] for x in html[1:]]
-		open('../interrogar-ud/conllu/tmp.conllu', 'w').write("\n\n".join(html).replace('<b>','').replace('</b>','').replace('<font color="' + tabela['yellow'] + '">','').replace('<font color="' + tabela['red'] + '">','').replace('<font color="' + tabela['cyan'] + '">','').replace('<font color="' + tabela['blue'] + '">','').replace('<font color="' + tabela['purple'] + '">','').replace('</font>',''))
+		open('../interrogar-ud/conllu/tmp.conllu', 'w').write("\n\n".join(html).replace('<b>','').replace('</b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('</font>',''))
 
 	udoriginal = form['udoriginal'].value
 	arquivo_ud = '../interrogar-ud/conllu/tmp.conllu'
 	ud = "tmp.conllu"
 	if not 'nome_pesquisa' in form:
-		nome = form['pesquisa'].value.replace('<b>','').replace('</b>','').replace('<font color="' + tabela['yellow'] + '">','').replace('<font color="' + tabela['red'] + '">','').replace('<font color="' + tabela['cyan'] + '">','').replace('<font color="' + tabela['blue'] + '">','').replace('<font color="' + tabela['purple'] + '">','').replace('</font>','')
+		nome = form['pesquisa'].value.replace('<b>','').replace('</b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('</font>','')
 	else:
 		nome = form['nome_pesquisa'].value
 	if not os.path.isdir('../interrogar-ud/resultados/' + form['html'].value): os.mkdir('../interrogar-ud/resultados/' + form['html'].value)
@@ -93,7 +93,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	for i, ocorrencia in enumerate(lista_ocorrencias):
 		print(str(i+1) + '/' + str(len(lista_ocorrencias)))
-		ocorrencia = ocorrencia.replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<font color="' + tabela['yellow'] + '">','@YELLOW/').replace('<font color="' + tabela['red'] + '">','@RED/').replace('<font color="' + tabela['cyan'] + '">','@CYAN/').replace('<font color="' + tabela['blue'] + '">','@BLUE/').replace('<font color="' + tabela['purple'] + '">','@PURPLE/').replace('</font>','/FONT').replace('<','&lt;').replace('>','&gt;')
+		ocorrencia = ocorrencia.replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<font color=' + tabela['yellow'] + '>','@YELLOW/').replace('<font color=' + tabela['red'] + '>','@RED/').replace('<font color=' + tabela['cyan'] + '>','@CYAN/').replace('<font color=' + tabela['blue'] + '>','@BLUE/').replace('<font color=' + tabela['purple'] + '>','@PURPLE/').replace('</font>','/FONT').replace('<','&lt;').replace('>','&gt;')
 		ocorrencia_limpa = ocorrencia.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', '').replace('&lt;', '<').replace('&gt;', '>')
 
 		if '# sent_id = ' in ocorrencia:
@@ -103,7 +103,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 			text = ocorrencia.split('# text = ')[1].split('\n')[0]
 		else: text = ''
 
-		novo =  '''<div class="container"><p>'''+str(i+1)+''' / '''+ocorrencias+'''</p>'''
+		novo =  '''<div class=container><p>'''+str(i+1)+''' / '''+ocorrencias+'''</p>'''
 		#SENTID
 		if sentid != '': novo += '''<p>'''+sentid.replace('/BOLD','</b>').replace('@BOLD','<b>')+'''</p>'''
 		#FORM
@@ -111,7 +111,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 		novo += '''<form action="../../../cgi-bin/udpipe.py?conllu=''' + udoriginal + '''" target="_blank" method="POST" id="udpipe_'''+str(i+1)+'''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"></form>'''
 		novo += '<form action="../../../cgi-bin/draw_tree.py?conllu=' + udoriginal + '" target="_blank" method="POST" id="tree_' + str(i+1) + '"><input type=hidden name=sent_id value="' + sentid.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"><input type=hidden name=text value="' + text.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '"></form>'
 		#TEXT
-		novo += '''<p id="text_'''+str(i+1)+'''">'''+ text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color="' + tabela['yellow'] + '">').replace('@PURPLE/', '<font color="' + tabela['purple'] + '">').replace('@BLUE/', '<font color="' + tabela['blue'] + '">').replace('@RED/', '<font color="' + tabela['red'] + '">').replace('@CYAN/', '<font color="' + tabela['cyan'] + '">').replace('/FONT', '</font>')+ '''</p>
+		novo += '''<p id="text_'''+str(i+1)+'''">'''+ text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')+ '''</p>
 <p>'''
 
 		#CONTEXTO
@@ -148,7 +148,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 							contexto2 = sentence.split('# text = ')[1].split('\n')[0]
 						if (contexto1 != '' or contexto1 == '.') and contexto2 != '':
 							break
-				novo += '''<p id="divcontexto_'''+str(i+1)+'''" style="display:none">''' + contexto1 + ' ' + text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color="' + tabela['yellow'] + '">').replace('@PURPLE/', '<font color="' + tabela['purple'] + '">').replace('@BLUE/', '<font color="' + tabela['blue'] + '">').replace('@RED/', '<font color="' + tabela['red'] + '">').replace('@CYAN/', '<font color="' + tabela['cyan'] + '">').replace('/FONT', '</font>') + ' ' + contexto2 + '''</p>\n'''
+				novo += '''<p id="divcontexto_'''+str(i+1)+'''" style="display:none">''' + contexto1 + ' ' + text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>') + ' ' + contexto2 + '''</p>\n'''
 
 			#IF NOT - in sentid
 			else:
@@ -167,7 +167,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 								contexto2 = sentence.split('# text = ')[1].split('\n')[0]
 							if (contexto1 != '' or contexto1 == '.') and contexto2 != '':
 								break
-					novo += '''<p id="divcontexto_'''+str(i+1)+'''" style="display:none">''' + contexto1 + ' ' + text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color="' + tabela['yellow'] + '">').replace('@PURPLE/', '<font color="' + tabela['purple'] + '">').replace('@BLUE/', '<font color="' + tabela['blue'] + '">').replace('@RED/', '<font color="' + tabela['red'] + '">').replace('@CYAN/', '<font color="' + tabela['cyan'] + '">').replace('/FONT', '</font>') + ' ' + contexto2 + '''</p>\n'''
+					novo += '''<p id="divcontexto_'''+str(i+1)+'''" style="display:none">''' + contexto1 + ' ' + text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>') + ' ' + contexto2 + '''</p>\n'''
 				except:
 					pass
 
@@ -176,21 +176,21 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 		novo += '''<a style="cursor:pointer" onclick='drawtree("tree_'''+str(i+1)+'''")'>Visualizar árvore</a>'''
 		novo += '''</p></div>'''
 
-		novo += '''\n<pre id="div_'''+str(i+1)+'''" style="display:none">''' + ocorrencia.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color="' + tabela['yellow'] + '">').replace('@PURPLE/', '<font color="' + tabela['purple'] + '">').replace('@BLUE/', '<font color="' + tabela['blue'] + '">').replace('@RED/', '<font color="' + tabela['red'] + '">').replace('@CYAN/', '<font color="' + tabela['cyan'] + '">').replace('/FONT', '</font>') + '''</pre>'''
+		novo += '''\n<pre id="div_'''+str(i+1)+'''" style="display:none">''' + ocorrencia.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>') + '''</pre>'''
 
 		novo += '</div>\n'
 
 		html1 = html1 + novo
 
-		html_original = html_original.split('<div class="container">')
+		html_original = html_original.split('<div class=container>')
 		for i, sentence in enumerate(html_original):
 			if i != 0:
-				if '# text = ' + text.replace('<b>', '').replace('</b>', '').replace('/BOLD', '').replace('@BOLD', '').replace('<font color="' + tabela['yellow'] + '">', '').replace('<font color="' + tabela['red'] + '">', '').replace('<font color="' + tabela['cyan'] + '">', '').replace('<font color="' + tabela['blue'] + '">', '').replace('<font color="' + tabela['purple'] + '">', '').replace('</font>', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/','').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', '') in sentence.replace('<b>', '').replace('</b>', '').replace('/BOLD', '').replace('@BOLD', '').replace('<font color="' + tabela['yellow'] + '">', '').replace('<font color="' + tabela['red'] + '">', '').replace('<font color="' + tabela['cyan'] + '">', '').replace('<font color="' + tabela['blue'] + '">', '').replace('<font color="' + tabela['purple'] + '">', '').replace('</font>', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''):
+				if '# text = ' + text.replace('<b>', '').replace('</b>', '').replace('/BOLD', '').replace('@BOLD', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/','').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', '') in sentence.replace('<b>', '').replace('</b>', '').replace('/BOLD', '').replace('@BOLD', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''):
 					if len(html_original[i].split('</div>')) > 1:
 						html_original[i] = '</div>' + html_original[i].split('</div>', 1)[1]
 					else:
 						html_original[i] = '</div>'
-		html_original = '<div class="container">'.join(html_original)
+		html_original = '<div class=container>'.join(html_original)
 
 	os.remove('../interrogar-ud/conllu/tmp.conllu')
 

@@ -3,7 +3,7 @@ import estrutura_dados
 import re
 import copy
 import sys
-sys.setrecursionlimit(10000)
+#sys.setrecursionlimit(10000)
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros):
@@ -247,7 +247,10 @@ def main(arquivoUD, criterio, parametros):
 			arroba = identificador
 		if " in " in arroba: arroba = arroba.split(" in ")[1]
 
-		for sentid, sentence in corpus.sentences.items():
+		agilizar = pesquisa.split('"')[1].split('"')[0] if '"' in pesquisa else "\t"
+		agilizado = [[x, y] for x, y in corpus.sentences.items() if agilizar in y.to_str()]
+
+		for sentid, sentence in agilizado:
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
 			
 			condition += '''

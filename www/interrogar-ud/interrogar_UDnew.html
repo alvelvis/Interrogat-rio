@@ -22,7 +22,7 @@
             <option value="2">2</option>
           </select>
         </p>
-        <p><input type=radio name=meth value="teste" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'none'" checked>Teste</input> <input type=radio name=meth value="salvar" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').value = document.getElementById('pesquisa').value; document.getElementById('nome').select();" >Salvar busca</input></p>
+        <p><input type=radio name=meth value="teste" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'none'" checked>Teste <input type=radio name=meth value="salvar" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').value = document.getElementById('pesquisa').value; document.getElementById('nome').select();" >Salvar busca</p>
       <p><div id="meth_salvar" style="display:none">Nome da pesquisa:<br>
         <input id="nome" name="nome" type="text"></div></p>
         <p><input name="enviar" id="enviar" value="Pesquisar" class="btn-gradient orange" style="margin:0px"
@@ -42,7 +42,6 @@ type="submit" onclick="document.getElementById('enviar').value='Pesquisando...'"
         <p><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Acessar GitHub do projeto</a></p>
       </div>
     </div>
-    <body>
     <script>
         function pesquisa(numero) {
             document.getElementById('pesquisa').value = document.getElementById(numero).innerHTML.replace(/&amp;/g, '&').replace(/&gt;/g, '>');

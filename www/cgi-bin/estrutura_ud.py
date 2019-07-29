@@ -71,7 +71,9 @@ class Sentence:
 		for tok in self.tokens:
 			if tok.id == token.dephead:
 				token.head_token = tok
+				break
 
+		for tok in self.tokens:
 			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id:
 				if int(token.id) == int(tok.id) - 1:
 					token.next_token = tok
@@ -81,10 +83,6 @@ class Sentence:
 					previous_t = True
 			if next_t and previous_t:
 				break
-		if not next_t:
-			token.next_token = self.default_token
-		if not previous_t:
-			token.previous_token = self.default_token
 
 		return token
 
@@ -102,7 +100,7 @@ class Sentence:
 			self.id = txt.split('# id = ')[1].split('\n')[0]
 			self.metadados["id"] = self.id
 		
-		tokens_incompletos = list()
+		#tokens_incompletos = list()
 		for linha in txt.split(self.separator):
 			if linha and "#" == linha[0] and "=" in linha:
 				identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
@@ -115,8 +113,7 @@ class Sentence:
 				tok.head_token = self.default_token
 				tok.next_token = self.default_token
 				tok.previous_token = self.default_token
-				if self.recursivo == 0: self.tokens.append(tok)
-				else: self.tokens_incompletos.append(tok)
+				self.tokens.append(tok)
 
 		'''if not self.recursivo:
 			for token in self.tokens:
@@ -130,14 +127,11 @@ class Sentence:
 							if int(token.id) == int(_token.id) + 1:
 								token.previous_token = _token'''
 
-		for token in self.tokens_incompletos:
-			self.tokens.append(self.get_head(token))
-
-		if isinstance(self.recursivo, int) and self.recursivo > 0:
-			x = self.recursivo if isinstance(self.recursivo, int) else 4
-			for i in range(1):
-				for token in self.tokens:
-					token = self.get_head(token)
+		if self.recursivo != False:
+			#x = self.recursivo if isinstance(self.recursivo, int) else 
+			#for i in range(1):
+			for token in self.tokens:
+				token = self.get_head(token)
 
 	def tokens_to_str(self):
 		return "\n".join([tok.to_str() for tok in self.tokens])
@@ -151,7 +145,7 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=0):
+	def __init__(self, separator="\n\n", recursivo=1):
 		self.len = 0
 		self.sentences = {}
 		self.separator = separator
