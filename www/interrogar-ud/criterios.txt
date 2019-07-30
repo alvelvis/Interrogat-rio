@@ -51,6 +51,7 @@ Realiza uma condição seguindo a sintaxe em Python.
 <br><br>Parâmetros: uma condição em sintaxe Python.
 <br><br>São atributos de um token: id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token e previous_token.
 <br>Opcional: Utilize um "@" para indicar qual token deve ser negritado.
+<br>Para realizar buscas com regex, utilize a sintaxe:<pre>r".*as?" in upos</pre>
 <h4>Exemplos:</h4>
 1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
 <ul><li>

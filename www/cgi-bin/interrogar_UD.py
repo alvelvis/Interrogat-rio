@@ -3,7 +3,6 @@ import estrutura_dados
 import re
 import copy
 import sys
-#sys.setrecursionlimit(10000)
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros):
@@ -218,7 +217,13 @@ def main(arquivoUD, criterio, parametros):
 		pesquisa = parametros
 		casos = 0
 
-		pesquisa = pesquisa.replace(" = ", " == ").replace(" @", " ").replace("  ", "").strip()
+		pesquisa = pesquisa.replace("'", '"')
+		pesquisa = pesquisa.replace("=", " = ")
+		pesquisa = pesquisa.replace(" = = ", " = ")
+		pesquisa = pesquisa.replace("! =", "!=")
+		pesquisa = pesquisa.replace(" = ", " == ")
+		pesquisa = pesquisa.replace(" @", " ")
+		pesquisa = pesquisa.replace("  ", " ").strip()
 		if pesquisa[0] == "@": pesquisa = pesquisa[1:]
 		pesquisa = pesquisa.replace(" == ", " == token.")
 		pesquisa = pesquisa.replace(" != ", " != token.")
@@ -227,10 +232,10 @@ def main(arquivoUD, criterio, parametros):
 		pesquisa = pesquisa.replace(" and ", " and token.")
 		pesquisa = pesquisa.replace(" or ", " or token.")
 		pesquisa = pesquisa.replace(" in ", " in token.")
-		pesquisa = pesquisa.replace("token.'", "'")
 		pesquisa = pesquisa.replace('token."', '"')
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
+		pesquisa = re.sub(r'token\.r\"(.*?)\"\s+in\s+(.*?)(\s)', r're.search(r"\1", \2)\3', pesquisa)
 
 		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa):
 			pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
@@ -247,8 +252,15 @@ def main(arquivoUD, criterio, parametros):
 			arroba = identificador
 		if " in " in arroba: arroba = arroba.split(" in ")[1]
 
-		agilizar = pesquisa.split('"')[1].split('"')[0] if '"' in pesquisa else "\t"
-		agilizado = [[x, y] for x, y in corpus.sentences.items() if agilizar in y.to_str()]
+		with open("expressao_busca.txt", "w") as f:
+			f.write(f"parametro: {parametros}\npesquisa: {pesquisa}\narroba: {arroba}")
+
+		agilizar = pesquisa.split('"')[1].split('"')[0] if '"' in pesquisa and not "re.search" in pesquisa else ""
+		agilizado = [[x, y] for x, y in corpus.sentences.items() if agilizar in y.to_str()] if agilizar else corpus.sentences.items()
+		# print(agilizado)
+		# print(pesquisa)
+		# print(arroba)
+		# exit()
 
 		for sentid, sentence in agilizado:
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"

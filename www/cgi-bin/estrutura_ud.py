@@ -48,7 +48,7 @@ class Token:
 
 class Sentence:
 
-	def __init__(self, separator="\n", recursivo=0):
+	def __init__(self, separator="\n", recursivo=True):
 		self.text = ""
 		self.sent_id = ""
 		self.source = ""
@@ -74,7 +74,7 @@ class Sentence:
 				break
 
 		for tok in self.tokens:
-			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id:
+			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id and not ">" in tok.id and not ">" in token.id:
 				if int(token.id) == int(tok.id) - 1:
 					token.next_token = tok
 					next_t = True
@@ -145,7 +145,7 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=1):
+	def __init__(self, separator="\n\n", recursivo=True):
 		self.len = 0
 		self.sentences = {}
 		self.separator = separator
