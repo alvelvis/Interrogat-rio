@@ -15,7 +15,10 @@ print('''<head>
          </head>''')
 
 if os.path.isfile(link):
-	os.rename(link, '../interrogar-ud/tmp/' + form["ud"].value)
+	if os.path.isdir('/home/elvis_desouza99/Dropbox/tronco/comcorhd.tronco.me/julgamento/'):
+		os.rename(link, '/home/elvis_desouza99/Dropbox/tronco/comcorhd.tronco.me/julgamento/static/uploads/' + form["ud"].value)
+	else:
+		os.rename(link, '../interrogar-ud/tmp/' + form["ud"].value)
 
 	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
 else:

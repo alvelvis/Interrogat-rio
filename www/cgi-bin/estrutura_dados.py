@@ -89,4 +89,4 @@ def PrintarUD(UD, arquivo):
 
 #Transforma acentos e caracteres especiais em underlines
 def slugify(value):
-	return "".join(x if x.isalnum() or x == '.' else "_" for x in value)
+	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)

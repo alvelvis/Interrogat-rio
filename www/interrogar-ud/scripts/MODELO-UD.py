@@ -53,7 +53,7 @@ for head in arquivo_ud.sentences:
 
 			with open('../interrogar-ud/scripts/' + issue, 'r') as f:
 				codigo = f.read().splitlines()
-
+			
 			token_var = 'token'
 			for x, linha in enumerate(codigo):
 				if 'for ' in linha and 'enumerate(' in linha:
@@ -63,9 +63,12 @@ for head in arquivo_ud.sentences:
 				if not 'if ' in linha and ' = ' in linha and '.' in linha:
 					token_col = linha.split('.', 1)[1].split(" = ")[0].strip()
 					tab = (len(linha.split('\t')) -1) * '\t'
-					codigo[x] = tab + "anterior = copy.copy(" + token_var + ".to_str()[:])\n" + codigo[x] + "\n" + tab + "novo_inquerito.append(alterar + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + " + token_var + ".head_token.word + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sent_id)\n" + tab + "sim.append(alterar + '''\n''' + 'ANTES: ' + anterior + '''\n''' + 'DEPOIS: ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + " + token_var + ".head_token.word + ')'))"
+					codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except:\n" + tab + "\tpass\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(alterar + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + " + token_var + ".head_token.word + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sent_id)\n" + tab + "\tsim.append(alterar + '''\n''' + 'ANTES: ' + anterior + '''\n''' + 'DEPOIS: ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + " + token_var + ".head_token.word + ')'))\n" + tab + "except:\n" + tab + "\tpass"
 
-			exec("\n".join(codigo))
+			codigo = "\n".join(codigo)
+			with open("codigo", "w") as f:
+				f.write(codigo)
+			exec(codigo)
 										
 if action == 'sim': open('../interrogar-ud/scripts/sim.txt', 'w').write('\n\n'.join(sim))
 if action == 'exec': open('../interrogar-ud/scripts/novos_inqueritos.txt', 'w').write('\n'.join(novo_inquerito))

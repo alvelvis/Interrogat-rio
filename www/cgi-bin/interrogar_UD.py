@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-import estrutura_dados
 import re
 import copy
 import sys
@@ -9,7 +8,20 @@ def main(arquivoUD, criterio, parametros):
 	parametros = parametros.strip()
 	
 	#Lê o arquivo UD
-	qualquercoisa = estrutura_dados.LerUD(arquivoUD)
+	if criterio in [1, 2, 3, 4]:
+		import estrutura_dados
+		qualquercoisa = estrutura_dados.LerUD(arquivoUD)
+
+	if criterio in [5]:
+		import estrutura_ud
+		with open(arquivoUD, "r") as f:
+			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+				#qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
+				corpus = estrutura_ud.Corpus(recursivo=True)
+			else:
+				corpus = estrutura_ud.Corpus(recursivo=False)
+			corpus.build(f.read())
+			
 
 	#Cria a lista que vai ser enviada seja ao terminal ou ao HTML
 	output = list()
@@ -205,21 +217,12 @@ def main(arquivoUD, criterio, parametros):
 
 	#Python
 	if criterio == 5:
-		import estrutura_ud
-		with open(arquivoUD, "r") as f:
-			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
-				qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
-				corpus = estrutura_ud.Corpus(recursivo=qtd)
-			else:
-				corpus = estrutura_ud.Corpus(recursivo=0)
-			corpus.build(f.read())
-
 		pesquisa = parametros
 		casos = 0
 
 		pesquisa = pesquisa.replace("'", '"')
 		pesquisa = pesquisa.replace("=", " = ")
-		pesquisa = pesquisa.replace(" = = ", " = ")
+		pesquisa = pesquisa.replace(" =  = ", " = ")
 		pesquisa = pesquisa.replace("! =", "!=")
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
@@ -235,6 +238,10 @@ def main(arquivoUD, criterio, parametros):
 		pesquisa = pesquisa.replace('token."', '"')
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
+		pesquisa = pesquisa.replace('token.token.', 'token.')
+		pesquisa = pesquisa.replace('.lower ', '.lower() ')
+		pesquisa = pesquisa.replace('.upper ', '.upper() ')
+		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 		pesquisa = re.sub(r'token\.r\"(.*?)\"\s+in\s+(.*?)(\s)', r're.search(r"\1", \2)\3', pesquisa)
 
 		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa):
@@ -310,10 +317,10 @@ for ''' + identificador + ''' in sentence.tokens:
 if __name__ == '__main__':
 	import sys
 	if len(sys.argv) < 2:
-		arquivoUD= input('arraste arquivo:\n').replace("'","").replace('"','').strip()
+		arquivoUD = input('arraste arquivo:\n').replace("'","").replace('"','').strip()
 	else:
 		arquivoUD = sys.argv[1]
-	qualquercoisa = estrutura_dados.LerUD(arquivoUD)
+	
 	criterio=int(input('qual criterio de procura? '))
 	while criterio > 5:
 	    print('em desenvolvimento')
@@ -341,13 +348,14 @@ if __name__ == '__main__':
 	#Chama a função principal e printo o resultado, dando a ela os parâmetros dos inputs
 	printar = main(arquivoUD, criterio, parametros)['output']
 	
-	for a, sentence in enumerate(printar):
-		printar[a] = printar[a].splitlines()
-		for i, linha in enumerate(printar[a]):
-			if isinstance(linha, list):
-				printar[a][i] = '\t'.join(printar[a][i])
-		printar[a] = '\n'.join(printar[a])
-	printar = '\n\n'.join(printar)
+	if criterio in [1, 2, 3, 4]:
+		for a, sentence in enumerate(printar):
+			printar[a] = printar[a].splitlines()
+			for i, linha in enumerate(printar[a]):
+				if isinstance(linha, list):
+					printar[a][i] = '\t'.join(printar[a][i])
+			printar[a] = '\n'.join(printar[a])
+		printar = '\n\n'.join(printar)
 	
 	print(printar)
 

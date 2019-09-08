@@ -24,7 +24,7 @@ def main():
 
 
 def sendRequestInterrogar():
-	arquivosCONLLU = ["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if ".conllu" in arquivo]
+	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
 	
 	with open("../interrogar-ud/interrogar_UDnew.html", "r") as f:
 		paginaHTML = f.read().split("<!--SPLIT-->")

@@ -40,7 +40,7 @@ function excluir_selection() {
             if (document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.indexOf("<b>") !== -1){
                 negrito = document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.split("<b>")[1].split("</b>")[0].replace(/<.*?>/g, '');
             } else { negrito = ""; }
-            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.replace(/<.*?>/g, '')) + "$" + "(.*\\n)*.*" + negrito + "|";
+            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.replace(/<.*?>/g, '')) + "$" + "(.*\\n)*.*(" + negrito + ")?|";
         }
     }
 

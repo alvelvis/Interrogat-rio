@@ -17,13 +17,14 @@ else:
 log = list()
 
 #apaga tmp
-#if os.path.isdir('/interrogar-ud/tmp'):
-#	shutil.rmtree('/interrogar-ud/tmp')
-#	os.mkdir('/interrogar-ud/tmp')
-#	log.append('- /interrogar-ud/tmp excluída e recriada')
-#else:
-#	os.mkdir('/interrogar-ud/tmp')
-#	log.append('- /interrogar-ud/tmp criada')
+if os.path.isdir('../interrogar-ud/tmp'):
+	shutil.rmtree('../interrogar-ud/tmp')
+	os.mkdir('../interrogar-ud/tmp')
+	open("../interrogar-ud/tmp/README", "w").write('temporary files')
+	log.append('- /interrogar-ud/tmp excluída e recriada')
+else:
+	os.mkdir('../interrogar-ud/tmp')
+	log.append('- /interrogar-ud/tmp criada')
 
 #apaga se antes = depois ou depois not in ud
 inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read().splitlines()

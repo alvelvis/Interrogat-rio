@@ -8,7 +8,7 @@ import os
 #cookie = cookies.Cookie(os.environ['HTTP_COOKIE'])
 
 #print(cookie)
-print("Content-type:text/html")
+print("Content-type:text/html; charset=utf-8")
 print('\n\n')
 
 import sys

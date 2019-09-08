@@ -6,7 +6,7 @@ Interrogatório is meant to be used for making refined queries and revising anno
 
 To understand better how to use the tools, check our Wiki in the tab above.
 
-You can find a demo of the website at [http://comcorhd.tronco.me/](http://comcorhd.tronco.me/UD_Portuguese-Bosque).
+You can access the website at [https://interrogatorio.comcorhd.ga/](https://interrogatorio.comcorhd.ga).
 
 # 4-steps Tutorial
 

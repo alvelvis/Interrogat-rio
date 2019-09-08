@@ -12,9 +12,6 @@ from datetime import datetime
 from functions import tabela
 import html as web
 
-#if not 'REQUEST_METHOD' in os.environ:
-#	os.environ['REQUEST_METHOD'] = 'POST'
-
 from estrutura_dados import slugify as slugify
 
 #POST
