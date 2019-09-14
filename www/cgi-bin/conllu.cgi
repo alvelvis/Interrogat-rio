@@ -14,7 +14,6 @@ import html as web
 
 from estrutura_dados import slugify as slugify
 
-#POST
 form = cgi.FieldStorage()
 with open(form['html'].value, 'r') as f:
 	html = f.read()

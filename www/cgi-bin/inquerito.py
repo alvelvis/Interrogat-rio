@@ -4,6 +4,9 @@
 print('Content-type:text/html')
 print('\n\n')
 
+mostrarEtiqueta = False
+bosqueNaoEncontrado = "BosqueUD2.4.conllu"
+
 import sys
 import cgi, cgitb
 cgitb.enable()
@@ -14,11 +17,6 @@ from datetime import datetime
 import re
 from subprocess import call
 import html as webpage
-
-#import json
-
-#with open('/interrogar-ud/cookies.json', 'w') as fp:
-	#json.dump(dict(os.environ), fp)
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -187,7 +185,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
-		ud = 'bosque_organico.conllu'
+		ud = bosqueNaoEncontrado
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	if 'finalizado' in form: html1 += '<span style="background-color: cyan">Alteração realizada com sucesso!</span><br><br><br>'
 
@@ -210,14 +208,18 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			if 'nome_interrogatorio' in form and 'teste' != form['nome_interrogatorio'].value:
 				html1 = html1 + '<input type=hidden name=nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">'
 				if 'occ' in form: html1 += '<input type=hidden name=occ value="' + form['occ'].value + '">'
-			html1 += '''Tipo de inquérito (etiqueta):<br><br><input type="text" style="border-width: 0px; border-radius: 10px; text-align: center;" placeholder="Crie uma etiqueta para este tipo de inquérito" id=tag name="tag" list="cars" required>'''
-			html1 += '<script>var x = document.cookie.split("tag=")[1].split(";")[0]; if (x && x != "NONE") { document.getElementById("tag").value = x }; </script>'
-			html1 += '''<datalist id="cars">'''
-			if not os.path.isfile('../interrogar-ud/inqueritos_cars.txt'): open('../interrogar-ud/inqueritos_cars.txt', 'w').write('')
-			for linha in open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines():
-				if linha:
-					html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
-			html1 += '</datalist> <input style="display: inline-block;" type="button" onclick="enviar()" value="Realizar alteração"><!--br><br><br-->'
+			
+			if mostrarEtiqueta:
+				html1 += '''Tipo de inquérito (etiqueta):<br><br><input type="text" style="border-width: 0px; border-radius: 10px; text-align: center;" placeholder="Crie uma etiqueta para este tipo de inquérito" id=tag name="tag" list="cars" required>'''
+				html1 += '<script>var x = document.cookie.split("tag=")[1].split(";")[0]; if (x && x != "NONE") { document.getElementById("tag").value = x }; </script>'
+				html1 += '''<datalist id="cars">'''
+				if not os.path.isfile('../interrogar-ud/inqueritos_cars.txt'): open('../interrogar-ud/inqueritos_cars.txt', 'w').write('')
+				for linha in open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines():
+					if linha:
+						html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
+				html1 += "</datalist> "
+			html1 += '<h3>Controles:</h3>Tab, Shift+Tab: mover para coluna à direita/esquerda<br>↑, ↓: mover para linha acima/abaixo<br><br>'
+			html1 += '<input style="display: inline-block;" type="button" onclick="enviar()" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
 			html1 += '<br><br><br><b>Edite as colunas desejadas:</b></div><table id="t01">'
 
 			dicionario = dict()
@@ -227,14 +229,14 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="plaintext" colspan="42" style="cursor:pointer; color:black;">''' + linha + '</td></tr>'
+					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42" style="cursor:pointer; color:black;">''' + linha + '</td></tr>'
 				else:
 					html1 += '<tr>'
 					for b, coluna in enumerate(linha.split('\t')):
 						#if b == 6 and re.search(r'^\d+$', coluna) and coluna in dicionario.keys():
 							#html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" contenteditable=True class="plaintext" style="cursor:pointer; color:black;" onclick="this.Focus(); this.Select();"><div class="tooltip">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '<span class="tooltiptextfix">' + dicionario[coluna].split('\t', 1)[1].replace('<','&lt;').replace('>','&gt;') + '</span></div></td>'
 						#else:
-						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" class="plaintext" contenteditable=True style="cursor:pointer; color:black;">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
+						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + '''" class="annotationValue plaintext" contenteditable=True style="cursor:pointer; color:black;">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
 
 			html1 += '</table><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'

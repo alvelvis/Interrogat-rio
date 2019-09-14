@@ -1,3 +1,25 @@
+<h2>Instruções</h2>
+Digite o critério de busca e os parâmetros na barra de busca à esquerda, conforme os exemplos abaixo.
+<br><br>
+Caso uma busca demore mais de 1 minuto, será retornado um erro do tipo <i>Timeout</i>. Ainda assim, ela continuará sendo processada, e quando completar, será disponibilizada na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.
+<br>
+<ul>
+<li>
+<a href="#criterio_1">Critério 1: Regex</a>
+</li>
+<li>
+<a href="#criterio_2">Critério 2: Ausência de B apontando para A</a>
+</li>
+<li>
+<a href="#criterio_3">Critério 3: Regex Independentes</a>
+</li>
+<li>
+<a href="#criterio_4">Critério 4: Pais e filhos</a>
+</li>
+<li>
+<a href="#criterio_5">Critério 5: Python</a>
+</li>
+
 !@#<h3>Critério 1: Regex</h3>
 Se a expressão regular for encontrada em alguma sentença, retorná-la.
 <br><br>Dica: Cada grupo da expressão regular será mostrado com uma cor diferente.
@@ -48,13 +70,13 @@ Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
 
 !@#<h3>Critério 5: Python</h3>
 Realiza uma condição seguindo a sintaxe em Python.
-<br><br>Parâmetros: uma condição em sintaxe Python.
-<br><br>São atributos de um token: id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token e previous_token.
-<br>Opcional: Utilize um "@" para indicar qual token deve ser negritado.
-<br>Para realizar buscas com regex, utilize a sintaxe:<pre style="color:black">r".*as?" in upos</pre>
+<br><br>Parâmetros:
+<br>Uma ou mais condições que conta com atributos de um token/palavra, um operador (= ou !=), e um valor entre aspas.
+<br><br>São atributos de um token: <pre>id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
+Opcional: Utilize um "@" para indicar qual token deve ser negritado.
+<br>Dica: Todos os valores de uma condição são uma expressão regular (regex).
 <h4>Exemplos:</h4>
 1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
 <ul><li>
 <a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
-

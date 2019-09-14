@@ -14,7 +14,7 @@ print('\n\n')
 import sys
 import cgi,cgitb
 cgitb.enable()
-import re
+import re, html
 
 #conectado = False
 #if 'conectado' in cookie and cookie['conectado'] == True: conectado = True
@@ -30,6 +30,7 @@ def printar(coluna = '', valor = ''):
 	novo_html = ''
 
 	criterios = open('../interrogar-ud/criterios.txt', 'r').read().split('!@#')
+	criterios = [x for x in criterios if x.strip()]
 
 	novo_html += '<form id=pesquisa action="../cgi-bin/interrogatorio.cgi" method="POST"><table><tr><td style="padding-bottom:0px; margin-bottom:0px;">Filtrar pesquisas:</td></tr><tr><td style="padding-right:0px;"><select id=coluna name="coluna" required><option value=":">Tudo</option><option value="1">Nome</option><option value="3">Critério de busca</option><option value="4">Expressão de busca</option><option value="5">CoNLLU</option><option value="6">Data</option></select></td><td style="width:100%"><input type=text style="width:100%; max-width:100%;" id=valor name=valor value="' + valor + '" autofocus=true required></td><td style="padding-left:0px;"><input type=submit class="btn-gradient mini orange" value="Realizar filtro" style="display:inline-block">'
 

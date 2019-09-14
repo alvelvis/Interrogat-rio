@@ -1,3 +1,39 @@
+$(document).ready(function(){
+
+    $('#sendAnnotation').click(function(){
+        $(this).value('Enviando alterações...');
+    });
+
+    $(document).on('keydown', function(event){
+        if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+            event.preventDefault();
+            $('#sendAnnotation').click();
+        };
+    });
+
+    $('.annotationValue').on('keydown', function(event){
+        $td = $(this);
+        if (event.keyCode == 38) {
+            event.preventDefault();
+            $linha = parseInt($td.attr('id').split("-")[0]) - 1;
+            $coluna = $td.attr('id').split("-")[1];
+            $('#' + $linha + '-' + $coluna).focus();
+        };
+    });
+
+    $('.annotationValue').on('keydown', function(event){
+        $td = $(this);
+        if (event.keyCode == 40) {
+            event.preventDefault();
+            $linha = parseInt($td.attr('id').split("-")[0]) + 1;
+            $coluna = $td.attr('id').split("-")[1];
+            $('#' + $linha + '-' + $coluna).focus();
+        };
+    });
+
+});
+
+
 function dist(coluna){
     document.getElementById("corpus_dist").value = document.getElementById("corpus").innerHTML
     document.getElementById("expressao_dist").value = document.getElementById("expressao").innerHTML

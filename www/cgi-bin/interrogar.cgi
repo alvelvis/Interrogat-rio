@@ -15,6 +15,7 @@ from datetime import datetime
 from functions import tabela
 import html as web
 import time
+import sys
 
 def main():
 	if not os.path.isdir("../interrogar-ud/conllu"):
@@ -31,11 +32,15 @@ def sendRequestInterrogar():
 
 	with open("../interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
+		criteriosBusca = [x for x in criteriosBusca if x.strip()]
 
-	paginaHTML[0] += "\n".join(["<a id=criterio_{0}></a><div class=container-lr>{1}</div>".format(i+1, criterio) for i, criterio in enumerate(criteriosBusca)])
+	paginaHTML[0] += "\n".join(["<a id=criterio_{0}></a><div class=container-lr>{1}</div>".format(i, criterio) for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
 	paginaHTML = paginaHTML.split("<select name=\"conllu\">")[0] + "<select name=conllu>" + "\n".join(arquivosCONLLU) + "</select>" + paginaHTML.split("</select>")[1]
+
+	refazerPesquisa = cgi.FieldStorage()['params'].value if 'params' in cgi.FieldStorage() else ""
+	paginaHTML = paginaHTML.replace('id="pesquisa"', f'id="pesquisa" value="{refazerPesquisa}"')
 
 	print(paginaHTML)
 
@@ -125,12 +130,15 @@ class montarHtml():
 	
 	def adicionarHeader(self):
 		arquivoHtml = self.arquivoHtml.replace('<title>link de pesquisa 1 (203): Interrogatório</title>', '<title>' + cgi.escape(self.nomePesquisa) + ' (' + self.numeroOcorrencias + '): Interrogatório</title>')
-		arquivoHtml = arquivoHtml.replace('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>', '<h1><a id=titulo><span id=combination>' + cgi.escape(self.nomePesquisa) + '</span> (' + self.numeroOcorrencias + ')</a></h1><br>Casos: ' + str(self.casosOcorrencias))
+		casos = f"<br>Casos: {str(self.casosOcorrencias)}" if self.casosOcorrencias else ""
+		arquivoHtml = arquivoHtml.replace('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>', '<h1><a style="color:black" id=titulo><span id=combination>' + cgi.escape(self.nomePesquisa) + '</span> (' + self.numeroOcorrencias + ')</a></h1>' + casos)
 
 		with open ('../interrogar-ud/criterios.txt', 'r') as f:
 			criterios = f.read().split('!@#')
+		criterios = [x for x in criterios if x.strip()]
 		
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><div class=tooltip><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span><span class=tooltiptext>' + criterios[int(self.criterio)].split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <span id=corpus>' + self.conllu + '</span> &nbsp;&nbsp;&nbsp;&nbsp; <span id=data>' + self.dataAgora.replace('_', ' ') + '</span> &nbsp;&nbsp;&nbsp;&nbsp; ')
+		refazerPesquisa = '<br><a href="../../cgi-bin/interrogar.cgi?params=' + self.criterio + ' ' + self.parametros.replace('"', "'") + '">Refazer pesquisa</a>'
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><div class=tooltip><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span><span class=tooltiptext>' + criterios[int(self.criterio)].split('<h4>')[0] + '</span></div>' + refazerPesquisa + '<br><br><span id=corpus>' + self.conllu + '</span><br><span id=data>' + self.dataAgora.replace('_', ' ') + '</span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
 
 		return arquivoHtml

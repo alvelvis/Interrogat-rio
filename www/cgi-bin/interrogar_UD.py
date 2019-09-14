@@ -221,16 +221,15 @@ def main(arquivoUD, criterio, parametros):
 		casos = 0
 
 		pesquisa = pesquisa.replace("'", '"')
-		pesquisa = pesquisa.replace("=", " = ")
-		pesquisa = pesquisa.replace(" =  = ", " = ")
-		pesquisa = pesquisa.replace("! =", "!=")
+		pesquisa = pesquisa.replace('="', ' = "')
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
-		pesquisa = pesquisa.replace("  ", " ").strip()
 		if pesquisa[0] == "@": pesquisa = pesquisa[1:]
+		pesquisa = pesquisa.replace("  ", " ").strip()
 		pesquisa = pesquisa.replace(" == ", " == token.")
 		pesquisa = pesquisa.replace(" != ", " != token.")
 		pesquisa = pesquisa.replace(" & ", " and ")
+		pesquisa = pesquisa.replace(" | ", " or ")
 		pesquisa = "token." + pesquisa
 		pesquisa = pesquisa.replace(" and ", " and token.")
 		pesquisa = pesquisa.replace(" or ", " or token.")
@@ -238,19 +237,21 @@ def main(arquivoUD, criterio, parametros):
 		pesquisa = pesquisa.replace('token."', '"')
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
+		
+		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
 		pesquisa = pesquisa.replace('.lower ', '.lower() ')
 		pesquisa = pesquisa.replace('.upper ', '.upper() ')
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
-		pesquisa = re.sub(r'token\.r\"(.*?)\"\s+in\s+(.*?)(\s)', r're.search(r"\1", \2)\3', pesquisa)
+
+		pesquisa = re.sub(r'(\S+?)\s==\s(\S+)', r're.search( r"^" + r\2 + r"$", \1 )', pesquisa)
+		pesquisa = re.sub(r'(\S+?)\s!=\s(\S+)', r'not re.search( r"^" + r\2 + r"$", \1 )', pesquisa)
+		pesquisa = pesquisa.strip()
 
 		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa):
 			pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
 
 		identificador = "token"
-		#identificador = pesquisa.split("head_token")[0].split("next_token")[0].split("previous_token")[0].split(".")[0].strip().replace("  ", " ").replace("int(", "").split(")")[0].replace("(", "")
-		#if " in " in identificador: identificador = identificador.split(" in ")[1]
-		#if "@" in identificador: identificador = identificador.split("@")[1]
 
 		if " @" in parametros:
 			if parametros[0] == "@": parametros = parametros[1:]
@@ -264,10 +265,6 @@ def main(arquivoUD, criterio, parametros):
 
 		agilizar = pesquisa.split('"')[1].split('"')[0] if '"' in pesquisa and not "re.search" in pesquisa else ""
 		agilizado = [[x, y] for x, y in corpus.sentences.items() if agilizar in y.to_str()] if agilizar else corpus.sentences.items()
-		# print(agilizado)
-		# print(pesquisa)
-		# print(arroba)
-		# exit()
 
 		for sentid, sentence in agilizado:
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"

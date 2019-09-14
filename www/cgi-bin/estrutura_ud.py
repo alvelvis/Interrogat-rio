@@ -1,3 +1,14 @@
+def chunkIt(seq, num):
+    avg = len(seq) / float(num)
+    out = []
+    last = 0.0
+
+    while last < len(seq):
+        out.append(seq[int(last):int(last + avg)])
+        last += avg
+
+    return out
+
 class Token:
 	
 	def __init__(self, separator='\t', sent_id="NONE", text="NONE"):
@@ -87,17 +98,17 @@ class Sentence:
 		return token
 
 	def build(self, txt):
-		if '# text = ' in txt:
-			self.text = txt.split('# text = ')[1].split('\n')[0]
+		if '# text =' in txt:
+			self.text = txt.split('# text =')[1].split('\n')[0].strip()
 			self.metadados['text'] = self.text
-		if '# sent_id = ' in txt:
-			self.sent_id = txt.split('# sent_id = ')[1].split('\n')[0]
+		if '# sent_id =' in txt:
+			self.sent_id = txt.split('# sent_id =')[1].split('\n')[0].strip()
 			self.metadados['sent_id'] = self.sent_id
-		if '# source = ' in txt:
-			self.source = txt.split('# source = ')[1].split('\n')[0]
+		if '# source =' in txt:
+			self.source = txt.split('# source =')[1].split('\n')[0].strip()
 			self.metadados['source'] = self.source
-		if '# id = ' in txt:
-			self.id = txt.split('# id = ')[1].split('\n')[0]
+		if '# id =' in txt:
+			self.id = txt.split('# id =')[1].split('\n')[0].strip()
 			self.metadados["id"] = self.id
 		
 		for linha in txt.split(self.separator):
@@ -131,7 +142,7 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=True, sent_id=None):
+	def __init__(self, separator="\n\n", recursivo=True, sent_id=None, thread=False):
 		self.len = 0
 		self.sentences = {}
 		self.separator = separator
@@ -140,6 +151,7 @@ class Corpus:
 		self.sent_id = sent_id
 		self.pre = ""
 		self.pos = ""
+		self.thread = thread
 
 	def build(self, txt):
 		if self.sent_id:
@@ -151,6 +163,24 @@ class Corpus:
 			self.pos = old_txt.split(txt)[1].strip()
 
 		sents = txt.split(self.separator)
+
+		if self.thread:
+			import threading
+			threads = {}
+			chunks = chunkIt(sents, self.thread)
+			for i in range(self.thread):
+				threads[i] = threading.Thread(target=self.sent_build, args=(chunks[i],))
+			for i in range(self.thread):
+				threads[i].start()
+			for i in range(self.thread):
+				threads[i].join()
+
+		else:
+			self.sent_build(sents)
+
+		self.len = len(self.sentences)
+
+	def sent_build(self, sents):
 		for sentence in sents:
 			sent = Sentence(recursivo=self.recursivo)
 			sent.build(sentence)
@@ -162,7 +192,6 @@ class Corpus:
 			elif sent.text:
 				self.sentences[sent.text] = sent
 
-		self.len = len(self.sentences)
 
 	def to_str(self):
 		retorno = list()
