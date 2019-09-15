@@ -3,13 +3,16 @@
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
     <title>link de pesquisa 1 (203): Interrogatório</title>
-    <link href="../../interrogar-ud/style.css" rel="stylesheet" type="text/css">
+    <link href="../../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
-    <script src="../../interrogar-ud/resultados.js"></script>
+    <script src="../../interrogar-ud/resultados.js?version=13"></script>
   </head>
   <body onload="load()">
+    <div id="loading-bg"></div>
+    <img id="loading-image" src="../../interrogar-ud/loading4.gif" alt="Carregando">
+    <img id="loading-image-nobg" src="../../interrogar-ud/loading4.gif" alt="Carregando">
    <button onclick="topFunction()" id="myBtn" title="Voltar ao topo">Voltar ao topo</button>
     <div class="header">
       <h1><span id="combination">link de pesquisa 1</span> (203)</h1>
@@ -29,7 +32,39 @@
       <div class="tabcontent" id="ver"> <br>
       <br>
       <br>
-      <p><a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotações</a><br><a style="cursor:pointer" onclick="tudo('fechar')">Fechar anotações</a><br><a style="cursor:pointer" onclick="tudo('marcar')">Marcar todas as sentenças</a><br><a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar todas as sentenças</a><br><a style="cursor:pointer" onclick="abrir_script()"><div class="tooltip">Executar script<div class="tooltiptext">O script deve estar na pasta "interrogar-ud/scripts" e será executado nas sentenças presentes na página atual. Antes de efetivar as alterações, será feita uma simulação.</div></div></a> <div id="script" style="display:none"><!--script--></div><!--DISTbr><br><a style="cursor:pointer" onclick="dist('id')">Visualizar distribuição de ID</a><br><a style="cursor:pointer" onclick="dist('word')">Visualizar distribuição de WORD</a><br><a style="cursor:pointer" onclick="dist('lemma')">Visualizar distribuição de LEMMA</a><br><a style="cursor:pointer" onclick="dist('upos')">Visualizar distribuição de UPOS</a><br><a style="cursor:pointer" onclick="dist('xpos')">Visualizar distribuição de XPOS</a><br><a style="cursor:pointer" onclick="dist('feats')">Visualizar distribuição de FEATS</a><br><a style="cursor:pointer" onclick="dist('dephead')">Visualizar distribuição de DEPHEAD</a><br><a style="cursor:pointer" onclick="dist('deprel')">Visualizar distribuição de DEPREL</a><br><a style="cursor:pointer" onclick="dist('deps')">Visualizar distribuição de DEPS</a><br><a style="cursor:pointer" onclick="dist('misc')">Visualizar distribuição de MISC</aDIST--><!--br><a style="cursor:pointer" onclick="paginacao()">Remover paginação</a--></p>
+      <a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotações</a>
+      <br>
+      <a style="cursor:pointer" onclick="tudo('fechar')">Fechar anotações</a>
+      <br>
+      <a style="cursor:pointer" onclick="tudo('marcar')">Marcar todas as sentenças</a>
+      <br>
+      <a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar todas as sentenças</a>
+      <br>
+      <a style="cursor:pointer" onclick="abrir_script()">
+        <div class="tooltip">Executar script
+          <div class="tooltiptext">
+            O script deve estar na pasta "interrogar-ud/scripts" e será executado nas sentenças presentes na página atual. Antes de efetivar as alterações, será feita uma simulação.
+          </div>
+        </div>
+      </a>
+      <div id="script" style="display:none"><!--script--></div>
+        <!--DISTh4>Visualizar distribuição:</h4>
+          <ul>
+            <li><a style="cursor:pointer" class="verDist">id</a></li>
+            <li><a style="cursor:pointer" class="verDist">word</a></li>
+            <li><a style="cursor:pointer" class="verDist">lemma</a></li>
+            <li><a style="cursor:pointer" class="verDist">upos</a></li>
+            <li><a style="cursor:pointer" class="verDist">xpos</a></li>
+            <li><a style="cursor:pointer" class="verDist">feats</a></li>
+            <li><a style="cursor:pointer" class="verDist">dephead</a></li>
+            <li><a style="cursor:pointer" class="verDist">deprel</a></li>
+            <li><a style="cursor:pointer" class="verDist">deps</a></li>
+            <li><a style="cursor:pointer" class="verDist">misc</a></li>
+        </ulDIST-->
+      <!--br>
+        <p>
+          <a style="cursor:pointer" onclick="paginacao()">Remover paginação</a>
+        </p-->
       </div>
       <div class="tabcontent" id="filtrar_tab"> <br>
         <br>

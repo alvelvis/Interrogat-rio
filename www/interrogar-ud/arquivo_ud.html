@@ -2,17 +2,23 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>Arquivos UD: Interrogatório</title>
-    <link href="../interrogar-ud/style.css" rel="stylesheet" type="text/css">
+    <title>Arquivos CoNLL-U: Interrogatório</title>
+    <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
+    <script src="../interrogar-ud/resultados.js?version=12"></script>
   </head>
   <body>
+      <div id="loading-bg"></div>
+      <img id="loading-image" src="../interrogar-ud/loading4.gif" alt="Carregando">
+      <img id="loading-image-nobg" src="../interrogar-ud/loading4.gif" alt="Carregando">
     <div class="header">
-      <h1>Arquivos UD</h1>
+      <h1>Arquivos CoNLL-U</h1>
       <h2><a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a> - <a href="../cgi-bin/interrogar.cgi">nova interrogação</a></h2>
     </div>
     <div class="content">
-      <form action="../cgi-bin/arquivo_ud.cgi" method="post" enctype="multipart/form-data"> <label for="arquivo">Novo arquivo UD:<br>
+      <form action="../cgi-bin/arquivo_ud.cgi" method="post" enctype="multipart/form-data"> <label for="arquivo">Enviar arquivo .conllu:<br>
           <input name="file" value="Escolher arquivo" required="required" type="file"> </label><input class="btn-gradient orange mini" value="Enviar" onclick="document.getElementById('submeter').value = 'Enviando...'" id=submeter type="submit"></form>
       <br>
       <br>

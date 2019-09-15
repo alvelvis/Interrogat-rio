@@ -1,3 +1,46 @@
+#loading-bg {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1010;
+    display:none;
+}
+  
+#loading-image {
+  position: fixed;
+  left:47vw;
+  text-align:center;
+  top:48vh;
+  z-index: 1020;
+  width: 10vh;
+  height: auto;
+  display:none;
+}
+
+#loading-image-nobg {
+  position: fixed;
+  text-align:center;
+  left: 47vw;
+  top:48vh;
+  z-index: 1020;
+  width: 10vh;
+  height: auto;
+  display:none;
+}
+
+.drop-hover {
+    background-color: red;
+    color: white;
+}
+
+.ui-draggable-dragging {
+    background-color: black;
+    color: white;
+}
+
 #tag:valid {
     box-shadow: 0 0 5px green;
 }

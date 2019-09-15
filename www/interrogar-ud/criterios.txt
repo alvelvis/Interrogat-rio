@@ -1,8 +1,16 @@
 <h2>Instruções</h2>
-Digite o critério de busca e os parâmetros na barra de busca à esquerda, conforme os exemplos abaixo.
-<br><br>
-Caso uma busca demore mais de 1 minuto, será retornado um erro do tipo <i>Timeout</i>. Ainda assim, ela continuará sendo processada, e quando completar, será disponibilizada na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.
+Buscas simples com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a> podem ser realizadas digitando as palavras na barra de busca à esquerda.
 <br>
+Para buscas complexas, digite o critério de busca e seus parâmetros na barra de busca, conforme as instruções e os exemplos abaixo. Caso nenhum critério seja especificado, será utilizado o <a href="#criterio_1">critério 1: Regex</a>.
+<br>
+<h3>Alguns caminhos:</h3>
+<ul>
+<li>
+<a href="#interactive"><b>Construir expressão de busca complexa interativamente</b></a>
+</li>
+<li>
+<b>Consultar documentação dos critérios de busca</b>
+</li>
 <ul>
 <li>
 <a href="#criterio_1">Critério 1: Regex</a>
@@ -19,11 +27,121 @@ Caso uma busca demore mais de 1 minuto, será retornado um erro do tipo <i>Timeo
 <li>
 <a href="#criterio_5">Critério 5: Python</a>
 </li>
+</ul>
+</ul>
+<h3>Links úteis:</h3>
+<ul>
+<li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos</a></li>
+<li><a href="https://julgamento.comcorhd.ga" target="_blank">Julgamento - avaliação de corpora</a></li>
+<li><a href="../cgi-bin/arquivo_ud.cgi">Repositório dos arquivos CoNLL-U</a></li>
+<li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Repositório no Github</a></li>
+</ul>
+
+!@#<a id="interactive"></a>
+<h2>Construtor de expressões de busca</h2>
+Com o Construtor você cria expressões de busca complexas interativamente. Cada nova condição é automaticamente adicionada à barra de busca à esquerda.
+
+<h3>
+Procurar por:</h3>
+<select title="Token/palavra que será avaliado nesta condição" class="token">
+    <option title="Qualquer token">token</option>
+    <option title="Pai do token">head_token</option>
+    <option title="Token à direita">next_token</option>
+    <option title="Token à esquerda">previous_token</option>
+</select>
+ cujo(a) 
+<select title="Atributo que será avaliado" class="atribute">
+    <option title="Número do token na sentença">id</option>
+    <option title="Forma da palavra">word</option>
+    <option title="Lema da palavra">lemma</option>
+    <option title="Classe gramatical">upos</option>
+    <option title="Classe gramatical específica">xpos</option>
+    <option title="Atributos morfológicos">feats</option>
+    <option title="Número de ID do token do qual é dependente">dephead</option>
+    <option title="Relação de dependência sintática">deprel</option>
+    <option title="Dependência específica">deps</option>
+    <option title="Miscelânea">misc</option>
+</select>
+ seja 
+<select title="Forma de avaliação do atributo selecionado" class="evaluation">
+    <option title="Igual">==</option>
+    <option title="Diferente">!=</option>
+</select>
+ a/de 
+<input placeholder="Clique para sugestões" title="Valor que o atributo selecionado deve conter" list="possibleValues" class="value">
+<datalist id="possibleValues">
+    <option value='ADJ' title="Adjetivo">
+    <option value='ADP' title="Preposição">
+    <option value='ADV' title="Advérbio">
+    <option value='AUX' title="Auxiliar">
+    <option value='CCONJ' title="Conjunção coordenativa">
+    <option value='DET' title="Determinante">
+    <option value='INTJ' title="Interjeição">
+    <option value='NOUN' title="Substantivo">
+    <option value='NUM' title="Numeral">
+    <option value='PART' title="Partícula">
+    <option value='PRON' title="Pronome">
+    <option value='PROPN' title="Nome próprio">
+    <option value='PUNCT' title="Pontuação">
+    <option value='SCONJ' title="Conjunção subordinativa">
+    <option value='SYM'>
+    <option value='VERB'>
+    <option value='X'>
+    <option value='acl'>
+    <option value='advcl'>
+    <option value='advmod'>
+    <option value='amod	'>
+    <option value='appos'>
+    <option value='aux'>
+    <option value='case'>
+    <option value='cc'>
+    <option value='ccomp'>
+    <option value='clf'>
+    <option value='compound	'>
+    <option value='conj'>
+    <option value='cop'>
+    <option value='csubj'>
+    <option value='dep'>
+    <option value='det'>
+    <option value='discourse'>
+    <option value='dislocated'>
+    <option value='expl'>
+    <option value='fixed'>
+    <option value='flat'>
+    <option value='goeswith'>
+    <option value='iobj'>
+    <option value='list'>
+    <option value='mark'>
+    <option value='nmod'>
+    <option value='nsubj'>
+    <option value='nummod'>
+    <option value='obj'>
+    <option value='obl'>
+    <option value='orphan'>
+    <option value='parataxis'>
+    <option value='punct'>
+    <option value='reparandum'>
+    <option value='root'>
+    <option value='vocative'>
+    <option value='xcomp'>
+</datalist>
+[<a class="addCondition" title="Adicionar condição à expressão de busca (Enter)" href="#interactive">+</a>] [<a class="addBoldCondition" title="Adicionar condição com o token em negrito" href="#interactive">@</a>] [<a style="color:red" class="clearCondition" title="Limpar expressão de busca" href="#interactive">x</a>]
+<br>
+
+<h3>Instruções:</h3>
+<ul>
+<li>A busca será construida utilizando o <a href="#criterio_5">critério 5: Python</a>. Neste critério, você indica as condições que devem ser satisfeitas para que uma frase seja encontrada. Todas as condições indicadas por você devem ser atendidas.</li>
+<li>Uma condição é feita pensando em um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
+<li>Um ou mais <b>atributos</b> gramaticais serão verificados desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um (ou mais) <b>valor</b>(es).</li>
+<li>Todos os valores podem ser preenchidos com expressão regular (aprenda sobre Regex <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">aqui</a>).</li>
+<li>Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
+<li>Caso você não especifique nenhum token para ser negritado nas frases, o primeiro da expressão de busca será o escolhido.</li>
+</ul>
 
 !@#<h3>Critério 1: Regex</h3>
 Se a expressão regular for encontrada em alguma sentença, retorná-la.
-<br><br>Dica: Cada grupo da expressão regular será mostrado com uma cor diferente.
-<br>Dica 2: Em um arquivo <i>.conllu</i>, "\t" separa as colunas, e "\n", as palavras.
+<br><br>Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.
+<br>Dica 2: Em um arquivo no formato CoNLL-U, "\t" separa as colunas, e "\n", as palavras.
 <h4>Exemplos:</h4>
 1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".
 <ul><li>
@@ -59,7 +177,7 @@ Verifica se várias expressões regulares dão match em uma sentença e a retorn
 </li></ul>
 
 !@#<h3>Critério 4: Pais e filhos</h3>
-Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
+Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).
 <br><br>Parâmetros:<br>Regex 1 :: Regex 2
 <br><br>Dica: Utilize '!' para negar a presença de um filho ou de um pai.
 <h4>Exemplos:</h4>
@@ -71,12 +189,12 @@ Pesquisa relações sintáticas entre filhos (regex 1) e pais (regex 2).
 !@#<h3>Critério 5: Python</h3>
 Realiza uma condição seguindo a sintaxe em Python.
 <br><br>Parâmetros:
-<br>Uma ou mais condições que conta com atributos de um token/palavra, um operador (= ou !=), e um valor entre aspas.
-<br><br>São atributos de um token: <pre>id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
+<br>Uma ou mais condições que conta com atributos de um token/palavra, um operador (== ou !=), e um valor entre aspas.
+<br><br>São atributos de um token: <pre style="color:black">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
 Opcional: Utilize um "@" para indicar qual token deve ser negritado.
 <br>Dica: Todos os valores de uma condição são uma expressão regular (regex).
 <h4>Exemplos:</h4>
 1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
 <ul><li>
-<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
+<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word == "é" and token.upos == "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>

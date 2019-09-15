@@ -221,7 +221,7 @@ def main(arquivoUD, criterio, parametros):
 		casos = 0
 
 		pesquisa = pesquisa.replace("'", '"')
-		pesquisa = pesquisa.replace('="', ' = "')
+		pesquisa = pesquisa.replace('==', ' == ')
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
 		if pesquisa[0] == "@": pesquisa = pesquisa[1:]
@@ -263,8 +263,8 @@ def main(arquivoUD, criterio, parametros):
 		with open("expressao_busca.txt", "w") as f:
 			f.write(f"parametro: {parametros}\npesquisa: {pesquisa}\narroba: {arroba}")
 
-		agilizar = pesquisa.split('"')[1].split('"')[0] if '"' in pesquisa and not "re.search" in pesquisa else ""
-		agilizado = [[x, y] for x, y in corpus.sentences.items() if agilizar in y.to_str()] if agilizar else corpus.sentences.items()
+		agilizar = parametros.split('"')[1].split('"')[0] if '"' in parametros else ""
+		agilizado = [[x, y] for x, y in corpus.sentences.items() if re.search(agilizar, y.to_str())] if agilizar else corpus.sentences.items()
 
 		for sentid, sentence in agilizado:
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"

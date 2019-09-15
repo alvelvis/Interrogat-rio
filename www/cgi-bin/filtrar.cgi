@@ -196,7 +196,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	html = html1 + html2
 
-	html = html.replace('''<a style="cursor:pointer" onclick="tudo('marcar')">Marcar tudo</a><br><a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar tudo</a>''', "")
+	html = html.replace('''Marcar todas as sentenças''', "").replace("Desmarcar todas as sentenças", "")
 
 	#<!--script-->
 	html1 = html.split('<!--script-->')[0]

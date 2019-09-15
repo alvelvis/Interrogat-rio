@@ -32,16 +32,19 @@ def sendRequestInterrogar():
 
 	with open("../interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
-		criteriosBusca = [x for x in criteriosBusca if x.strip()]
+		criteriosBusca = [x + "<br>[<a href='#criterio_-1'>Voltar ao menu</a>]" for x in criteriosBusca if x.strip()]
 
-	paginaHTML[0] += "\n".join(["<a id=criterio_{0}></a><div class=container-lr>{1}</div>".format(i, criterio) for i, criterio in enumerate(criteriosBusca)])
+	paginaHTML[0] += "\n".join(["<div class=container-lr id=criterio_{0}>{1}</div>".format(i-1, criterio) for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
-	paginaHTML = paginaHTML.split("<select name=\"conllu\">")[0] + "<select name=conllu>" + "\n".join(arquivosCONLLU) + "</select>" + paginaHTML.split("</select>")[1]
+	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
 
-	refazerPesquisa = cgi.FieldStorage()['params'].value if 'params' in cgi.FieldStorage() else ""
-	paginaHTML = paginaHTML.replace('id="pesquisa"', f'id="pesquisa" value="{refazerPesquisa}"')
-
+	refazerPesquisa = cgi.FieldStorage()['params'].value.replace("'", '"') if 'params' in cgi.FieldStorage() else ""
+	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
+	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{refazerPesquisa}\'''').replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")
+	if 'save' in cgi.FieldStorage():
+		paginaHTML = paginaHTML.replace('checked>Busca rápida', '>Busca rápida').replace('>Salvar busca', 'checked>Salvar busca')
+		paginaHTML = paginaHTML.split("</body>")[0] + '<script>$("body").ready(function(){$("#enviar").click()})</script>' + "</body>" + paginaHTML.split("</body>")[1]
 	print(paginaHTML)
 
 
@@ -53,9 +56,20 @@ def sendPOSTInterrogar():
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
 	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora + '.html'
 
+	if nomePesquisa and nomePesquisa not in ['teste', 'Busca rápida']:
+		with open(f"../interrogar-ud/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
+			f.write("")
+
 	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros)
 
 	arquivoHtml = montarHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias).montarHtml()
+
+	if nomePesquisa and nomePesquisa not in ['teste', 'Busca rápida']:
+		os.remove("../interrogar-ud/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
+
+	if nomePesquisa in ['teste', 'Busca rápida']:
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Executar script", "").replace("Marcar todas as sentenças", "").replace("Desmarcar todas as sentenças", "").replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para liberar mais funções.<br>'))
+		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
 		f.write(arquivoHtml)
@@ -75,13 +89,11 @@ def variaveisDePesquisa(form):
 	if not re.match(r'^\d+$', form['pesquisa'].value.split(' ')[0]):
 		criterio = '1'
 		parametros = form['pesquisa'].value
-		print('<script>window.alert("Critério não especificado. Utilizando expressão regular (critério 1).")</script>')
 	else:
 		criterio = form['pesquisa'].value.split(' ')[0]
 
 	conllu = form['conllu'].value
-	metodo = form['meth'].value
-	nomePesquisa = 'teste' if form['meth'].value == 'teste' else form['nome'].value
+	nomePesquisa = 'Busca rápida' if form['meth'].value != 'salvar' else form['nome'].value
 
 	return criterio, parametros, conllu, nomePesquisa
 
@@ -109,7 +121,6 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros):
 	dicionarioOcorrencias = resultadosBusca['output']
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
-	#print('Total: ' + numeroOcorrencias)
 
 	return dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias
 
@@ -137,15 +148,18 @@ class montarHtml():
 			criterios = f.read().split('!@#')
 		criterios = [x for x in criterios if x.strip()]
 		
-		refazerPesquisa = '<br><a href="../../cgi-bin/interrogar.cgi?params=' + self.criterio + ' ' + self.parametros.replace('"', "'") + '">Refazer pesquisa</a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><div class=tooltip><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span><span class=tooltiptext>' + criterios[int(self.criterio)].split('<h4>')[0] + '</span></div>' + refazerPesquisa + '<br><br><span id=corpus>' + self.conllu + '</span><br><span id=data>' + self.dataAgora.replace('_', ' ') + '</span>')
+		refazerPesquisa = '<br><a class="refazerPesquisa" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + self.parametros.replace('"', "'") + '">Refazer busca</a>'
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><div class=tooltip><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span><span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div>' + refazerPesquisa + '<br><br><span id=corpus>' + self.conllu + '</span><br><span id=data><small>' + self.dataAgora.replace('_', ' ') + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
 
 		return arquivoHtml
 
 	def adicionarDistribution(self):
 		if self.criterio == "5":
-			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", f"><form id=dist action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='{self.caminhoCompletoHtml}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+			if self.nomePesquisa not in ['teste', 'Busca rápida']:
+				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", f"><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='{self.caminhoCompletoHtml}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>".format(self.parametros.replace("'", '"')))
+			#return self.arquivoHtml.replace("DIST-->", 'DIST--><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.')
 		return self.arquivoHtml
 
 	def adicionarExecutarScript(self):
@@ -211,7 +225,7 @@ class montarHtml():
 			self.arquivoHtml[0] += adicionarBotoesEContextoHtml(self.caminhoCompletoConllu, i, ocorrencia, self.corpus) + '\n'
 			self.arquivoHtml[0] += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
 			self.arquivoHtml[0] += self.adicionarFormInquerito(i, ocorrencia)
-			self.arquivoHtml[0] += self.adicionarOpcaoFiltrar(i, ocorrencia)
+			if self.nomePesquisa != 'Busca rápida': self.arquivoHtml[0] += self.adicionarOpcaoFiltrar(i, ocorrencia)
 			self.arquivoHtml[0] += '<br>'
 			self.arquivoHtml[0] += self.adicionarFormEOpcaoUDPipe(i, ocorrencia)
 			self.arquivoHtml[0] += '<br>'

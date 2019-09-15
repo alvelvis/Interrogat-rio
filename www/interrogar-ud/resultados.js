@@ -1,7 +1,70 @@
+$(window).on('beforeunload', function() {
+    $('#loading-bg').show();
+    $('#loading-image').show();
+    setTimeout(waitTooMuch, 20000);
+});
+
+function waitTooMuch(){
+    if ($('#loading-bg').is(':visible')){
+        if (/interrogar\.cgi/.test(window.location.href)) {
+            if (!$('.salvar').is(':checked')) {
+                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&params=' + $('.pesquisa').val() + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
+            } else {
+                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.</div>');
+            }
+        }
+    }
+};
+
+$(window).on('unload', function() {
+    $('#loading-bg').hide();
+    $('#loading-image').hide();
+});
+
+$(window).ready(function(){
+    $('#loading-bg').hide();
+    $('#loading-image').hide();
+});
+
 $(document).ready(function(){
 
+    $('.toggleOutros').on('click', function(){
+        if (/5 /.test($('#pesquisa').val())) {
+            $('.dist').show();
+            $('.notDist').hide();
+        } else {
+            $('.dist').hide();
+            $('.notDist').show();
+        }
+    });
+
+    $('.verDist').click(function(){
+        if ($('#pesquisa').length){
+            $('#html_dist').val($('#pesquisa').val().replace(/^5 /, ""));
+            $('#expressao_dist').val($('#pesquisa').val());
+            $('#corpus_dist').val($('.conllu').val());
+        };
+        dist($(this).html());
+    });
+
+    $('.drag').draggable({
+        zIndex: 100,
+        revert: true,
+        opacity: 0.35,
+        appendTo: "body",
+        refreshPositions: true,
+      });
+      
+    $('tr').droppable({
+        hoverClass: "drop-hover",
+        drop: function(event, ui) {
+            var classes = ui.draggable.attr('class');
+            ui.draggable.html($(this).children('.id').html());
+        }
+    });
+
     $('#sendAnnotation').click(function(){
-        $(this).value('Enviando alterações...');
+        $(this).val('Enviando alterações...');
     });
 
     $(document).on('keydown', function(event){
@@ -35,11 +98,12 @@ $(document).ready(function(){
 
 
 function dist(coluna){
-    document.getElementById("corpus_dist").value = document.getElementById("corpus").innerHTML
-    document.getElementById("expressao_dist").value = document.getElementById("expressao").innerHTML
-    document.getElementById("combination_dist").value = document.getElementById("titulo").innerHTML.replace('<span id="combination">', '').replace('</span>', '')
+    if (! $('#pesquisa').length){
+        document.getElementById("corpus_dist").value = document.getElementById("corpus").innerHTML
+        document.getElementById("expressao_dist").value = document.getElementById("expressao").innerHTML
+    }
     document.getElementById("coluna_dist").value = coluna
-    document.getElementById("dist").submit()
+    $("#dist").submit()
 }
 
 function abrir_script() {
