@@ -1,7 +1,7 @@
-dephead|erro: Token dependente de si próprio
+dephead|erro: 1 - Token dependente de si próprio
 dephead = id
 
-dephead|erro: Ciclo na sentença
+dephead|erro: 2 - Ciclo na sentença
 dephead == head_token.id and head_token.dephead == id and dephead != id
 
 feats|erro: Features incompatíveis
@@ -18,12 +18,23 @@ upos = "PROPN" and feats != "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gend
 upos = "VERB" and feats != "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats != "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
-upos|erro: UPOS não existe
+upos|erro: UPOS inválido
 upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
 
-deprel|erro: DEPREL não existe
+deprel|erro: DEPREL inválido
 deprel != "root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis"
 
-misc|erro: MWE sem MWEPOS
+misc|erro: MWE inválida
 misc = "MWE=.*" and misc != "MWEPOS=.*"
 misc = "MWEPOS.*" and misc != "MWE.*"
+deprel = "fixed|compound" and head_token.misc != "MWE=.*"
+deprel = "fixed|compound" and head_token.misc != "MWEPOS=.*"
+
+dephead|erro: DEPHEAD inválido
+dephead != "\d+"
+
+misc|erro: MISC inválido
+misc != "MWE=.*|MWEPOS.*|SpaceAfter=.*|d2d:.*|ChangedBy=.*|_"
+
+id|erro: ID inválido
+id != "[0-9\-]+"

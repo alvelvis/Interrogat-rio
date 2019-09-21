@@ -3,6 +3,7 @@ import interrogar_UD
 import sys
 import re
 import pprint
+from functions import fromInterrogarToHtml
 
 def validate(conllu, sent_id = None, errorList = "validar_UD.txt"):
     with open(errorList) as f:
@@ -24,7 +25,7 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt"):
                 if not comment in errorDictionary:
                     errorDictionary[comment] = []
                 sentence = estrutura_ud.Sentence(recursivo=True)
-                sentence.build(sentString)
+                sentence.build(fromInterrogarToHtml(sentString))
                 for t, token in enumerate(sentence.tokens):
                     if "<b>" in token.to_str():
                         tokenT = t

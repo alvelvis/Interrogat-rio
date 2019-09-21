@@ -14,13 +14,16 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 
 	if criterio in [5]:
 		import estrutura_ud
-		with open(arquivoUD, "r") as f:
-			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
-				#qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
-				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
-			else:
-				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
-			corpus.build(f.read())
+		if isinstance(arquivoUD, str):
+			with open(arquivoUD, "r") as f:
+				if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+					#qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
+					corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
+				else:
+					corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
+				corpus.build(f.read())
+		else:
+			corpus = arquivoUD
 			
 
 	#Cria a lista que vai ser enviada seja ao terminal ou ao HTML
@@ -263,8 +266,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		arroba = arroba.rsplit(".", 1)[0]
 		#if " in " in arroba: arroba = arroba.split(" in ")[1]
 
-		with open("expressao_busca.txt", "w") as f:
-			f.write(f"parametro: {parametros}\npesquisa: {pesquisa}\narroba: {arroba}")
+		#with open("expressao_busca.txt", "w") as f:
+			#f.write(f"parametro: {parametros}\npesquisa: {pesquisa}\narroba: {arroba}")
 
 		agilizar = parametros.split('"')[1].split('"')[0] if '"' in parametros else ""
 		agilizado = corpus.sentences.items()#[[x, y] for x, y in corpus.sentences.items() if re.search(agilizar, y.to_str())] if agilizar else corpus.sentences.items()
