@@ -1,10 +1,10 @@
-erro: Token apontando para si próprio
+dephead|erro: Token apontando para si próprio
 dephead = id
 
-erro: Ciclo na sentença
+dephead|erro: Ciclo na sentença
 dephead == head_token.id and head_token.dephead == id and dephead != id
 
-erro: Features incompatíveis
+feats|erro: Features incompatíveis
 upos = "ADJ" and feats != "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
 upos = "ADV" and feats != "_|Polarity=Neg"
 upos = "AUX" and feats != "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
@@ -18,12 +18,12 @@ upos = "PROPN" and feats != "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gend
 upos = "VERB" and feats != "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats != "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
-erro: UPOS não existe
+upos|erro: UPOS não existe
 upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
 
-erro: DEPREL não existe
+deprel|erro: DEPREL não existe
 deprel != "root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis"
 
-erro: MWE sem MWEPOS
+misc|erro: MWE sem MWEPOS
 misc = "MWE=.*" and misc != "MWEPOS=.*"
 misc = "MWEPOS.*" and misc != "MWE.*"

@@ -202,7 +202,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			for erro in erros:
 				html1 += f'<li>{erro}:</li><ul>'
 				for sentence in erros[erro]:
-					html1 += f"<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}</li>"
+					html1 += f'''<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</li>'''
 				html1 += "</ul>"
 			html1 += "</ul>"
 		html1 += '<br>'
