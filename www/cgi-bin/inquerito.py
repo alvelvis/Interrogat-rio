@@ -14,11 +14,12 @@ cgitb.enable()
 import estrutura_dados
 import estrutura_ud
 import os
-from functions import prettyDate
+from functions import prettyDate, cleanEstruturaUD
 from datetime import datetime
 import re
 from subprocess import call
 import html as webpage
+import validar_UD
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -189,7 +190,22 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
 		ud = bosqueNaoEncontrado
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
-	if 'finalizado' in form: html1 += '<span style="background-color: cyan">Alteração realizada com sucesso!</span><br><br><br>'
+	if 'finalizado' in form:
+		erros = []
+		if 'sentid' in form:
+			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value)
+		alertColor = "cyan" if not erros else "yellow"
+		alertBut = "" if not erros else ", mas atenção:"
+		html1 += f'<span style="background-color: {alertColor}">Alteração realizada com sucesso{alertBut}</span>'
+		if alertBut:
+			html1 += "<ul>" 
+			for erro in erros:
+				html1 += f'<li>{erro}:</li><ul>'
+				for sentence in erros[erro]:
+					html1 += f"<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}</li>"
+				html1 += "</ul>"
+			html1 += "</ul>"
+		html1 += '<br>'
 
 	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a href="javascript:window.close()">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 

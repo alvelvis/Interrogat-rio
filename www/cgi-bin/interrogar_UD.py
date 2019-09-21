@@ -4,7 +4,7 @@ import copy
 import sys
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
-def main(arquivoUD, criterio, parametros, limit=0):
+def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 	parametros = parametros.strip()
 	
 	#Lê o arquivo UD
@@ -17,9 +17,9 @@ def main(arquivoUD, criterio, parametros, limit=0):
 		with open(arquivoUD, "r") as f:
 			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
 				#qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
-				corpus = estrutura_ud.Corpus(recursivo=True)
+				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
 			else:
-				corpus = estrutura_ud.Corpus(recursivo=False)
+				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
 			corpus.build(f.read())
 			
 

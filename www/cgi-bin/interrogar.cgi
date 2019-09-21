@@ -161,9 +161,6 @@ class paginaHtml():
 
 	def adicionarDistribution(self):
 		if self.criterio == "5":
-			if self.numeroOcorrencias != "0":
-				with open("../cgi-bin/expressoes_5.txt", "a") as f:
-					f.write("\n5 " + self.parametros)
 			if self.nomePesquisa not in fastSearch:
 				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", f"><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='{self.caminhoCompletoHtml}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
 			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>".format(self.parametros.replace("'", '"')))

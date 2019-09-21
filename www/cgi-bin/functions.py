@@ -1,5 +1,4 @@
-def fromInterrogarToHtml(s):
-    return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')
+import re
 
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
@@ -7,6 +6,12 @@ tabela = {	'yellow': 'green',
 			'red': 'red',
 			'cyan': 'cyan',
 }
+
+def cleanEstruturaUD(s):
+    return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
+
+def fromInterrogarToHtml(s):
+    return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')
 
 class prettyDate:
 

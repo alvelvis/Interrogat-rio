@@ -206,10 +206,6 @@ $(document).ready(function(){
         }
     });
 
-    $('#sendAnnotation').click(function(){
-        $(this).val('Enviando alterações...');
-    });
-
     $(document).on('keydown', function(event){
         if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
             event.preventDefault();
