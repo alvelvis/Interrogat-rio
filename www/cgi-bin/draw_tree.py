@@ -126,7 +126,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	with open('../interrogar-ud/conllu/' + form['conllu'].value, 'r') as f:
 		arquivo = f.read()
 
-	conllu = estrutura_ud.Corpus()
+	conllu = estrutura_ud.Corpus(recursivo=False)
 	conllu.build(arquivo)
 
 	sentence = conllu.sentences[form['text'].value] if 'text' in conllu.sentences else conllu.sentences[form['sent_id'].value]

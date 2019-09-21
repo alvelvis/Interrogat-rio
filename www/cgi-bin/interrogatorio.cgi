@@ -15,6 +15,7 @@ import sys
 import cgi,cgitb
 cgitb.enable()
 import re, html, time
+from functions import prettyDate
 
 #conectado = False
 #if 'conectado' in cookie and cookie['conectado'] == True: conectado = True
@@ -38,9 +39,9 @@ def printar(coluna = '', valor = ''):
 
 	novo_html += '</td></tr></table></form><br>'
 
-	inProgress = sorted(["<tr><td>" + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/" + x))) + "</td><td>" + x.split(" ", 1)[1].rsplit(' ', 1)[0] + "</td><td>" + x.split(" ", 1)[0] + "</td></tr>" for x in os.listdir('../interrogar-ud/') if x.endswith('.inProgress')], reverse=True)
+	inProgress = ["<tr><td>" + prettyDate(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/" + x)))).beautifyDateDMAH() + "</td><td>" + x.split(" ", 1)[1].rsplit(' ', 1)[0] + "</td><td>" + x.split(" ", 1)[0] + "</td></tr>" for x in os.listdir('../interrogar-ud/') if x.endswith('.inProgress')]
 	if inProgress:
-		html = html.replace("<title>", f"<title>({len(inProgress)}) ")
+		html = html.replace("<title>", f"<title>{len(inProgress)} busca{'s' if len(inProgress) > 1 else ''} em progresso - ")
 		novo_html += "<h2>Buscas em progresso:</h2><small><a href='javascript:location.reload()'>Atualizar</a></small><div class=\"container-lr\"><table>{0}</table></div>".format(''.join(inProgress)) + "<br>"
 
 	html_query = ''
@@ -52,11 +53,11 @@ def printar(coluna = '', valor = ''):
 				try:
 					if os.path.isdir(query.split('\t')[0].rsplit('.html', 1)[0]):
 						filtros = '<b>Filtros:</b><br>'
-						for arquivo in os.listdir(query.split('\t')[0].rsplit('.html', 1)[0]):
+						for arquivo in sorted(os.listdir(query.split('\t')[0].rsplit('.html', 1)[0]), key=lambda x: x.rsplit("_", 2)[1:]):
 							if not '_anterior' in arquivo:
-								filtros += '<a href="''' + query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo + '">' + open(query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo, 'r').read().split('<h1>')[1].split('1>')[0].split('>', 1)[1].rsplit('</h', 1)[0].replace('</span>', '') + '</a><br>'
+								filtros += '<a href="''' + query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo + '">' + open(query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo, 'r').read().split('<h1>')[1].split('1>')[0].split('>', 1)[1].rsplit('</h', 1)[0].replace('</span>', '').replace('<span id="combination">', "") + '</a><br>'
 				except: pass
-				html_query += '''<div class="container-lr"><table><tr><td style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><p style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p></td></tr></table><table><tr><td style="max-width: 40vw; word-wrap: break-word;"><div class="tooltip" style="max-width: 40vw; word-wrap: break-word; display: inline-block;">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3]) +1].split('<h4>')[0] + '''</span></div></td></tr><tr><td><a href="#" onclick="document.getElementById('coluna').value = '5'; document.getElementById('valor').value = \'''' + query.split('\t')[5] + '''\'; document.getElementById('pesquisa').submit();">''' + query.split('\t')[5] + '''</a><br><small>''' + query.split('\t')[6].replace('_', ' ') + '''</small></td><td>''' + filtros + '''</td></tr></table></div>\n'''
+				html_query += '''<div class="container-lr"><table><tr><td style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><p style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p></td></tr></table><table><tr><td style="max-width: 40vw; word-wrap: break-word;"><div class="tooltip" style="max-width: 40vw; word-wrap: break-word; display: inline-block;">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3]) +1].split('<h4>')[0] + '''</span></div></td></tr><tr><td><a href="#" onclick="document.getElementById('coluna').value = '5'; document.getElementById('valor').value = \'''' + query.split('\t')[5] + '''\'; document.getElementById('pesquisa').submit();">''' + query.split('\t')[5] + '''</a><br><small>''' + prettyDate(query.split('\t')[6].replace("_", " ")).beautifyDateDMAH() + '''</small></td><td style="max-width: 20vw; word-wrap: break-word;">''' + filtros + '''</td></tr></table></div>\n'''
 				# if conectado else '''<div class="container-lr" ><p><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p><p><div class="tooltip" style="display: inline-block">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3])].split('<h4>')[0] + '''</span></div></p><small><p>''' + query.split('\t')[5] + '''</p><p>''' + query.split('\t')[6] + '''</p></small></div>\n''' # &nbsp;&nbsp;&nbsp;&nbsp;
 				total += 1
 

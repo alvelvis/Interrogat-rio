@@ -12,7 +12,7 @@ import estrutura_dados
 import interrogar_UD
 from datetime import datetime
 import functions
-from functions import tabela
+from functions import tabela, prettyDate
 
 #if not 'REQUEST_METHOD' in os.environ:
 #	os.environ['REQUEST_METHOD'] = 'POST'
@@ -49,21 +49,23 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 		print('em desenvolvimento')
 		exit()
 
+	data = str(datetime.now()).replace(' ','_').split('.')[0]
+
 	with open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'r') as f:
 		html = f.read()
 		html = re.split(r'\<pre.*?\>', html)
 		html = [x.split('</pre>')[0] for x in html[1:]]
-		open('../interrogar-ud/conllu/tmp.conllu', 'w').write("\n\n".join(html).replace('<b>','').replace('</b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('</font>',''))
+		open(f'../interrogar-ud/conllu/tmp_{data}.conllu', 'w').write("\n\n".join(html).replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', ''))
 
 	udoriginal = form['udoriginal'].value
-	arquivo_ud = '../interrogar-ud/conllu/tmp.conllu'
-	ud = "tmp.conllu"
+	arquivo_ud = f'../interrogar-ud/conllu/tmp_{data}.conllu'
+	ud = f"tmp_{data}.conllu"
 	if not 'nome_pesquisa' in form:
-		nome = form['pesquisa'].value.replace('<b>','').replace('</b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('</font>','')
+		nome = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '')
 	else:
 		nome = form['nome_pesquisa'].value
 	if not os.path.isdir('../interrogar-ud/resultados/' + form['html'].value): os.mkdir('../interrogar-ud/resultados/' + form['html'].value)
-	data = str(datetime.now()).replace(' ','_').split('.')[0]
+	
 	link = '../interrogar-ud/resultados/' + form['html'].value + '/' + slugify(nome) + '_' + data + '.html'
 
 	interrogarud = interrogar_UD.main(arquivo_ud, int(criterio), parametros)
@@ -78,7 +80,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	#dist
 	if criterio == "5":
-		html = html.replace("!--DIST", "").replace("DIST-->", "><form id=dist action='../../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='"+link+"'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+		html = html.replace("!--DIST", "").replace("DIST-->", "><form target='_blank' id=dist action='../../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='"+link+"'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
 
 	#alterações
 	html1 = html.split('<!--SPLIT-->')[0]
@@ -192,7 +194,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 						html_original[i] = '</div>'
 		html_original = '<div class=container>'.join(html_original)
 
-	os.remove('../interrogar-ud/conllu/tmp.conllu')
+	os.remove(f'../interrogar-ud/conllu/tmp_{data}.conllu')
 
 	html = html1 + html2
 
@@ -216,11 +218,11 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	novo_html = re.sub(re.escape('<title>link de pesquisa 1 (203): Interrogatório</title>'), '<title>' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + ' (' + ocorrencias + '): Interrogatório</title>', html)
 
 	#h1
-	novo_html = re.sub(re.escape('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>'), '<h1><a id="titulo"><span id="combination">' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + '</span> (' + ocorrencias + ')</a></h1><br>Casos: ' + str(interrogarud['casos']), novo_html)
+	novo_html = re.sub(re.escape('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>'), '<h1><a style="color:black; max-width: 40vw; word-wrap: break-word;" id="titulo"><span id="combination">' + nome.replace('\\', '\\\\').replace('<', '&lt;').replace('>', '&gt;') + '</span> (' + ocorrencias + ')</a></h1><br>Casos: ' + str(interrogarud['casos']), novo_html)
 
 	#h2
 	criterios = open('../interrogar-ud/criterios.txt', 'r').read().split('!@#')
-	novo_html = re.sub(re.escape('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;'), '<p><div class="tooltip"><span id="expressao">' + criterio + ' ' + parametros.replace('\\','\\\\').replace('<','&lt;').replace('>','&gt;') + '</span><span class="tooltiptext">' + criterios[int(criterio)].replace('\\','\\\\').split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <div class="tooltip"><span id=corpus>' + udoriginal + '</span><span class="tooltiptext">Página é resultado da filtragem de uma interrogação anterior.</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <span id="data">' + data.replace('_', ' ') + '</span> &nbsp;&nbsp;&nbsp;&nbsp; ', novo_html)
+	novo_html = re.sub(re.escape('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;'), '<p><div class="tooltip" style="max-width: 60vw; word-wrap: break-word;"><span id="expressao">' + criterio + ' ' + parametros.replace('\\','\\\\').replace('<','&lt;').replace('>','&gt;') + '</span><span class="tooltiptext">' + criterios[int(criterio)+1].replace('\\','\\\\').split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <br><br><div class="tooltip"><span id=corpus>' + udoriginal + '</span><span class="tooltiptext">Página é resultado da filtragem de uma interrogação anterior.</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <br><span id="data"><small>' + prettyDate(data.replace('_', ' ')).beautifyDateDMAH() + '</small></span> &nbsp;&nbsp;&nbsp;&nbsp; ', novo_html)
 
 	#apagar.cgi
 	novo_html = re.sub('\<a.*onclick="apagar.*\</a\>', '', novo_html)

@@ -52,6 +52,7 @@ class Token:
 		self.col["deprel"] = self.deprel
 		self.col["deps"] = self.deps
 		self.col["misc"] = self.misc
+		self.col["text"] = self.text
 
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])

@@ -6,6 +6,7 @@ print('\n\n')
 
 mostrarEtiqueta = False
 bosqueNaoEncontrado = "BosqueUD2.4.conllu"
+draggable = [6]
 
 import sys
 import cgi, cgitb
@@ -13,6 +14,7 @@ cgitb.enable()
 import estrutura_dados
 import estrutura_ud
 import os
+from functions import prettyDate
 from datetime import datetime
 import re
 from subprocess import call
@@ -70,7 +72,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 			if not managetags:
 				if (coluna != ':' and valor and len(linha.split('!@#')) > int(coluna) and (re.search(valor, linha.split('!@#')[int(coluna)], flags=re.I|re.M)) and linha.split('!@#')[int(coluna)] != 'NONE') or (not coluna) or (coluna == ':' and re.search(valor, linha, flags=re.I|re.M)):
 					if (not onlysent) or (onlysent and not linha.split('!@#')[0] in javistos):
-						html42 += '<div class="container"><form target="_blank" id="form_' + str(a) + '" action="../cgi-bin/inquerito.py" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
+						html42 += '<div class="container"><form id="form_' + str(a) + '" action="../cgi-bin/inquerito.py" target="_blank" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
 						relatorio42 += '\n\n-------------------------'
 						if len(linha.split('!@#')) >= 7 and linha.split('!@#')[6] != 'NONE':
 							html42 += '<p><small><a href="#" onclick="document.getElementById(\'coluna\').value=\'6\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[6].replace('"', '&quot;') + '\'; document.getElementById(\'form_pesquisa\').submit();">#' + linha.split('!@#')[6].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></small></p>'
@@ -87,7 +89,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 						if not onlysent:
 							html42 += '<pre>ANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre><pre>DEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre>'
 							relatorio42 += '\n\nANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '').replace('</b>','') + '\nDEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','').replace('</b>','')
-						html42 += '<small><p><a href="#" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[2] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split('!@#')[2] + '</a></p><p>' + linha.split('!@#')[3] + '</p></small></form></div>'
+						html42 += '<small><p><a href="#" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[2] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split("!@#")[2] + '</a></p><p>' + prettyDate(linha.split('!@#')[3].replace("_", ' ')).beautifyDateDMAH() + '</p></small></form></div>'
 						relatorio42 += '\n\n' + linha.split('!@#')[2]
 						relatorio42 += '\n' + linha.split('!@#')[3]
 						total += 1
@@ -218,9 +220,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					if linha:
 						html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
 				html1 += "</datalist> "
-			html1 += '<h3>Controles:</h3>Tab, Shift+Tab: ir para coluna à direita/esquerda<br>↑, ↓: ir para linha acima/abaixo<br>↖: Arraste a coluna "dephead" de um token para o token do qual ele depende<br><br>'
+			html1 += '<h3>Controles:</h3>Tab / Shift + Tab: ir para coluna à direita/esquerda<br>↑ / ↓: ir para linha acima/abaixo<br>Shift + Scroll: Mover tabela para os lados<br>↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende<br><br>'
 			html1 += '<input style="display: inline-block;" type="button" onclick="enviar()" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
-			html1 += '<br><br><br><b>Edite as colunas desejadas:</b></div><table id="t01">'
+			html1 += '<br><br><br><b>Edite as colunas desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()
 			for a, linha in enumerate(sentence2.splitlines()):
@@ -229,16 +231,16 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42" style="cursor:pointer; color:black;">''' + linha + '</td></tr>'
+					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td style="cursor:pointer; color:black; max-width: 98vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42">''' + linha + '</td></tr>'
 				else:
 					html1 += '<tr>'
 					for b, coluna in enumerate(linha.split('\t')):
-						drag = 'drag ' if b == 6 else ''
+						drag = 'drag ' if b in draggable else ''
 						dragId = 'id ' if b == 0 else ''
-						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + '''"><td id="''' +str(a)+ '''-''' + str(b) + f'''" class="{drag}{dragId}annotationValue plaintext" contenteditable=True style="cursor:pointer; color:black;">''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
+						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{drag}{dragId}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
 
-			html1 += '</table><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
+			html1 += '</table></div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
 			html1 += '</div></form>'
 			achou = True
 			break

@@ -1,15 +1,17 @@
-<h2>Instruções</h2>
-Buscas simples com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a> podem ser realizadas digitando as palavras na barra de busca à esquerda.
-<br>
-Para buscas complexas, digite o critério de busca e seus parâmetros na barra de busca, conforme as instruções e os exemplos abaixo. Caso nenhum critério seja especificado, será utilizado o <a href="#criterio_1">critério 1: Regex</a>.
-<br>
-<h3>Alguns caminhos:</h3>
+<h2>Bem-vindo(a) ao Interrogatório!</h2>
 <ul>
+<li><b>Interrogatório</b> é parte da <a target="_blank" href="http://comcorhd.letras.puc-rio.br/recursos/">ET: Estação de Trabalho para busca, revisão e avaliação de corpora anotados</a>.</li>
+<li>Neste site, você busca sentenças em corpora anotados com diferentes graus de complexidade.</li>
+<li>Todos podem realizar buscas nos corpora que estão disponíveis no <a href="../cgi-bin/arquivo_ud.cgi">repositório</a> ou enviar seu próprio corpus no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a>, mas para revisar a anotação de uma sentença, você deve abrir um <a target="_blank" href="../cgi-bin/inquerito.py">inquérito</a> para ela (requer <a target="_blank" href="http://github.com/alvelvis/Interrogat-rio/wiki">permissão especial</a>).</li>
+<li>Ciente de que o código é aberto e está disponível no <a target="_blank" href="https://github.com/alvelvis/interrogat-rio">Github</a>, qualquer grupo pode manter sua própria versão do Interrogatório e/ou da ET :)</li>
+</ul>
+<h2>Por onde começar</h2>
+Buscas simples com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a> podem ser realizadas digitando as palavras na barra de busca à esquerda. Para buscas complexas, há alguns caminhos que você pode seguir:
+<br>
+<ul>
+<li><a href="#interactive"><b>Construa expressões de busca complexas interativamente</b></a></li>
 <li>
-<a href="#interactive"><b>Construir expressão de busca complexa interativamente</b></a>
-</li>
-<li>
-<b>Consultar documentação dos critérios de busca</b>
+<b>Consulte a documentação dos critérios de busca</b>
 </li>
 <ul>
 <li>
@@ -31,44 +33,44 @@ Para buscas complexas, digite o critério de busca e seus parâmetros na barra d
 </ul>
 <h3>Links úteis:</h3>
 <ul>
-<li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos</a></li>
-<li><a href="https://julgamento.comcorhd.ga" target="_blank">Julgamento - avaliação de corpora</a></li>
 <li><a href="../cgi-bin/arquivo_ud.cgi">Repositório dos arquivos CoNLL-U</a></li>
-<li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Repositório no Github</a></li>
+<li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos finalizados</a></li>
+<li><a href="https://julgamento.comcorhd.ga" target="_blank">Julgamento - avaliação de corpora anotados</a></li>
+<li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Repositório do Interrogatório no Github</a></li>
+<li><a target="_blank" href="http://comcorhd.letras.puc-rio.br/">Grupo de pesquisa ComCorHd/PUC-Rio</a></li>
 </ul>
 
 !@#<a id="interactive"></a>
-<h2>Construtor de expressões de busca</h2>
-Com o Construtor você cria expressões de busca complexas interativamente. Cada nova condição é automaticamente adicionada à barra de busca à esquerda.
+<h3>Construtor de expressões de busca</h3>
+Selecione os parâmetros que deseja encontrar em uma sentença, e a sintaxe da condição será adicionada à barra de busca à esquerda utilizando o <a href="#criterio_5">critério 5: Python</a>.
 
-<h3>
-Procurar por:</h3>
+<h3>Procurar por:</h3>
 <select title="Token/palavra que será avaliado nesta condição" class="token">
-    <option title="Qualquer token">token</option>
+    <option title="Token principal">token</option>
     <option title="Pai do token">head_token</option>
     <option title="Token à direita">next_token</option>
     <option title="Token à esquerda">previous_token</option>
 </select>
  cujo(a) 
-<select title="Atributo que será avaliado" class="atribute">
-    <option title="Número do token na sentença">id</option>
+<select title="Anotação que será avaliada" class="atribute">
     <option title="Forma da palavra">word</option>
     <option title="Lema da palavra">lemma</option>
     <option title="Classe gramatical">upos</option>
     <option title="Classe gramatical específica">xpos</option>
     <option title="Atributos morfológicos">feats</option>
-    <option title="Número de ID do token do qual é dependente">dephead</option>
     <option title="Relação de dependência sintática">deprel</option>
     <option title="Dependência específica">deps</option>
     <option title="Miscelânea">misc</option>
+    <option title="Frase completa">text</option>
+    <option title="ID da sentença no corpus">sent_id</option>
 </select>
  seja 
-<select title="Forma de avaliação do atributo selecionado" class="evaluation">
+<select title="Forma de avaliação da anotação selecionada" class="evaluation">
     <option title="Igual">==</option>
     <option title="Diferente">!=</option>
 </select>
- a/de 
-<input placeholder="Clique para sugestões" title="Valor que o atributo selecionado deve conter" list="possibleValues" class="value">
+ <span class="ade"> a </span> 
+<input placeholder="Clique para sugestões" title="Valor que a anotação selecionada deve conter" list="possibleValues" class="value">
 <datalist id="possibleValues">
     <option value='ADJ' title="Adjetivo">
     <option value='ADP' title="Preposição">
@@ -97,7 +99,7 @@ Procurar por:</h3>
     <option value='cc'>
     <option value='ccomp'>
     <option value='clf'>
-    <option value='compound	'>
+    <option value='compound'>
     <option value='conj'>
     <option value='cop'>
     <option value='csubj'>
@@ -125,15 +127,14 @@ Procurar por:</h3>
     <option value='vocative'>
     <option value='xcomp'>
 </datalist>
-[<a class="addCondition" title="Adicionar condição à expressão de busca (Enter)" href="#interactive">+</a>] [<a class="addBoldCondition" title="Adicionar condição com o token em negrito" href="#interactive">@</a>] [<a style="color:red" class="clearCondition" title="Limpar expressão de busca" href="#interactive">x</a>]
+<a class="addCondition" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition" title="Limpar expressão de busca" >[ X ]</a>
 <br>
 
-<h3>Instruções:</h3>
+<h3>Como funciona:</h3>
 <ul>
-<li>A busca será construida utilizando o <a href="#criterio_5">critério 5: Python</a>. Neste critério, você indica as condições que devem ser satisfeitas para que uma frase seja encontrada. Todas as condições indicadas por você devem ser atendidas.</li>
-<li>Uma condição é feita pensando em um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
-<li>Um ou mais <b>atributos</b> gramaticais serão verificados desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um (ou mais) <b>valor</b>(es).</li>
-<li>Todos os valores podem ser preenchidos com expressão regular (aprenda sobre Regex <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">aqui</a>).</li>
+<li>As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
+<li>Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>.</li>
+<li>Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
 <li>Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 <li>Caso você não especifique nenhum token para ser negritado nas frases, o primeiro da expressão de busca será o escolhido.</li>
 </ul>
@@ -188,9 +189,11 @@ Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).
 
 !@#<h3>Critério 5: Python</h3>
 Realiza uma condição seguindo a sintaxe em Python.
+<br>
+Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.
 <br><br>Parâmetros:
-<br>Uma ou mais condições que conta com atributos de um token/palavra, um operador (== ou !=), e um valor entre aspas.
-<br><br>São atributos de um token: <pre style="color:black">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
+<br>Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.
+<br><br>São anotações de um token: <pre style="color:black">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
 Opcional: Utilize um "@" para indicar qual token deve ser negritado.
 <br>Dica: Todos os valores de uma condição são uma expressão regular (regex).
 <h4>Exemplos:</h4>
@@ -198,3 +201,5 @@ Opcional: Utilize um "@" para indicar qual token deve ser negritado.
 <ul><li>
 <a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 token.word == "é" and token.upos == "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
+Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.
+<br>

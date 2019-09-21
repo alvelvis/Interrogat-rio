@@ -16,6 +16,11 @@ else:
 
 log = list()
 
+for arquivo in os.listdir('../interrogar-ud/conllu'):
+	if arquivo.startswith("tmp_"):
+		os.remove("../interrogar-ud/conllu/" + arquivo)
+		log.append(f"- corpus {arquivo} removido")
+
 #apaga tmp
 if os.path.isdir('../interrogar-ud/tmp'):
 	shutil.rmtree('../interrogar-ud/tmp')
@@ -26,6 +31,7 @@ else:
 	os.mkdir('../interrogar-ud/tmp')
 	log.append('- /interrogar-ud/tmp criada')
 
+'''
 #apaga se antes = depois ou depois not in ud
 inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read().splitlines()
 novo_inqueritos = list()
@@ -39,6 +45,7 @@ for inquerito in inqueritos:
 	else:
 		novo_inqueritos.append(inquerito)
 open('../interrogar-ud/inqueritos.txt', 'w').write('\n'.join(novo_inqueritos))
+'''
 
 #etiquetas dos inquéritos
 inqueritos_cars = open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines()

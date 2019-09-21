@@ -4,11 +4,40 @@ $(window).on('beforeunload', function() {
     setTimeout(waitTooMuch, 20000);
 });
 
+function encodeUrl(s){
+    return s
+        .replace(/ /g, '%20')
+        .replace(/#/g, '%23')
+        .replace(/\$/g, '%24')
+        .replace(/&/g, "%26")
+        .replace(/@/g, "%40")
+        .replace(/`/g, "%60")
+        .replace(/\//g, "%2F")
+        .replace(/:/g, "%3A")
+        .replace(/;/g, "%3B")
+        .replace(/</g, "%3C")
+        .replace(/=/g, "%3D")
+        .replace(/>/g, "%3E")
+        .replace(/\?/g, "%3F")
+        .replace(/\[/g, "%5B")
+        .replace(/\\/g, "%5C")
+        .replace(/]/g, "%5D")
+        .replace(/\^/g, "%5E")
+        .replace(/{/g, "%7B")
+        .replace(/\|/g, "%7C")
+        .replace(/}/g, "%7D")
+        .replace(/~/g, "%7E")
+        .replace(/\"/g, "%22")
+        .replace(/'/g, "%27")
+        .replace(/\+/g, "%2B")
+        .replace(/,/g, "%2C");
+};
+
 function waitTooMuch(){
     if ($('#loading-bg').is(':visible')){
         if (/interrogar\.cgi/.test(window.location.href)) {
-            if (!$('.salvar').is(':checked')) {
-                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&params=' + $('.pesquisa').val() + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
+            if (!$('.toggleSalvar').is(':checked')) {
+                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
             } else {
                 $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.</div>');
             }
@@ -26,10 +55,117 @@ $(window).ready(function(){
     $('#loading-image').hide();
 });
 
+function pesquisaChange(){
+    if ($("#pesquisa").val()){
+        $('.clearPesquisa').show();
+    } else {
+        $('.clearPesquisa').hide();
+    };
+    if ($('.toggleDist').is(':checked')) {
+        if (/^5 /.test($('#pesquisa').val())) {
+            $('.dist').show();
+            $('.notDist').hide();
+        } else {
+            $('.dist').hide();
+            $('.notDist').show();
+        };
+    };
+};
+
+function pesquisa(numero) {
+    document.getElementById('pesquisa').value = document.getElementById(numero).innerHTML.replace(/&amp;/g, '&').replace(/&gt;/g, '>');
+    pesquisaChange();
+};
+
 $(document).ready(function(){
 
-    $('.toggleOutros').on('click', function(){
-        if (/5 /.test($('#pesquisa').val())) {
+    $('.filterAnchor').click(function(){
+        $('.filterDiv').hide();
+        $('.' + $(this).attr('tab')).show();
+    });
+
+    $('.tablinks').click(function(){
+        $('.filterDiv').hide();
+    });
+
+    $('[tab=newSearchFilter]').click(function(){
+        $('#pesquisa_filtro').focus();
+    });
+
+    $('[tab=selectionFilter]').click(function(){
+        $('#nome_pesquisa_sel').focus();
+    });
+
+    $('.drag').click(function(){
+        document.execCommand('selectAll');
+    });
+
+    $lastDistribution = "";
+
+    $('.toggleSalvar, .toggleRapida').click(function(){
+        $('#enviar').val($(this).attr('label'));
+    });
+
+    $('.sendInterrogar').on('submit', function(event){
+        if (! $('#enviar').is(":visible")){
+            event.preventDefault();
+            if ($lastDistribution){
+                if ($('.dist').is(':visible')){
+                    $lastDistribution.click();
+                };
+            };
+        };
+    });
+
+    $('.addCondition').click(function(){
+        if (! $('#pesquisa').val()){
+          $('#pesquisa').val('5 ');
+        } else {
+          $('#pesquisa').val($('#pesquisa').val() + ' and ');
+        };
+        $('#pesquisa').val($('#pesquisa').val() + $('.token').val() + "." + $('.atribute').val() + " " + $('.evaluation').val() + ' "' + $('.value').val() + '"');
+        $('.value').val('');
+        $('.pesquisa').focus();
+        pesquisaChange();
+    });
+
+    $('.addBoldCondition').click(function(){
+        if (! $('#pesquisa').val()){
+          $('#pesquisa').val('5 ');
+        } else {
+          $('#pesquisa').val($('#pesquisa').val() + ' and ');
+        };
+        $('#pesquisa').val($('#pesquisa').val().replace(/\s@/g, " "));
+        $('#pesquisa').val($('#pesquisa').val() + "@" + $('.token').val() + "." + $('.atribute').val() + " " + $('.evaluation').val() + ' "' + $('.value').val() + '"');
+        $('.value').val('');
+        $('.pesquisa').focus();
+        pesquisaChange();
+    });
+
+    $('.clearCondition, .clearPesquisa').click(function(){
+        $('#pesquisa').val('');
+        pesquisaChange();
+    });
+
+    $('.value').keydown(function(event){
+        if (event.which == 13 || event.keyCode == 13) {
+            event.preventDefault();
+            $('.addCondition').click();
+        };
+    });
+
+    $('.evaluation').change(function(){
+        if ($('.evaluation').val() == '=='){
+            $('.ade').html(' a ');
+        } else {
+            $('.ade').html(' de ');
+        };
+    });
+
+    $('#pesquisa').on('keyup', function(){pesquisaChange()});
+
+    $('.toggleDist').on('click', function(){
+        if (/^5 /.test($('#pesquisa').val())) {
             $('.dist').show();
             $('.notDist').hide();
         } else {
@@ -38,11 +174,16 @@ $(document).ready(function(){
         }
     });
 
+    $('.toggle:checked').click();
+
     $('.verDist').click(function(){
         if ($('#pesquisa').length){
             $('#html_dist').val($('#pesquisa').val().replace(/^5 /, ""));
             $('#expressao_dist').val($('#pesquisa').val());
             $('#corpus_dist').val($('.conllu').val());
+            $lastDistribution = $(this);
+            $('.verDist').css('color', '');
+            $(this).css('color', 'rgba(255,105,30,1)');
         };
         dist($(this).html());
     });
@@ -53,13 +194,15 @@ $(document).ready(function(){
         opacity: 0.35,
         appendTo: "body",
         refreshPositions: true,
-      });
+      },);
       
     $('tr').droppable({
         hoverClass: "drop-hover",
         drop: function(event, ui) {
             var classes = ui.draggable.attr('class');
-            ui.draggable.html($(this).children('.id').html());
+            if ($(this).children('.id').html() != ui.draggable.siblings(".id").html()){
+                ui.draggable.html($(this).children('.id').html());
+            };
         }
     });
 
@@ -135,12 +278,13 @@ function excluir_selection() {
 
     var checkboxes, i, negrito;
     checkboxes = document.getElementsByClassName("cb");
+    document.getElementById("pesquisa_filtro").value = "5";
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
-            if (document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.indexOf("<b>") !== -1){
-                negrito = document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.split("<b>")[1].split("</b>")[0].replace(/<.*?>/g, '');
+            if (document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf("<b>") !== -1){
+                negrito = document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.substring(document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf('<b>')).split(/<\/b>/)[0].replace(/<.*?>/g, '');
             } else { negrito = ""; }
-            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.replace(/<.*?>/g, '')) + "$" + "(.*\\n)*.*(" + negrito + ")?|";
+            document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + " ( token.text == \"" + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.replace(/<.*?>/g, '')) + "\" and token.word == \".*" + negrito + ".*\" ) or";
         }
     }
 
@@ -151,7 +295,7 @@ function excluir_selection() {
 
     document.getElementById("nome_pesquisa").value = document.getElementById("nome_pesquisa_sel").value;
 
-    document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value.rsplit('|',1)[0];
+    document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value.rsplit(' or',1)[0];
     document.getElementById("filtrar").click();
 }
 

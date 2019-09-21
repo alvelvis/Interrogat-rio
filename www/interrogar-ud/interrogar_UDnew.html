@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>Nova interrogação: Interrogatório</title>
+    <title>Interrogatório - Ambiente de busca e revisão de corpora anotados no formato CoNLL-U</title>
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="../interrogar-ud/jquery.min.js"></script>
@@ -19,102 +19,65 @@
       <img id="loading-image" src="../interrogar-ud/loading4.gif" alt="Carregando">
       <img id="loading-image-nobg" src="../interrogar-ud/loading4.gif" alt="Carregando">
     <div class="header">
-      <h1>Interrogatório</h1>
-      <h2><a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a> - nova interrogação</h2>
+      <!--h1>Interrogatório</h1-->
+      <h2>nova interrogação - <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a></h2>
     </div>
     <div class="content">
     <div style="display: flex; margin:auto; max-width:1280px;">
-    <div style='width: 30%; margin: 0px 30px;' class="interrogar">
-      <form action="../cgi-bin/interrogar.cgi" method="post">
-        <p><div style="display:inline;">Expressão de busca:</div><br>
-          <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="max-width:100vw; width:100%;" autofocus></p>
-          <p><a href="../cgi-bin/arquivo_ud.cgi" title="Acessar repositório dos arquivos CoNLL-U">Corpus:</a><br>
-            <select class="conllu" name="conllu" data-live-search="true">
+    <div style='width: 30%; margin: 30px 30px;' class="interrogar">
+      <form action="../cgi-bin/interrogar.cgi" class="sendInterrogar" method="post">
+        <p><div style="display:inline;"><div class="tooltip"><b>Expressão de busca:</b><div class="tooltiptext">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
+          <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus> <a style="cursor:pointer; color:red; margin-left:5px; display:none;" class="clearPesquisa" title="Limpar expressão de busca" >x</a></p>
+          <p><a href="../cgi-bin/arquivo_ud.cgi" title="Acessar repositório dos arquivos CoNLL-U"><b>Corpus:</b></a><br>
+            <select class="conllu" style="margin-top: 5px; padding:5px;" name="conllu" data-live-search="true">
             <!--selectpicker-->
             </select>
         </p>
-        <p>
-          <input type=radio name=meth value="teste" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'none'; $('.outros').hide();" title="A busca não será salva em interrogações recentes" checked>Busca rápida 
-          <input type=radio name=meth value="salvar" title="A busca será salva em interrogações recentes" style="display:inline" onclick="$('.outros').hide(); document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').select();" class="salvar" >Salvar busca 
-          <input type=radio name=meth value="distribution" class="toggleOutros" style="display:inline" onclick="document.getElementById('meth_salvar').style.display = 'none'; $('.outros').show();" title="Outras opções">Outros
-        </p> <!--document.getElementById('nome').value = document.getElementById('pesquisa').value;-->
-        <div class="outros" style="display:none">
-          <div class="dist" style="display:none">
-            <h4>Visualizar distribuição:</h4>
-            <ul>
-              <li><a style="cursor:pointer" class="verDist">id</a></li>
-              <li><a style="cursor:pointer" class="verDist">word</a></li>
-              <li><a style="cursor:pointer" class="verDist">lemma</a></li>
-              <li><a style="cursor:pointer" class="verDist">upos</a></li>
-              <li><a style="cursor:pointer" class="verDist">xpos</a></li>
-              <li><a style="cursor:pointer" class="verDist">feats</a></li>
-              <li><a style="cursor:pointer" class="verDist">dephead</a></li>
-              <li><a style="cursor:pointer" class="verDist">deprel</a></li>
-              <li><a style="cursor:pointer" class="verDist">deps</a></li>
-              <li><a style="cursor:pointer" class="verDist">misc</a></li>
-            </ul>
-          </div>
-          <div class="notDist" style="display:none">
-            Para visualizar a distribuição de algum atributo, utilize o <a href="#criterio_5">critério 5: Python</a>.
-          </div>
+        <div style="margin-left:5px;">
+          <input type=radio name=meth value="teste" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();" label="Busca rápida" class="toggle toggleRapida" checked><div onclick="$('.toggleRapida').click();" style="display:inline; cursor:pointer;" class="tooltip">Busca rápida<div class="tooltiptext">A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.</div></div>
+          <br><input type=radio name=meth value="salvar" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();  document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').select();" label="Salvar busca" class="toggle toggleSalvar"><div onclick="$('.toggleSalvar').click();"style="display:inline; cursor:pointer;" class="tooltip">Salvar resultados da busca<div class="tooltiptext">A busca será salva no sistema, e você poderá acessá-la posteriormente na página de interrogações recentes.</div></div>
+          <br><input type=radio name=meth value="distribution" style="display:inline" onclick="$('.buscaOption').hide(); $('.distDiv').show();" title="Visualizar distribuição de alguma anotação gramatical" class="toggle toggleDist"><div style="display:inline; cursor:pointer;" class="tooltip" onclick="$('.toggleDist').click();">Visualizar distribuição<div class="tooltiptext">Selecione para visualizar a distribuição das ocorrências que são resultado da sua expressão de busca entre as diferentes categorias de anotação.</div></div>
         </div>
-      <p><div id="meth_salvar" style="display:none">Nome da busca:<br>
-        <input id="nome" name="nome" value="Busca salva" type="text"></div></p>
-        <p><input name="enviar" id="enviar" value="Buscar" class="btn-gradient orange" style="margin:0px"
-type="submit"></p>
+        <p><div id="meth_salvar" class="buscaOption" style="margin-left:10px; display:none">Nome da busca:<br>
+          <input id="nome" name="nome" value="Busca salva" style="max-width:70%" type="text"></div></p>
+          <p><input name="enviar" style="margin-left:10px" id="enviar" value="Busca rápida" class="buscaOption btn-gradient orange small"
+  type="submit"></p>          
+        </form>      
+        <!--document.getElementById('nome').value = document.getElementById('pesquisa').value;-->
+        
+          <div class="distDiv buscaOption" style="margin-left:10px; display:none">
+              
+            <div class="dist" style="display:none">
+		<h4>Visualizar distribuição de:</h4>
+                
+              <ul>
+                <li><a style="cursor:pointer" class="verDist" title="Número do token na sentença">id</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Forma da palavra">word</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Lema da palavra">lemma</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Classe gramatical">upos</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Classe gramatical específica">xpos</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Atributos morfológicos">feats</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Relação de dependência">deprel</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Relação de dependência específica">deps</a></li>
+                <li><a style="cursor:pointer" class="verDist" title="Miscelânea">misc</a></li>
+              </ul>
+
+            </div>
+            <div class="notDist" style="display:none">
+              Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5">critério 5: Python</a> ou o <a href="#interactive">construtor de expressões de busca</a>.
+            </div>
+          </div>
         <br>
-      </form>      
-      <form id=dist target='_blank' action='../cgi-bin/distribution.py' method=POST>
-        <input type=hidden name=notSaved id=html_dist>
-        <input type=hidden name=coluna id=coluna_dist>
-        <input id=expressao_dist type=hidden name=expressao>
-        <input id=corpus_dist type=hidden name=corpus>
-      </form>
+        <form id=dist target='_blank' action='../cgi-bin/distribution.py' method=POST>
+          <input type=hidden name=notSaved id=html_dist>
+          <input type=hidden name=coluna id=coluna_dist>
+          <input id=expressao_dist type=hidden name=expressao>
+          <input id=corpus_dist type=hidden name=corpus>
+        </form>
       </div>
-      <div style='flex: 1; flex-grow: 1; overflow: auto; max-width: 70%;' class="interrogar">
+      <div style='border-radius: 0 0 4px 4px; flex: 1; flex-grow: 1; overflow: auto; max-width: 70%; max-height: 80vh;' class="interrogar">
       <!--SPLIT-->
       </div>
-    </div>
-    </div>
-    <script>
-        function pesquisa(numero) {
-            document.getElementById('pesquisa').value = document.getElementById(numero).innerHTML.replace(/&amp;/g, '&').replace(/&gt;/g, '>');
-        };
-
-        $('.addCondition').click(function(){
-          if (! $('#pesquisa').val()){
-            $('#pesquisa').val('5 ');
-          } else {
-            $('#pesquisa').val($('#pesquisa').val() + ' and ');
-          };
-          $('#pesquisa').val($('#pesquisa').val() + $('.token').val() + "." + $('.atribute').val() + " " + $('.evaluation').val() + ' "' + $('.value').val() + '"');
-          $('.value').val('');
-          $('.pesquisa').focus();
-        });
-
-        $('.addBoldCondition').click(function(){
-          if (! $('#pesquisa').val()){
-            $('#pesquisa').val('5 ');
-          } else {
-            $('#pesquisa').val($('#pesquisa').val() + ' and ');
-          };
-          $('#pesquisa').val($('#pesquisa').val().replace(/\s@/g, " "));
-          $('#pesquisa').val($('#pesquisa').val() + "@" + $('.token').val() + "." + $('.atribute').val() + " " + $('.evaluation').val() + ' "' + $('.value').val() + '"');
-          $('.value').val('');
-          $('.pesquisa').focus();
-        });
-
-        $('.clearCondition').click(function(){
-          $('#pesquisa').val('');
-          $('.value').val('');
-        });
-
-        $('.value').keydown(function(event){
-            if (event.which == 13 || event.keyCode == 13) {
-              event.preventDefault();
-              $('.addCondition').click();
-            };
-        });
-    </script>    
   </body>
 </html>
