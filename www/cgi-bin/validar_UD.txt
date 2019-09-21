@@ -1,4 +1,4 @@
-dephead|erro: Token apontando para si próprio
+dephead|erro: Token dependente de si próprio
 dephead = id
 
 dephead|erro: Ciclo na sentença
