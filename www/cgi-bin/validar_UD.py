@@ -26,7 +26,6 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt"):
                 sentence.build(sentString)
                 for t, token in enumerate(sentence.tokens):
                     if "<b>" in token.to_str():
-                        tokenId = re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", token.id))
                         tokenT = t
                         break
 
