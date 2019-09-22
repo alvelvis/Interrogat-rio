@@ -10,7 +10,16 @@ dephead == "0" and deprel != "root"
 dephead|erro: 3 - Deprel não pode ser root se dephead não for 0
 dephead != "0" and deprel == "root"
 
-feats|erro: Features incompatíveis
+dephead|erro: 4 - DEPHEAD inválido
+dephead != "\d+"
+
+id|erro: 5 - ID inválido
+id != "[0-9\-]+"
+
+erro: 6 - Algum atributo está vazio
+not id or not word or not lemma or not upos or not xpos or not feats or not dephead or not deprel or not deps or not misc
+
+feats|erro: Features incompatíveis com a classe gramatical
 upos = "ADJ" and feats != "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
 upos = "ADV" and feats != "_|Polarity=Neg"
 upos = "AUX" and feats != "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
@@ -36,11 +45,5 @@ misc = "MWEPOS=.*" and not "MWE=" in misc
 deprel = "fixed|compound" and not "MWE=.*" in @head_token.misc
 deprel = "fixed|compound" and not "MWEPOS=.*" in @head_token.misc
 
-dephead|erro: DEPHEAD inválido
-dephead != "\d+"
-
 misc|erro: MISC inválido
 misc != "MWE=.*|MWEPOS=.*|SpaceAfter=.*|d2d:.*|ChangedBy=.*|_"
-
-id|erro: ID inválido
-id != "[0-9\-]+"

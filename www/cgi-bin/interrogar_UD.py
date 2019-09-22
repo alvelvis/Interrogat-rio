@@ -249,7 +249,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'any( not re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = pesquisa.strip()
 
 		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa) and ("<" in pesquisa or ">" in pesquisa):
