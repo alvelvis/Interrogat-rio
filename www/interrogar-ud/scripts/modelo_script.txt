@@ -1,0 +1,4 @@
+#Escreva seu script abaixo, seguindo a sintaxe do critério 5: Python
+#Exemplo:
+#if token.upos == "NUM" and token.deprel == "nmod":
+#	token.deprel = "nummod"
