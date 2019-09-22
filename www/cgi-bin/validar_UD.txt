@@ -4,6 +4,12 @@ dephead = id
 dephead|erro: 2 - Ciclo na sentença
 dephead == head_token.id and head_token.dephead == id and dephead != id
 
+deprel|erro: 3 - Dephead não pode ser 0 se não for root
+dephead == "0" and deprel != "root"
+
+dephead|erro: 3 - Deprel não pode ser root se dephead não for 0
+dephead != "0" and deprel == "root"
+
 feats|erro: Features incompatíveis
 upos = "ADJ" and feats != "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
 upos = "ADV" and feats != "_|Polarity=Neg"
@@ -27,8 +33,8 @@ deprel != "root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|pu
 misc|erro: MWE inválida
 misc = "MWE=.*" and not "MWEPOS=" in misc
 misc = "MWEPOS=.*" and not "MWE=" in misc
-deprel = "fixed|compound" and not "MWE=.*" in head_token.misc
-deprel = "fixed|compound" and not "MWEPOS=.*" in head_token.misc
+deprel = "fixed|compound" and not "MWE=.*" in @head_token.misc
+deprel = "fixed|compound" and not "MWEPOS=.*" in @head_token.misc
 
 dephead|erro: DEPHEAD inválido
 dephead != "\d+"
