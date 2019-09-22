@@ -193,16 +193,17 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	if 'finalizado' in form:
 		erros = []
 		if 'sentid' in form:
-			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value)
+			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value, noMissingToken=True)
 		alertColor = "cyan" if not erros else "yellow"
 		alertBut = "" if not erros else ", mas atenção:"
 		html1 += f'<span style="background-color: {alertColor}">Alteração realizada com sucesso{alertBut}</span>'
 		if alertBut:
 			html1 += "<ul>" 
 			for erro in erros:
-				html1 += f'<li>{erro}:</li><ul>'
+				html1 += f'<li>{erro}</li><ul>'
 				for sentence in erros[erro]:
-					html1 += f'''<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</li>'''
+					if sentence and sentence['sentence']:
+						html1 += f'''<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</li>'''
 				html1 += "</ul>"
 			html1 += "</ul>"
 		html1 += '<br>'
