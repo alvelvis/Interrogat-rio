@@ -46,7 +46,7 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt"):
                 "sent_id": sentence.sent_id,
             })
 
-    missingToken = re.search(r"\n\n(?!# text)", corpus.to_str())
+    missingToken = re.findall(r"\n\n(?!# text)", corpus.to_str())
     if missingToken:
         if not '1 - Há tokens faltando no corpus' in errorDictionary:
             errorDictionary['1 - Há tokens faltando no corpus'] = []
