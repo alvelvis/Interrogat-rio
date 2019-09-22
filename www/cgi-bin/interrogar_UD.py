@@ -223,8 +223,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		pesquisa = parametros
 		casos = 0
 
-		pesquisa = pesquisa.replace('==', ' == ')
-		pesquisa = pesquisa.replace('===', ' === ')
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
 		if pesquisa[0] == "@": pesquisa = pesquisa[1:]

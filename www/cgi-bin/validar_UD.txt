@@ -20,7 +20,7 @@ erro: 6 - Algum atributo está vazio
 not id or not word or not lemma or not upos or not xpos or not feats or not dephead or not deprel or not deps or not misc
 
 feats|erro: Features incompatíveis com a classe gramatical
-upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
+upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur|NumType=Ord"
 upos = "ADV" and feats !== "_|Polarity=Neg"
 upos = "AUX" and feats !== "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
 upos = "CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_" and feats !== "_"
