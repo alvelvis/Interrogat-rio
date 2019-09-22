@@ -203,15 +203,14 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	#<!--script-->
 	html1 = html.split('<!--script-->')[0]
 	html2 = html.split('<!--script-->')[1]
-	html1 += '<form method="POST" action="../../../cgi-bin/inquerito.py?action=script&executar=sim" target="_blank">'
 	html1 += '''<input type=hidden name="nome_interrogatorio" value="''' + nome.replace('"', '&quot;') + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name="conllu" value="''' + udoriginal + '''">'''
-	html1 += '<input type=text name="script" list="lista" required><datalist id="lista">'
-	if not os.path.isdir('../interrogar-ud/scripts/'):
-		os.mkdir('../interrogar-ud/scripts')
-	for item in os.listdir('../interrogar-ud/scripts/'):
-		if '.py' in item and not 'estrutura_dados' in item:
-			html1 += '<option value="' + item + '">' + item + '</option>'
-	html1 += '</datalist> <input type="submit" value="Executar"></form>'
+	#html1 += '<input type=text name="script" list="lista" required><datalist id="lista">'
+	#if not os.path.isdir('../interrogar-ud/scripts/'):
+	#	os.mkdir('../interrogar-ud/scripts')
+	#for item in os.listdir('../interrogar-ud/scripts/'):
+	#	if '.py' in item and not 'estrutura_dados' in item:
+	#		html1 += '<option value="' + item + '">' + item + '</option>'
+	#html1 += '</datalist> <input type="submit" value="Executar"></form>'
 	html = html1 + html2
 
 	#title

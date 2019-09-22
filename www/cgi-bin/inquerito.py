@@ -147,26 +147,30 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	#pega os headers
 	headers = list()
 	for linha in open(form['link_interrogatorio'].value, 'r').read().splitlines():
-		if '# text = ' in linha:
+		if '# text =' in linha:
 			headers.append(re.sub(r'\<.*?\>', '', linha))
 
+	if form['executar'].value == 'sim':
+		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
+			f.write(form['fileScript'].file.read())
+
 	open('../interrogar-ud/scripts/headers.txt', 'w').write("\n".join(headers))
-	call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + form['script'].value + '"', shell=True)
+	call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True)
 
 	if form['executar'].value == 'exec':
 		for linha in open('../interrogar-ud/scripts/novos_inqueritos.txt', 'r').read().splitlines():
 			if form['nome_interrogatorio'] not in ['teste', 'Busca rápida']:
-				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')!@#' + form['link_interrogatorio'].value + '!@#' + form['script'].value + '!@#' + linha.rsplit('!@#', 1)[1])
+				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')!@#' + form['link_interrogatorio'].value + '!@#' + form['scriptName'].value + '!@#' + linha.rsplit('!@#', 1)[1])
 			else:
-				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#NONE!@#NONE!@#' + form['script'].value + '!@#' + linha.rsplit('!@#', 1)[1])
+				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#NONE!@#NONE!@#' + form['scriptName'].value + '!@#' + linha.rsplit('!@#', 1)[1])
 
 		cars = open('../interrogar-ud/inqueritos_cars.txt', 'r').read().splitlines()
-		if not form['script'].value in cars:
+		if not form['scriptName'].value in cars:
 			with open('../interrogar-ud/inqueritos_cars.txt', 'w') as f:
-				f.write(form['script'].value + '\n' + "\n".join(cars))
+				f.write(form['scriptName'].value + '\n' + "\n".join(cars))
 
 		open('../interrogar-ud/inqueritos.txt', 'w').write('\n'.join(inqueritos))
-		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['script'].value + '"></form>'
+		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['scriptName'].value + '"></form>'
 		html += '<script>document.getElementById("submeter").submit();</script>'
 
 		os.remove('../interrogar-ud/conllu/' + form['conllu'].value)
@@ -177,10 +181,10 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		html = 'Simulação:'
 		html += '<pre>' + open('../interrogar-ud/scripts/sim.txt', 'r').read().replace('<', '&lt;').replace('>','&gt;')
 		html += '</pre>'
-		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['script'].value + '''" name="script"><input type=submit value="Executar script"></form>'''
-		os.remove('../interrogar-ud/scripts/sim.txt')
+		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
+		#os.remove('../interrogar-ud/scripts/sim.txt')
 
-	os.remove('../interrogar-ud/scripts/headers.txt')
+	#os.remove('../interrogar-ud/scripts/headers.txt')
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or (form['action'].value != 'alterar' and form['action'].value != 'filtrar' and form['action'].value != 'script' and form['action'].value != 'manage_tags')):
 	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>') if not 'finalizado' in form else html1.replace('<title>Sistema de inquéritos</title>', '<title>Inquérito realizado com sucesso: Interrogatório</title>')

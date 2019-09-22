@@ -52,7 +52,7 @@ for head in arquivo_ud.sentences:
 		for n, token in enumerate(tokens):
 
 			with open('../interrogar-ud/scripts/' + issue, 'r') as f:
-				codigo = f.read().splitlines()
+				codigo = [x for x in f.read().splitlines() if x.strip() and x.strip()[0] != "#"]
 			
 			token_var = 'token'
 			for x, linha in enumerate(codigo):

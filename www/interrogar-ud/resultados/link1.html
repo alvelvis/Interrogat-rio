@@ -3,11 +3,11 @@
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
     <title>link de pesquisa 1 (203): Interrogatório</title>
-    <link href="../../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
+    <link href="../../interrogar-ud/style.css?version=5" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
-    <script src="../../interrogar-ud/resultados.js?version=13"></script>
+    <script src="../../interrogar-ud/resultados.js?version=15"></script>
   </head>
   <body onload="load()">
     <div id="loading-bg"></div>
@@ -40,31 +40,44 @@
       <br>
       <a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar todas as sentenças</a>
       <br>
-      <a style="cursor:pointer" onclick="abrir_script()">
-        <div class="tooltip">Executar script
-          <div class="tooltiptext">
-            O script deve estar na pasta "interrogar-ud/scripts" e será executado nas sentenças presentes na página atual. Antes de efetivar as alterações, será feita uma simulação.
-          </div>
+      <a style="cursor:pointer" onclick="$('#script').toggle();">Correção em lote</a>
+      <div id="script" style="display:none">
+        <h3>Correção em lote</h3>
+        <ul>
+          <li>A correção em lote permite modificar todas ou parte das sentenças presentes aqui com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
+          <li>Para prosseguir, baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download>modelo de script</a>, edite-o, e submeta sua versão editada.</li>
+          <li>Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
+        </ul>
+        <div style="margin-left:40px;">
+          <form class='scriptForm' method=POST action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
+            <label for="scriptName"><b>Dê um nome à correção:</b></label><br>
+            <input name="scriptName" id="nomeScript" required>
+            <br><br>
+            <label for="fileScript"><b>Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
+            <br>
+            <input type="file" name="fileScript" id="fileScript" onChange="if($('#nomeScript').val() && /\.txt$/.test($(this).val()) ){ $('.scriptForm').submit(); } else { $('.scriptName').css('color', 'white').css('background-color', 'red'); }" required>
+            <!--script-->
+          </form>
         </div>
-      </a>
-      <div id="script" style="display:none"><!--script--></div>
-        <!--DISTh4>Visualizar distribuição:</h4>
-          <ul>
-            <li><a style="cursor:pointer" class="verDist" title="Número do token na sentença">id</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Forma da palavra">word</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Lema da palavra">lemma</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Classe gramatical">upos</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Classe gramatical específica">xpos</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Atributos morfológicos">feats</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Relação de dependência">deprel</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Relação de dependência específica">deps</a></li>
-            <li><a style="cursor:pointer" class="verDist" title="Miscelânea">misc</a></li>
-        </ulDIST-->
+      </div>
+      <!--DISTh4>Visualizar distribuição:</h4>
+        <ul>
+          <li><a style="cursor:pointer" class="verDist" title="Número do token na sentença">id</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Forma da palavra">word</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Lema da palavra">lemma</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Classe gramatical">upos</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Classe gramatical específica">xpos</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Atributos morfológicos">feats</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Relação de dependência">deprel</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Relação de dependência específica">deps</a></li>
+          <li><a style="cursor:pointer" class="verDist" title="Miscelânea">misc</a></li>
+      </ulDIST-->
       <!--br>
         <p>
           <a style="cursor:pointer" onclick="paginacao()">Remover paginação</a>
         </p-->
+        <br><br>
       </div>
       <div class="tabcontent" id="filtrar_tab"> <br>
         <br>
