@@ -224,12 +224,15 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		casos = 0
 
 		pesquisa = pesquisa.replace('==', ' == ')
+		pesquisa = pesquisa.replace('===', ' === ')
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
 		if pesquisa[0] == "@": pesquisa = pesquisa[1:]
 		pesquisa = pesquisa.replace("  ", " ").strip()
 		pesquisa = pesquisa.replace(" == ", " == token.")
+		pesquisa = pesquisa.replace(" === ", " === token.")
 		pesquisa = pesquisa.replace(" != ", " != token.")
+		pesquisa = pesquisa.replace(" !== ", " !== token.")
 		pesquisa = pesquisa.replace(" > ", " > token.")
 		pesquisa = pesquisa.replace(" < ", " < token.")
 		pesquisa = pesquisa.replace(" >= ", " >= token.")
@@ -249,7 +252,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'any( not re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = pesquisa.strip()
 
 		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa) and ("<" in pesquisa or ">" in pesquisa):

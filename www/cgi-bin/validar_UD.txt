@@ -20,18 +20,18 @@ erro: 6 - Algum atributo está vazio
 not id or not word or not lemma or not upos or not xpos or not feats or not dephead or not deprel or not deps or not misc
 
 feats|erro: Features incompatíveis com a classe gramatical
-upos = "ADJ" and feats != "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
-upos = "ADV" and feats != "_|Polarity=Neg"
-upos = "AUX" and feats != "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
-upos = "CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_" and feats != "_"
-upos = "DET" and feats != "Definite=Def|Gender=Masc|Number=Sing|PronType=Art|Definite=Ind|Gender=Fem|Number=Plur|PronType=Ind|PronType=Dem|PronType=Prs|PronType=Tot|PronType=Neg|PronType=Emp|PronType=Int|PronType=Rel|Gender=Unsp|Number=Unsp"
-upos = "NOUN" and feats != "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
-upos = "NUM" and feats != "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
-upos = "PART" and feats != "_|Gender=Masc|Number=Sing"
-upos = "PRON" and feats != "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind"
-upos = "PROPN" and feats != "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp"
-upos = "VERB" and feats != "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
-upos = "X" and feats != "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
+upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur"
+upos = "ADV" and feats !== "_|Polarity=Neg"
+upos = "AUX" and feats !== "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
+upos = "CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_" and feats !== "_"
+upos = "DET" and feats !== "Definite=Def|Gender=Masc|Number=Sing|PronType=Art|Definite=Ind|Gender=Fem|Number=Plur|PronType=Ind|PronType=Dem|PronType=Prs|PronType=Tot|PronType=Neg|PronType=Emp|PronType=Int|PronType=Rel|Gender=Unsp|Number=Unsp"
+upos = "NOUN" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
+upos = "NUM" and feats !== "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
+upos = "PART" and feats !== "_|Gender=Masc|Number=Sing"
+upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind"
+upos = "PROPN" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp"
+upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
+upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
 upos|erro: UPOS inválido
 upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
@@ -40,10 +40,10 @@ deprel|erro: DEPREL inválido
 deprel != "root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis"
 
 misc|erro: MWE inválida
-misc = "MWE=.*" and not "MWEPOS=" in misc
-misc = "MWEPOS=.*" and not "MWE=" in misc
-deprel = "fixed|compound" and not "MWE=.*" in @head_token.misc
-deprel = "fixed|compound" and not "MWEPOS=.*" in @head_token.misc
+misc = "MWE=.*" and misc != "MWEPOS=.*"
+misc = "MWEPOS=.*" and misc != "MWE=.*"
+deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
+deprel = "fixed|compound" and @head_token.misc != "MWEPOS=.*"
 
 misc|erro: MISC inválido
-misc != "MWE=.*|MWEPOS=.*|SpaceAfter=.*|d2d:.*|ChangedBy=.*|_"
+misc !== "MWE=.*|MWEPOS=.*|SpaceAfter=.*|d2d:.*|ChangedBy=.*|_"
