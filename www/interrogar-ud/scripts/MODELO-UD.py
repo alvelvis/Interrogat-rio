@@ -39,6 +39,11 @@ with open('../interrogar-ud/conllu/' + conllu, 'r') as f:
 novo_inquerito = list()
 sim = list()
 
+def append_to(original, s, delimiter="|"):
+	original = original.split(delimiter)
+	original += s.split(delimiter)
+	return delimiter.join(sorted(original))
+
 for head in arquivo_ud.sentences:
 	alterar = ''
 	sent_id = "NONE"

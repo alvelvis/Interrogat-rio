@@ -45,8 +45,12 @@
         <h3>Correção em lote</h3>
         <ul>
           <li>A correção em lote permite modificar todas ou parte das sentenças presentes aqui com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
-          <li>Para prosseguir, baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download>modelo de script</a>, edite-o, e submeta sua versão editada.</li>
           <li>Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
+          <ol type="1">
+            <li>Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download>modelo de script de correção</a> em Python.</li>
+            <li>Edite o script de correção de acordo com o exemplo dentro do arquivo.</li>
+            <li>Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.</li>
+          </ol>
         </ul>
         <div style="margin-left:40px;">
           <form class='scriptForm' method=POST action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
@@ -55,7 +59,10 @@
             <br><br>
             <label for="fileScript"><b>Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
             <br>
-            <input type="file" name="fileScript" id="fileScript" onChange="if($('#nomeScript').val() && /\.txt$/.test($(this).val()) ){ $('.scriptForm').submit(); } else { $('.scriptName').css('color', 'white').css('background-color', 'red'); }" required>
+            <input type="file" name="fileScript" id="fileScript" required>
+            <br><br>
+            <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="buscaOption btn-gradient orange mini"
+  type="submit" onclick="">
             <!--script-->
           </form>
         </div>

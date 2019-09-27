@@ -12,6 +12,7 @@ import datetime
 from estrutura_dados import slugify as slugify
 import subprocess
 from functions import prettyDate
+import functions
 
 form = cgi.FieldStorage()
 
@@ -45,7 +46,7 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
 	            for linha in leitura.splitlines():
 	            	if len(linha.split('\t')) > 2:
 	            		n_tokens += 1
-	            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; ' + n_sent + ' sentenças &nbsp;&nbsp; ' + str(n_tokens) + ' tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <!--a href="#" onclick='apagar("''' + ud + '''")' >excluir</a--> | <a target="_blank" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
+	            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; ' + n_sent + ' sentenças &nbsp;&nbsp; ' + str(n_tokens) + ' tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a target="_blank" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
 	        except:
 	            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; MemoryError &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''" target="_blank">validar</a></div>\n'''
 
@@ -58,6 +59,12 @@ elif not 'validate' in form:
     if form['file'].filename.endswith('.conllu'):
         f = os.path.basename(form['file'].filename)
         open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+        print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+    elif form['file'].filename.endswith(".txt"):
+        f = os.path.basename(form['file'].filename)
+        open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+        os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ./' + functions.udpipe + ' --tokenize --tag --parse ' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
+        os.system('rm ../interrogar-ud/conllu/' + slugify(f))
         print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
     else:
         print('Arquivo não está no formato indicado.')

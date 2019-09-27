@@ -39,7 +39,7 @@ def printar(coluna = '', valor = ''):
 
 	novo_html += '</td></tr></table></form><br>'
 
-	inProgress = ["<tr><td>" + prettyDate(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/" + x)))).beautifyDateDMAH() + "</td><td>" + x.split(" ", 1)[1].rsplit(' ', 1)[0] + "</td><td>" + x.split(" ", 1)[0] + "</td></tr>" for x in os.listdir('../interrogar-ud/') if x.endswith('.inProgress')]
+	inProgress = ["<tr><td>" + prettyDate(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + x)))).beautifyDateDMAH() + "</td><td>" + x.split(" ", 1)[1].rsplit(' ', 1)[0] + "</td><td>" + x.split(" ", 1)[0] + "</td></tr>" for x in os.listdir('../interrogar-ud/inProgress/') if x.endswith('.inProgress')]
 	if inProgress:
 		html = html.replace("<title>", f"<title>{len(inProgress)} busca{'s' if len(inProgress) > 1 else ''} em progresso - ")
 		novo_html += "<h2>Buscas em progresso:</h2><small><a href='javascript:location.reload()'>Atualizar</a></small><div class=\"container-lr\"><table>{0}</table></div>".format(''.join(inProgress)) + "<br>"

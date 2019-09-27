@@ -52,23 +52,22 @@ def sendRequestInterrogar():
 
 
 def sendPOSTInterrogar():
-	criterio, parametros, conllu, nomePesquisa, script = definirVariaveisDePesquisa(cgi.FieldStorage())
-	checarQtdCriterios(criterio)
+	criterio, parametros, conllu, nomePesquisa, script, sentLimit = definirVariaveisDePesquisa(cgi.FieldStorage())
 
 	caminhoCompletoConllu = "../interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
 	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora + '.html'
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		with open(f"../interrogar-ud/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
+		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
 			f.write("")
 
-	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script)
+	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script, sentLimit)
 
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		os.remove("../interrogar-ud/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
+		os.remove("../interrogar-ud/inProgress/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
@@ -106,20 +105,14 @@ def definirVariaveisDePesquisa(form):
 
 	conllu = form['conllu'].value
 	nomePesquisa = 'Busca rápida' if form['meth'].value != 'salvar' else form['nome'].value
+	sentLimit = int(form['sentLimit'].value) if 'sentLimit' in form and form['meth'].value == 'salvar' else 0
 
-	return criterio, parametros, conllu, nomePesquisa, script
-
-
-def checarQtdCriterios(criterio):
-	with open("../interrogar-ud/max_crit.txt", "r") as f:
-		if int(criterio) > int(f.read().strip().split()[0]):
-			print('em desenvolvimento')
-			exit()
+	return criterio, parametros, conllu, nomePesquisa, script, sentLimit
 
 
-def realizarBusca(caminhoCompletoConllu, criterio, parametros, script):
+def realizarBusca(caminhoCompletoConllu, criterio, parametros, script, sentLimit):
 	if not script:
-		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
+		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, sentLimit)
 	else:
 		with open("../cgi-bin/queryScript.py", 'r') as f:
 			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)

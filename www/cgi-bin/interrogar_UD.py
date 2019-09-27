@@ -35,6 +35,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 	
 	if criterio == 1:
 		for a, sentence in enumerate(qualquercoisa):
+			if limit and len(output) == limit:
+				break
 			sentence2 = sentence
 			for b, linha in enumerate(sentence):
 				linha2 = linha

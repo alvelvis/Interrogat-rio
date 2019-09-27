@@ -4,8 +4,10 @@
 print('Content-type:text/html')
 print('\n\n')
 
+from functions import corpusGenericoInquerito
+
 mostrarEtiqueta = False
-bosqueNaoEncontrado = "BosqueUD2.4.conllu"
+bosqueNaoEncontrado = corpusGenericoInquerito
 draggable = [6]
 
 import sys
@@ -114,7 +116,12 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 		print(html)
 		exit()
 
-if os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
+if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
+	os.system('rm ../interrogar-ud/conllu/' + form['ud'].value)
+	print('<script>window.location = "../cgi-bin/arquivo_ud.cgi"</script>')
+	exit()
+
+elif os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
 	inqueritos = open('../interrogar-ud/inqueritos.txt', 'r').read()
 	tags = open('../interrogar-ud/inqueritos_cars.txt', 'r').read()
 
@@ -170,7 +177,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 				f.write(form['scriptName'].value + '\n' + "\n".join(cars))
 
 		open('../interrogar-ud/inqueritos.txt', 'w').write('\n'.join(inqueritos))
-		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['scriptName'].value + '"></form>'
+		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['scriptName'].value.replace('"', '&quot;') + '"></form>'
 		html += '<script>document.getElementById("submeter").submit();</script>'
 
 		os.remove('../interrogar-ud/conllu/' + form['conllu'].value)
@@ -178,13 +185,15 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		os.remove('../interrogar-ud/scripts/novos_inqueritos.txt')
 			
 	elif form['executar'].value == 'sim':
-		html = 'Simulação:'
-		html += '<pre>' + open('../interrogar-ud/scripts/sim.txt', 'r').read().replace('<', '&lt;').replace('>','&gt;')
+		with open('../interrogar-ud/scripts/sim.txt', 'r') as f:
+			sim = f.read()
+		html = f'<title>Simulação de correção em lote</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1><hr>'
+		html += '<pre>' + sim.replace('<', '&lt;').replace('>', '&gt;')
 		html += '</pre>'
-		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
-		#os.remove('../interrogar-ud/scripts/sim.txt')
+		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
+		os.remove('../interrogar-ud/scripts/sim.txt')
 
-	#os.remove('../interrogar-ud/scripts/headers.txt')
+	os.remove('../interrogar-ud/scripts/headers.txt')
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or (form['action'].value != 'alterar' and form['action'].value != 'filtrar' and form['action'].value != 'script' and form['action'].value != 'manage_tags')):
 	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>') if not 'finalizado' in form else html1.replace('<title>Sistema de inquéritos</title>', '<title>Inquérito realizado com sucesso: Interrogatório</title>')
@@ -252,7 +261,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td style="cursor:pointer; color:black; max-width: 98vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42">''' + linha + '</td></tr>'
+					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42">''' + linha + '</td></tr>'
 				else:
 					html1 += '<tr>'
 					for b, coluna in enumerate(linha.split('\t')):

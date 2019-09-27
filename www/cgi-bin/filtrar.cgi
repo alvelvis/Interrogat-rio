@@ -38,7 +38,7 @@ if not 'pesquisa' in form and not 'action' in form:
 
 elif not 'action' in form or form['action'].value != 'desfazer':
 	if ' ' in form['pesquisa'].value: parametros = form['pesquisa'].value.split(' ', 1)[1].replace('<b>', '').replace('<\\/b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
-	if not re.match('^\d+$', form['pesquisa'].value.split(' ')[0]):
+	if not re.match(r'^\d+$', form['pesquisa'].value.split(' ')[0]):
 		criterio = '1'
 		parametros = form['pesquisa'].value.replace('<b>','').replace('<\\/b>','').replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('<\\/font>','').replace('<','&lt;').replace('>','&gt;')
 		if not '^# text = ' in form['pesquisa'].value: print('<script>window.alert("Critério não especificado. Utilizando expressão regular (critério 1).")</script>')
@@ -118,7 +118,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 		#CONTEXTO
 		if sentid != '' and text != '':
-			if '-' in sentid or re.search('^\d+$', sentid):
+			if '-' in sentid or re.search(r'^\d+$', sentid):
 				temcontexto = True
 			else:
 				temcontexto = False
@@ -224,8 +224,8 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	novo_html = re.sub(re.escape('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;'), '<p><div class="tooltip" style="max-width: 60vw; word-wrap: break-word;"><span id="expressao">' + criterio + ' ' + parametros.replace('\\','\\\\').replace('<','&lt;').replace('>','&gt;') + '</span><span class="tooltiptext">' + criterios[int(criterio)+1].replace('\\','\\\\').split('<h4>')[0] + '</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <br><br><div class="tooltip"><span id=corpus>' + udoriginal + '</span><span class="tooltiptext">Página é resultado da filtragem de uma interrogação anterior.</span></div> &nbsp;&nbsp;&nbsp;&nbsp; <br><span id="data"><small>' + prettyDate(data.replace('_', ' ')).beautifyDateDMAH() + '</small></span> &nbsp;&nbsp;&nbsp;&nbsp; ', novo_html)
 
 	#apagar.cgi
-	novo_html = re.sub('\<a.*onclick="apagar.*\</a\>', '', novo_html)
-	novo_html = re.sub('\<button.*filtrar.*\n.*\</button\>', '', novo_html)
+	novo_html = re.sub(r'\<a.*onclick="apagar.*\</a\>', '', novo_html)
+	novo_html = re.sub(r'\<button.*filtrar.*\n.*\</button\>', '', novo_html)
 	novo_html = re.sub('../../../cgi-bin/conllu.cgi', '../../../cgi-bin/conllu.cgi?html=' + link, novo_html)
 
 	open(link, 'w').write(novo_html.replace('<div class="content">','<div class="content"> > <a href="../' + form['html'].value + '.html">Voltar</a> > <a href="../../../cgi-bin/filtrar.cgi?action=desfazer&html=' + link + '_anterior&original='+form['html'].value+'">Desfazer este filtro</a>'))

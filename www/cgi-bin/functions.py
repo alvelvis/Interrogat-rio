@@ -1,11 +1,19 @@
 import re
 
+corpusGenericoInquerito = "bosqueUD_2.3.conllu"
+corpusGenericoExpressoes = "generico.conllu"
+udpipe = "udpipe-1.2.0"
+modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
+
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
 			'blue': 'blue',
 			'red': 'red',
 			'cyan': 'cyan',
 }
+
+def slugify(value):
+	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 
 def cleanEstruturaUD(s):
     return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))

@@ -5,8 +5,10 @@ import os
 import cgi, cgitb
 cgitb.enable()
 import estrutura_dados
+import functions
 
-modelo = 'bosque-2.3.udpipe'
+modelo = functions.modelo
+udpipe = functions.udpipe
 
 html = '<html><head><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title>UDPipe: Interrogatório</title></head><body>'
 
@@ -16,13 +18,17 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	text = form['textheader'].value
 
 	html += '<style>body { width: 90%; margin: 20px auto; }</style><h1>UDPipe</h1><hr><a href="#" onclick="window.close()"">Fechar</a><br><br>'
-	html += 'Modelo: <a href="../interrogar-ud/modelos_udpipe/' + modelo + '" download>' + modelo + '</a>'
+	html += 'Modelo: <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
+	html += '<br>Corpus: <a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a>'
 
-	open('../interrogar-ud/cru.txt', 'w').write(text.replace('"', '\\"'))
+	open('../cgi-bin/cru.txt', 'w').write(text.replace('"', '\\"'))
 
-	os.system('cat ../interrogar-ud/cru.txt | ../interrogar-ud/udpipe --tokenize --tag --parse ../interrogar-ud/modelos_udpipe/' + modelo + ' > ../interrogar-ud/anotado.txt')
+	os.system('cat ../cgi-bin/cru.txt | ../cgi-bin/' + udpipe + ' --tokenize --tag --parse ../cgi-bin/' + modelo + ' > ../cgi-bin/anotado.txt')
 
-	resultado = open('../interrogar-ud/anotado.txt', 'r').read()
+	with open('../cgi-bin/anotado.txt', 'r') as f:
+		resultado = f.read()
+
+	os.system('rm ../cgi-bin/cru.txt ../cgi-bin/anotado.txt')
 
 	html += '<pre style="font-size: 14px">' + resultado + '</pre>'
 

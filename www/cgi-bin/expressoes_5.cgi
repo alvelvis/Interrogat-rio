@@ -12,13 +12,17 @@ import interrogar_UD
 from datetime import datetime
 from functions import prettyDate, encodeUrl, fromInterrogarToHtml
 import html as web
+from functions import corpusGenericoExpressoes
 
 with open("expressoes_5.txt") as f:
     fileExpressions = f.read().splitlines()
     expressions = []
     [expressions.append(x) for x in fileExpressions if not x in expressions]
 
-dictExpressions = [{"expression": x, "example": interrogar_UD.main('generico.conllu', 5, x.split(" ", 1)[1], 1)['output'][0]} for x in expressions]
+corpus = estrutura_ud.Corpus(recursivo=True)
+corpus.load(corpusGenericoExpressoes)
+
+dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]} for x in expressions]
 
 html = "<title>Banco de expressões de busca do critério 5: Python</title>\
     <body style='margin:10px auto; max-width:960px;'>\
