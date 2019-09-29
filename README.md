@@ -1,12 +1,12 @@
 # Interrogatório
 
-Interrogatório (Interrogatory) is an enviroment developed and used by the research group ComCorHd (Computational Linguistics, Corpus and Digital Humanities), from the Linguistics Department of PUC-Rio, in Brazil, in the scope of the project Linguistic resources for Portuguese Natural Language Processing (loose translation).
+Interrogatório (Interrogatory) is an enviroment for querying and revising annotated corpora in the [Universal Dependencies](http://universaldependencies.org) format. It is being developed and used by the research group [ComCorHd (Computational Linguistics, Corpus and Digital Humanities)](http://comcorhd.letras.puc-rio.br), from the Linguistics Department of PUC-Rio, in Brazil, for the project Linguistic resources for Portuguese Natural Language Processing.
 
-Interrogatório is meant to be used for making refined queries and revising annotated corpora in the [Universal Dependencies](http://universaldependencies.org) format, and it requires a computer running Linux and Python 3 at least in order to run your own version of it.
+Interrogatório is part of [ET: a workstation for searching, revising and evaluating annotated corpora](http://comcorhd.letras.puc-rio.br/ET).
 
-To understand better how the tools work, check our Wiki in the tab above.
+If you want to run your own version of Interrogatório, a Linux computer and Python 3 are needed. Check our Wiki in the tab above to a deep understanding of Interrogatório tools.
 
-You can also use Interrogatorio at the website [https://comcorhd.letras.puc-rio.br/interrogatorio/](https://comcorhd.letras.puc-rio.br/interrogatorio/).
+You can also use Interrogatorio at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora and upload your own, already in the UD format or in plane text to be annotated (in Portuguese).
 
 # 4-steps Tutorial
 
