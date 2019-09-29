@@ -27,7 +27,7 @@ dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.
 html = "<title>Banco de expressões de busca do critério 5: Python</title>\
     <body style='margin:10px auto; max-width:960px;'>\
     <h1>Banco de expressões</h1>\
-    Critério 5: Python<br>\
+    <a href='#' onclick='window.close()'>Fechar</a><br><br>Critério 5: Python<br>\
         Página gerada dia " + prettyDate(datetime.now()).beautifyDateDMAH() \
             + "<hr>\
                 <br><table style='margin:auto; border-collapse: collapse;' border='1'><tr><th>Expressão</th><th>Exemplo</th></tr>"
