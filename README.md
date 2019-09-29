@@ -6,7 +6,7 @@ Interrogatório is part of [ET: a workstation for searching, revising and evalua
 
 If you want to run your own version of Interrogatório, a Linux computer and Python 3 are needed. Check our Wiki in the tab above to a deep understanding of Interrogatório tools.
 
-You can also use Interrogatorio at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora and upload your own, already in the UD format or in plane text to be annotated (in Portuguese).
+You can also use Interrogatorio at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora, or upload your own, be it in the UD format or in plain text to be annotated (in Portuguese).
 
 # 4-steps Tutorial
 
