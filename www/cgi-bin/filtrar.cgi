@@ -105,7 +105,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 			text = ocorrencia.split('# text = ')[1].split('\n')[0]
 		else: text = ''
 
-		novo =  '''<div class=container><p>'''+str(i+1)+''' / '''+ocorrencias+'''</p>'''
+		novo =  '''<div class=container><p>'''+str(i+1)+'''/'''+ocorrencias+'''</p>'''
 		#SENTID
 		if sentid != '': novo += '''<p>'''+sentid.replace('/BOLD','</b>').replace('@BOLD','<b>')+'''</p>'''
 		#FORM
@@ -126,7 +126,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 			temcontexto = False
 
 		if temcontexto:
-			novo += '''<input id="contexto_'''+str(i+1)+'''" value="Mostrar contexto" onclick="contexto('divcontexto_'''+str(i+1)+'''', 'contexto_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input id="mostrar_'''+str(i+1)+'''" class="anotacao" value="Mostrar anotação" onclick="mostrar('div_'''+str(i+1)+'''', 'mostrar_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input id="opt_'''+str(i+1)+'''" class="opt" value="Mostrar opções" onclick="mostraropt('optdiv_'''+str(i+1)+'''', 'opt_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input type="button" value="Abrir inquérito" onclick='inquerito("form_'''+str(i+1)+'''")'>'''
+			novo += '''<input id="contexto_'''+str(i+1)+'''" value="Mostrar contexto" onclick="contexto('divcontexto_'''+str(i+1)+'''', 'contexto_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input id="mostrar_'''+str(i+1)+'''" class="anotacao" value="Mostrar anotação" onclick="mostrar('div_'''+str(i+1)+'''', 'mostrar_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input id="opt_'''+str(i+1)+'''" class="opt" value="Mostrar opções" onclick="mostraropt('optdiv_'''+str(i+1)+'''', 'opt_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input type="button" class=\"abrirInquerito\" value="Abrir inquérito" onclick='inquerito("form_'''+str(i+1)+'''")'>'''
 		else:
 			novo += '''<input class="anotacao" id="mostrar_'''+str(i+1)+'''" value="Mostrar anotação" onclick="mostrar('div_'''+str(i+1)+'''', 'mostrar_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input id="opt_'''+str(i+1)+'''" class="opt" value="Mostrar opções" onclick="mostraropt('optdiv_'''+str(i+1)+'''', 'opt_'''+str(i+1)+'''')" style="margin-left:0px" type="button"> <input type="button" value="Abrir inquérito" onclick='inquerito("form_'''+str(i+1)+'''")'>'''
 
@@ -198,7 +198,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	html = html1 + html2
 
-	html = html.replace('''Marcar todas as sentenças''', "").replace("Desmarcar todas as sentenças", "")
+	html = html.replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar algumas sentenças', '')
 
 	#<!--script-->
 	html1 = html.split('<!--script-->')[0]
@@ -228,7 +228,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 	novo_html = re.sub(r'\<button.*filtrar.*\n.*\</button\>', '', novo_html)
 	novo_html = re.sub('../../../cgi-bin/conllu.cgi', '../../../cgi-bin/conllu.cgi?html=' + link, novo_html)
 
-	open(link, 'w').write(novo_html.replace('<div class="content">','<div class="content"> > <a href="../' + form['html'].value + '.html">Voltar</a> > <a href="../../../cgi-bin/filtrar.cgi?action=desfazer&html=' + link + '_anterior&original='+form['html'].value+'">Desfazer este filtro</a>'))
+	open(link, 'w').write(novo_html.replace('<div class="content">','<div class="content"> > <a href="../' + form['html'].value + '.html">Voltar</a> > <a href="#" class="desfazerFiltro" nomeFiltro="' +nome.replace('"', '&quot;')+ '" link="../../../cgi-bin/filtrar.cgi?action=desfazer&html=' + link + '_anterior&original='+form['html'].value+'">Desfazer este filtro</a>'))
 	open(link + '_anterior', 'w').write(open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'r').read())
 	open('../interrogar-ud/resultados/' + form['html'].value + '.html', 'w').write(html_original)
 

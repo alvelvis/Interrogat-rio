@@ -24,21 +24,25 @@
     </div>
     <div class="content"><br>
     <br>
-      <div class="tab"><button class="Ver" onclick="openCity(event, 'ver')">
-      Opções </button> <button class="tablinks" onclick="openCity(event, 'filtrar_tab')">
-          Filtrar </button> <button class="tablinks" onclick="openCity(event, 'conllu')">
-          Baixar </button> <button id="fechartabs" style="display:none; color:white; background-color:red;" class="fechartabs" onclick="fechar_tabs()">
-          X </button></div>
-      <div class="tabcontent" id="ver"> <br>
+      <div class="tab"><button class="tablinks" tabid="ver" tab="Options">
+      Opções </button> <button class="tablinks" tab="Filter" tabid="filtrar_tab">
+          Filtrar </button> <button class="tablinks" tab="Download" tabid="conllu">
+          Baixar </button></div>
+      <div class="tabcontent tabOptions" id="ver"> <br>
       <br>
       <br>
-      <a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotações</a>
+      <a onclick="$('.abrirInquerito').slice(0,20).click();" title="Serão abertos inquéritos para as 20 primeiras sentenças" style="cursor:pointer">Abrir inquérito para as 20 primeiras sentenças</a>
       <br>
-      <a style="cursor:pointer" onclick="tudo('fechar')">Fechar anotações</a>
+      <a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotação de todas as sentenças</a>
       <br>
-      <a style="cursor:pointer" onclick="tudo('marcar')">Marcar todas as sentenças</a>
+      <a style="cursor:pointer" title="" onclick="tudo('fechar')">Fechar anotação de todas as sentenças</a>
       <br>
-      <a style="cursor:pointer" onclick="tudo('desmarcar')">Desmarcar todas as sentenças</a>
+      <a style="cursor:pointer" onclick="tudo('marcar')">Selecionar todas as sentenças</a>
+      <br>
+      <a style="cursor:pointer" onclick="tudo('desmarcar')">Deselecionar todas as sentenças</a>
+      <br>
+      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();">Selecionar algumas sentenças</a>
+      <div class="selectSome"><ul><li>Número de sentenças: <input type="number" style="width:60px;" value="20" class="numberSentences"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(0, parseInt($('.numberSentences').val())).prop('checked', true);"></li></ul></div>
       <br>
       <a style="cursor:pointer" onclick="$('#script').toggle();">Correção em lote</a>
       <div id="script" style="display:none">
@@ -61,7 +65,7 @@
             <br>
             <input type="file" name="fileScript" id="fileScript" required>
             <br><br>
-            <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="buscaOption btn-gradient orange mini"
+            <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="buscaOption btn-gradient orange small"
   type="submit" onclick="">
             <!--script-->
           </form>
@@ -86,7 +90,7 @@
         </p-->
         <br><br>
       </div>
-      <div class="tabcontent" id="filtrar_tab"> <br>
+      <div class="tabcontent tabFilter" id="filtrar_tab"> <br>
         <br>
         <br>
         <form action="../../cgi-bin/filtrar.cgi" method="POST"> <p><label for="pesquisa">
@@ -95,8 +99,8 @@
           <li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</li>
           <li>Você pode realizar filtros de duas formas:</li>
             <ul>
-              <li><a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor">Com uma nova busca dentro desta página</a></li>
-              <li><a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor">Apenas com as frases que foram selecionadas nesta página</a></li>
+              <li><a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor">Filtrar com uma nova expressão de busca</a></li>
+              <li><a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor">Filtrar apenas as frases que foram selecionadas manualmente</a></li>
             </ul>
           </ul>
             <div class="filterDiv newSearchFilter" style="display:none; margin-left:40px;">
@@ -116,7 +120,7 @@
                   <input id="filtrarsel" style="margin-left:0px; margin-top:15px;" value="Filtrar" class="btn-gradient orange small" type="button" onclick="excluir_selection()"></p></form>
                 </div>
       </div>
-      <div class="tabcontent" id="conllu"> <br>
+      <div class="tabcontent tabDownload" id="conllu"> <br>
         <br>
         <br>
         <form action="../../cgi-bin/conllu.cgi" method="POST"><p><label for="nomeconllu">Nome do arquivo (sem <em>.conllu</em>):<br>

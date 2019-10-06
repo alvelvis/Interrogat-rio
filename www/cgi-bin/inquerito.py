@@ -161,9 +161,12 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
 			f.write(form['fileScript'].file.read())
 
-	open('../interrogar-ud/scripts/headers.txt', 'w').write("\n".join(headers))
-	call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True)
-
+	with open('../interrogar-ud/scripts/headers.txt', 'w') as f:
+		f.write("\n".join(headers))
+	
+	if call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True):
+		pass
+	
 	if form['executar'].value == 'exec':
 		for linha in open('../interrogar-ud/scripts/novos_inqueritos.txt', 'r').read().splitlines():
 			if form['nome_interrogatorio'] not in ['teste', 'Busca rápida']:
@@ -185,9 +188,17 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		os.remove('../interrogar-ud/scripts/novos_inqueritos.txt')
 			
 	elif form['executar'].value == 'sim':
-		with open('../interrogar-ud/scripts/sim.txt', 'r') as f:
-			sim = f.read()
-		html = f'<title>Simulação de correção em lote</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1><hr>'
+		try:
+			with open('../interrogar-ud/scripts/sim.txt', 'r') as f:
+				sim = f.read()
+		except:
+			with open("../cgi-bin/error.log", "r") as f:
+				print(f.read().splitlines()[-1])
+				exit()
+		html = f'<title>Simulação de correção em lote</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
+		<br>Nome da correção: ' + form['scriptName'].value + '\
+		<br>Corpus: <a target="_blank" href="../interrogar-ud/conllu/' + form['conllu'].value + '" download>' + form['conllu'].value + '</a>\
+		<hr>'
 		html += '<pre>' + sim.replace('<', '&lt;').replace('>', '&gt;')
 		html += '</pre>'
 		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
@@ -216,7 +227,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 				html1 += f'<li>{erro}</li><ul>'
 				for sentence in erros[erro]:
 					if sentence and sentence['sentence']:
-						html1 += f'''<li>{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</li>'''
+						html1 += f'''<li><a style="cursor:pointer" onclick="$('.id_{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)}').focus();">{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</a></li>'''
 				html1 += "</ul>"
 			html1 += "</ul>"
 		html1 += '<br>'
@@ -267,7 +278,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					for b, coluna in enumerate(linha.split('\t')):
 						drag = 'drag ' if b in draggable else ''
 						dragId = 'id ' if b == 0 else ''
-						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{drag}{dragId}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
+						notPipe = "" if b in [4, 5, 9] and coluna != "_" else "notPipe "
+						tokenId = f"id_{coluna} " if b == 0 else ""
+						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
 
 			html1 += '</table></div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
