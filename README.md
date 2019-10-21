@@ -1,6 +1,6 @@
 # Interrogatório
 
-Interrogatório (Interrogatory) is an enviroment for querying and revising annotated corpora in the [Universal Dependencies](http://universaldependencies.org) format. It is being developed and used by the research group [ComCorHd (Computational Linguistics, Corpus and Digital Humanities)](http://comcorhd.letras.puc-rio.br), from the Linguistics Department of PUC-Rio, in Brazil, for the project Linguistic resources for Portuguese Natural Language Processing.
+Interrogatório (Interrogatory) is an enviroment for querying and revising annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is being developed and used by the research group [ComCorHd (Computational Linguistics, Corpus and Digital Humanities)](http://comcorhd.letras.puc-rio.br), from the Linguistics Department of PUC-Rio, in Brazil, for the project Linguistic resources for Portuguese Natural Language Processing.
 
 Interrogatório is part of [ET: a workstation for searching, revising and evaluating annotated corpora](http://comcorhd.letras.puc-rio.br/ET).
 
