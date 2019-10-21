@@ -18,6 +18,7 @@ from functions import tabela, prettyDate, encodeUrl
 import html as web
 import time
 import sys
+import functions
 
 def main():
 	if not os.path.isdir("../interrogar-ud/conllu"):
@@ -71,7 +72,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar algumas sentenças', '').replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar múltiplas sentenças', '').replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
@@ -194,7 +195,10 @@ class paginaHtml():
 		return f"<p><span id=text_{str(i+1)}>{ocorrencia['resultadoAnotado'].text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>"
 
 	def adicionarFormInquerito(self, i, ocorrencia):
-		return f"<form action=\"../../cgi-bin/inquerito.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"></form>"
+		formInquerito = f"<form action=\"../../cgi-bin/inquerito.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">"
+		if "@BOLD" in ocorrencia['resultadoAnotado'].to_str():
+			formInquerito += f"<input type=hidden name=tokenId value=\"" + "".join([functions.cleanEstruturaUD(x.id) for x in ocorrencia['resultadoAnotado'].tokens if '@BOLD' in x.to_str()]) + "\">"
+		return formInquerito + "</form>"
 
 	def adicionarOpcaoFiltrar(self, i, ocorrencia):
 		return f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(i+1)}\")'>Separar sentença</a-->"

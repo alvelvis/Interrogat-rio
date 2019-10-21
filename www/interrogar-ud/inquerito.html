@@ -47,13 +47,6 @@ function confirmar(etiqueta) {
 		return true;
 	}
 }
-function enviar() {
-  var fields, i;
-  fields = document.getElementsByClassName("field");
-  for (i = 0; i < fields.length; i++) {
-    fields[i].value = document.getElementById(fields[i].name).innerHTML.replace('<br>', '').replace('</div>', '').replace('<div>', '');
-  }
-  document.getElementById('dados_inquerito').submit();
-}
+
 </script>
 </html>

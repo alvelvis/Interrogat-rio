@@ -198,7 +198,7 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 
 	html = html1 + html2
 
-	html = html.replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar algumas sentenças', '')
+	html = html.replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar múltiplas sentenças', '')
 
 	#<!--script-->
 	html1 = html.split('<!--script-->')[0]

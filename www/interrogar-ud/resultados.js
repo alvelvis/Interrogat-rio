@@ -4,6 +4,17 @@ $(window).on('beforeunload', function() {
     setTimeout(waitTooMuch, 20000);
 });
 
+function enviar() {
+    $('[class=field]').each(function(i){
+        if ($(this).val() == $('#' + $(this).attr('name')).text().replace("<br>", '').replace('</div>', '').replace('<div>', '')) {
+            this.remove();
+        } else {
+            $(this).val($('#' + $(this).attr('name')).text().replace("<br>", '').replace('</div>', '').replace('<div>', ''));
+        }
+    });
+    document.getElementById('dados_inquerito').submit();
+};
+
 function encodeUrl(s){
     return s
         .replace(/ /g, '%20')
@@ -79,6 +90,12 @@ function pesquisa(numero) {
     pesquisaChange();
 };
 
+$(document).on('keydown', function(e){
+    if (e.key === "Escape") {
+        $('.endInquerito').click();
+    }
+});
+
 $(document).ready(function(){
 
     $('.desfazerFiltro').click(function(){
@@ -92,6 +109,8 @@ $(document).ready(function(){
         $('.filterDiv').hide();
         $('#script').hide();
         $('.selectSome').hide();
+        $('.inqueritoSome').hide();
+        $('.viewDist').hide();
         if ($('.tab' + $(this).attr('tab')).is(":visible")){
             $('.tab' + $(this).attr('tab')).hide();
         } else {

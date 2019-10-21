@@ -232,7 +232,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			html1 += "</ul>"
 		html1 += '<br>'
 
-	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a href="javascript:window.close()">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
+	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 
 	achou = False
 	for i, sentence in enumerate(conlluzao):
@@ -261,8 +261,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					if linha:
 						html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
 				html1 += "</datalist> "
-			html1 += '<h3>Controles:</h3>Tab / Shift + Tab: ir para coluna à direita/esquerda<br>↑ / ↓: ir para linha acima/abaixo<br>Shift + Scroll: Mover tabela para os lados<br>↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende<br><br>'
-			html1 += '<input style="display: inline-block;" type="button" onclick="enviar()" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
+			html1 += '<h3>Controles:</h3>Esc: Encerrar inquérito<br>Tab / Shift + Tab: ir para coluna à direita/esquerda<br>↑ / ↓: ir para linha acima/abaixo<br>↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende<br>Shift + Scroll: Mover tabela para os lados<br><br>'
+			html1 += '<input style="display: inline-block; margin: 0px;" type="button" onclick="enviar()" class="btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
 			html1 += '<br><br><br><b>Edite as colunas desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()
@@ -272,18 +272,20 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += '''<tr><input class="field" type="hidden" name="''' +str(a)+ '''-''' + ''':"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + ''':" contenteditable=True class="annotationValue plaintext" colspan="42">''' + linha + '</td></tr>'
+					html1 += f'''<tr><input class="field" value="{linha.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type="hidden" name="''' +str(a)+ '''-''' + '''meta"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + '''meta" contenteditable=True class="annotationValue plaintext" colspan="42">''' + linha + '</td></tr>'
 				else:
-					html1 += '<tr>'
+					isBold = "background-color: lightgray;" if 'tokenId' in form and linha.split('\t')[0] == form['tokenId'].value else ""
+					html1 += f'<tr style="{isBold}">'
 					for b, coluna in enumerate(linha.split('\t')):
 						drag = 'drag ' if b in draggable else ''
 						dragId = 'id ' if b == 0 else ''
 						notPipe = "" if b in [4, 5, 9] and coluna != "_" else "notPipe "
 						tokenId = f"id_{coluna} " if b == 0 else ""
-						html1 += '''<input class="field" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
+						html1 += f'''<input class="field" value="{coluna.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
 
 			html1 += '</table></div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
+			html1 += '<input type=hidden name=tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else ''
 			html1 += '</div></form>'
 			achou = True
 			break
@@ -335,31 +337,31 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 
 	for key in dict(form).keys():
 		value = dict(form)[key]
-		if re.search(r'^\d+-(\d+|:)$', key):
+		if re.search(r'^\d+-(\d+|meta)$', key):
 			token = int(key.split('-')[0])
-			if key.split('-')[1] != ':': coluna = int(key.split('-')[1])
-			else: coluna = ':'
+			if key.split('-')[1] != 'meta': coluna = int(key.split('-')[1])
+			else: coluna = 'meta'
 			value = webpage.unescape(value.value)
 
-			if (coluna == ':' and conlluzao[int(form['sentnum'].value)][token] != value) or (coluna != ':' and conlluzao[int(form['sentnum'].value)][token][coluna] != value):
+			#if (coluna == ':' and conlluzao[int(form['sentnum'].value)][token] != value) or (coluna != ':' and conlluzao[int(form['sentnum'].value)][token][coluna] != value):
 				#try:
 				#print(value)
 				#print(conlluzao[int(form['sentnum'].value)][token])
-				if coluna != ':':
-					antes = '\t'.join(conlluzao[int(form['sentnum'].value)][token])
-					conlluzao[int(form['sentnum'].value)][token][coluna] = value
-					depois = '\t'.join(conlluzao[int(form['sentnum'].value)][token]).replace(value, '<b>' + value + '</b>').replace(conlluzao[int(form['sentnum'].value)][token][7], conlluzao[int(form['sentnum'].value)][token][7] + get_head(conlluzao[int(form['sentnum'].value)], conlluzao[int(form['sentnum'].value)][token]))
-				else:
-					antes = conlluzao[int(form['sentnum'].value)][token]
-					conlluzao[int(form['sentnum'].value)][token] = value
-					depois = conlluzao[int(form['sentnum'].value)][token].replace(value, '<b>' + value + '</b>')
-			
-				inquerito_concluido = form['textheader'].value + '!@#' + antes + ' --> ' + depois + '!@#' + form['conllu'].value + '!@#' + data
-				inquerito_concluido += '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')' if 'occ' in form else '!@#NONE'
-				inquerito_concluido += '!@#' + form['link_interrogatorio'].value if 'link_interrogatorio' in form else '!@#NONE'
-				inquerito_concluido += '!@#' + tag if 'tag' in form else '!@#NONE'
-				inquerito_concluido += '!@#' + form['sentid'].value if 'sentid' in form else '!@#NONE'
-				inqueritos_concluidos.append(inquerito_concluido)
+			if coluna != 'meta':
+				antes = '\t'.join(conlluzao[int(form['sentnum'].value)][token])
+				conlluzao[int(form['sentnum'].value)][token][coluna] = value
+				depois = '\t'.join(conlluzao[int(form['sentnum'].value)][token]).replace(value, '<b>' + value + '</b>').replace(conlluzao[int(form['sentnum'].value)][token][7], conlluzao[int(form['sentnum'].value)][token][7] + get_head(conlluzao[int(form['sentnum'].value)], conlluzao[int(form['sentnum'].value)][token]))
+			else:
+				antes = conlluzao[int(form['sentnum'].value)][token]
+				conlluzao[int(form['sentnum'].value)][token] = value
+				depois = conlluzao[int(form['sentnum'].value)][token].replace(value, '<b>' + value + '</b>')
+		
+			inquerito_concluido = form['textheader'].value + '!@#' + antes + ' --> ' + depois + '!@#' + form['conllu'].value + '!@#' + data
+			inquerito_concluido += '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')' if 'occ' in form else '!@#NONE'
+			inquerito_concluido += '!@#' + form['link_interrogatorio'].value if 'link_interrogatorio' in form else '!@#NONE'
+			inquerito_concluido += '!@#' + tag if 'tag' in form else '!@#NONE'
+			inquerito_concluido += '!@#' + form['sentid'].value if 'sentid' in form else '!@#NONE'
+			inqueritos_concluidos.append(inquerito_concluido)
 
 	if not os.path.isfile('../interrogar-ud/inqueritos.txt'):
 		open('../interrogar-ud/inqueritos.txt', 'w').write('')
@@ -373,6 +375,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 
 	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="../cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
 	if 'tag' in form: html += '<input type=hidden name=tag value="' + form['tag'].value + '">'
+	html += '<input type=hidden name=tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else ''
 	html += '''</form><script>document.cookie = "tag=''' + tag.replace('"', '\\"').replace(";", "_") + '''"; document.getElementById('reenviar').submit();</script></body></html>'''
 
 elif os.environ['REQUEST_METHOD'] != 'POST':

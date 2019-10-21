@@ -56,18 +56,30 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
 
 
 elif not 'validate' in form:
-    if form['file'].filename.endswith('.conllu'):
-        f = os.path.basename(form['file'].filename)
-        open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
-        print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
-    elif form['file'].filename.endswith(".txt"):
-        f = os.path.basename(form['file'].filename)
-        open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
-        os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ./' + functions.udpipe + ' --tokenize --tag --parse ' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
-        os.system('rm ../interrogar-ud/conllu/' + slugify(f))
-        print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+    fileitem = form['file'].file
+    fileitem.seek(0, 2) # Seek to the end of the file.
+    filesize = fileitem.tell() # Get the position of EOF.
+    fileitem.seek(0) # Reset the file position to the beginning.
+    f = os.path.basename(form['file'].filename)
+    if filesize > 2*10000000:
+        print("Arquivo maior que 20mb não suportado.")
     else:
-        print('Arquivo não está no formato indicado.')
+        if form['file'].filename.endswith('.conllu'):
+            if os.path.isfile('../interrogar-ud/conllu/' + slugify(f)):
+                print("Arquivo \"" + slugify(f) + "\" já existe no repositório.")
+            else:
+                open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+        elif form['file'].filename.endswith(".txt"):
+            if os.path.isfile('../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu"):
+                print("Arquivo \"" + slugify(f).rsplit(".txt", 1)[0] + ".conllu" + "\" já existe no repositório.")
+            else:
+                open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ./' + functions.udpipe + ' --tokenize --tag --parse ' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
+                os.system('rm ../interrogar-ud/conllu/' + slugify(f))
+                print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+        else:
+            print('Arquivo não está no formato indicado.')
 
 else:
     print('<html><head><meta charset="UTF-8"><title>validate.py</title></head><body>')

@@ -29,7 +29,7 @@ misc == ""
 
 deprel|erro: 7 - Token apontando na direção errada
 deprel = "(appos|conj|fixed|compound|flat|flat:name)" and dephead > id
-deprel = "(case|cc|mark|det|cop|aux)" and dephead < id
+deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != "MWE=.*"
 
 feats|erro: Features incompatíveis com a classe gramatical
 upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Number=Sing|Number=Plur|NumType=Ord"
@@ -62,4 +62,4 @@ misc|erro: MISC inválido
 misc !== "MWE=.*|MWEPOS=.*|SpaceAfter=.*|d2d:.*|ChangedBy=.*|_"
 
 deprel|erro: Este deprel não pode ter dependentes
-head_token.deprel == "(cc|case|det|flat:name|fixed|compound)"
+head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and head_token.misc != "MWE=.*"
