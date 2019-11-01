@@ -20,7 +20,7 @@ with open("../cgi-bin/expressoes_5.txt") as f:
     [expressions.append(x) for x in fileExpressions if not x in expressions]
 
 corpus = estrutura_ud.Corpus(recursivo=True)
-corpus.load(corpusGenericoExpressoes)
+corpus.load('../cgi-bin/' + corpusGenericoExpressoes)
 
 dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]} for x in expressions]
 
