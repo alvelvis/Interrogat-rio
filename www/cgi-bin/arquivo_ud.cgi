@@ -75,7 +75,7 @@ elif not 'validate' in form:
                 print("Arquivo \"" + slugify(f).rsplit(".txt", 1)[0] + ".conllu" + "\" já existe no repositório.")
             else:
                 open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
-                os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ./' + functions.udpipe + ' --tokenize --tag --parse ' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
+                os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ../cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
                 os.system('rm ../interrogar-ud/conllu/' + slugify(f))
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
         else:
