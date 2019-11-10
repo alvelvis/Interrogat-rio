@@ -13,6 +13,8 @@ from estrutura_dados import slugify as slugify
 import subprocess
 from functions import prettyDate
 import functions
+from chardet import detect
+
 
 form = cgi.FieldStorage()
 
@@ -69,12 +71,28 @@ elif not 'validate' in form:
                 print("Arquivo \"" + slugify(f) + "\" já existe no repositório.")
             else:
                 open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                srcfile = '../interrogar-ud/conllu/' + slugify(f)
+                trgfile = 'codification'
+                from_codec = get_encoding_type(srcfile)
+                with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
+                    text = f.read() # for small files, for big use chunks
+                    e.write(text)
+                os.remove(srcfile) # remove old encoding file
+                os.rename(trgfile, srcfile) # rename new encoding
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
         elif form['file'].filename.endswith(".txt"):
             if os.path.isfile('../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu"):
                 print("Arquivo \"" + slugify(f).rsplit(".txt", 1)[0] + ".conllu" + "\" já existe no repositório.")
             else:
                 open('../interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                srcfile = '../interrogar-ud/conllu/' + slugify(f)
+                trgfile = 'codification'
+                from_codec = get_encoding_type(srcfile)
+                with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
+                    text = f.read() # for small files, for big use chunks
+                    e.write(text)
+                os.remove(srcfile) # remove old encoding file
+                os.rename(trgfile, srcfile) # rename new encoding
                 os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ../cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ../cgi-bin/' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
                 os.system('rm ../interrogar-ud/conllu/' + slugify(f))
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
