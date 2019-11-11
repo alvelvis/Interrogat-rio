@@ -32,6 +32,6 @@ That way, whenever you want to update the repository, you can simply pull the up
 
 Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
 
-	$ cd www; python3 -m http.server --cgi; cd ..
+	$ sh run_interrogatorio.sh
 
 All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/interrogar-ud/](http://localhost:8000/interrogar-ud/). End the server by pressing "Ctrl+C" in the terminal window.
