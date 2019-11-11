@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-print('Content-type:text/html')
+print('Content-type:text/html; charset=utf-8')
 print('\n\n')
 
 from functions import corpusGenericoInquerito
