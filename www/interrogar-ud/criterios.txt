@@ -23,7 +23,7 @@
 <ul>
     <li><a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a></li>
     <li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos finalizados</a></li>
-    <li><a href="https://julgamento.comcorhd.ga" target="_blank">Julgamento - avaliação de corpora anotados</a></li>
+    <li><a href="http://comcorhd.letras.puc-rio.br/julgamento" target="_blank">Julgamento - avaliação de corpora anotados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Código fonte do Interrogatório no Github</a></li>
     <li><a target="_blank" href="http://comcorhd.letras.puc-rio.br/">Grupo de pesquisa ComCorHd/PUC-Rio</a></li>
 </ul>

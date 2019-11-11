@@ -15,6 +15,10 @@ from functions import prettyDate
 import functions
 from chardet import detect
 
+def get_encoding_type(file):
+    with open(file, 'rb') as f:
+        rawdata = f.read()
+    return detect(rawdata)['encoding']
 
 form = cgi.FieldStorage()
 
@@ -74,8 +78,8 @@ elif not 'validate' in form:
                 srcfile = '../interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'
                 from_codec = get_encoding_type(srcfile)
-                with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
-                    text = f.read() # for small files, for big use chunks
+                with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
+                    text = ff.read() # for small files, for big use chunks
                     e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
@@ -88,8 +92,8 @@ elif not 'validate' in form:
                 srcfile = '../interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'
                 from_codec = get_encoding_type(srcfile)
-                with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
-                    text = f.read() # for small files, for big use chunks
+                with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
+                    text = ff.read() # for small files, for big use chunks
                     e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
