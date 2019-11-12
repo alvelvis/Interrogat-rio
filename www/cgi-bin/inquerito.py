@@ -22,6 +22,7 @@ import re
 from subprocess import call
 import html as webpage
 import validar_UD
+from credenciar import LOGIN
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -111,10 +112,11 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 
 if os.environ['REQUEST_METHOD'] == 'POST':
 	form = cgi.FieldStorage()
-	if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
-		html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'
-		print(html)
-		exit()
+	if LOGIN:
+		if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
+			html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'
+			print(html)
+			exit()
 
 if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
 	os.system('rm ../interrogar-ud/conllu/' + form['ud'].value)
