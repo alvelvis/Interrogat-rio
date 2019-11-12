@@ -26,11 +26,7 @@ That way, whenever you want to update the repository, you can simply pull the up
 
 	$ pip3 install -r requirements.txt
 
-4) Make two links before you can start the server and give them reading and writing permission:
-
-	$ sudo ln -rs www/interrogar-ud/ .; sudo ln -rs www/cgi-bin/ .; sudo chmod -R a+rwx www
-
-Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
+4) Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
 
 	$ sh run_interrogatorio.sh
 
