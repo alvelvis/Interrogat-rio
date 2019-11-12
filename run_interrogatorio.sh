@@ -1,4 +1,4 @@
-if [ ! -e www ]; then
+if [ ! -e cgi-bin ]; then
   sudo ln -rs www/interrogar-ud/ .; sudo ln -rs www/cgi-bin/ .; sudo chmod -R a+rwx www
 fi
 
