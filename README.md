@@ -8,7 +8,7 @@ If you want to run your own version of Interrogatório, a Linux computer and Pyt
 
 You can also use Interrogatorio at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora, or upload your own, be it in the UD format or in plain text to be annotated (in Portuguese).
 
-# 4-steps Tutorial
+# 3-steps Tutorial
 
 1) The recommended way to download the repository is by cloning it. In a terminal, execute the following command:
 
@@ -22,11 +22,7 @@ That way, whenever you want to update the repository, you can simply pull the up
 
 	$ git pull
 
-3) Download the requirements to you Python 3 libraries:
-
-	$ pip3 install -r requirements.txt
-
-4) Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
+3) Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
 
 	$ sh run_interrogatorio.sh
 
