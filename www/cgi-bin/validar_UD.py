@@ -5,7 +5,7 @@ import re
 import pprint
 from functions import fromInterrogarToHtml
 
-def validate(conllu, sent_id = None, errorList = "validar_UD.txt", noMissingToken=False):
+def validate(conllu, sent_id = None, errorList = "../cgi-bin/validar_UD.txt", noMissingToken=False):
 
     errorDictionary = {}
 
@@ -95,5 +95,5 @@ if __name__ == "__main__":
     pprint.pprint(validate(
         conllu=sys.argv[1],
         sent_id=sys.argv[2] if len(sys.argv) > 2 else None, 
-        errorList=sys.argv[3] if len(sys.argv) > 3 else "validar_UD.txt"
+        errorList=sys.argv[3] if len(sys.argv) > 3 else "../cgi-bin/validar_UD.txt"
     ))
