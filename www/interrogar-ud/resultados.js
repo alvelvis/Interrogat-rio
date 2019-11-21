@@ -398,14 +398,9 @@ function mostraropt(nome, botao) {
     }
 }
 
-function contexto(nome, botao) {
-    if (document.getElementById(nome).style.display == "none"){
-        document.getElementById(nome).style.display = "block"
-        document.getElementById(botao).value = "Esconder contexto"
-    } else {
-        document.getElementById(nome).style.display = "none"
-        document.getElementById(botao).value = "Mostrar contexto"
-    }
+function contexto(sent_id, id, corpus) {
+    window.open( 
+        "../cgi-bin/contexto.py?id=" + id + "&sent_id=" + sent_id + "&corpus=" + corpus, "_blank"); 
 }
 
 function apagar() {

@@ -2,6 +2,7 @@
 import re
 import copy
 import sys
+import time
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
@@ -21,7 +22,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 					corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
 				else:
 					corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
+				start = time.time()
 				corpus.build(f.read())
+				print("<br>corpus.build: " + str(time.time() - start))
 		else:
 			corpus = arquivoUD
 			
@@ -221,6 +224,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 				output.append(qualquercoisa[a])
 
 	#Python
+	start = time.time()
 	if criterio == 5:
 		pesquisa = parametros
 		casos = 0
@@ -305,10 +309,12 @@ for ''' + identificador + ''' in sentence.tokens:
 					final[l] = "<b>" + final[l] + "</b>"
 			final = "\\n".join(final)'''
 
+			
 			exec(condition + '''
 			output.append(final)
 	except:
 		pass''')
+		print("<br>critério 5: " + str(time.time() - start))
 		
 		for a, sentence in enumerate(output):
 			output[a] = sentence.splitlines()

@@ -65,7 +65,9 @@ def sendPOSTInterrogar():
 
 	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script, sentLimit)
 
+	start = time.time()
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias).montarHtml()
+	print("<br>montarHtml: " + str(time.time() - start))
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		os.remove("../interrogar-ud/inProgress/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
@@ -217,58 +219,72 @@ class paginaHtml():
 			self.arquivoHtml = f.read()
 			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/filtrar.cgi', '../../cgi-bin/filtrar.cgi?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '&udoriginal=' + self.conllu)
 			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.cgi', '../../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '.html')
-		self.corpus = estrutura_ud.Corpus(recursivo=False)
-		self.corpus.load(self.caminhoCompletoConllu)
 
 		self.arquivoHtml = self.adicionarHeader()
 		self.arquivoHtml = self.adicionarDistribution()
 		self.arquivoHtml = self.adicionarExecutarScript()
 
+		t1 = 0
+		t2 = 0
+		t3 = 0
+		t4 = 0
+		t5 = 0
+		t6 = 0
+		t7 = 0
+		t8 = 0
+		t9 = 0
 		self.arquivoHtml = self.arquivoHtml.split('<!--SPLIT-->')
 		for i, ocorrencia in enumerate(self.dicionarioOcorrencias):
 			self.arquivoHtml[0] += '<div class=container>\n'
+			t = time.time()
 			self.arquivoHtml[0] += self.adicionarNumeroHtml(i, ocorrencia) + '\n'
+			t1 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += self.adicionarSentIdHtml(i, ocorrencia) + '\n'
+			t2 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += self.adicionarTextHtml(i, ocorrencia) + '\n'
-			self.arquivoHtml[0] += adicionarBotoesEContextoHtml(self.caminhoCompletoConllu, i, ocorrencia, self.corpus) + '\n'
+			t3 += time.time() - t
+			t = time.time()
+			self.arquivoHtml[0] += adicionarBotoesEContextoHtml(self.caminhoCompletoConllu, i, ocorrencia, self.conllu) + '\n'
+			t4 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
 			self.arquivoHtml[0] += self.adicionarFormInquerito(i, ocorrencia)
+			t5 += time.time() - t
+			t = time.time()
 			if self.nomePesquisa not in fastSearch: self.arquivoHtml[0] += self.adicionarOpcaoFiltrar(i, ocorrencia)
+			t6 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += '<br>'
 			self.arquivoHtml[0] += self.adicionarFormEOpcaoUDPipe(i, ocorrencia)
+			t7 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += '<br>'
 			self.arquivoHtml[0] += self.adicionarFormEOpcaoTree(i, ocorrencia)
+			t8 += time.time() - t
+			t = time.time()
 			self.arquivoHtml[0] += '</p></span>\n'
 			self.arquivoHtml[0] += self.adicionarAnotacaoHtml(i, ocorrencia) + '\n'
+			t9 += time.time() - t
 			self.arquivoHtml[0] += '</div>\n'
+		print(f"<br>t1: {t1}")
+		print(f"<br>t2: {t2}")
+		print(f"<br>t3: {t3}")
+		print(f"<br>t4: {t4}")
+		print(f"<br>t5: {t5}")
+		print(f"<br>t6: {t6}")
+		print(f"<br>t7: {t7}")
+		print(f"<br>t8: {t8}")
+		print(f"<br>t9: {t9}")
 
 		return "".join(self.arquivoHtml)
 
 
 def adicionarBotoesEContextoHtml(caminhoCompletoConllu, i, ocorrencia, corpus):
 
-	def adicionarContexto(caminhoCompletoConllu, i, ocorrencia, corpus):
-		contextoEsquerda = ""
-		contextoDireita = ""
-
-		if ocorrencia['resultadoEstruturado'].sent_id:
-			if '-' in ocorrencia['resultadoEstruturado'].sent_id and re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]):
-				contextoEsquerda = corpus.sentences[ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) - 1)].text if ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) + 1)].text if ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) + 1) in corpus.sentences else ""
-
-			elif re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id):
-				contextoEsquerda = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].sent_id) - 1)].text if str(int(ocorrencia['resultadoEstruturado'].sent_id) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].sent_id) + 1)].text if str(int(ocorrencia['resultadoEstruturado'].sent_id) + 1) in corpus.sentences else ""
-
-		elif ocorrencia['resultadoEstruturado'].id:
-			if re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].id):
-				contextoEsquerda = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].id) - 1)].text if str(int(ocorrencia['resultadoEstruturado'].id) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].id) + 1)].text if str(int(ocorrencia['resultadoEstruturado'].id) + 1) in corpus.sentences else ""
-
-		return f"<p id=divcontexto_{str(i+1)} style=\"display:none\">{contextoEsquerda} {ocorrencia['resultadoAnotado'].text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')} {contextoDireita}</p>"
-
 	if ((ocorrencia['resultadoEstruturado'].sent_id and ('-' in ocorrencia['resultadoEstruturado'].sent_id or re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id))) or ocorrencia['resultadoEstruturado'].id) and ocorrencia['resultadoEstruturado'].text:
-		return f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('divcontexto_{str(i+1)}', 'contexto_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + adicionarContexto(caminhoCompletoConllu, i, ocorrencia, corpus)
+		return f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('{ocorrencia['resultadoEstruturado'].sent_id}', '{ocorrencia['resultadoEstruturado'].id}', '{corpus}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>"
 
 	return f"<p><input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>"
 
