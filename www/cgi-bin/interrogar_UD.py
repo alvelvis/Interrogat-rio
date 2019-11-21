@@ -3,6 +3,9 @@ import re
 import copy
 import sys
 import time
+from functions import tabela as tabelaf
+import cgi
+import html as web
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
@@ -282,6 +285,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 		#agilizado = corpus.sentences.values()
 		agilizado = filter(lambda x: all(re.search(y, x.to_str()) for y in agilizar), corpus.sentences.values())
 		#print(agilizado)
+
 		for sentence in agilizado:
 			if limit and limit == len(output):
 				break
@@ -309,24 +313,27 @@ for ''' + identificador + ''' in sentence.tokens:
 					final[l] = "<b>" + final[l] + "</b>"
 			final = "\\n".join(final)'''
 
-			
 			exec(condition + '''
-			output.append(final)
-	except:
+			anotado = estrutura_ud.Sentence(recursivo=False)
+			estruturado = estrutura_ud.Sentence(recursivo=False)
+			anotado.build(cgi.escape(final.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '>', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))		
+			estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))			
+			output.append({
+				'resultado': final,
+				'resultadoAnotado': anotado,
+				'resultadoEstruturado': estruturado,
+			})
+	except Exception as e:
+		print(e)
 		pass''')
 		print("<br>critério 5: " + str(time.time() - start))
-		
-		for a, sentence in enumerate(output):
-			output[a] = sentence.splitlines()
-			for b, linha in enumerate(output[a]):
-				output[a][b] = linha.split("\t")
-
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
-	for a, sentence in enumerate(output):
-		for b, linha in enumerate(sentence):
-			if isinstance(linha, list):
-				sentence[b] = "\t".join(sentence[b])
-		output[a] = "\n".join(sentence)
+	if criterio not in [5]:
+		for a, sentence in enumerate(output):
+			for b, linha in enumerate(sentence):
+				if isinstance(linha, list):
+					sentence[b] = "\t".join(sentence[b])
+			output[a] = "\n".join(sentence)
 
 	return {'output': output, 'casos': casos}
 
