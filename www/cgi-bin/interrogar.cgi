@@ -124,17 +124,6 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros, script):
 		import queryScript
 		resultadosBusca = queryScript.getResultadosBusca()
 
-	for n, frase in enumerate(resultadosBusca['output']):
-		anotado = estrutura_ud.Sentence(recursivo=False)
-		estruturado = estrutura_ud.Sentence(recursivo=False)
-		anotado.build(cgi.escape(frase.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))
-		estruturado.build(web.unescape(frase).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
-		
-		resultadosBusca['output'][n] = {
-			'resultadoAnotado': anotado,
-			'resultadoEstruturado': estruturado,
-		}
-
 	dicionarioOcorrencias = resultadosBusca['output']
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
