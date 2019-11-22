@@ -113,7 +113,7 @@ def definirVariaveisDePesquisa(form):
 	return criterio, parametros, conllu, nomePesquisa, script, sentLimit
 
 
-def realizarBusca(caminhoCompletoConllu, criterio, parametros, script, sentLimit):
+def realizarBusca(caminhoCompletoConllu, criterio, parametros, script):
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, sentLimit)
 	else:
@@ -185,35 +185,6 @@ class paginaHtml():
 
 		return "".join(arquivoHtml)
 
-	def adicionarNumeroHtml(self, i, ocorrencia):
-		return f'<p>{str(i+1)}/{self.numeroOcorrencias}</p>'
-
-	def adicionarSentIdHtml(self, i, ocorrencia):
-		if ocorrencia['resultadoEstruturado'].sent_id:
-			return f'''<p><input class=cb id=checkbox_{str(i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" type=checkbox> {ocorrencia['resultadoEstruturado'].sent_id}</p>'''
-		return ""
-
-	def adicionarTextHtml(self, i, ocorrencia):
-		return f"<p><span id=text_{str(i+1)}>{ocorrencia['resultadoAnotado'].text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>"
-
-	def adicionarFormInquerito(self, i, ocorrencia):
-		formInquerito = f"<form action=\"../../cgi-bin/inquerito.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">"
-		if "@BOLD" in ocorrencia['resultadoAnotado'].to_str():
-			formInquerito += f"<input type=hidden name=tokenId value=\"" + "".join([functions.cleanEstruturaUD(x.id) for x in ocorrencia['resultadoAnotado'].tokens if '@BOLD' in x.to_str()]) + "\">"
-		return formInquerito + "</form>"
-
-	def adicionarOpcaoFiltrar(self, i, ocorrencia):
-		return f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(i+1)}\")'>Separar sentença</a-->"
-
-	def adicionarFormEOpcaoUDPipe(self, i, ocorrencia):
-		return f"<form action=\"../../cgi-bin/udpipe.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=udpipe_{str(i+1)}><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(i+1)}\")'>Anotar frase com o UDPipe</a>"
-
-	def adicionarFormEOpcaoTree(self, i, ocorrencia):
-		return f"<form action=\"../../cgi-bin/draw_tree.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=tree_{str(i+1)}><input type=hidden name=sent_id value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=text value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(i+1)}\")'>Visualizar árvore de dependências</a>"
-
-	def adicionarAnotacaoHtml(self, i, ocorrencia):
-		return f"<pre id=div_{str(i+1)} style=\"display:none\">{ocorrencia['resultadoAnotado'].to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>"
-
 	def montarHtml(self):
 		with open("../interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
@@ -224,69 +195,67 @@ class paginaHtml():
 		self.arquivoHtml = self.adicionarDistribution()
 		self.arquivoHtml = self.adicionarExecutarScript()
 
-		t1 = 0
-		t2 = 0
-		t3 = 0
-		t4 = 0
-		t5 = 0
-		t6 = 0
-		t7 = 0
-		t8 = 0
-		t9 = 0
-		self.arquivoHtml = self.arquivoHtml.split('<!--SPLIT-->')
-		for i, ocorrencia in enumerate(self.dicionarioOcorrencias):
-			self.arquivoHtml[0] += '<div class=container>\n'
-			t = time.time()
-			self.arquivoHtml[0] += self.adicionarNumeroHtml(i, ocorrencia) + '\n'
-			t1 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += self.adicionarSentIdHtml(i, ocorrencia) + '\n'
-			t2 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += self.adicionarTextHtml(i, ocorrencia) + '\n'
-			t3 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += adicionarBotoesEContextoHtml(self.caminhoCompletoConllu, i, ocorrencia, self.conllu) + '\n'
-			t4 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
-			self.arquivoHtml[0] += self.adicionarFormInquerito(i, ocorrencia)
-			t5 += time.time() - t
-			t = time.time()
-			if self.nomePesquisa not in fastSearch: self.arquivoHtml[0] += self.adicionarOpcaoFiltrar(i, ocorrencia)
-			t6 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += '<br>'
-			self.arquivoHtml[0] += self.adicionarFormEOpcaoUDPipe(i, ocorrencia)
-			t7 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += '<br>'
-			self.arquivoHtml[0] += self.adicionarFormEOpcaoTree(i, ocorrencia)
-			t8 += time.time() - t
-			t = time.time()
-			self.arquivoHtml[0] += '</p></span>\n'
-			self.arquivoHtml[0] += self.adicionarAnotacaoHtml(i, ocorrencia) + '\n'
-			t9 += time.time() - t
-			self.arquivoHtml[0] += '</div>\n'
-		print(f"<br>t1: {t1}")
-		print(f"<br>t2: {t2}")
-		print(f"<br>t3: {t3}")
-		print(f"<br>t4: {t4}")
-		print(f"<br>t5: {t5}")
-		print(f"<br>t6: {t6}")
-		print(f"<br>t7: {t7}")
-		print(f"<br>t8: {t8}")
-		print(f"<br>t9: {t9}")
-
-		return "".join(self.arquivoHtml)
+		return self.arquivoHtml
+		
 
 
-def adicionarBotoesEContextoHtml(caminhoCompletoConllu, i, ocorrencia, corpus):
+def renderSentences(caminhoCompletoConllu, criterio, parametros, script, startPoint, nomePesquisa):
+	
+	conllu = caminhoCompletoConllu.rsplit("/", 1)[1]
 
-	if ((ocorrencia['resultadoEstruturado'].sent_id and ('-' in ocorrencia['resultadoEstruturado'].sent_id or re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id))) or ocorrencia['resultadoEstruturado'].id) and ocorrencia['resultadoEstruturado'].text:
-		return f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('{ocorrencia['resultadoEstruturado'].sent_id}', '{ocorrencia['resultadoEstruturado'].id}', '{corpus}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>"
+	if not script:
+		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
+	else:
+		with open("../cgi-bin/queryScript.py", 'r') as f:
+			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
+		with open("../cgi-bin/queryScript.py", "w") as f:
+			f.write(scriptFile)
+		import queryScript
+		resultadosBusca = queryScript.getResultadosBusca()
 
-	return f"<p><input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>"
+	for n, frase in enumerate(resultadosBusca['output']):
+		anotado = estrutura_ud.Sentence(recursivo=False)
+		estruturado = estrutura_ud.Sentence(recursivo=False)
+		anotado.build(cgi.escape(frase.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))
+		estruturado.build(web.unescape(frase).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
+		
+		resultadosBusca['output'][n] = {
+			'resultadoAnotado': anotado,
+			'resultadoEstruturado': estruturado,
+		}
+
+	dicionarioOcorrencias = resultadosBusca['output']
+	numeroOcorrencias = str(len(resultadosBusca['output']))
+	casosOcorrencias = resultadosBusca['casos']
+
+	arquivoHtml = ""
+	for i, ocorrencia in enumerate(dicionarioOcorrencias):
+		arquivoHtml += '<div class=container>\n'
+		arquivoHtml += f'<p>{str(i+1)}/{numeroOcorrencias}</p>' + '\n'
+		if ocorrencia['resultadoEstruturado'].sent_id:
+			arquivoHtml += f'''<p><input class=cb id=checkbox_{str(i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" type=checkbox> {ocorrencia['resultadoEstruturado'].sent_id}</p>''' + '\n'
+		arquivoHtml += f"<p><span id=text_{str(i+1)}>{ocorrencia['resultadoAnotado'].text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
+		if ((ocorrencia['resultadoEstruturado'].sent_id and ('-' in ocorrencia['resultadoEstruturado'].sent_id or re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id))) or ocorrencia['resultadoEstruturado'].id) and ocorrencia['resultadoEstruturado'].text:
+			arquivoHtml += f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('{ocorrencia['resultadoEstruturado'].sent_id}', '{ocorrencia['resultadoEstruturado'].id}', '{corpus}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + "\n"
+		else:
+			arquivoHtml += f"<p><input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + '\n'
+		arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
+		formInquerito = f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\">"
+		if "@BOLD" in ocorrencia['resultadoAnotado'].to_str():
+			formInquerito += f"<input type=hidden name=tokenId value=\"" + "".join([functions.cleanEstruturaUD(x.id) for x in ocorrencia['resultadoAnotado'].tokens if '@BOLD' in x.to_str()]) + "\">"
+		arquivoHtml += "</form>"
+		if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(i+1)}\")'>Separar sentença</a-->"
+		arquivoHtml += '<br>'
+		arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(i+1)}><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(i+1)}\")'>Anotar frase com o UDPipe</a>"
+		arquivoHtml += '<br>'
+		arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(i+1)}><input type=hidden name=sent_id value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=text value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(i+1)}\")'>Visualizar árvore de dependências</a>"
+		arquivoHtml += '</p></span>\n'
+		arquivoHtml += f"<pre id=div_{str(i+1)} style=\"display:none\">{ocorrencia['resultadoAnotado'].to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>" + '\n'
+		arquivoHtml += '</div>\n'
+
+	return jsonify({
+		'success': True, 'data': "".join(arquivoHtml)
+		})
 
 
 if __name__ == "__main__":
