@@ -45,15 +45,16 @@ function encodeUrl(s){
 };
 
 function waitTooMuch(){
-    if ($('#loading-bg').is(':visible')){
-        if (/interrogar\.cgi/.test(window.location.href)) {
-            if (!$('.toggleSalvar').is(':checked')) {
-                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
-            } else {
-                $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.</div>');
+    if ($('.toggleSalvar').length){
+        if ($('#loading-bg').is(':visible')){
+            if (/interrogar\.cgi/.test(window.location.href)) {
+                if (!$('.toggleSalvar').is(':checked')) {
+                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
+                } else {
+                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.</div>');
+                }
             }
-        }
-    }
+        }}
 };
 
 $(window).on('unload', function() {
@@ -96,7 +97,39 @@ $(document).on('keydown', function(e){
     }
 });
 
+function carregarPosts(){
+    $.post('../cgi-bin/api.py', {
+        'indexSentences': $('.indexSentences').val(),
+        'nomePesquisa': $('[name=nome_interrogatorio]').val(),
+        'html': $('[name=link_interrogatorio]').val(),
+        'conllu': $('[name=conllu]').val(),
+        'parametros': expressao.innerHTML,
+        }, function(data){
+            $('.loadSentences').append(data['html']);
+            $('.indexSentences').val(data['indexSentences']);
+            if (data['noMore'] == true){
+                $(window).unbind('scroll');
+                $('#loadingGif').attr("src", "");
+                $('#statusLoading').html(':(');
+                $('#loadingText').html('acabaram as sentenças');
+            } else { scrollPosts() };
+    });
+};
+
+function scrollPosts(){
+    $(window).scroll(function() {    
+        if($(window).scrollTop() + $(window).height() > $(document).height() -500) {
+            $(window).unbind('scroll');
+            carregarPosts();
+        };
+    });
+};
+
 $(document).ready(function(){
+
+    if($('#expressao').length){
+        carregarPosts();
+    };
 
     $('.desfazerFiltro').click(function(){
         if (confirm('Todos os filtros posteriores ao "' + $(this).attr('nomeFiltro') +  '" serão apagados também. Continuar?')){
@@ -221,23 +254,28 @@ $(document).ready(function(){
         dist($(this).html());
     });
 
-    $('.drag').draggable({
-        zIndex: 100,
-        revert: true,
-        opacity: 0.35,
-        appendTo: "body",
-        refreshPositions: true,
-      },);
+    if($('.drag').length){
+
+        $('.drag').draggable({
+            zIndex: 100,
+            revert: true,
+            opacity: 0.35,
+            appendTo: "body",
+            refreshPositions: true,
+        },);
+    };
       
-    $('tr').droppable({
-        hoverClass: "drop-hover",
-        drop: function(event, ui) {
-            var classes = ui.draggable.attr('class');
-            if ($(this).children('.id').html() != ui.draggable.siblings(".id").html()){
-                ui.draggable.html($(this).children('.id').html());
-            };
-        }
-    });
+    if ($('.drop-hover').length){
+        $('tr').droppable({
+            hoverClass: "drop-hover",
+            drop: function(event, ui) {
+                var classes = ui.draggable.attr('class');
+                if ($(this).children('.id').html() != ui.draggable.siblings(".id").html()){
+                    ui.draggable.html($(this).children('.id').html());
+                };
+            }
+        });
+    };
 
     $(document).on('keydown', function(event){
         if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
@@ -460,23 +498,23 @@ function drawtree(ide) {
     document.getElementById(ide).submit()
 }
 
-function load() {
-    url = new URL(window.location.href);
-    if (url.searchParams.get('page') == 'hide') {
-        $('#easyPaginate').easyPaginate({
-            paginateElement: 'nadanao',
-        });
-    } else {
-        $('#easyPaginate').easyPaginate({
-            paginateElement: '.container',
-            elementsPerPage: 10,
-            firstButton: false,
-            lastButton: false,
-            prevButton: true,
-            nextButton: true,
-        });
-    }
-}
+//function load() {
+    //url = new URL(window.location.href);
+    //if (url.searchParams.get('page') == 'hide') {
+        //$('#easyPaginate').easyPaginate({
+            //paginateElement: 'nadanao',
+        //});
+    //} else {
+        //$('#easyPaginate').easyPaginate({
+            //paginateElement: '.container',
+            //elementsPerPage: 10,
+            //firstButton: false,
+            //lastButton: false,
+            ////prevButton: true,
+            //nextButton: true,
+        //});
+    //}
+//}
 
 function paginacao() {
     if (window.location.href.indexOf("?page=hide") != -1){

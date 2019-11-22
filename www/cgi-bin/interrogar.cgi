@@ -53,7 +53,8 @@ def sendRequestInterrogar():
 
 
 def sendPOSTInterrogar():
-	criterio, parametros, conllu, nomePesquisa, script, sentLimit = definirVariaveisDePesquisa(cgi.FieldStorage())
+
+	criterio, parametros, conllu, nomePesquisa, script = definirVariaveisDePesquisa(cgi.FieldStorage())
 
 	caminhoCompletoConllu = "../interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
@@ -63,10 +64,12 @@ def sendPOSTInterrogar():
 		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
 			f.write("")
 
-	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script, sentLimit)
+	start = time.time()
+	numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script)
+	print("<br>busca: " + str(time.time() - start))
 
 	start = time.time()
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias).montarHtml()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias).montarHtml()
 	print("<br>montarHtml: " + str(time.time() - start))
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
@@ -108,14 +111,14 @@ def definirVariaveisDePesquisa(form):
 
 	conllu = form['conllu'].value
 	nomePesquisa = 'Busca rápida' if form['meth'].value != 'salvar' else form['nome'].value
-	sentLimit = int(form['sentLimit'].value) if 'sentLimit' in form and form['meth'].value == 'salvar' else 0
+	#sentLimit = int(form['sentLimit'].value) if 'sentLimit' in form and form['meth'].value == 'salvar' else 0
 
-	return criterio, parametros, conllu, nomePesquisa, script, sentLimit
+	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(caminhoCompletoConllu, criterio, parametros, script):
+def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
 	if not script:
-		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, sentLimit)
+		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
 	else:
 		with open("../cgi-bin/queryScript.py", 'r') as f:
 			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
@@ -124,16 +127,15 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros, script):
 		import queryScript
 		resultadosBusca = queryScript.getResultadosBusca()
 
-	dicionarioOcorrencias = resultadosBusca['output']
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
 
-	return dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias
+	return numeroOcorrencias, casosOcorrencias
 
 
 class paginaHtml():
 
-	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias):
+	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias):
 		self.caminhoCompletoConllu = caminhoCompletoConllu
 		self.caminhoCompletoHtml = caminhoCompletoHtml
 		self.nomePesquisa = nomePesquisa
@@ -141,7 +143,6 @@ class paginaHtml():
 		self.conllu = conllu
 		self.criterio = criterio
 		self.parametros = parametros
-		self.dicionarioOcorrencias = dicionarioOcorrencias
 		self.numeroOcorrencias = numeroOcorrencias
 		self.casosOcorrencias = casosOcorrencias
 	
@@ -185,66 +186,6 @@ class paginaHtml():
 		self.arquivoHtml = self.adicionarExecutarScript()
 
 		return self.arquivoHtml
-		
-
-
-def renderSentences(caminhoCompletoConllu, criterio, parametros, script, startPoint, nomePesquisa):
-	
-	conllu = caminhoCompletoConllu.rsplit("/", 1)[1]
-
-	if not script:
-		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
-	else:
-		with open("../cgi-bin/queryScript.py", 'r') as f:
-			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
-		with open("../cgi-bin/queryScript.py", "w") as f:
-			f.write(scriptFile)
-		import queryScript
-		resultadosBusca = queryScript.getResultadosBusca()
-
-	for n, frase in enumerate(resultadosBusca['output']):
-		anotado = estrutura_ud.Sentence(recursivo=False)
-		estruturado = estrutura_ud.Sentence(recursivo=False)
-		anotado.build(cgi.escape(frase.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))
-		estruturado.build(web.unescape(frase).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
-		
-		resultadosBusca['output'][n] = {
-			'resultadoAnotado': anotado,
-			'resultadoEstruturado': estruturado,
-		}
-
-	dicionarioOcorrencias = resultadosBusca['output']
-	numeroOcorrencias = str(len(resultadosBusca['output']))
-	casosOcorrencias = resultadosBusca['casos']
-
-	arquivoHtml = ""
-	for i, ocorrencia in enumerate(dicionarioOcorrencias):
-		arquivoHtml += '<div class=container>\n'
-		arquivoHtml += f'<p>{str(i+1)}/{numeroOcorrencias}</p>' + '\n'
-		if ocorrencia['resultadoEstruturado'].sent_id:
-			arquivoHtml += f'''<p><input class=cb id=checkbox_{str(i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" type=checkbox> {ocorrencia['resultadoEstruturado'].sent_id}</p>''' + '\n'
-		arquivoHtml += f"<p><span id=text_{str(i+1)}>{ocorrencia['resultadoAnotado'].text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
-		if ((ocorrencia['resultadoEstruturado'].sent_id and ('-' in ocorrencia['resultadoEstruturado'].sent_id or re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id))) or ocorrencia['resultadoEstruturado'].id) and ocorrencia['resultadoEstruturado'].text:
-			arquivoHtml += f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('{ocorrencia['resultadoEstruturado'].sent_id}', '{ocorrencia['resultadoEstruturado'].id}', '{corpus}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + "\n"
-		else:
-			arquivoHtml += f"<p><input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + '\n'
-		arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
-		formInquerito = f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\">"
-		if "@BOLD" in ocorrencia['resultadoAnotado'].to_str():
-			formInquerito += f"<input type=hidden name=tokenId value=\"" + "".join([functions.cleanEstruturaUD(x.id) for x in ocorrencia['resultadoAnotado'].tokens if '@BOLD' in x.to_str()]) + "\">"
-		arquivoHtml += "</form>"
-		if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(i+1)}\")'>Separar sentença</a-->"
-		arquivoHtml += '<br>'
-		arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(i+1)}><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(i+1)}\")'>Anotar frase com o UDPipe</a>"
-		arquivoHtml += '<br>'
-		arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(i+1)}><input type=hidden name=sent_id value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=text value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(i+1)}\")'>Visualizar árvore de dependências</a>"
-		arquivoHtml += '</p></span>\n'
-		arquivoHtml += f"<pre id=div_{str(i+1)} style=\"display:none\">{ocorrencia['resultadoAnotado'].to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>" + '\n'
-		arquivoHtml += '</div>\n'
-
-	return jsonify({
-		'success': True, 'data': "".join(arquivoHtml)
-		})
 
 
 if __name__ == "__main__":

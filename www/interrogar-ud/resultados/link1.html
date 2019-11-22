@@ -9,7 +9,7 @@
     <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
     <script src="../../interrogar-ud/resultados.js?version=15"></script>
   </head>
-  <body onload="load()">
+  <body><!--onload="load()"-->
     <div id="loading-bg"></div>
     <img id="loading-image" src="../../interrogar-ud/loading4.gif" alt="Carregando">
     <img id="loading-image-nobg" src="../../interrogar-ud/loading4.gif" alt="Carregando">
@@ -132,8 +132,15 @@ value="Baixar arquivo" class="btn-gradient orange mini" type="submit"></p></form
       <br>
       <br>
       <br>
-      <!--div id="easyPaginate"-->
-      <!--SPLIT-->
-      <!--/div--><br></div>
+        <input type="hidden" name="indexSentences" class="indexSentences" value="0">
+        <div class="loadSentences">
+        <!--SPLIT-->
+        </div><br>
+      <div style="position:relative">
+        <div class="container" style="width:100%;">
+            <h1 id="statusLoading"><img id="loadingGif" style="max-width:64px; max-height: 64px; margin-left:10px;" src="../interrogar-ud/loading4.gif"></h1><p id="loadingText" class="lead">Carregando...</p>
+        </div>
+      </div>
+      </div>
   </body>
 </html>

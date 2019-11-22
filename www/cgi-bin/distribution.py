@@ -27,7 +27,7 @@ if 'notSaved' in form:
 	corpus = list()
 	for sentence in sentences:
 		sent = estrutura_ud.Sentence()
-		sent.build(sentence.replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
+		sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
 		corpus.append(sent)
 
 elif 'html' in form:
