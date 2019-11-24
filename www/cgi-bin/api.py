@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -w
 # -*- coding: UTF-8 -*-
 
 fastSearch = ['teste', 'Busca rápida']
