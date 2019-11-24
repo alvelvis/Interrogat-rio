@@ -269,7 +269,7 @@ $(document).ready(function(){
         },);
     };
       
-    if ($('.drop-hover').length){
+    if ($('.drag').length){
         $('tr').droppable({
             hoverClass: "drop-hover",
             drop: function(event, ui) {
