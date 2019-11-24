@@ -64,13 +64,10 @@ def sendPOSTInterrogar():
 		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
 			f.write("")
 
-	start = time.time()
 	numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script)
-	print("<br>busca: " + str(time.time() - start))
 
 	start = time.time()
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script).montarHtml()
-	print("<br>montarHtml: " + str(time.time() - start))
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		os.remove("../interrogar-ud/inProgress/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
