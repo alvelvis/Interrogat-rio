@@ -99,7 +99,13 @@ $(document).on('keydown', function(e){
 
 function carregarPosts(){
     $(window).unbind('scroll');
-    $.post('../../cgi-bin/api.py', {
+    var url;
+    if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
+        url = '../cgi-bin/api.py'
+    } else {
+        url = '../../cgi-bin/api.py'
+    };
+    $.post(url, {
             'indexSentences': $('.indexSentences').val(),
             'nomePesquisa': $('[name=nome_interrogatorio]').val(),
             'html': $('[name=link_interrogatorio]').val(),
