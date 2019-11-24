@@ -23,6 +23,7 @@ from subprocess import call
 import html as webpage
 import validar_UD
 from credenciar import LOGIN
+import interrogar_UD
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -155,9 +156,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 
 	#pega os headers
 	headers = list()
-	for linha in open(form['link_interrogatorio'].value, 'r').read().splitlines():
-		if '# text =' in linha:
-			headers.append(re.sub(r'\<.*?\>', '', linha))
+	for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value)['output']:
+		headers.append("# text = " + sentence['resultadoEstruturado'].text)	
 
 	if form['executar'].value == 'sim':
 		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
@@ -203,7 +203,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		<hr>'
 		html += '<pre>' + sim.replace('<', '&lt;').replace('>', '&gt;')
 		html += '</pre>'
-		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
+		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name=parametros value=\''+form['parametros'].value+'\'><input type=hidden name=criterio value=\"'+form['criterio'].value+'\"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
 		os.remove('../interrogar-ud/scripts/sim.txt')
 
 	os.remove('../interrogar-ud/scripts/headers.txt')

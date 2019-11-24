@@ -53,7 +53,8 @@ def sendRequestInterrogar():
 
 
 def sendPOSTInterrogar():
-	criterio, parametros, conllu, nomePesquisa, script, sentLimit = definirVariaveisDePesquisa(cgi.FieldStorage())
+
+	criterio, parametros, conllu, nomePesquisa, script = definirVariaveisDePesquisa(cgi.FieldStorage())
 
 	caminhoCompletoConllu = "../interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
@@ -63,16 +64,20 @@ def sendPOSTInterrogar():
 		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
 			f.write("")
 
-	dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script, sentLimit)
+	start = time.time()
+	numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script)
+	print("<br>busca: " + str(time.time() - start))
 
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias).montarHtml()
+	start = time.time()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script).montarHtml()
+	print("<br>montarHtml: " + str(time.time() - start))
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		os.remove("../interrogar-ud/inProgress/{0} {1} {2} {3}.inProgress".format(conllu, criterio, parametros, dataAgora))
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar múltiplas sentenças', '').replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
@@ -80,6 +85,9 @@ def sendPOSTInterrogar():
 
 	queries = ["\t".join([caminhoCompletoHtml, nomePesquisa, numeroOcorrencias, criterio, parametros, conllu, dataAgora])]
 
+	if not os.path.isfile("../interrogar-ud/queries.txt"):
+		with open("../interrogar-ud/queries.txt", "w") as f:
+			f.write("")
 	with open('../interrogar-ud/queries.txt', 'r') as f:
 		queries.extend(f.read().splitlines())
 
@@ -90,9 +98,12 @@ def sendPOSTInterrogar():
 
 def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' and form['scriptQueryFile'].value:
-		with open('../cgi-bin/queryScript.py', 'wb') as f:
+		if not os.path.isdir('../cgi-bin/scripts'):
+			os.mkdir('../cgi-bin/scripts')
+		with open('../cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		script = True
+		os.system("cp ../cgi-bin/scripts/" + form['scriptQueryFile'].filename + " ../cgi-bin/queryScript.py")
+		script = form['scriptQueryFile'].filename
 	else:
 		script = False
 
@@ -106,14 +117,14 @@ def definirVariaveisDePesquisa(form):
 
 	conllu = form['conllu'].value
 	nomePesquisa = 'Busca rápida' if form['meth'].value != 'salvar' else form['nome'].value
-	sentLimit = int(form['sentLimit'].value) if 'sentLimit' in form and form['meth'].value == 'salvar' else 0
+	#sentLimit = int(form['sentLimit'].value) if 'sentLimit' in form and form['meth'].value == 'salvar' else 0
 
-	return criterio, parametros, conllu, nomePesquisa, script, sentLimit
+	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(caminhoCompletoConllu, criterio, parametros, script, sentLimit):
+def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
 	if not script:
-		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, sentLimit)
+		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
 		with open("../cgi-bin/queryScript.py", 'r') as f:
 			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
@@ -122,27 +133,15 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros, script, sentLimit
 		import queryScript
 		resultadosBusca = queryScript.getResultadosBusca()
 
-	for n, frase in enumerate(resultadosBusca['output']):
-		anotado = estrutura_ud.Sentence(recursivo=False)
-		estruturado = estrutura_ud.Sentence(recursivo=False)
-		anotado.build(cgi.escape(frase.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))
-		estruturado.build(web.unescape(frase).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
-		
-		resultadosBusca['output'][n] = {
-			'resultadoAnotado': anotado,
-			'resultadoEstruturado': estruturado,
-		}
-
-	dicionarioOcorrencias = resultadosBusca['output']
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
 
-	return dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias
+	return numeroOcorrencias, casosOcorrencias
 
 
 class paginaHtml():
 
-	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, dicionarioOcorrencias, numeroOcorrencias, casosOcorrencias):
+	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script):
 		self.caminhoCompletoConllu = caminhoCompletoConllu
 		self.caminhoCompletoHtml = caminhoCompletoHtml
 		self.nomePesquisa = nomePesquisa
@@ -150,9 +149,9 @@ class paginaHtml():
 		self.conllu = conllu
 		self.criterio = criterio
 		self.parametros = parametros
-		self.dicionarioOcorrencias = dicionarioOcorrencias
 		self.numeroOcorrencias = numeroOcorrencias
 		self.casosOcorrencias = casosOcorrencias
+		self.script = script
 	
 	def adicionarHeader(self):
 		arquivoHtml = self.arquivoHtml.replace('<title>link de pesquisa 1 (203): Interrogatório</title>', '<title>' + cgi.escape(self.nomePesquisa) + ' (' + self.numeroOcorrencias + '): Interrogatório</title>')
@@ -172,105 +171,31 @@ class paginaHtml():
 	def adicionarDistribution(self):
 		if self.criterio == "5":
 			if self.nomePesquisa not in fastSearch:
-				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", f"><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='{self.caminhoCompletoHtml}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>").format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)
 			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>".format(self.parametros.replace("'", '"')))
 			#return self.arquivoHtml.replace("DIST-->", 'DIST--><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.')
 		return self.arquivoHtml
 
 	def adicionarExecutarScript(self):
 		arquivoHtml = self.arquivoHtml.split("<!--script-->")
-		arquivoHtml[0] += f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"><input type=hidden name=conllu value=\"{self.conllu}\">"
+		arquivoHtml[0] += f"<input type=hidden name=criterio value=\"{self.criterio}\"><input type=hidden name=parametros value=\'{self.parametros}\'><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"><input type=hidden name=conllu value=\"{self.conllu}\">"
 
 		return "".join(arquivoHtml)
-
-	def adicionarNumeroHtml(self, i, ocorrencia):
-		return f'<p>{str(i+1)}/{self.numeroOcorrencias}</p>'
-
-	def adicionarSentIdHtml(self, i, ocorrencia):
-		if ocorrencia['resultadoEstruturado'].sent_id:
-			return f'''<p><input class=cb id=checkbox_{str(i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" type=checkbox> {ocorrencia['resultadoEstruturado'].sent_id}</p>'''
-		return ""
-
-	def adicionarTextHtml(self, i, ocorrencia):
-		return f"<p><span id=text_{str(i+1)}>{ocorrencia['resultadoAnotado'].text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>"
-
-	def adicionarFormInquerito(self, i, ocorrencia):
-		formInquerito = f"<form action=\"../../cgi-bin/inquerito.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=form_{str(i+1)}><input type=hidden name=sentid value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">"
-		if "@BOLD" in ocorrencia['resultadoAnotado'].to_str():
-			formInquerito += f"<input type=hidden name=tokenId value=\"" + "".join([functions.cleanEstruturaUD(x.id) for x in ocorrencia['resultadoAnotado'].tokens if '@BOLD' in x.to_str()]) + "\">"
-		return formInquerito + "</form>"
-
-	def adicionarOpcaoFiltrar(self, i, ocorrencia):
-		return f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(i+1)}\")'>Separar sentença</a-->"
-
-	def adicionarFormEOpcaoUDPipe(self, i, ocorrencia):
-		return f"<form action=\"../../cgi-bin/udpipe.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=udpipe_{str(i+1)}><input type=hidden name=textheader value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(i+1)}\")'>Anotar frase com o UDPipe</a>"
-
-	def adicionarFormEOpcaoTree(self, i, ocorrencia):
-		return f"<form action=\"../../cgi-bin/draw_tree.py?conllu={self.conllu}\" target=\"_blank\" method=POST id=tree_{str(i+1)}><input type=hidden name=sent_id value=\"{ocorrencia['resultadoEstruturado'].sent_id}\"><input type=hidden name=text value=\"{ocorrencia['resultadoEstruturado'].text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(i+1)}\")'>Visualizar árvore de dependências</a>"
-
-	def adicionarAnotacaoHtml(self, i, ocorrencia):
-		return f"<pre id=div_{str(i+1)} style=\"display:none\">{ocorrencia['resultadoAnotado'].to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>"
 
 	def montarHtml(self):
 		with open("../interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
 			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/filtrar.cgi', '../../cgi-bin/filtrar.cgi?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '&udoriginal=' + self.conllu)
 			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.cgi', '../../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '.html')
-		self.corpus = estrutura_ud.Corpus(recursivo=False)
-		self.corpus.load(self.caminhoCompletoConllu)
 
 		self.arquivoHtml = self.adicionarHeader()
-		self.arquivoHtml = self.adicionarDistribution()
-		self.arquivoHtml = self.adicionarExecutarScript()
+		if not self.script:
+			self.arquivoHtml = self.adicionarDistribution()
+			self.arquivoHtml = self.adicionarExecutarScript()
+		if self.script:
+			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{self.script}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
 
-		self.arquivoHtml = self.arquivoHtml.split('<!--SPLIT-->')
-		for i, ocorrencia in enumerate(self.dicionarioOcorrencias):
-			self.arquivoHtml[0] += '<div class=container>\n'
-			self.arquivoHtml[0] += self.adicionarNumeroHtml(i, ocorrencia) + '\n'
-			self.arquivoHtml[0] += self.adicionarSentIdHtml(i, ocorrencia) + '\n'
-			self.arquivoHtml[0] += self.adicionarTextHtml(i, ocorrencia) + '\n'
-			self.arquivoHtml[0] += adicionarBotoesEContextoHtml(self.caminhoCompletoConllu, i, ocorrencia, self.corpus) + '\n'
-			self.arquivoHtml[0] += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(i+1)}\">"
-			self.arquivoHtml[0] += self.adicionarFormInquerito(i, ocorrencia)
-			if self.nomePesquisa not in fastSearch: self.arquivoHtml[0] += self.adicionarOpcaoFiltrar(i, ocorrencia)
-			self.arquivoHtml[0] += '<br>'
-			self.arquivoHtml[0] += self.adicionarFormEOpcaoUDPipe(i, ocorrencia)
-			self.arquivoHtml[0] += '<br>'
-			self.arquivoHtml[0] += self.adicionarFormEOpcaoTree(i, ocorrencia)
-			self.arquivoHtml[0] += '</p></span>\n'
-			self.arquivoHtml[0] += self.adicionarAnotacaoHtml(i, ocorrencia) + '\n'
-			self.arquivoHtml[0] += '</div>\n'
-
-		return "".join(self.arquivoHtml)
-
-
-def adicionarBotoesEContextoHtml(caminhoCompletoConllu, i, ocorrencia, corpus):
-
-	def adicionarContexto(caminhoCompletoConllu, i, ocorrencia, corpus):
-		contextoEsquerda = ""
-		contextoDireita = ""
-
-		if ocorrencia['resultadoEstruturado'].sent_id:
-			if '-' in ocorrencia['resultadoEstruturado'].sent_id and re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]):
-				contextoEsquerda = corpus.sentences[ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) - 1)].text if ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) + 1)].text if ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[0] + '-' + str(int(ocorrencia['resultadoEstruturado'].sent_id.rsplit('-', 1)[1]) + 1) in corpus.sentences else ""
-
-			elif re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id):
-				contextoEsquerda = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].sent_id) - 1)].text if str(int(ocorrencia['resultadoEstruturado'].sent_id) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].sent_id) + 1)].text if str(int(ocorrencia['resultadoEstruturado'].sent_id) + 1) in corpus.sentences else ""
-
-		elif ocorrencia['resultadoEstruturado'].id:
-			if re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].id):
-				contextoEsquerda = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].id) - 1)].text if str(int(ocorrencia['resultadoEstruturado'].id) - 1) in corpus.sentences else ""
-				contextoDireita = corpus.sentences[str(int(ocorrencia['resultadoEstruturado'].id) + 1)].text if str(int(ocorrencia['resultadoEstruturado'].id) + 1) in corpus.sentences else ""
-
-		return f"<p id=divcontexto_{str(i+1)} style=\"display:none\">{contextoEsquerda} {ocorrencia['resultadoAnotado'].text.replace('/BOLD','</b>').replace('@BOLD','<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')} {contextoDireita}</p>"
-
-	if ((ocorrencia['resultadoEstruturado'].sent_id and ('-' in ocorrencia['resultadoEstruturado'].sent_id or re.search(r'^\d+$', ocorrencia['resultadoEstruturado'].sent_id))) or ocorrencia['resultadoEstruturado'].id) and ocorrencia['resultadoEstruturado'].text:
-		return f"<p><input id=contexto_{str(i+1)} value=\"Mostrar contexto\" onclick=\"contexto('divcontexto_{str(i+1)}', 'contexto_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>" + adicionarContexto(caminhoCompletoConllu, i, ocorrencia, corpus)
-
-	return f"<p><input id=mostrar_{str(i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(i+1)}', 'mostrar_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(i+1)}', 'opt_{str(i+1)}')\" style=\"margin-left:0px\" type=button> <input type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(i+1)}\")'></p>"
+		return self.arquivoHtml
 
 
 if __name__ == "__main__":

@@ -93,10 +93,10 @@ elif not 'action' in form or form['action'].value != 'desfazer':
 		ocorrencias_anterior = int(re.search(r'Com filtros: (\d+)', html_original).group(1))
 		html_original = re.sub(r'Com filtros: \d+', 'Com filtros: ' + str(ocorrencias_anterior - int(ocorrencias)), html_original)
 
-	for i, ocorrencia in enumerate(lista_ocorrencias):
+	for i, ocorrencia_ in enumerate(lista_ocorrencias):
 		print(str(i+1) + '/' + str(len(lista_ocorrencias)))
-		ocorrencia = ocorrencia.replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<font color=' + tabela['yellow'] + '>','@YELLOW/').replace('<font color=' + tabela['red'] + '>','@RED/').replace('<font color=' + tabela['cyan'] + '>','@CYAN/').replace('<font color=' + tabela['blue'] + '>','@BLUE/').replace('<font color=' + tabela['purple'] + '>','@PURPLE/').replace('</font>','/FONT').replace('<','&lt;').replace('>','&gt;')
-		ocorrencia_limpa = ocorrencia.replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', '').replace('&lt;', '<').replace('&gt;', '>')
+		ocorrencia = ocorrencia_['resultadoAnotado'].to_str()
+		ocorrencia_limpa = ocorrencia_['resultadoEstruturado'].to_str()
 
 		if '# sent_id = ' in ocorrencia:
 			sentid = ocorrencia.split('# sent_id = ')[1].split('\n')[0]
