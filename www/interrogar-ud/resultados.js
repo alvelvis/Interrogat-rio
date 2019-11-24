@@ -98,27 +98,31 @@ $(document).on('keydown', function(e){
 });
 
 function carregarPosts(){
-    $.post('../cgi-bin/api.py', {
-        'indexSentences': $('.indexSentences').val(),
-        'nomePesquisa': $('[name=nome_interrogatorio]').val(),
-        'html': $('[name=link_interrogatorio]').val(),
-        'conllu': $('[name=conllu]').val(),
-        'parametros': expressao.innerHTML,
-        }, function(data){
-            $('.loadSentences').append(data['html']);
-            $('.indexSentences').val(data['indexSentences']);
-            if (data['noMore'] == true){
-                $(window).unbind('scroll');
+    $(window).unbind('scroll');
+    $.post('../../cgi-bin/api.py', {
+            'indexSentences': $('.indexSentences').val(),
+            'nomePesquisa': $('[name=nome_interrogatorio]').val(),
+            'html': $('[name=link_interrogatorio]').val(),
+            'conllu': $('[name=conllu]').val(),
+            'parametros': expressao.innerHTML,
+            'script': $('[name=queryScript]').val(),
+        },
+        function(data) {
+            $('.loadSentences').append(JSON.parse(data).html);
+            $('.indexSentences').val(JSON.parse(data).indexSentences);
+            if (JSON.parse(data).noMore == true){
                 $('#loadingGif').attr("src", "");
                 $('#statusLoading').html(':(');
                 $('#loadingText').html('acabaram as sentenças');
-            } else { scrollPosts() };
-    });
+            } else { scrollPosts(); };
+        },
+        "text",
+    );
 };
 
 function scrollPosts(){
     $(window).scroll(function() {    
-        if($(window).scrollTop() + $(window).height() > $(document).height() -500) {
+        if($(window).scrollTop() + $(window).height() > $(document).height() -5000) {
             $(window).unbind('scroll');
             carregarPosts();
         };

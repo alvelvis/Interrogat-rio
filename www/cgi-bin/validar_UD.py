@@ -75,7 +75,7 @@ def validate(conllu, sent_id = None, errorList = "../cgi-bin/validar_UD.txt", no
                 if not comment in errorDictionary:
                     errorDictionary[comment] = []
                 sentence = estrutura_ud.Sentence(recursivo=True)
-                sentence.build(fromInterrogarToHtml(sentString))
+                sentence.build(fromInterrogarToHtml(sentString['resultado']))
                 tokenT = 0
                 for t, token in enumerate(sentence.tokens):
                     if "<b>" in token.to_str():

@@ -69,7 +69,7 @@ def sendPOSTInterrogar():
 	print("<br>busca: " + str(time.time() - start))
 
 	start = time.time()
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias).montarHtml()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script).montarHtml()
 	print("<br>montarHtml: " + str(time.time() - start))
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
@@ -77,7 +77,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("Selecionar todas as sentenças", "").replace("Deselecionar todas as sentenças", "").replace('Selecionar múltiplas sentenças', '').replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
@@ -85,6 +85,9 @@ def sendPOSTInterrogar():
 
 	queries = ["\t".join([caminhoCompletoHtml, nomePesquisa, numeroOcorrencias, criterio, parametros, conllu, dataAgora])]
 
+	if not os.path.isfile("../interrogar-ud/queries.txt"):
+		with open("../interrogar-ud/queries.txt", "w") as f:
+			f.write("")
 	with open('../interrogar-ud/queries.txt', 'r') as f:
 		queries.extend(f.read().splitlines())
 
@@ -95,9 +98,12 @@ def sendPOSTInterrogar():
 
 def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' and form['scriptQueryFile'].value:
-		with open('../cgi-bin/queryScript.py', 'wb') as f:
+		if not os.path.isdir('../cgi-bin/scripts'):
+			os.mkdir('../cgi-bin/scripts')
+		with open('../cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		script = True
+		os.system("cp ../cgi-bin/scripts/" + form['scriptQueryFile'].filename + " ../cgi-bin/queryScript.py")
+		script = form['scriptQueryFile'].filename
 	else:
 		script = False
 
@@ -118,7 +124,7 @@ def definirVariaveisDePesquisa(form):
 
 def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
 	if not script:
-		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
+		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
 		with open("../cgi-bin/queryScript.py", 'r') as f:
 			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
@@ -135,7 +141,7 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
 
 class paginaHtml():
 
-	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias):
+	def __init__(self, caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script):
 		self.caminhoCompletoConllu = caminhoCompletoConllu
 		self.caminhoCompletoHtml = caminhoCompletoHtml
 		self.nomePesquisa = nomePesquisa
@@ -145,6 +151,7 @@ class paginaHtml():
 		self.parametros = parametros
 		self.numeroOcorrencias = numeroOcorrencias
 		self.casosOcorrencias = casosOcorrencias
+		self.script = script
 	
 	def adicionarHeader(self):
 		arquivoHtml = self.arquivoHtml.replace('<title>link de pesquisa 1 (203): Interrogatório</title>', '<title>' + cgi.escape(self.nomePesquisa) + ' (' + self.numeroOcorrencias + '): Interrogatório</title>')
@@ -164,14 +171,14 @@ class paginaHtml():
 	def adicionarDistribution(self):
 		if self.criterio == "5":
 			if self.nomePesquisa not in fastSearch:
-				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", f"><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=html id=html_dist value='{self.caminhoCompletoHtml}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>")
+				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>").format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)
 			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>".format(self.parametros.replace("'", '"')))
 			#return self.arquivoHtml.replace("DIST-->", 'DIST--><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.')
 		return self.arquivoHtml
 
 	def adicionarExecutarScript(self):
 		arquivoHtml = self.arquivoHtml.split("<!--script-->")
-		arquivoHtml[0] += f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"><input type=hidden name=conllu value=\"{self.conllu}\">"
+		arquivoHtml[0] += f"<input type=hidden name=criterio value=\"{self.criterio}\"><input type=hidden name=parametros value=\'{self.parametros}\'><input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"><input type=hidden name=conllu value=\"{self.conllu}\">"
 
 		return "".join(arquivoHtml)
 
@@ -182,8 +189,11 @@ class paginaHtml():
 			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.cgi', '../../cgi-bin/conllu.cgi?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '.html')
 
 		self.arquivoHtml = self.adicionarHeader()
-		self.arquivoHtml = self.adicionarDistribution()
-		self.arquivoHtml = self.adicionarExecutarScript()
+		if not self.script:
+			self.arquivoHtml = self.adicionarDistribution()
+			self.arquivoHtml = self.adicionarExecutarScript()
+		if self.script:
+			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{self.script}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
 
 		return self.arquivoHtml
 

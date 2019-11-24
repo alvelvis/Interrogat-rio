@@ -25,22 +25,22 @@
     <div class="content"><br>
     <br>
       <div class="tab"><button class="tablinks" tabid="ver" tab="Options">
-      Opções </button> <button class="tablinks" tab="Filter" tabid="filtrar_tab">
-          Filtrar </button> <button class="tablinks" tab="Download" tabid="conllu">
-          Baixar </button></div>
+      Opções </button> <!--button class="tablinks" tab="Filter" tabid="filtrar_tab">
+          Filtrar </button> <button class="tablinks" tab="Download" tabid="conllu"-->
+          <!--Baixar </button--></div>
       <div class="tabcontent tabOptions" id="ver"> <br>
       <br>
       <br>
       <div class="tooltip"><a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer">Abrir inquérito para múltiplas sentenças</a><div class="tooltiptext">Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.</div></div>
       <div class="inqueritoSome" style="display:none"><ul><li>De: <input type="number" style="width:60px;" value="1" class="minInquerito"> Até: <input type="number" style="width:60px;" value="20" class="maxInquerito"> <input type="button" value="Abrir inqueritos" onclick="$('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li></ul></div>
-      <br>
-      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();">Selecionar múltiplas sentenças</a>
+      <!--br>
+      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();">Selecionar múltiplas sentenças</a-->
       <div class="selectSome" style="display:none"><ul><li>De: <input type="number" style="width:60px;" value="1" class="minSelect"> Até: <input type="number" style="width:60px;" value="20" class="maxSelect"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(parseInt($('.minSelect').val()) -1, parseInt($('.maxSelect').val())).prop('checked', true);"></li></ul></div>
       <br>
-      <a style="cursor:pointer" onclick="tudo('marcar')">Selecionar todas as sentenças</a>
+      <!--a style="cursor:pointer" onclick="tudo('marcar')">Selecionar todas as sentenças</a>
       <br>
       <a style="cursor:pointer" onclick="tudo('desmarcar')">Deselecionar todas as sentenças</a>
-      <br>
+      <br-->
       <a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotação de todas as sentenças</a>
       <br>
       <a style="cursor:pointer" title="" onclick="tudo('fechar')">Fechar anotação de todas as sentenças</a>
@@ -49,7 +49,7 @@
       <div id="script" style="display:none">
         <h3>Correção em lote</h3>
         <ul>
-          <li>A correção em lote permite modificar todas ou parte das sentenças presentes aqui com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
+          <li>A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
           <li>Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
           <ol type="1">
             <li>Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download>modelo de script de correção</a> em Python.</li>
@@ -137,8 +137,8 @@ value="Baixar arquivo" class="btn-gradient orange mini" type="submit"></p></form
         <!--SPLIT-->
         </div><br>
       <div style="position:relative">
-        <div class="container" style="width:100%;">
-            <h1 id="statusLoading"><img id="loadingGif" style="max-width:64px; max-height: 64px; margin-left:10px;" src="../interrogar-ud/loading4.gif"></h1><p id="loadingText" class="lead">Carregando...</p>
+        <div class="container-lr" style="width:100%;">
+            <h1 id="statusLoading"><img id="loadingGif" style="max-width:64px; max-height: 64px; margin-left:10px;" src="../../interrogar-ud/loading4.gif"></h1><p id="loadingText" class="lead">Carregando...</p>
         </div>
       </div>
       </div>

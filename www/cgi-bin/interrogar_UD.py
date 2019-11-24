@@ -8,7 +8,7 @@ import cgi
 import html as web
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
-def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
+def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False):
 	parametros = parametros.strip()
 	
 	#Lê o arquivo UD
@@ -27,7 +27,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id=""):
 					corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
 				start = time.time()
 				corpus.build(f.read())
-				print("<br>corpus.build: " + str(time.time() - start))
+				sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
 		else:
 			corpus = arquivoUD
 			
@@ -314,19 +314,11 @@ for ''' + identificador + ''' in sentence.tokens:
 			final = "\\n".join(final)'''
 
 			exec(condition + '''
-			anotado = estrutura_ud.Sentence(recursivo=False)
-			estruturado = estrutura_ud.Sentence(recursivo=False)
-			anotado.build(cgi.escape(final.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '>', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))		
-			estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))			
-			output.append({
-				'resultado': final,
-				'resultadoAnotado': anotado,
-				'resultadoEstruturado': estruturado,
-			})
+			output.append(final)
 	except Exception as e:
 		print(e)
 		pass''')
-		print("<br>critério 5: " + str(time.time() - start))
+		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	if criterio not in [5]:
 		for a, sentence in enumerate(output):
@@ -334,6 +326,23 @@ for ''' + identificador + ''' in sentence.tokens:
 				if isinstance(linha, list):
 					sentence[b] = "\t".join(sentence[b])
 			output[a] = "\n".join(sentence)
+
+	start = time.time()
+	for i, final in enumerate(output):
+		if not fastSearch:
+			anotado = estrutura_ud.Sentence(recursivo=False)
+			estruturado = estrutura_ud.Sentence(recursivo=False)
+			anotado.build(cgi.escape(final.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '>', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))		
+			estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))			
+		else:
+			anotado = ""
+			estruturado = ""
+		output[i] = {
+			'resultado': final,
+			'resultadoAnotado': anotado,
+			'resultadoEstruturado': estruturado,
+		}
+	sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
 
 	return {'output': output, 'casos': casos}
 

@@ -1,5 +1,8 @@
 import estrutura_ud
 import re
+import cgi
+import html as web
+from functions import tabela as tabelaf
 
 def bold_token(token, sentence):
     return sentence.to_str().replace(token.to_str(), "<b>" + token.to_str() + "</b>").replace(sentence.text, re.sub(r"\b" + re.escape(token.word) + r"\b", "<b>" + token.word + "</b>", sentence.text))
@@ -14,9 +17,25 @@ def getResultadosBusca():
     EDITAR METODOLOGIA DE BUSCA ABAIXO
 
     '''
+    
     for sentence in corpus.sentences.values():
         for token in sentence.tokens:
             if token.word == "palavra":
                 resultadosBusca['output'].append(bold_token(token, sentence))
+
+    '''
+    EDITAR APENAS A PARTE ACIMA, E MAIS NADA
+    '''
+
+    for i, final in enumerate(resultadosBusca['output']):
+        anotado = estrutura_ud.Sentence(recursivo=False)
+        estruturado = estrutura_ud.Sentence(recursivo=False)
+        anotado.build(cgi.escape(final.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '>', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))		
+        estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))			
+        resultadosBusca['output'][i] = {
+            'resultado': final,
+            'resultadoAnotado': anotado,
+            'resultadoEstruturado': estruturado,
+        }
 
     return resultadosBusca

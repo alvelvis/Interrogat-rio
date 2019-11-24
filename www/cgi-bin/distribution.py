@@ -22,28 +22,12 @@ from estrutura_dados import slugify as slugify
 
 #POST
 form = cgi.FieldStorage()
-if 'notSaved' in form:
-	sentences = interrogar_UD.main("../interrogar-ud/conllu/" + form['corpus'].value, 5, form['notSaved'].value)['output']
-	corpus = list()
-	for sentence in sentences:
-		sent = estrutura_ud.Sentence()
-		sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
-		corpus.append(sent)
-
-elif 'html' in form:
-	with open(form['html'].value, 'r') as f:
-		html = f.read()
-		html = web.unescape(html)
-		html = re.split(r'\<pre id=.*?\>', html)
-		html = [x.split('</pre>')[0] for x in html[1:]]
-		corpus = list()
-		for sentence in html:
-			sent = estrutura_ud.Sentence()
-			sent.build(sentence.replace('<font color=' + tabela['yellow'] + '>','').replace('<font color=' + tabela['red'] + '>','').replace('<font color=' + tabela['cyan'] + '>','').replace('<font color=' + tabela['blue'] + '>','').replace('<font color=' + tabela['purple'] + '>','').replace('</font>',''))
-			corpus.append(sent)
-
-else:
-	exit()
+sentences = interrogar_UD.main("../interrogar-ud/conllu/" + form['corpus'].value, 5, form['notSaved'].value)['output']
+corpus = list()
+for sentence in sentences:
+	sent = estrutura_ud.Sentence()
+	sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
+	corpus.append(sent)
 
 dist = list()
 for sentence in corpus:
