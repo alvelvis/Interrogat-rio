@@ -14,6 +14,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 	#Lê o arquivo UD
 	if criterio in [1, 2, 3, 4]:
 		import estrutura_dados
+		import estrutura_ud
 		qualquercoisa = estrutura_dados.LerUD(arquivoUD)
 
 	if criterio in [5]:

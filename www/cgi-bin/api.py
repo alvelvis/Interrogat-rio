@@ -24,7 +24,6 @@ import json
 def renderSentences(script=""):
 
     form = cgi.FieldStorage()
-
     conllu = form['conllu'].value
     corpus = conllu
     caminhoCompletoConllu = '../interrogar-ud/conllu/' + conllu
@@ -38,6 +37,7 @@ def renderSentences(script=""):
 
     startPoint = int(form['indexSentences'].value)
     nomePesquisa = form['nomePesquisa'].value
+
 
     if not script:
         resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
