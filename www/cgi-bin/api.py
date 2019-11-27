@@ -53,8 +53,8 @@ def renderSentences(script=""):
 
 
     numeroOcorrencias = len(resultadosBusca['output'])
-    if numeroOcorrencias > startPoint + 51 and numeroOcorrencias >= 1:
-        finalPoint = startPoint + 50
+    if numeroOcorrencias > startPoint + 21 and numeroOcorrencias >= 1:
+        finalPoint = startPoint + 20
         noMore = False
     else:
         finalPoint = len(resultadosBusca['output'])

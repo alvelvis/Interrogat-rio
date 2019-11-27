@@ -108,6 +108,9 @@ def definirVariaveisDePesquisa(form):
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]):
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
+	elif any(x in pesquisa for x in [' == ', ' = ']):
+		criterio = '5'
+		parametros = pesquisa
 	else:
 		criterio = '1'
 		parametros = pesquisa
@@ -153,7 +156,7 @@ class paginaHtml():
 	def adicionarHeader(self):
 		arquivoHtml = self.arquivoHtml.replace('<title>link de pesquisa 1 (203): Interrogatório</title>', '<title>' + cgi.escape(self.nomePesquisa) + ' (' + self.numeroOcorrencias + '): Interrogatório</title>')
 		casos = f"<br>Casos: {str(self.casosOcorrencias)}" if self.casosOcorrencias else ""
-		arquivoHtml = arquivoHtml.replace('<h1><span id="combination">link de pesquisa 1</span> (203)</h1>', '<h1><a style="color:black; max-width: 40vw; word-wrap: break-word;" id=titulo><span id=combination>' + cgi.escape(self.nomePesquisa) + '</span> (' + self.numeroOcorrencias + ')</a></h1>' + casos)
+		arquivoHtml = arquivoHtml.replace('<h3><span id="combination">link de pesquisa 1</span> (203)</h3>', '<h3><a style="color:black; max-width: 40vw; word-wrap: break-word;" id=titulo><span id=combination>' + cgi.escape(self.nomePesquisa) + '</span> (' + self.numeroOcorrencias + ')</a></h3>' + casos)
 
 		with open ('../interrogar-ud/criterios.txt', 'r') as f:
 			criterios = f.read().split('!@#')

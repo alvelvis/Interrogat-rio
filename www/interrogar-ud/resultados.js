@@ -194,9 +194,7 @@ $(document).ready(function(){
     });
 
     $('.addCondition').click(function(){
-        if (! $('#pesquisa').val()){
-          $('#pesquisa').val('5 ');
-        } else {
+        if ($('#pesquisa').val()){
           $('#pesquisa').val($('#pesquisa').val() + ' and ');
         };
         $('#pesquisa').val($('#pesquisa').val() + $('.token').val() + "." + $('.atribute').val() + " " + $('.evaluation').val() + ' "' + $('.value').val() + '"');
@@ -206,9 +204,7 @@ $(document).ready(function(){
     });
 
     $('.addBoldCondition').click(function(){
-        if (! $('#pesquisa').val()){
-          $('#pesquisa').val('5 ');
-        } else {
+        if ($('#pesquisa').val()){
           $('#pesquisa').val($('#pesquisa').val() + ' and ');
         };
         $('#pesquisa').val($('#pesquisa').val().replace(/\s@/g, " "));
