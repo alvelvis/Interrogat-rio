@@ -18,6 +18,7 @@ from functions import tabela, prettyDate, encodeUrl
 import html as web
 import time
 import sys
+import json
 import functions
 
 def main():
@@ -64,7 +65,7 @@ def sendPOSTInterrogar():
 		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
 			f.write("")
 
-	numeroOcorrencias, casosOcorrencias = realizarBusca(caminhoCompletoConllu, int(criterio), parametros, script)
+	numeroOcorrencias, casosOcorrencias = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
 
 	start = time.time()
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script).montarHtml()
@@ -94,13 +95,14 @@ def sendPOSTInterrogar():
 
 
 def definirVariaveisDePesquisa(form):
-	if 'scriptQueryFile' and form['scriptQueryFile'].value:
+	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
 		if not os.path.isdir('../cgi-bin/scripts'):
 			os.mkdir('../cgi-bin/scripts')
 		with open('../cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		os.system("cp ../cgi-bin/scripts/" + form['scriptQueryFile'].filename + " ../cgi-bin/queryScript.py")
+		os.system("cp '../cgi-bin/scripts/" + form['scriptQueryFile'].filename + "' ../cgi-bin/queryScript.py")
 		script = form['scriptQueryFile'].filename
+		parametros = form['scriptQueryFile'].filename
 	else:
 		script = False
 
@@ -108,7 +110,7 @@ def definirVariaveisDePesquisa(form):
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]):
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
-	elif any(x in pesquisa for x in [' == ', ' = ']):
+	elif any(x in pesquisa for x in [' == ', ' = ', ' != ', ' !== ', ' === ']):
 		criterio = '5'
 		parametros = pesquisa
 	else:
@@ -122,7 +124,7 @@ def definirVariaveisDePesquisa(form):
 	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
+def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""):
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
@@ -132,6 +134,11 @@ def realizarBusca(caminhoCompletoConllu, criterio, parametros, script=""):
 			f.write(scriptFile)
 		import queryScript
 		resultadosBusca = queryScript.getResultadosBusca()
+
+	if not os.path.isdir('../cgi-bin/json'):
+		os.mkdir('../cgi-bin/json')
+	with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
+		json.dump(resultadosBusca, f)
 
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
@@ -193,7 +200,7 @@ class paginaHtml():
 			self.arquivoHtml = self.adicionarDistribution()
 			self.arquivoHtml = self.adicionarExecutarScript()
 		if self.script:
-			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{self.script}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
+			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{slugify(self.script)}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
 
 		return self.arquivoHtml
 

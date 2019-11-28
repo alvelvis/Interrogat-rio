@@ -56,7 +56,7 @@
         <!--div class="tooltip">Limitar resultados:<div class="tooltiptext">Pode tornar a busca muito mais rápida. Zero para não limitar a busca.</div></div> <input id="sentLimit" name="sentLimit" value="0" style="width:60px" type="number"-->
         </div></p>
           <p><input name="enviar" style="margin-left:10px" id="enviar" value="Busca rápida" class="buscaOption btn-gradient orange small"
-  type="submit" onclick="if(!$('.scriptQuery').is(':visible')){ $('.scriptQueryFile').val(''); } else { $('#pesquisa').val('1 modelo_query.txt'); };"></p>          
+  type="submit" onclick="if(!$('.scriptQuery').is(':visible')){ $('.scriptQueryFile').val(''); } else { $('#pesquisa').val($('.scriptQueryFile').val().replace(/C:\\fakepath\\/i, '')); };"></p>          
         </form>      
         <!--document.getElementById('nome').value = document.getElementById('pesquisa').value;-->
         
