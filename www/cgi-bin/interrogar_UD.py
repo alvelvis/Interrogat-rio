@@ -343,7 +343,7 @@ for ''' + identificador + ''' in sentence.tokens:
 			'resultadoAnotado': anotado,
 			'resultadoEstruturado': estruturado,
 		}
-	sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
+	#sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
 
 	return {'output': output, 'casos': casos}
 
