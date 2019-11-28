@@ -76,7 +76,7 @@ function pesquisaChange(){
         $('.clearPesquisa').hide();
     };
     if ($('.toggleDist').is(':checked')) {
-        if (/^5 /.test($('#pesquisa').val())) {
+        if (/(^5 )|( == )|( = )|( != )|( !== )/.test($('#pesquisa').val())) {
             $('.dist').show();
             $('.notDist').hide();
         } else {
@@ -237,7 +237,7 @@ $(document).ready(function(){
     $('#pesquisa').on('keyup', function(){pesquisaChange()});
 
     $('.toggleDist').on('click', function(){
-        if (/^5 /.test($('#pesquisa').val())) {
+        if (/(^5 )|( == )|( = )|( != )|( !== )|( !=== )/.test($('#pesquisa').val())) {
             $('.dist').show();
             $('.notDist').hide();
         } else {
