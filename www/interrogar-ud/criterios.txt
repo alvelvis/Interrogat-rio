@@ -7,7 +7,7 @@
 </ul-->
 <!--h3>Por onde começar</h3-->
 <ul>
-    <li>Buscas simples: Digite as palavras na <a style="cursor:pointer;" title="Focalizar barra de busca" onclick="$('#pesquisa').focus();">barra de busca</a> à esquerda.</li>
+    <li>Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
     <li>Buscas complexas: <a title="Ir para interface" href="#interactive">Construa expressões de busca interativamente</a></li>
     <li>Para experientes: Utilize algum dos critérios de busca</li>
     <ul>
