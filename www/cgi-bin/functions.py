@@ -1,7 +1,7 @@
 import re
 
 corpusGenericoInquerito = "bosque.conllu"
-corpusGenericoExpressoes = "bosque.conllu"
+corpusGenericoExpressoes = "generico.conllu"
 udpipe = "udpipe-1.2.0"
 modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
 
