@@ -24,6 +24,7 @@ import html as webpage
 import validar_UD
 from credenciar import LOGIN
 import interrogar_UD
+import variables
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -219,7 +220,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	if 'finalizado' in form:
 		erros = []
 		if 'sentid' in form:
-			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value, noMissingToken=True)
+			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value, noMissingToken=True, errorList=variables.validar_UD)
 		alertColor = "cyan" if not erros else "yellow"
 		alertBut = "" if not erros else ", mas atenção:"
 		html1 += f'<span style="background-color: {alertColor}">Alteração realizada com sucesso{alertBut}</span>'
