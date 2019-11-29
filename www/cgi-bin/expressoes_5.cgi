@@ -22,7 +22,7 @@ with open("../cgi-bin/expressoes_5.txt") as f:
 corpus = estrutura_ud.Corpus(recursivo=True)
 corpus.load('../cgi-bin/' + corpusGenericoExpressoes)
 
-dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]} for x in expressions]
+dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]['resultado']} for x in expressions]
 
 html = "<title>Banco de expressões de busca do critério 5: Python</title>\
     <body style='margin:10px auto; max-width:960px;'>\

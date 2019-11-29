@@ -137,6 +137,10 @@ function scrollPosts(){
 
 $(document).ready(function(){
 
+    $('.exportHtml').click(function(){
+        window.open("../cgi-bin/export_html.py?corpus=" + corpus.innerHTML + "&params=" + expressao.innerHTML, "_blank");
+    });
+
     if($('#expressao').length){
         carregarPosts();
     };

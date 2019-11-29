@@ -74,7 +74,7 @@ pagina = '''
 pagina += "<title>Distribuição de " + form["coluna"].value + "</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
 pagina += '<a href="#" onclick="window.close()">Fechar</a><br><br>Relatório gerado dia ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
-pagina += "<hr>Busca: " + form["expressao"].value + "<br>"
+pagina += f"<hr>Busca: <a target='_blank' href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + form["expressao"].value + "</a><br>"
 pagina += "Corpus: <a href='../interrogar-ud/conllu/"+form["corpus"].value+"' title='Baixar corpus' download>" + form["corpus"].value + "</a>"
 pagina += "<br><br>Quantidade de ocorrências: "+str(len(dist))+"<br>Quantidade de <b>"+form["coluna"].value+"</b>: "+str(len(lista))+"<hr>"
 

@@ -8,6 +8,8 @@ import cgi, cgitb
 cgitb.enable()
 import estrutura_ud
 import re
+from functions import prettyDate
+from datetime import datetime
 
 form = cgi.FieldStorage()
 
@@ -34,4 +36,4 @@ elif id:
         contextoEsquerda = corpus.sentences[str(int(id) - 1)].text if str(int(id) - 1) in corpus.sentences else ""
         contextoDireita = corpus.sentences[str(int(id) + 1)].text if str(int(id) + 1) in corpus.sentences else ""
 
-print(f'<title>Contexto - Interrogatório</title><h1>Contexto</h1><hr><a href="javascript:window.close()">Fechar</a><br><br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><br>Sent_id: {sent_id}<br><br>{contextoEsquerda[0]}: {contextoEsquerda[1]}<br><b>{sent_id}</b>: {corpus.sentences[sent_id].text}<br>{contextoDireita[0]}: {contextoDireita[1]}')
+print(f'<title>Contexto - Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><br>Sent_id: {sent_id}<br><br>{contextoEsquerda[0]}: {contextoEsquerda[1]}<br><b>{sent_id}</b>: {corpus.sentences[sent_id].text}<br>{contextoDireita[0]}: {contextoDireita[1]}')

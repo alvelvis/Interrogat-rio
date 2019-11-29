@@ -4,6 +4,7 @@ corpusGenericoInquerito = "bosque.conllu"
 corpusGenericoExpressoes = "generico.conllu"
 udpipe = "udpipe-1.2.0"
 modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
+localtime = 0
 
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
@@ -36,7 +37,7 @@ class prettyDate:
         self.mesExtenso_3 = "".join(calendario[self.mes][:3])
         self.ano = int(data[0])		
         horabruta = date.split(" ")[1].rsplit(":", 1)[0]
-        self.hora = int(horabruta.split(":")[0]) - 3
+        self.hora = int(horabruta.split(":")[0]) - localtime
         if self.hora < 0: self.hora = 24 + self.hora
         self.tempo = str(self.hora) + ":" + horabruta.split(":")[1]
 

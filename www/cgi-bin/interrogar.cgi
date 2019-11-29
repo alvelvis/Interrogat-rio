@@ -75,7 +75,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("Correção em lote", "").replace("<br>\n<br>", "").replace('<div class="content"><br>', '<div class="content"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">Salve a busca</a> para liberar mais funções.<br>'))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('<div class="content">', '<div class="content">Você deseja <a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">salvar esta busca</a>?<br>'))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
