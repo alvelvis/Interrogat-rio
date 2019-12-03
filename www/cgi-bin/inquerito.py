@@ -8,7 +8,6 @@ from functions import corpusGenericoInquerito
 
 mostrarEtiqueta = False
 bosqueNaoEncontrado = corpusGenericoInquerito
-draggable = [6]
 
 import sys
 import cgi, cgitb
@@ -280,9 +279,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					isBold = "background-color: lightgray;" if 'tokenId' in form and linha.split('\t')[0] == form['tokenId'].value else ""
 					html1 += f'<tr style="{isBold}">'
 					for b, coluna in enumerate(linha.split('\t')):
-						drag = 'drag ' if b in draggable else ''
+						drag = 'drag ' if b in [6] else ''
 						dragId = 'id ' if b == 0 else ''
-						notPipe = "" if b in [4, 5, 9] and coluna != "_" else "notPipe "
+						notPipe = "" if b in [1, 2, 4, 5, 9] and coluna != "_" else "notPipe "
 						tokenId = f"id_{coluna} " if b == 0 else ""
 						html1 += f'''<input class="field" value="{coluna.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + coluna.replace('<','&lt;').replace('>','&gt;') + '</td>'
 					html1 += '</tr>'
