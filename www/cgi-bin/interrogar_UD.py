@@ -255,6 +255,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 		
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
+		pesquisa = pesquisa.replace('token.int(', 'int(')
+#		pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)

@@ -118,7 +118,7 @@ class Sentence:
 				if identificador not in ["text", "sent_id", "source", "id"]:
 					valor = linha.split('=', 1)[1].strip()
 					self.metadados[identificador] = valor
-			if "\t" in linha:
+			if not linha.startswith("# ") and "\t" in linha:
 				tok = Token(sent_id = self.sent_id, text = self.text)
 				tok.build(linha)
 				tok.head_token = self.default_token
