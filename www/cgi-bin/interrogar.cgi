@@ -63,7 +63,10 @@ def sendPOSTInterrogar():
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		with open(f"../interrogar-ud/inProgress/{conllu} {criterio} {parametros} {dataAgora}.inProgress", 'w') as f:
-			f.write("")
+			try:
+				f.write("")
+			except:
+				pass
 
 	numeroOcorrencias, casosOcorrencias = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
 
@@ -137,8 +140,11 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 
 	if not os.path.isdir('../cgi-bin/json'):
 		os.mkdir('../cgi-bin/json')
-	with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
-		json.dump(resultadosBusca, f)
+	try:
+		with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
+			json.dump(resultadosBusca, f)
+	except:
+		pass
 
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
