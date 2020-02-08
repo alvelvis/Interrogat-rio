@@ -113,12 +113,12 @@ class Sentence:
 			self.metadados["id"] = self.id
 		
 		for linha in txt.split(self.separator):
-			if linha and "#" == linha[0] and "=" in linha:
+			if linha and linha.startswith("# ") and " = " in linha:
 				identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
 				if identificador not in ["text", "sent_id", "source", "id"]:
 					valor = linha.split('=', 1)[1].strip()
 					self.metadados[identificador] = valor
-			if not linha.startswith("# ") and "\t" in linha:
+			elif not linha.startswith("# ") and "\t" in linha:
 				tok = Token(sent_id = self.sent_id, text = self.text)
 				tok.build(linha)
 				tok.head_token = self.default_token
