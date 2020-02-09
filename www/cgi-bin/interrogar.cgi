@@ -27,7 +27,6 @@ def main():
 
 	sendRequestInterrogar() if os.environ['REQUEST_METHOD'] != "POST" else sendPOSTInterrogar()
 
-
 def sendRequestInterrogar():
 	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
 	
@@ -70,7 +69,6 @@ def sendPOSTInterrogar():
 
 	numeroOcorrencias, casosOcorrencias = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
 
-	start = time.time()
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
@@ -78,7 +76,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('<div class="content">', '<div class="content">Você deseja <a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">salvar esta busca</a>?<br>'))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace(')</a></h3>', ')</a></h3><span style="background-color:yellow;">Você deseja <a href="#" onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" title="Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar" style="color:blue" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">salvar esta busca</a>?</span><br>').replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', ''))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
@@ -184,8 +182,8 @@ class paginaHtml():
 	def adicionarDistribution(self):
 		if self.criterio == "5":
 			if self.nomePesquisa not in fastSearch:
-				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>").format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)
-			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination></form>".format(self.parametros.replace("'", '"')))
+				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>").format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)
+			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"')))
 			#return self.arquivoHtml.replace("DIST-->", 'DIST--><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.')
 		return self.arquivoHtml
 

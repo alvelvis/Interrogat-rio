@@ -4,6 +4,8 @@
 print("Content-type:text/html")
 print('\n\n')
 
+fastSearch = ['teste', 'Busca rápida']
+
 import os
 import cgi,cgitb
 cgitb.enable()
@@ -14,6 +16,7 @@ import datetime
 import html as web
 import estrutura_ud
 import interrogar_UD
+import json
 
 #if not 'REQUEST_METHOD' in os.environ:
 #	os.environ['REQUEST_METHOD'] = 'POST'
@@ -22,12 +25,26 @@ from estrutura_dados import slugify as slugify
 
 #POST
 form = cgi.FieldStorage()
+
+filtros = []
+nome_interrogatorio = ""
+if "link_dist" in form and os.path.isfile("../cgi-bin/filtros.json"):
+	link_interrogatorio = form['link_dist'].value.rsplit(".", 1)[0].rsplit("/", 1)[1]
+	nome_interrogatorio = form['combination'].value
+	with open("../cgi-bin/filtros.json") as f:
+		filtros = json.load(f)
+	if link_interrogatorio in filtros:
+		filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]
+	else:
+		filtros = []
+
 sentences = interrogar_UD.main("../interrogar-ud/conllu/" + form['corpus'].value, 5, form['notSaved'].value)['output']
 corpus = list()
 for sentence in sentences:
 	sent = estrutura_ud.Sentence()
 	sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
-	corpus.append(sent)
+	if sent.sent_id not in filtros:
+		corpus.append(sent)
 
 dist = list()
 for sentence in corpus:
@@ -76,7 +93,10 @@ pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
 pagina += '<a href="#" onclick="window.close()">Fechar</a><br><br>Relatório gerado dia ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
 pagina += f"<hr>Busca: <a target='_blank' href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + form["expressao"].value + "</a><br>"
 pagina += "Corpus: <a href='../interrogar-ud/conllu/"+form["corpus"].value+"' title='Baixar corpus' download>" + form["corpus"].value + "</a>"
-pagina += "<br><br>Quantidade de ocorrências: "+str(len(dist))+"<br>Quantidade de <b>"+form["coluna"].value+"</b>: "+str(len(lista))+"<hr>"
+pagina += "<br><br>Quantidade de ocorrências: "+str(len(dist))+"<br>Quantidade de <b>"+form["coluna"].value+"</b>: "+str(len(lista))
+if nome_interrogatorio and nome_interrogatorio not in fastSearch:
+	pagina += f"<br>Busca salva em <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
+pagina += "<hr>"
 
 freq = dict()
 for entrada in dicionario:

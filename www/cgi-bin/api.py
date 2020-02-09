@@ -36,7 +36,24 @@ def renderSentences(script=""):
         script = form['script'].value
 
     startPoint = int(form['indexSentences'].value)
+    filtradoPrevious = int(form['filtrado'].value) if 'filtrado' in form else 0
     nomePesquisa = form['nomePesquisa'].value
+
+    filtros = []
+    filtrar_filtros = ""
+    pagina_filtros = ""
+    if nomePesquisa not in fastSearch:
+        pagina_html = caminhoCompletoHtml.rsplit("/", 1)[1].rsplit(".", 1)[0]
+        if os.path.isfile("../cgi-bin/filtros.json"):
+            with open("../cgi-bin/filtros.json") as f:
+                filtros_json = json.load(f)
+            if pagina_html in filtros_json:
+                filtros = [x for nome in filtros_json[pagina_html]['filtros'] for x in filtros_json[pagina_html]['filtros'][nome]['sentences']]
+                for pagina in [[x, len(filtros_json[pagina_html]['filtros'][x]['sentences'])] for x in filtros_json[pagina_html]['filtros']]:
+                    filtrar_filtros += f'<li style="float:left; margin-right:10px;"><a style="cursor:pointer;" onclick="$(\'#nome_pesquisa,#nome_pesquisa_sel\').val(\'{pagina[0]}\')">{pagina[0]} ({pagina[1]})</li>'
+                    pagina_filtros += f'<li style="float:left; margin-right:10px;"><a style="cursor:pointer;" target="_blank" href="../../cgi-bin/filtrar.cgi?action=view&html={pagina_html}&filtro={pagina[0]}">{pagina[0]} ({pagina[1]})</li>'
+            else:
+                filtros = []
 
     if os.path.isfile('../cgi-bin/json/' + slugify(conllu + "_" + parametros + ".json")):
         with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "r") as f:
@@ -54,24 +71,47 @@ def renderSentences(script=""):
             import queryScript
             resultadosBusca = queryScript.getResultadosBusca()
 
-    numeroOcorrencias = len(resultadosBusca['output'])
+    numeroOcorrencias = len(resultadosBusca['output']) - len(filtros)
+    #numeroOcorrenciasMenosFiltro = numeroOcorrencias - len(filtros)
     if numeroOcorrencias > startPoint + 21 and numeroOcorrencias >= 1:
         finalPoint = startPoint + 20
         noMore = False
     else:
-        finalPoint = len(resultadosBusca['output'])
+        finalPoint = len(resultadosBusca['output']) - len(filtros) + len(filtros)
         noMore = True
 
     arquivoHtml = ""
-    for i, ocorrencia in enumerate(resultadosBusca['output'][startPoint:finalPoint]):
+    resultados = []
+    quantos = 0
+    filtrado = 0
+    for ocorrencia in resultadosBusca['output'][startPoint:]:
         anotado = estrutura_ud.Sentence(recursivo=False)
         estruturado = estrutura_ud.Sentence(recursivo=False)
         anotado.build(cgi.escape(ocorrencia['resultado'].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))	
         estruturado.build(web.unescape(ocorrencia['resultado']).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
+
+        if not estruturado.sent_id in filtros and not estruturado.text in filtros:
+            resultados.append({'anotado': anotado, 'estruturado': estruturado})
+            quantos += 1
+        else:
+            quantos += 1
+            filtrado += 1
+            if finalPoint+1 < len(resultadosBusca['output']):
+                finalPoint += 1
+
+        if quantos == finalPoint-startPoint:
+            break
+
+    for i, ocorrencia in enumerate(resultados):
+        anotado = ocorrencia['anotado']
+        estruturado = ocorrencia['estruturado']
+
         arquivoHtml += '<div class=container>\n'
-        arquivoHtml += f'<p>{str(startPoint+i+1)}/{numeroOcorrencias}</p>' + '\n'
+        arquivoHtml += f'<p>{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}</p>' + '\n'
         if estruturado.sent_id:
-            arquivoHtml += f'''<p><!--input class=cb id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" type=checkbox-->{estruturado.sent_id}</p>''' + '\n'
+            arquivoHtml += '<p onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" style="cursor:pointer;" class="metadados_sentence">'
+            arquivoHtml += f'''<input class=cb id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" type=checkbox>''' if nomePesquisa not in fastSearch else ""
+            arquivoHtml += f'''{estruturado.sent_id}</p>''' + '\n'
         arquivoHtml += f"<p><span id=text_{str(startPoint+i+1)}>{anotado.text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
         if ((estruturado.sent_id and ('-' in estruturado.sent_id or re.search(r'^\d+$', estruturado.sent_id))) or estruturado.id) and estruturado.text:
             arquivoHtml += f"<p><input id=contexto_{str(startPoint+i+1)} value=\"Mostrar contexto\" onclick=\"contexto('{estruturado.sent_id}', '{estruturado.id}', '{corpus}')\" style=\"margin-left:0px\" type=button> <input id=mostrar_{str(startPoint+i+1)} class=anotacao value=\"Mostrar anotação\" onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\" type=button> <input id=opt_{str(startPoint+i+1)} class=opt value=\"Mostrar opções\" onclick=\"mostraropt('optdiv_{str(startPoint+i+1)}', 'opt_{str(startPoint+i+1)}')\" style=\"margin-left:0px\" type=button> <input class=\"abrirInquerito\" type=button value=\"Abrir inquérito\" onclick='inquerito(\"form_{str(startPoint+i+1)}\")'></p>" + "\n"
@@ -96,6 +136,10 @@ def renderSentences(script=""):
             'html': arquivoHtml,
             'noMore': noMore,
             'indexSentences': finalPoint,
+            'filtrado': filtrado,
+            'filtrar_filtros': filtrar_filtros,
+            'pagina_filtros': pagina_filtros,
+            'filtros': len(filtros),
         }))
 
 if os.environ['REQUEST_METHOD'] == "POST":

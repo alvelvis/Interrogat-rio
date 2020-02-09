@@ -5,7 +5,7 @@
     <title>link de pesquisa 1 (203): Interrogatório</title>
     <link href="../../interrogar-ud/style.css?version=5" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../interrogar-ud/jquery-latest.js"></script>
     <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
     <script src="../../interrogar-ud/resultados.js?version=15"></script>
   </head>
@@ -20,25 +20,30 @@
     </div>
     <div class="content"><h3><span id="combination">link de pesquisa 1</span> (203)</h3>
       <p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;
+        <br><br>
+        <ul style="list-style-type: none; margin: 0; padding: 0;" class="pagina_filtros">
+                    
+        </ul>
+        <br><br>
         <!--em--><!--a href="#" onclick="apagar()">excluir</a--><!--/em--></p>
         <input type="hidden" id="apagar_link" value="link1">
       <div class="tab"><button class="tablinks" tabid="ver" tab="Options">
-      Opções </button> <!--button class="tablinks" tab="Filter" tabid="filtrar_tab">
-          Filtrar </button> <button class="tablinks" tab="Download" tabid="conllu"-->
-          <!--Baixar </button--></div>
+      Opções </button> <button class="tablinks" tab="Filter" tabid="filtrar_tab">
+          Filtrar </button> <!--button class="tablinks" tab="Download" tabid="conllu">
+          Baixar </button--></div>
       <div class="tabcontent tabOptions" id="ver"> <br>
       <br>
       <br>
       <div class="tooltip"><a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer">Abrir inquérito para múltiplas sentenças</a><div class="tooltiptext">Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.</div></div>
       <div class="inqueritoSome" style="display:none"><ul><li>De: <input type="number" style="width:60px;" value="1" class="minInquerito"> Até: <input type="number" style="width:60px;" value="20" class="maxInquerito"> <input type="button" value="Abrir inqueritos" onclick="$('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li></ul></div>
-      <!--br>
-      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();">Selecionar múltiplas sentenças</a-->
+      <br>
+      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();">Selecionar múltiplas sentenças</a>
       <div class="selectSome" style="display:none"><ul><li>De: <input type="number" style="width:60px;" value="1" class="minSelect"> Até: <input type="number" style="width:60px;" value="20" class="maxSelect"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(parseInt($('.minSelect').val()) -1, parseInt($('.maxSelect').val())).prop('checked', true);"></li></ul></div>
       <br>
-      <!--a style="cursor:pointer" onclick="tudo('marcar')">Selecionar todas as sentenças</a>
+      <a style="cursor:pointer" onclick="tudo('marcar')">Selecionar todas as sentenças</a>
       <br>
       <a style="cursor:pointer" onclick="tudo('desmarcar')">Deselecionar todas as sentenças</a>
-      <br-->
+      <br>
       <a class="exportHtml" style="cursor:pointer">Exportar resultados para .html</a>
       <br>
       <a onclick="tudo('abrir')" style="cursor:pointer">Abrir anotação de todas as sentenças</a>
@@ -98,7 +103,8 @@
         <form action="../../cgi-bin/filtrar.cgi" method="POST"> <p><label for="pesquisa">
           <ul>
           <li>A opção de filtrar retira frases dessa página e as coloca em uma página à parte, com um nome que você decidir.</li>
-          <li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</li>
+          <!--li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</!--li-->
+          <li>Para adicionar frases a um filtro já existente, basta escolher o mesmo nome para o filtro.</li>
           <li>Você pode realizar filtros de duas formas:</li>
             <ul>
               <li><a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor">Filtrar com uma nova expressão de busca</a></li>
@@ -111,15 +117,25 @@
                   <input id="pesquisa_filtro" name="pesquisa" type="text" required></label>
                   <br><br> <label for="nome_pesquisa">Nome do filtro (opcional):<br>
       <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label>
-                  <br> <input id="filtrar"
-      value="Filtrar" class="btn-gradient orange small" style="margin-left:0px; margin-top:15px;" type="submit"><br>
+                  <br><br>
+                  <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
+                          
+                  </ul>
+                  <br><br>
+                  <input id="filtrar"
+      value="Filtrar" class="btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit"><br><br>
               </div>
               <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
               	<h3>Filtrar frases selecionadas</h3>
                   <label for="nome_pesquisa_sel">Nome do filtro (opcional):<br>
                   <input id="nome_pesquisa_sel" type="text" ></label>
-                  <br>
-                  <input id="filtrarsel" style="margin-left:0px; margin-top:15px;" value="Filtrar" class="btn-gradient orange small" type="button" onclick="excluir_selection()"></p></form>
+                  <br><br>
+                  <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
+                    
+                  </ul>
+                  <br><br>
+                  <input id="filtrarsel" style="margin-left:0px; margin-top:0px;" value="Filtrar" class="btn-gradient orange small" type="button" onclick="excluir_selection()"></p>
+                </form>
                 </div>
       </div>
       <div class="tabcontent tabDownload" id="conllu"> <br>
@@ -133,6 +149,7 @@ value="Baixar arquivo" class="btn-gradient orange mini" type="submit"></p></form
       <br>
       <br>
         <input type="hidden" name="indexSentences" class="indexSentences" value="0">
+        <input type="hidden" name="filtrado" class="filtrado" value="0">
         <div class="loadSentences">
         <!--SPLIT-->
         </div><br>

@@ -16,6 +16,7 @@ import cgi,cgitb
 cgitb.enable()
 import re, html, time
 from functions import prettyDate
+import json
 
 #conectado = False
 #if 'conectado' in cookie and cookie['conectado'] == True: conectado = True
@@ -44,19 +45,21 @@ def printar(coluna = '', valor = ''):
 		html = html.replace("<title>", f"<title>{len(inProgress)} busca{'s' if len(inProgress) > 1 else ''} em progresso - ")
 		novo_html += "<h2>Buscas em progresso:</h2><small><a href='javascript:location.reload()'>Atualizar</a></small><div class=\"container-lr\"><table>{0}</table></div>".format(''.join(inProgress)) + "<br>"
 
+	filtros_json = []
+	if os.path.isfile("../cgi-bin/filtros.json"):
+		with open("../cgi-bin/filtros.json") as f:
+			filtros_json = json.load(f)
+
 	html_query = ''
 	total = 0
 	for query in queries:
 		if query.strip():
 			if (coluna != ':' and valor and len(query.split('\t')) >= int(coluna) + 1 and (re.search(valor, query.split('\t')[int(coluna)], flags=re.I|re.M))) or (not coluna) or (coluna == ':' and re.search(valor, query, flags=re.I|re.M)):
 				filtros = ''
-				try:
-					if os.path.isdir(query.split('\t')[0].rsplit('.html', 1)[0]):
-						filtros = '<b>Filtros:</b><br>'
-						for arquivo in sorted(os.listdir(query.split('\t')[0].rsplit('.html', 1)[0]), key=lambda x: x.rsplit("_", 2)[1:]):
-							if not '_anterior' in arquivo:
-								filtros += '<a href="''' + query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo + '">' + open(query.split('\t')[0].rsplit('.html', 1)[0] + '/' + arquivo, 'r').read().split('<h1>')[1].split('1>')[0].split('>', 1)[1].rsplit('</h', 1)[0].replace('</span>', '').replace('<span id="combination">', "") + '</a><br>'
-				except: pass
+				if query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1] in filtros_json:
+					filtros = '<b>Filtros (' + str(len([x for filtro in filtros_json[query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1]]['filtros'] for x in filtros_json[query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1]]['filtros'][filtro]['sentences']])) + '):</b><br>'
+					for filtro in filtros_json[query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1]]['filtros']:
+						filtros += '<a target="_blank" href="../cgi-bin/filtrar.cgi?action=view&html=' + query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1] + '&filtro=' + filtro + '">' + filtro + ' ('+ str(len(filtros_json[query.split('\t')[0].rsplit('.html', 1)[0].rsplit("/", 1)[1]]['filtros'][filtro]['sentences'])) + ')</a><br>'
 				html_query += '''<div class="container-lr"><table><tr><td style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><p style="padding-top:0px; padding-bottom:0px; max-width: 40vw; word-wrap: break-word;"><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p></td></tr></table><table><tr><td style="max-width: 40vw; word-wrap: break-word;"><div class="tooltip" style="max-width: 40vw; word-wrap: break-word; display: inline-block;">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3]) +1].split('<h4>')[0] + '''</span></div></td></tr><tr><td><a href="#" onclick="document.getElementById('coluna').value = '5'; document.getElementById('valor').value = \'''' + query.split('\t')[5] + '''\'; document.getElementById('pesquisa').submit();">''' + query.split('\t')[5] + '''</a><br><small>''' + prettyDate(query.split('\t')[6].replace("_", " ")).beautifyDateDMAH() + '''</small></td><td style="max-width: 20vw; word-wrap: break-word;">''' + filtros + '''</td></tr></table></div>\n'''
 				# if conectado else '''<div class="container-lr" ><p><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p><p><div class="tooltip" style="display: inline-block">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3])].split('<h4>')[0] + '''</span></div></p><small><p>''' + query.split('\t')[5] + '''</p><p>''' + query.split('\t')[6] + '''</p></small></div>\n''' # &nbsp;&nbsp;&nbsp;&nbsp;
 				total += 1

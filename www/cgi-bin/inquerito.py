@@ -24,6 +24,7 @@ import validar_UD
 from credenciar import LOGIN
 import interrogar_UD
 import variables
+import json
 
 arquivos = list()
 for i, arquivo in enumerate(os.listdir('../interrogar-ud/conllu')):
@@ -154,10 +155,23 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
 elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form['action'].value == 'script':
 	inqueritos = open('../interrogar-ud/inqueritos.txt').read().splitlines()
 
+	nome_interrogatorio = form['nome_interrogatorio'].value
+	link_interrogatorio = form['link_interrogatorio'].value.rsplit(".", 1)[0].rsplit("/", 1)[1]
+
+	filtros = []
+	if os.path.isfile("../cgi-bin/filtros.json"):
+		with open("../cgi-bin/filtros.json") as f:
+			filtros = json.load(f)
+		if link_interrogatorio in filtros:
+			filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]
+		else:
+			filtros = []
+
 	#pega os headers
 	headers = list()
 	for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value)['output']:
-		headers.append("# text = " + sentence['resultadoEstruturado'].text)	
+		if sentence['resultadoEstruturado'].sent_id not in filtros:
+			headers.append("# text = " + sentence['resultadoEstruturado'].text)	
 
 	if form['executar'].value == 'sim':
 		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
