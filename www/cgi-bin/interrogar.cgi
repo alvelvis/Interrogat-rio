@@ -35,7 +35,7 @@ def sendRequestInterrogar():
 
 	with open("../interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
-		criteriosBusca = [x + "<br>[<a href='#criterio_-1'>Voltar ao menu</a>]" for x in criteriosBusca if x.strip()]
+		criteriosBusca = [x + "<br>[<a href='#criterio_-1'>Subir</a>]" for x in criteriosBusca if x.strip()]
 
 	paginaHTML[0] += "\n".join(["<div class=container-lr id=criterio_{0}>{1}</div>".format(i-1, criterio) for i, criterio in enumerate(criteriosBusca)])
 

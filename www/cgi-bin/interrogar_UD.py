@@ -231,7 +231,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 	start = time.time()
 	if criterio == 5:
 		pesquisa = parametros
-		casos = 0
 
 		pesquisa = pesquisa.replace(" = ", " == ")
 		pesquisa = pesquisa.replace(" @", " ")
@@ -288,16 +287,17 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 		#agilizado = corpus.sentences.values()
 		agilizado = filter(lambda x: all(re.search(y, x.to_str()) for y in agilizar), corpus.sentences.values())
 		#print(agilizado)
-
+		casos = []
 		for sentence in agilizado:
 			if limit and limit == len(output):
 				break
-			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str()"
+			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str();"
 			
 			condition += '''
 for ''' + identificador + ''' in sentence.tokens:
 	try:
 		if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :
+			sentence2.metadados['corresponde'] = 1
 			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
 			sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
 	'''#try por causa de não ter um next_token no fim de sentença, por ex.
@@ -308,20 +308,26 @@ for ''' + identificador + ''' in sentence.tokens:
 			
 			condition += '''
 			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
-			final = sentence2.metadados_to_str() + "\\n" + sentence2.print
-			final = final.splitlines()
-			arroba = '''+arroba+'''.id
-			for l, linha in enumerate(final):
-				if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
-					final[l] = "<b>" + final[l] + "</b>"
-			final = "\\n".join(final)'''
+			'''
 
 			exec(condition + '''
-			output.append(final)
+			casos.append(1)
+			arroba = '''+arroba+'''.id
+			sentence2.print = sentence2.print.splitlines()
+			for l, linha in enumerate(sentence2.print):
+				if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
+					sentence2.print[l] = "<b>" + sentence2.print[l] + "</b>"
+			sentence2.print = "\\n".join(sentence2.print)
+			
 	except Exception as e:
 		print(e)
-		pass''')
+		pass
+if 'corresponde' in sentence2.metadados:
+	sentence2.metadados['corresponde'] = ""
+	final = sentence2.metadados_to_str() + "\\n" + sentence2.print
+	output.append(final)''')
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
+		casos = len(casos)
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	if criterio not in [5]:
 		for a, sentence in enumerate(output):
@@ -346,7 +352,7 @@ for ''' + identificador + ''' in sentence.tokens:
 			'resultadoEstruturado': estruturado,
 		}
 	#sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
-
+	
 	return {'output': output, 'casos': casos}
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web

@@ -143,7 +143,7 @@ class Sentence:
 		return "\n".join([tok.to_str() for tok in self.tokens])
 
 	def metadados_to_str(self):
-		return "\n".join(["# " + x + " = " + self.metadados[x] for x in self.metadados])
+		return "\n".join(["# " + x + " = " + self.metadados[x] for x in self.metadados if self.metadados[x]])
 
 	def to_str(self):
 		return self.metadados_to_str() + "\n" + self.tokens_to_str()
