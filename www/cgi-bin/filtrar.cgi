@@ -37,7 +37,7 @@ if not 'pesquisa' in form and not 'action' in form:
 	html += '</form></body>'
 	print(html)
 
-elif not 'action' in form or form['action'].value not in ['desfazer', 'view', 'remove']:
+elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 'remove']:
 
 	if LOGIN:
 		if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
@@ -79,9 +79,10 @@ elif not 'action' in form or form['action'].value not in ['desfazer', 'view', 'r
 		
 	if not pagina_html in filtros:
 		filtros[pagina_html] = {'ud': ud, 'filtros': {}}
-	if not nome_filtro in filtros[pagina_html]:
-		filtros[pagina_html]['filtros'][nome_filtro] = {'criterio': int(criterio), 'parametros': parametros, 'sentences': []}
+	if not nome_filtro in filtros[pagina_html]['filtros']:
+		filtros[pagina_html]['filtros'][nome_filtro] = {'parametros': [], 'sentences': []}
 	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id if 'sent_id' in x['resultadoEstruturado'].metadados else x['resultadoEstruturado'].text for x in resultados['output']] if y not in filtros[pagina_html]['filtros'][nome_filtro]['sentences']])
+	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append(criterio + ' ' + parametros)
 
 	with open("../cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
@@ -118,18 +119,16 @@ elif form['action'].value == 'view':
 
 	num_filtros = len(filtros[nome_html]['filtros'][nome_filtro]['sentences'])
 	ud = filtros[nome_html]['ud']
-	criterio = filtros[nome_html]['filtros'][nome_filtro]['criterio']
-	parametros = filtros[nome_html]['filtros'][nome_filtro]['parametros']
+	parametros = "\n".join(filtros[nome_html]['filtros'][nome_filtro]['parametros'])
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
-	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' href='../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro}'>[Desfazer filtro]</a> <a href='#' onclick='window.close()'>[Fechar página]</a><br><br>{criterio} {parametros}<br><br>Busca inicial: <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>Corpus: <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
+	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' href='../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro}'>[Desfazer filtro]</a> <a href='#' onclick='window.close()'>[Fechar página]</a><br><br>{parametros}<br><br>Busca inicial: <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>Corpus: <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
 		nome_filtro=nome_filtro,
 		len_filtros=num_filtros,
 		nome_html=nome_html,
 		ud=ud,
-		criterio=criterio,
 		parametros=parametros,
 	)
 
