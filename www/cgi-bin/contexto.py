@@ -22,18 +22,26 @@ sent_id = form['sent_id'].value if 'sent_id' in form else ""
 id = form['id'].value if 'id' in form else ""
 conllu = form['corpus'].value
 
-if sent_id:
-    if '-' in sent_id and re.search(r'^\d+$', sent_id.rsplit('-', 1)[1]):
-        contextoEsquerda = [sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) - 1), corpus.sentences[sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) - 1)].text] if sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) - 1) in corpus.sentences else ["", ""]
-        contextoDireita = [sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) + 1), corpus.sentences[sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) + 1)].text] if sent_id.rsplit('-', 1)[0] + '-' + str(int(sent_id.rsplit('-', 1)[1]) + 1) in corpus.sentences else ["", ""]
+numero = re.search(r'^\d+$', sent_id.rsplit('-', 1)[1])[0] if '-' in sent_id else id
+identificador = sent_id.rsplit("-", 1)[0] + "-" if '-' in sent_id else ""
 
-    elif re.search(r'^\d+$', sent_id):
-        contextoEsquerda = [str(int(sent_id) - 1), corpus.sentences[str(int(sent_id) - 1)].text] if str(int(sent_id) - 1) in corpus.sentences else ["", ""]
-        contextoDireita = [str(int(sent_id) - 1), corpus.sentences[str(int(sent_id) + 1)].text] if str(int(sent_id) + 1) in corpus.sentences else ["", ""]
+contextoEsquerda = []
+contextoDireita = []
 
-elif id:
-    if re.search(r'^\d+$', id):
-        contextoEsquerda = corpus.sentences[str(int(id) - 1)].text if str(int(id) - 1) in corpus.sentences else ""
-        contextoDireita = corpus.sentences[str(int(id) + 1)].text if str(int(id) + 1) in corpus.sentences else ""
+for i in range(int(numero)-1):
+    if identificador + str(i + 1) in corpus.sentences:
+        contextoEsquerda.append([identificador + str(i+1), corpus.sentences[identificador + str(i+1)].text])
 
-print(f'<title>Contexto - Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><br>Sent_id: {sent_id}<br><br>{contextoEsquerda[0]}: {contextoEsquerda[1]}<br><b>{sent_id}</b>: {corpus.sentences[sent_id].text}<br>{contextoDireita[0]}: {contextoDireita[1]}')
+i = int(numero)
+while True:
+    if identificador + str(i+1) in corpus.sentences:
+        contextoDireita.append([identificador + str(i+1), corpus.sentences[identificador + str(i+1)].text])
+        i += 1
+    else:
+        break
+
+html = [f'<title>Contexto - Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito">Pular para {sent_id or id}</a></h4>']
+[html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoEsquerda]
+html += [f"<hr><b> <div id='negrito'>{sent_id or id}: {corpus.sentences[sent_id].text or corpus.sentences[id].text}</div></b>"]
+[html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoDireita]
+print("".join(html))
