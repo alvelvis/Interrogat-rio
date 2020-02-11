@@ -124,7 +124,7 @@ Quero procurar por:<br><br>
 <a class="addCondition" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition" title="Limpar expressão de busca" >[ X ]</a>
 <br>
 
-<h4 onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer">Como funciona?</a></h4>
+<br><hr><b><div onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer">Como funciona?</a></div></b>
 <ol type="1" class="construtorHelp" style="display:none">
     <li>Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
     <li>Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
