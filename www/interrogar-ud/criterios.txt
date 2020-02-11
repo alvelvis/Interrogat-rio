@@ -6,21 +6,27 @@
     <li>Ciente de que o código fonte é aberto e está disponível no <a target="_blank" href="https://github.com/alvelvis/interrogat-rio">Github</a>, qualquer grupo pode manter sua própria versão do Interrogatório e/ou da ET :)</li>
 </ul-->
 <!--h3>Por onde começar</h3-->
+Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.
+<br>Para começar a interrogar algum corpus, siga um dos caminhos abaixo:
 <ul>
     <li>Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
-    <li>Buscas complexas: <a title="Ir para interface" href="#interactive">Construa expressões de busca interativamente</a></li>
+    <li>Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="toggleCriteria">Construa expressões de busca interativamente</a></li>
     <li>Para experientes: Utilize algum dos critérios de busca</li>
     <ul>
-        <li><a href="#criterio_1">Critério 1: Regex</a></li>
-        <li><a href="#criterio_2">Critério 2: Ausência de B apontando para A</a></li>
-        <li><a href="#criterio_3">Critério 3: Regex Independentes</a></li>
-        <li><a href="#criterio_4">Critério 4: Pais e filhos</a></li>
-        <li><a href="#criterio_5">Critério 5: Python</a></li>
+        <li><a href="#criterio_1" class="toggleCriteria" criterio="1">Critério 1: Regex</a></li>
+        <li><a href="#criterio_2" class="toggleCriteria" criterio="2">Critério 2: Ausência de B apontando para A</a></li>
+        <li><a href="#criterio_3" class="toggleCriteria" criterio="3">Critério 3: Regex Independentes</a></li>
+        <li><a href="#criterio_4" class="toggleCriteria" criterio="4">Critério 4: Pais e filhos</a></li>
+        <li><a href="#criterio_5" class="toggleCriteria" criterio="5">Critério 5: Python</a></li>
     </ul>
     <li>Para experts:</u> <a title="Abrir interface" style="cursor:pointer;" onclick="$('.queryString').hide(); $('.scriptQuery').show(); $('.toggleSalvar').click(); ">Escreva seu próprio script de busca</a></li>
 </ul>
-<h3>Links úteis:</h3>
-<ul>
+<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer">Atualizações (8/2/20)</a></h3>
+<ul class="atualizacao">
+    <li>O sistema de filtrar sentenças foi reformulado</li>
+</ul>
+<h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer">Links úteis</a></h3>
+<ul class="linksUteis">
     <li><a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a></li>
     <li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos finalizados</a></li>
     <li><a href="http://comcorhd.letras.puc-rio.br/julgamento" target="_blank">Julgamento - avaliação de corpora anotados</a></li>
@@ -29,9 +35,9 @@
 </ul>
 
 !@#<a id="interactive"></a>
-<h2>Construtor de expressões de busca</h2>
+<h3>Construtor de expressões de busca</h3>
 
-<h3>Quero procurar por:</h3>
+Quero procurar por:<br><br>
 <select title="Token/palavra que será avaliado nesta condição" class="token">
     <option title="Token principal">token</option>
     <option title="Pai do token">head_token</option>
@@ -117,12 +123,12 @@
 <a class="addCondition" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition" title="Limpar expressão de busca" >[ X ]</a>
 <br>
 
-<h3>Como funciona, em 5 passos:</h3>
-<ol type="1">
+<h4 onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer">Como funciona?</a></h4>
+<ol type="1" class="construtorHelp" style="display:none">
     <li>Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
     <li>Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
-    <li>Ao clicar no botão <b>OK</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.</li>
-    <li>Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o primeiro da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
+    <li>Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.</li>
+    <li>Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
     <li>Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 </ol>
 

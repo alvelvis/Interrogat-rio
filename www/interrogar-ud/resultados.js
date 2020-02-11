@@ -123,6 +123,8 @@ function carregarPosts(){
             $('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
             if (JSON.parse(data).pagina_filtros.length) {
                 $('.pagina_filtros').html('<li><h4>Filtros (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
+            } else {
+                $('.pagina_filtros_br').remove();
             };
             if (JSON.parse(data).noMore == true){
                 $('#loadingGif').attr("src", "");
@@ -153,6 +155,11 @@ function scrollPosts(){
 };
 
 $(document).ready(function(){
+
+    $('.toggleCriteria').click(function(){
+        $('.criterio').hide();
+        $('#criterio_' + $(this).attr('criterio')).show();
+    });
 
     $('.exportHtml').click(function(){
         if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){

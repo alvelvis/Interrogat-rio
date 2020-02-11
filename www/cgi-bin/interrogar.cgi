@@ -35,9 +35,9 @@ def sendRequestInterrogar():
 
 	with open("../interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
-		criteriosBusca = [x + "<br>[<a href='#criterio_-1'>Subir</a>]" for x in criteriosBusca if x.strip()]
+		criteriosBusca = [("[<a href='#' class='toggleCriteria' criterio='-1'>Voltar</a>]<br>" if i != 0 else "") + x for i, x in enumerate(criteriosBusca) if x.strip()]
 
-	paginaHTML[0] += "\n".join(["<div class=container-lr id=criterio_{0}>{1}</div>".format(i-1, criterio) for i, criterio in enumerate(criteriosBusca)])
+	paginaHTML[0] += "\n".join(["<div class='container-lr criterio' {2} id=criterio_{0}>{1}</div>".format(i-1, criterio, " style='display:none'" if i-1 != -1 else "") for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
 	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
@@ -174,7 +174,7 @@ class paginaHtml():
 		criterios = [x for x in criterios if x.strip()]
 		
 		refazerPesquisa = '<br>Refazer busca</a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><div class=tooltip style="max-width: 60vw; word-wrap: break-word;"><a class="refazerPesquisa" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div>' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
 
 		return arquivoHtml

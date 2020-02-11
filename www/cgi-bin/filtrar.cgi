@@ -132,9 +132,9 @@ elif form['action'].value == 'view':
 		parametros=parametros,
 	)
 
+	corpus = estrutura_ud.Corpus(recursivo=False)
+	corpus.load(f"../interrogar-ud/conllu/{ud}")
 	for sentence in sentences:
-		corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sentence)
-		corpus.load(f"../interrogar-ud/conllu/{ud}")
 		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1); window.location=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\'" title="Retornar esta sentença para a busca inicial" style="cursor:pointer"><font color="red">[x]</font></a> <b>{sentence}</b>: {text}'.format(
 			sentence=corpus.sentences[sentence].sent_id, 
 			text=corpus.sentences[sentence].text,
