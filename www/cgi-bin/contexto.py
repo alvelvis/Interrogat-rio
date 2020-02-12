@@ -40,7 +40,7 @@ while True:
     else:
         break
 
-html = [f'<title>Contexto - Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito">Pular para {sent_id or id}</a></h4>']
+html = [f'<title>Contexto: Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito" style="color:blue">Pular para {sent_id or id}</a></h4>']
 [html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoEsquerda]
 html += [f"<hr><b> <div id='negrito'>{sent_id or id}: {corpus.sentences[sent_id].text or corpus.sentences[id].text}</div></b>"]
 [html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoDireita]

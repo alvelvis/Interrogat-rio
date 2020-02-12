@@ -64,7 +64,7 @@ def printar(coluna = '', valor = ''):
 				# if conectado else '''<div class="container-lr" ><p><h3><a href="''' + query.split('\t')[0] + '''">''' + query.split('\t')[1].replace('<','&lt;').replace('>','&gt;') + ''' (''' + query.split('\t')[2] + ''')</a> <!--a class="close-thik" href="#" onclick='apagar("''' + query.split('\t')[0].split('resultados/')[1].split('.html')[0] + '''")'></a--></h3></p><p><div class="tooltip" style="display: inline-block">''' + query.split('\t')[3] + ''' ''' + query.split('\t')[4].replace('<','&lt;').replace('>','&gt;') + '''<span class="tooltiptext">''' + criterios[int(query.split('\t')[3])].split('<h4>')[0] + '''</span></div></p><small><p>''' + query.split('\t')[5] + '''</p><p>''' + query.split('\t')[6] + '''</p></small></div>\n''' # &nbsp;&nbsp;&nbsp;&nbsp;
 				total += 1
 
-	novo_html = html.split('<!--SPLIT-->')[0] + novo_html + '<h2>Interrogações: ' + str(total) + '</h2>' + html_query + html.split('<!--SPLIT-->')[1]
+	novo_html = html.split('<!--SPLIT-->')[0] + novo_html + '<h2>Buscas: ' + str(total) + '</h2>' + html_query + html.split('<!--SPLIT-->')[1]
 
 	print(novo_html)
 

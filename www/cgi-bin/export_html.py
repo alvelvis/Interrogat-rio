@@ -36,7 +36,7 @@ if nome not in fastSearch:
     ocorrencias = [x for x in ocorrencias if link not in filtros or x['resultadoEstruturado'].sent_id not in [x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']]]
 numeroOcorrencias = len(ocorrencias)
 
-html = f"<title>Exportar resultados para .html - Interrogatório</title><h1>Exportar resultados para .html</h1><a href='javascript:window.close()'>Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href='../interrogar-ud/conllu/{corpus}' download>{corpus}</a><br>Busca: <a target='_blank' href='../cgi-bin/interrogar.cgi?corpus={corpus}&params={pesquisa}'>{pesquisa}</a><br>Resultados: {numeroOcorrencias_antes}"
+html = f"<title>Exportar resultados para .html: Interrogatório</title><h1>Exportar resultados para .html</h1><a href='javascript:window.close()'>Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href='../interrogar-ud/conllu/{corpus}' download>{corpus}</a><br>Busca: <a target='_blank' href='../cgi-bin/interrogar.cgi?corpus={corpus}&params={pesquisa}'>{pesquisa}</a><br>Resultados: {numeroOcorrencias_antes}"
 if nome not in fastSearch:
     if filtros and link in filtros:
         html += f"<br>Filtros: {len([x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']])}"

@@ -75,9 +75,9 @@ class Stand:
 				self.tokens[tok.dephead].children.append(tok)
 
 	def _to_str(self, dephead, inner=0, child=False):
-		space = " │ " * inner
+		space = "   " * inner
 		last = '└' if child else '─'
-		rep = [space + ' ' + last + ' "' + " ".join([dephead.word + '"', dephead.upos, dephead.deprel])]
+		rep = ['{:4} '.format(str(dephead.id)) + space + ' ' + last + ' "' + " ".join([dephead.word + '"', dephead.upos, dephead.deprel])]
 
 		for child in dephead.children:
 			rep.append(self._to_str(child, inner+1, child=True))
@@ -135,4 +135,4 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	forest.build(sentence.tokens_to_str())
 
 	print('''<html><head><title>Visualizar árvore: Interrogatório</title><meta charset="UTF-8" name="viewport"><style>body { width: 90%; margin: 20px auto; }</style></head><body><h1>Visualizar árvore</h1><hr><a href="#" onclick="window.close()">Fechar</a><br><br>
-	''' + form['conllu'].value + '<pre style="font-size: 14px; line-height: 1.5;">' + sentence.text + "\n\n" + forest.to_str() + '</pre></body></html>')
+	''' + form['conllu'].value + "<br><br>" + sentence.text + '<pre style="font-size: 14px; line-height: 1.5;">' + forest.to_str() + '</pre></body></html>')

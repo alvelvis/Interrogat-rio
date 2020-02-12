@@ -211,7 +211,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 			with open("../cgi-bin/error.log", "r") as f:
 				print(f.read().splitlines()[-1])
 				exit()
-		html = f'<title>Simulação de correção em lote</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
+		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
 		<br>Nome da correção: ' + form['scriptName'].value + '\
 		<br>Corpus: <a target="_blank" href="../interrogar-ud/conllu/' + form['conllu'].value + '" download>' + form['conllu'].value + '</a>\
 		<hr>'

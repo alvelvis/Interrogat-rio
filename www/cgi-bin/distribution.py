@@ -88,7 +88,7 @@ pagina = '''
 	<script src="../interrogar-ud/jquery.min.js"></script>
 	<script src="../interrogar-ud/resultados.js?version=12"></script>
 '''
-pagina += "<title>Distribuição de " + form["coluna"].value + "</title>"
+pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
 pagina += '<a href="#" onclick="window.close()">Fechar</a><br><br>Relatório gerado dia ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
 pagina += f"<hr>Busca: <a href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + form["expressao"].value + "</a><br>"
