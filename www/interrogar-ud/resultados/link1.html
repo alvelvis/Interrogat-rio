@@ -124,8 +124,9 @@
                           
                   </ul>
                   <br><br>
+                  <input type=hidden class="pesquisa_original" name="pesquisa_original" value="">
                   <input id="filtrar"
-      value="Filtrar" class="btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit"><br><br>
+      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit"><br><br>
               </div>
               <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
               	<h3>Filtrar frases selecionadas</h3>
