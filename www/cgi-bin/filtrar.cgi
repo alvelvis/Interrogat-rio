@@ -17,6 +17,9 @@ from functions import tabela, prettyDate
 import json
 from credenciar import LOGIN
 from functions import fromInterrogarToHtml
+import html as web
+import sys
+import pickle
 
 from estrutura_dados import slugify as slugify
 
@@ -70,6 +73,13 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		nome_filtro = form['nome_pesquisa'].value
 
 	resultados = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(criterio), parametros)
+	if not os.path.isdir('../cgi-bin/json'):
+		os.mkdir('../cgi-bin/json')
+	try:
+		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
+			pickle.dump(resultados, f)
+	except:
+		pass
 
 	if os.path.isfile("../cgi-bin/filtros.json"):
 		with open("../cgi-bin/filtros.json", "r") as f:
@@ -81,7 +91,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		filtros[pagina_html] = {'ud': ud, 'filtros': {}}
 	if not nome_filtro in filtros[pagina_html]['filtros']:
 		filtros[pagina_html]['filtros'][nome_filtro] = {'parametros': [], 'sentences': []}
-	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id if 'sent_id' in x['resultadoEstruturado'].metadados else x['resultadoEstruturado'].text for x in resultados['output']] if y not in filtros[pagina_html]['filtros'][nome_filtro]['sentences']])
+	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id if 'sent_id' in x['resultadoEstruturado'].metadados else x['resultadoEstruturado'].text for x in resultados['output']] if y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
 	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append(criterio + ' ' + parametros)
 
 	with open("../cgi-bin/filtros.json", "w") as f:
@@ -108,7 +118,7 @@ elif form['action'].value == 'desfazer':
 	with open("../cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 
-	print(f"<script>window.location = '../interrogar-ud/resultados/{nome_html}.html'</script>")
+	print(f"<script>window.close();</script>//window.location = '../interrogar-ud/resultados/{nome_html}.html'</script>")
 
 elif form['action'].value == 'view':
 	nome_html = form['html'].value
@@ -125,21 +135,36 @@ elif form['action'].value == 'view':
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
 	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' href='../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro}'>[Desfazer filtro]</a> <a href='#' onclick='window.close()'>[Fechar página]</a><br><br>{parametros}<br><br>Busca inicial: <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>Corpus: <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
-		nome_filtro=nome_filtro,
+		nome_filtro=web.escape(nome_filtro),
 		len_filtros=num_filtros,
 		nome_html=nome_html,
 		ud=ud,
 		parametros=parametros,
 	)
 
-	corpus = estrutura_ud.Corpus(recursivo=False)
-	corpus.load(f"../interrogar-ud/conllu/{ud}")
-	for sentence in sentences:
-		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1); window.location=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\'" title="Retornar esta sentença para a busca inicial" style="cursor:pointer"><font color="red">[x]</font></a> <b>{sentence}</b>: {text}'.format(
-			sentence=corpus.sentences[sentence].sent_id, 
-			text=corpus.sentences[sentence].text,
+	resultados = []
+	sentences_ja_filtrados = []
+	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
+		if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
+			with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
+				busca = pickle.load(f)
+		else:
+			busca = interrogar_UD.main(f"../interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
+		for x in busca['sentences']:
+			if x in sentences and x not in sentences_ja_filtrados:
+				resultados.append(busca['output'][busca['sentences'][x]]['resultadoAnotado'])
+				sentences_ja_filtrados.append(x)
+	
+	total = len(resultados)
+	for i, resultado in enumerate(resultados):
+		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' title="Retornar esta sentença para a busca inicial" style="cursor:pointer"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><a style="color:green; cursor:pointer;" onclick="$(this).siblings(\'.anno\').toggle();" title="Mostrar anotação">[+]</a> {text}<pre style="display:none" class="anno">{anno}</pre>'.format(
+			sentence=fromInterrogarToHtml(resultado.sent_id), 
+			text=fromInterrogarToHtml(resultado.text),
 			html=nome_html,
-			filtro=nome_filtro,
+			filtro=web.escape(nome_filtro),
+			agora=i+1,
+			maximo=total,
+			anno=fromInterrogarToHtml(resultado.tokens_to_str()),
 			)
 		html += "<hr></div>"
 

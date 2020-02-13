@@ -5,6 +5,7 @@ fi
 if [ -d .git ]; then
   git update-index --assume-unchanged www/cgi-bin/credenciar.py
   git update-index --assume-unchanged www/cgi-bin/variables.py
+  git pull
 fi
 
 cd www; python3 -m http.server --cgi; cd ..

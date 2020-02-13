@@ -12,12 +12,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 	parametros = parametros.strip()
 	
 	#Lê o arquivo UD
-	if criterio in [1, 2, 3, 4]:
+	if criterio in [1, 3, 4]:
 		import estrutura_dados
 		import estrutura_ud
 		qualquercoisa = estrutura_dados.LerUD(arquivoUD)
 
-	if criterio in [5]:
+	if criterio in [5, 2]:
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
 			with open(arquivoUD, "r") as f:
@@ -79,35 +79,21 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 
 		#Variáveis
 		y = parametros.split('#')[0].strip()
-		z = int(parametros.split('#')[1])
-		k = [x.strip() for x in parametros.split('#')[2].split('|')]
-		w = int(parametros.split('#')[3])
-		for sentence in qualquercoisa:
-			achei = 'nãoachei'
-			descarta = False
-			for i, linha in enumerate(sentence):
-				if isinstance(linha, list):
-					#print(linha)
-					if y == linha[z-1]:
-						achei = linha[0]
-						token = linha[1]
-						sentence[i] = '<b>' + '\t'.join(sentence[i]) + '</b>'
-						sentence[i] = sentence[i].split('\t')
-						#break
-			if achei != 'nãoachei':
-				for i, linha in enumerate(sentence):
-					if '# text' in linha:
-						sentence[i] = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', sentence[i])
-
-			if achei != 'nãoachei':
-				for linha in sentence:
-					if isinstance(linha, list):
-						for k_subitem in k:
-							if achei == linha[6] and k_subitem == linha[z-1]:
-								descarta = True
-				if descarta == False:
-					output.append(sentence)
-					casos += 1
+		z = int(parametros.split('#')[1].strip())
+		k = parametros.split('#')[2].strip()
+		w = int(parametros.split('#')[3].strip())
+		for sentence in corpus.sentences.values():
+			for token in sentence.tokens:
+				colunas = token.to_str().split("\t")
+				if any(colunas[z-1] == x for x in y.split("|")):
+					descarta = False
+					for _token in sentence.tokens:
+						_colunas = _token.to_str().split("\t")
+						if any(_colunas[w-1] == x for x in k.split("|")) and _token.dephead == token.id:
+							descarta = True
+					if not descarta:
+						output.append(re.sub(r"\b" + re.escape(token.word) + r"\b", "<b>" + token.word + "</b>", sentence.to_str()))
+						casos += 1
 					
 	#Regex Independentes
 	if criterio == 3:
@@ -329,7 +315,7 @@ if 'corresponde' in sentence2.metadados:
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
-	if criterio not in [5]:
+	if criterio not in [5, 2]:
 		for a, sentence in enumerate(output):
 			for b, linha in enumerate(sentence):
 				if isinstance(linha, list):
@@ -353,7 +339,11 @@ if 'corresponde' in sentence2.metadados:
 		}
 	#sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
 	
-	return {'output': output, 'casos': casos}
+	sentences = {}
+	if not fastSearch:
+		sentences = {x['resultadoEstruturado'].sent_id: i for i, x in enumerate(output)}
+
+	return {'output': output, 'casos': casos, 'sentences': sentences}
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web
 if __name__ == '__main__':

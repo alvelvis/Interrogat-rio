@@ -113,7 +113,7 @@ function carregarPosts(){
             'nomePesquisa': $('[name=nome_interrogatorio]').val(),
             'html': $('[name=link_interrogatorio]').val(),
             'conllu': $('[name=conllu]').val(),
-            'parametros': expressao.innerHTML,
+            'parametros': $('#expressao').text(),
             'script': $('[name=queryScript]').val(),
         },
         function(data) {
@@ -167,7 +167,7 @@ $(document).ready(function(){
         } else {
             url = '../../cgi-bin/export_html.py'
         };
-        window.open(url + "?corpus=" + corpus.innerHTML + "&params=" + expressao.innerHTML + "&html=" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val(), "_blank");
+        window.open(url + "?corpus=" + corpus.innerHTML + "&params=" + encodeURIComponent($('#expressao').text()) + "&html=" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val().replace(/#/%23), "_blank");
     });
 
     if($('#expressao').length){
@@ -350,7 +350,7 @@ $(document).ready(function(){
 function dist(coluna){
     if (! $('#pesquisa').length){
         document.getElementById("corpus_dist").value = document.getElementById("corpus").innerHTML
-        document.getElementById("expressao_dist").value = document.getElementById("expressao").innerHTML
+        document.getElementById("expressao_dist").value = $("#expressao").text()
         document.getElementById("link_dist").value = document.getElementsByName("link_interrogatorio")[0].value
         document.getElementById("combination_dist").value = document.getElementById("combination").innerHTML
     }
@@ -477,8 +477,13 @@ function mostraropt(nome, botao) {
 }
 
 function contexto(sent_id, id, corpus) {
-    window.open( 
-        "../cgi-bin/contexto.py?id=" + id + "&sent_id=" + sent_id + "&corpus=" + corpus, "_blank"); 
+    var url;
+    if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
+        url = '../cgi-bin/contexto.py';
+    } else {
+        url = '../../cgi-bin/contexto.py';
+    };
+    window.open(url + "?id=" + id + "&sent_id=" + sent_id + "&corpus=" + corpus, "_blank"); 
 }
 
 function apagar() {
