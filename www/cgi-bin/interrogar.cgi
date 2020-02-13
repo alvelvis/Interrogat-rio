@@ -40,7 +40,7 @@ def sendRequestInterrogar():
 	paginaHTML[0] += "\n".join(["<div class='container-lr criterio' {2} id=criterio_{0}>{1}</div>".format(i-1, criterio, " style='display:none'" if i-1 != -1 else "") for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
-	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
+	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option disabled selected value> -- escolha um corpus -- </option>" "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
 
 	refazerPesquisa = cgi.FieldStorage()['params'].value.replace("'", '"') if 'params' in cgi.FieldStorage() else ""
 	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
