@@ -14,6 +14,7 @@ import subprocess
 from functions import prettyDate
 import functions
 from chardet import detect
+from max_upload import max_filesize
 
 def get_encoding_type(file):
     with open(file, 'rb') as f:
@@ -66,8 +67,8 @@ elif not 'validate' in form:
     filesize = fileitem.tell() # Get the position of EOF.
     fileitem.seek(0) # Reset the file position to the beginning.
     f = os.path.basename(form['file'].filename)
-    if filesize > 2*10000000:
-        print("Arquivo maior que 20mb não suportado.")
+    if filesize > max_filesize:
+        print(f"Arquivo maior que {str(max_filesize)[:-6]}mb não suportado.")
     else:
         if form['file'].filename.endswith('.conllu'):
             if os.path.isfile('../interrogar-ud/conllu/' + slugify(f)):
