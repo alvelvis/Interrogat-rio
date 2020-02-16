@@ -10,4 +10,3 @@ if [ -d .git ]; then
 fi
 
 cd www; python3 -m http.server --cgi; cd ..
-
