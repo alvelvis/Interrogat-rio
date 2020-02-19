@@ -138,7 +138,7 @@ elif form['action'].value == 'view':
 
 	num_filtros = len(filtros[nome_html]['filtros'][nome_filtro]['sentences'])
 	ud = filtros[nome_html]['ud']
-	parametros = "\n".join(filtros[nome_html]['filtros'][nome_filtro]['parametros'])
+	parametros = "\n<br>".join(filtros[nome_html]['filtros'][nome_filtro]['parametros'])
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
