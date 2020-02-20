@@ -1,6 +1,15 @@
-$(window).on('beforeunload', function() {
+function loadingScreen(){
     $('#loading-bg').show();
     $('#loading-image').show();
+};
+
+function endLoadingScreen(){
+    $('#loading-bg').hide();
+    $('#loading-image').hide();
+};
+
+$(window).on('beforeunload', function() {
+    loadingScreen();
     $('.indexSentences').val('0');
     $('.filtrado').val('0');
     setTimeout(waitTooMuch, 20000);
@@ -60,13 +69,11 @@ function waitTooMuch(){
 };
 
 $(window).on('unload', function() {
-    $('#loading-bg').hide();
-    $('#loading-image').hide();
+    endLoadingScreen();
 });
 
 $(window).ready(function(){
-    $('#loading-bg').hide();
-    $('#loading-image').hide();
+    endLoadingScreen();
 });
 
 function pesquisaChange(){
@@ -101,6 +108,7 @@ $(document).on('keydown', function(e){
 
 function carregarPosts(){
     $(window).unbind('scroll');
+    $("title").text("Carregando | " + $("title").text());
     var url;
     if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
         url = '../cgi-bin/api.py'
@@ -117,6 +125,9 @@ function carregarPosts(){
             'script': $('[name=queryScript]').val(),
         },
         function(data) {
+            if ($("title").text().indexOf("Carregando | ") !== -1){
+                $("title").text($("title").text().split("Carregando | ")[1]);
+            };
             $('.loadSentences').append(JSON.parse(data).html);
             $('.indexSentences').val(JSON.parse(data).indexSentences);
             $('.filtrado').val(JSON.parse(data).filtrado);
