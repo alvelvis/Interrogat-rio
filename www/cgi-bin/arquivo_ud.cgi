@@ -36,6 +36,9 @@ def file_size(file_path):
 
 if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     html = open('../interrogar-ud/arquivo_ud.html', 'r').read()
+    if os.path.isdir("../../Julgamento") or os.path.isdir("../../../Julgamento"):
+        html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
+
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
 
