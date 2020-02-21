@@ -166,7 +166,7 @@ elif form['action'].value == 'view':
 	
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
-		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' title="Retornar esta sentença para a busca inicial" style="cursor:pointer"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><a style="color:green; cursor:pointer;" onclick="$(this).siblings(\'.anno\').toggle();" title="Mostrar anotação">[+]</a> {text}<pre style="display:none" class="anno">{anno}</pre>'.format(
+		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
 			sentence=fromInterrogarToHtml(resultado.sent_id), 
 			text=fromInterrogarToHtml(resultado.text),
 			html=nome_html,
