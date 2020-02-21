@@ -21,7 +21,7 @@ Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para s
     </ul>
     <li>Para experts:</u> <a title="Abrir interface" style="cursor:pointer;" onclick="$('.queryString').hide(); $('.scriptQuery').show(); $('.toggleSalvar').click(); ">Escreva seu próprio script de busca</a></li>
 </ul>
-<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer">Atualizações (8/2/20)</a></h3>
+<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer">Atualizações (8 de fevereiro de 2020)</a></h3>
 <ul class="atualizacao">
     <li>O sistema de filtrar sentenças foi totalmente reformulado</li>
     <li>Quando possível, "Mostrar contexto" permite a leitura de todas as sentenças</li>
