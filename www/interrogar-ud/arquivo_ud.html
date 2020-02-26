@@ -2,12 +2,13 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>Repositório: Interrogatório</title>
+    <title class="translateHtml">Repositório: Interrogatório</title>
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
     <script src="../interrogar-ud/resultados.js?version=12"></script>
+    <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
+    
   </head>
   <body>
       <div id="loading-bg"></div>
@@ -15,19 +16,22 @@
       <img id="loading-image-nobg" src="../interrogar-ud/loading4.gif" alt="Carregando">
       <div class="header">
       <!--h1>Interrogatório</h1-->
-      <h2><a href="../cgi-bin/interrogar.cgi">nova busca</a> - <a href="../cgi-bin/interrogatorio.cgi">buscas salvas</a> - gerenciar corpora</h2>
+      <h2><a href="../cgi-bin/interrogar.cgi" class="translateHtml">nova busca</a> - <a class="translateHtml" href="../cgi-bin/interrogatorio.cgi">buscas salvas</a> - <span class="translateHtml">gerenciar corpora</span></h2>
       </div>
     <div class="content">
-      <h2>Repositório</h2>
+      <h2 class="translateHtml">Repositório</h2>
       <hr>
-      <!--JULGAMENTOh2 style="padding:10px; background-color:orange; color:white;">Atenção: considere enviar um corpus pelo <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> para liberar funções extras da ET.</h2JULGAMENTO-->
-      <h3>Para alimentar o repositório:</h3>
+      <!--JULGAMENTOh2 style="padding:10px; background-color:orange; color:white;" class="translateHtml">Atenção: considere enviar um corpus pelo <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> para liberar funções extras da ET.</h2JULGAMENTO-->
+      <h3 class="translateHtml">Para alimentar o repositório:</h3>
       <ul>
-        <li>Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
-        <li>Você também pode enviar um arquivo em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">língua portuguesa</a>.</li>
+        <li class="translateHtml">Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
+        <li class="translateHtml">Você também pode enviar um arquivo em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">língua portuguesa</a>.</li>
       </ul>
-      <form action="../cgi-bin/arquivo_ud.cgi" method="post" enctype="multipart/form-data"> <label for="arquivo"><b>Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
-          <input name="file" onchange="if(/\.txt$/.test($(this).val())) { $('#submeter').val('Anotar e submeter'); $('#submeter').show(); } else {if(/\.conllu$/.test($(this).val())) { $('#submeter').val('Submeter corpus anotado'); $('#submeter').show(); } else { $('#submeter').hide(); }} " value="Escolher arquivo" required="required" type="file"> </label><br><br><input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" id=submeter type="submit"></form>
+      <form action="../cgi-bin/arquivo_ud.cgi" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
+        <input type=hidden class="anotaresubmeter translateVal" value="Anotar e submeter">
+        <input type=hidden class="submetercorpusanotado translateVal" value="Submeter corpus anotado">
+        <input type=hidden class="apagararquivo translateVal" value="Apagar arquivo">
+          <input name="file" onchange="if(/\.txt$/.test($(this).val())) { $('#submeter').val($('.anotaresubmeter').val()); $('#submeter').show(); } else {if(/\.conllu$/.test($(this).val())) { $('#submeter').val($('.submetercorpusanotado').val()); $('#submeter').show(); } else { $('#submeter').hide(); }} " value="Escolher arquivo" class="translateVal" required="required" type="file"> </label><br><br><input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit"></form>
       <br>
       <br>
       <form action="../cgi-bin/inquerito.py" method="POST" class="apagarCorpus">
@@ -37,7 +41,7 @@
       <!--SPLIT--> </div>
       <script>
       function apagar(conllu){
-      	if (confirm('Apagar arquivo "' + conllu + '"?')) {
+      	if (confirm($('.apagararquivo').val() + ' "' + conllu + '"?')) {
           $('.fieldUd').val(conllu);
           $('.apagarCorpus').submit();
       	};

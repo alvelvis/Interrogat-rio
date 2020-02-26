@@ -10,15 +10,15 @@ import functions
 modelo = functions.modelo
 udpipe = functions.udpipe
 
-html = '<html><head><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title>UDPipe: Interrogatório</title></head><body>'
+html = '<html><head><script src=\"../../interrogar-ud/jquery-latest.js\"></script><script src=\"../../interrogar-ud/resultados.js?version=15\"></script><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title class="translateHtml">UDPipe: Interrogatório</title></head><body>'
 
 if os.environ['REQUEST_METHOD'] == 'POST':
 	form = cgi.FieldStorage()
 	ud = form['conllu'].value
 	text = form['textheader'].value
 
-	html += '<style>body { width: 90%; margin: 20px auto; }</style><h1>UDPipe</h1><hr><a href="#" onclick="window.close()"">Fechar</a><br><br>'
-	html += 'Modelo: <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
+	html += '<style>body { width: 90%; margin: 20px auto; }</style><h1>UDPipe</h1><hr><a href="#" class="translateHtml" onclick="window.close();">Fechar</a><br><br>'
+	html += '<span class="translateHtml">Modelo:</span> <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
 	html += '<br>Corpus: <a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a>'
 
 	open('../cgi-bin/cru.txt', 'w').write(text.replace('"', '\\"'))

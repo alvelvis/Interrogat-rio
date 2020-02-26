@@ -24,13 +24,13 @@ corpus.load('../cgi-bin/' + corpusGenericoExpressoes)
 
 dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]['resultado']} for x in expressions]
 
-html = "<title>Banco de expressões de busca do critério 5: Python</title>\
+html = "<title class='translateHtml'>Banco de expressões de busca do critério 5: Python</title>\
     <body style='margin:10px auto; max-width:960px;'>\
-    <h1>Banco de expressões</h1>\
-    <a href='#' onclick='window.close()'>Fechar</a><br><br>Critério 5: Python<br>\
-        Página gerada dia " + prettyDate(datetime.now()).beautifyDateDMAH() \
+    <h1 class='translateHtml'>Banco de expressões</h1>\
+    <a href='#' class='translateHtml' onclick='window.close()'>Fechar</a><br><br><span class='translateHtml'>Critério 5: Python</span><br>\
+        <span class='translateHtml'>Página gerada dia</span> " + prettyDate(datetime.now()).beautifyDateDMAH() \
             + "<hr>\
-                <br><table style='margin:auto; border-collapse: collapse;' border='1'><tr><th>Expressão</th><th>Exemplo</th></tr>"
+                <br><table style='margin:auto; border-collapse: collapse;' border='1'><tr><th class='translateHtml'>Expressão</th><th class='translateHtml'>Exemplo</th></tr>"
 
 for expression in dictExpressions:
     sentence = estrutura_ud.Sentence(recursivo=False)

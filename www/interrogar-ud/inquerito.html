@@ -9,8 +9,8 @@
     <script src="../interrogar-ud/jquery.min.js"></script>
     <script src="../interrogar-ud/resultados.js?version=13"></script>
     <script src="../interrogar-ud/jquery-ui.min.js" type="text/javascript"></script>
-    <button onclick="topFunction()" id="myBtn" title="Voltar ao topo">Voltar ao topo</button>
-    <title>Sistema de inquéritos</title>
+    <button onclick="topFunction()" id="myBtn" class="translateHtml translateTitle" title="Voltar ao topo">Voltar ao topo</button>
+    <title class="translateHtml">Sistema de inquéritos</title>
 
   </head>
   <body>
@@ -35,15 +35,16 @@
         <p><input value="Abrir inquérito" class="btn-gradient blue" style="margin-left:0px"
 type="submit"> </p>
       </form-->
-      <p><h1>Relatório de inquéritos</h1></p>
+      <p><h1 class="translateHtml">Relatório de inquéritos</h1></p>
     </div>
+    <input type=hidden class="translateVal apagaretiquetaeinqueritos" value="Apagar a etiqueta e os inquéritos de">
     <div class="content">
     <!--SPLIT-->
     </div>
   </body>
 <script>
 function confirmar(etiqueta) {
-	if (confirm('Apagar a etiqueta "' + etiqueta + '" e seus respectivos inquéritos?') == true) {
+	if (confirm($('.apagaretiquetaeinqueritos').val() + ' "' + etiqueta + '"?') == true) {
 		return true;
 	}
 }

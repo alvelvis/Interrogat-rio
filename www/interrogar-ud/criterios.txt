@@ -1,85 +1,78 @@
-<h2>Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e revisão de corpora anotados</h2>
-<!--ul>
-    <li><b>Interrogatório</b> é parte da <a target="_blank" title="Site da ET" href="http://comcorhd.letras.puc-rio.br/recursos/">ET: Estação de Trabalho para busca, revisão e avaliação de corpora anotados</a>.</li>
-    <li>Neste site, você busca sentenças em corpora anotados, e pode também abrir inquéritos, isto é, alterar sua anotação, desde que possua <a target="_blank" title="Documentação do Interrogatório" href="http://github.com/alvelvis/Interrogat-rio/wiki">permissão especial</a>.</li>
-    <li>Qualquer um pode realizar buscas nos corpora que estão disponíveis no <a href="../cgi-bin/arquivo_ud.cgi">repositório</a> ou pode enviar seu próprio corpus, no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> ou em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" title="Bosque-UD" target="_blank">língua portuguesa</a>.</li>
-    <li>Ciente de que o código fonte é aberto e está disponível no <a target="_blank" href="https://github.com/alvelvis/interrogat-rio">Github</a>, qualquer grupo pode manter sua própria versão do Interrogatório e/ou da ET :)</li>
-</ul-->
-<!--h3>Por onde começar</h3-->
-Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.
-<br>Para começar a interrogar algum corpus, siga um dos caminhos abaixo:
+<h2 class="translateHtml">Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e revisão de corpora anotados</h2>
+<span class="translateHtml">Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.</span>
+<br><span class="translateHtml">Para começar a interrogar algum corpus, siga um dos caminhos abaixo:</span>
 <ul>
-    <li>Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
-    <li>Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="toggleCriteria">Construa expressões de busca interativamente</a></li>
-    <li>Para experientes: Utilize algum dos critérios de busca</li>
+    <li class="translateHtml">Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
+    <li class="translateHtml">Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a></li>
+    <li class="translateHtml">Para experientes: Utilize algum dos critérios de busca</li>
     <ul>
-        <li><a href="#criterio_1" class="toggleCriteria" criterio="1">Critério 1: Regex</a></li>
-        <li><a href="#criterio_2" class="toggleCriteria" criterio="2">Critério 2: Ausência de B apontando para A</a></li>
-        <li><a href="#criterio_3" class="toggleCriteria" criterio="3">Critério 3: Regex Independentes</a></li>
-        <li><a href="#criterio_4" class="toggleCriteria" criterio="4">Critério 4: Pais e filhos</a></li>
-        <li><a href="#criterio_5" class="toggleCriteria" criterio="5">Critério 5: Python</a></li>
+        <li><a href="#criterio_1" class="toggleCriteria translateHtml" criterio="1">Critério 1: Regex</a></li>
+        <li><a href="#criterio_2" class="toggleCriteria translateHtml" criterio="2">Critério 2: Ausência de B apontando para A</a></li>
+        <li><a href="#criterio_3" class="toggleCriteria translateHtml" criterio="3">Critério 3: Regex Independentes</a></li>
+        <li><a href="#criterio_4" class="toggleCriteria translateHtml" criterio="4">Critério 4: Pais e filhos</a></li>
+        <li><a href="#criterio_5" class="toggleCriteria translateHtml" criterio="5">Critério 5: Python</a></li>
     </ul>
-    <li>Para experts:</u> <a title="Abrir interface" style="cursor:pointer;" onclick="$('.queryString').hide(); $('.scriptQuery').show(); $('.toggleSalvar').click(); ">Escreva seu próprio script de busca</a></li>
+    <li class="translateHtml">Para experts:</u> <a title="Abrir interface" style="cursor:pointer;" onclick="$('.queryString').hide(); $('.scriptQuery').show(); $('.toggleSalvar').click(); ">Escreva seu próprio script de busca</a></li>
 </ul>
-<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer">Atualizações (8 de fevereiro de 2020)</a></h3>
+<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
-    <li>O sistema de filtrar sentenças foi totalmente reformulado</li>
-    <li>Quando possível, "Mostrar contexto" permite a leitura de todas as sentenças</li>
+    <li class="translateHtml">O sistema de filtrar sentenças foi totalmente reformulado</li>
+    <li class="translateHtml">Quando possível, "Mostrar contexto" permite a leitura de todas as sentenças</li>
 </ul>
-<h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer">Links úteis</a></h3>
+<h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
-    <li><a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a></li>
-    <li><a href="../cgi-bin/inquerito.py" target="_blank">Relatório de inquéritos finalizados</a></li>
-    <li><a href="http://comcorhd.letras.puc-rio.br/julgamento" target="_blank">Julgamento - avaliação de corpora anotados</a></li>
-    <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank">Código fonte do Interrogatório no Github</a></li>
-    <li><a target="_blank" href="http://comcorhd.letras.puc-rio.br/">Grupo de pesquisa ComCorHd/PUC-Rio</a></li>
+    <li><a href="../cgi-bin/arquivo_ud.cgi" class="translateHtml">Repositório dos corpora</a></li>
+    <li><a href="../cgi-bin/inquerito.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>
+    <li><a href="http://comcorhd.letras.puc-rio.br/julgamento" target="_blank" class="translateHtml">Julgamento - avaliação de corpora anotados</a></li>
+    <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank" class="translateHtml">Código fonte do Interrogatório no Github</a></li>
+    <li><a target="_blank" href="http://comcorhd.letras.puc-rio.br/" class="translateHtml">Grupo de pesquisa ComCorHd/PUC-Rio</a></li>
 </ul>
 
 !@#<a id="interactive"></a>
-<h3>Construtor de expressões de busca</h3>
+<h3 class="translateHtml">Construtor de expressões de busca</h3>
 
-Quero procurar por:<br><br>
-<select title="Token/palavra que será avaliado nesta condição" class="token">
-    <option title="Token principal">token</option>
-    <option title="Pai do token">head_token</option>
-    <option title="Token à direita">next_token</option>
-    <option title="Token à esquerda">previous_token</option>
+<span class="translateHtml">Quero procurar por:</span><br><br>
+<select title="Token/palavra que será avaliado nesta condição" class="translateTitle token">
+    <option class="translateTitle" title="Token principal">token</option>
+    <option class="translateTitle" title="Pai do token">head_token</option>
+    <option class="translateTitle" title="Token à direita">next_token</option>
+    <option class="translateTitle" title="Token à esquerda">previous_token</option>
 </select>
- cujo(a) 
-<select title="Anotação que será avaliada" class="atribute">
-    <option title="Forma da palavra">word</option>
-    <option title="Lema da palavra">lemma</option>
-    <option title="Classe gramatical">upos</option>
-    <option title="Classe gramatical específica">xpos</option>
-    <option title="Atributos morfológicos">feats</option>
-    <option title="Relação de dependência sintática">deprel</option>
-    <option title="Dependência específica">deps</option>
-    <option title="Miscelânea">misc</option>
-    <option title="Frase completa">text</option>
-    <option title="ID da sentença no corpus">sent_id</option>
+<span class="translateHtml">cujo(a)</span> 
+<select title="Anotação que será avaliada" class="translateTitle atribute">
+    <option class="translateTitle" title="Forma da palavra">word</option>
+    <option class="translateTitle" title="Lema da palavra">lemma</option>
+    <option class="translateTitle" title="Classe gramatical">upos</option>
+    <option class="translateTitle" title="Classe gramatical específica">xpos</option>
+    <option class="translateTitle" title="Atributos morfológicos">feats</option>
+    <option class="translateTitle" title="Relação de dependência sintática">deprel</option>
+    <option class="translateTitle" title="Dependência específica">deps</option>
+    <option class="translateTitle" title="Miscelânea">misc</option>
+    <option class="translateTitle" title="Frase completa">text</option>
+    <option class="translateTitle" title="ID da sentença no corpus">sent_id</option>
 </select>
- seja 
-<select title="Forma de avaliação da anotação selecionada" class="evaluation">
-    <option title="Igual">==</option>
-    <option title="Diferente">!=</option>
+<span class="translateHtml">seja</span> 
+<select title="Forma de avaliação da anotação selecionada" class="translateTitle evaluation">
+    <option class="translateTitle" title="Igual">==</option>
+    <option class="translateTitle" title="Diferente">!=</option>
 </select>
- <span class="ade"> a </span> 
-<input placeholder="Clique para sugestões" title="Valor que a anotação selecionada deve conter" list="possibleValues" class="value">
+ <span class="ade translateHtml"> a </span> 
+<input placeholder="Clique para sugestões" title="Valor que a anotação selecionada deve conter" list="possibleValues" class="translateTitle value">
 <datalist id="possibleValues">
-    <option value='ADJ' title="Adjetivo">
-    <option value='ADP' title="Preposição">
-    <option value='ADV' title="Advérbio">
-    <option value='AUX' title="Auxiliar">
-    <option value='CCONJ' title="Conjunção coordenativa">
-    <option value='DET' title="Determinante">
-    <option value='INTJ' title="Interjeição">
-    <option value='NOUN' title="Substantivo">
-    <option value='NUM' title="Numeral">
-    <option value='PART' title="Partícula">
-    <option value='PRON' title="Pronome">
-    <option value='PROPN' title="Nome próprio">
-    <option value='PUNCT' title="Pontuação">
-    <option value='SCONJ' title="Conjunção subordinativa">
+    <option value='ADJ' class="translateTitle" title="Adjetivo">
+    <option value='ADP' class="translateTitle" title="Preposição">
+    <option value='ADV' class="translateTitle" title="Advérbio">
+    <option value='AUX' class="translateTitle" title="Auxiliar">
+    <option value='CCONJ' class="translateTitle" title="Conjunção coordenativa">
+    <option value='DET' class="translateTitle" title="Determinante">
+    <option value='INTJ' class="translateTitle" title="Interjeição">
+    <option value='NOUN' class="translateTitle" title="Substantivo">
+    <option value='NUM' class="translateTitle" title="Numeral">
+    <option value='PART' class="translateTitle" title="Partícula">
+    <option value='PRON' class="translateTitle" title="Pronome">
+    <option value='PROPN' class="translateTitle" title="Nome próprio">
+    <option value='PUNCT' class="translateTitle" title="Pontuação">
+    <option value='SCONJ' class="translateTitle" title="Conjunção subordinativa">
     <option value='SYM'>
     <option value='VERB'>
     <option value='X'>
@@ -121,79 +114,79 @@ Quero procurar por:<br><br>
     <option value='vocative'>
     <option value='xcomp'>
 </datalist>
-<a class="addCondition" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition" title="Limpar expressão de busca" >[ X ]</a>
+<a class="addCondition translateTitle" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition translateTitle" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition translateTitle" title="Limpar expressão de busca" >[ X ]</a>
 <br>
 
-<br><hr><b><div onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer">Como funciona?</a></div></b>
+<br><hr><b><div onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer" class="translateHtml">Como funciona?</a></div></b>
 <ol type="1" class="construtorHelp" style="display:none">
-    <li>Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
-    <li>Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
-    <li>Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.</li>
-    <li>Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
-    <li>Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
+    <li class="translateHtml">Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
+    <li class="translateHtml">Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
+    <li class="translateHtml">Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.</li>
+    <li class="translateHtml">Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
+    <li class="translateHtml">Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 </ol>
 
-!@#<h3>Critério 1: Regex</h3>
-Se a expressão regular for encontrada em alguma sentença, retorná-la.
-<br><br>Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.
-<br>Dica 2: Em um arquivo no formato CoNLL-U, "\t" separa as colunas, e "\n", as palavras.
-<h4>Exemplos:</h4>
-1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".
+!@#<h3 class="translateHtml">Critério 1: Regex</h3>
+<span class="translateHtml">Se a expressão regular for encontrada em alguma sentença, retorná-la.</span>
+<br><br><span class="translateHtml">Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.</span>
+<br><span class="translateHtml">Dica 2: Em um arquivo no formato CoNLL-U, "\t" separa as colunas, e "\n", as palavras.</span>
+<h4 class="translateHtml">Exemplos:</h4>
+<span class="translateHtml">1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".</span>
 <ul><li>
 <a id="1" style="cursor:pointer" onclick="pesquisa('1')">1 (.*dizer.*)\n(.*PROPN)</a>
 </li></ul>
-2) Retornar sentenças com substantivos seguidos ou não de adjetivos, além de um nome próprio que seja aposto.
+<span class="translateHtml">2) Retornar sentenças com substantivos seguidos ou não de adjetivos, além de um nome próprio que seja aposto.</span>
 <ul><li>
 <a id="2" style="cursor:pointer" onclick="pesquisa('2')">1 (.*NOUN.*)(\n.*ADJ.*)*\n(.*PROPN.*appos)</a>
 </li></ul>
-3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "NUMMOD".
+<span class="translateHtml">3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "nummod".</span>
 <ul><li>
 <a id="nummod" style="cursor:pointer" onclick="pesquisa('nummod')">1 .*\t.*\t.*\tNUM\t(?!.*nummod)</a>
 </li></ul>
 
-!@#<h3>Critério 2: Ausência de B apontando para A</h3>
-Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.
-<br><br>Parâmetros: A#X#B#Y
-<br><br>Dica: O parâmetro B aceita o operador lógico '|' (ou).
-<h4>Exemplos:</h4>
-1) Retornar sentenças em que o 'root' não tenha nenhum 'nsubj' ou 'csubj' apontando para ele.
+!@#<h3 class="translateHtml">Critério 2: Ausência de B apontando para A</h3>
+<span class="translateHtml">Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.</span>
+<br><br><span class="translateHtml">Parâmetros: A#X#B#Y</span>
+<br><br><span class="translateHtml">Dica: O parâmetro B aceita o operador lógico '|' (ou).</span>
+<h4 class="translateHtml">Exemplos:</h4>
+<span class="translateHtml">1) Retornar sentenças em que o 'root' não tenha nenhum 'nsubj' ou 'csubj' apontando para ele.</span>
 <ul><li>
 <a id="3" style="cursor:pointer" onclick="pesquisa('3')">2 root#8#nsubj|csubj#8</a>
 </li></ul>
 
-!@#<h3>Critério 3: Regex Independentes</h3>
-Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.
-<br><br>Parâmetros:<br>Regex 1 :: Regex 2 :: . . . :: Regex N
-<br><br>Dica: Utilize '!' para negar uma expressão regular.
-<h4>Exemplos:</h4>
-1) Procurar por sentenças em que o 'root' seja 'VERB', e que não tenham nenhum 'nsubj' nem 'csubj'.
+!@#<h3 class="translateHtml">Critério 3: Regex Independentes</h3>
+<span class="translateHtml">Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.</span>
+<br><br><span class="translateHtml">Parâmetros:</span><br>Regex 1 :: Regex 2 :: . . . :: Regex N
+<br><br><span class="translateHtml">Dica: Utilize '!' para negar uma expressão regular.</span>
+<h4 class="translateHtml">Exemplos:</h4>
+<span class="translateHtml">1) Procurar por sentenças em que o 'root' seja 'VERB', e que não tenham nenhum 'nsubj' nem 'csubj'.</span>
 <ul><li>
 <a id="4" style="cursor:pointer" onclick="pesquisa('4')">3 VERB.*root::!nsubj::!csubj</a>
 </li></ul>
 
-!@#<h3>Critério 4: Pais e filhos</h3>
-Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).
-<br><br>Parâmetros:<br>Regex 1 :: Regex 2
-<br><br>Dica: Utilize '!' para negar a presença de um filho ou de um pai.
-<h4>Exemplos:</h4>
-1) Procurar por sentenças em que uma palavra com classe "NOUN" que também é sujeito esteja apontando para um "ADV".
+!@#<h3 class="translateHtml">Critério 4: Pais e filhos</h3>
+<span class="translateHtml">Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).</span>
+<br><br><span class="translateHtml">Parâmetros:</span><br>Regex 1 :: Regex 2
+<br><br><span class="translateHtml">Dica: Utilize '!' para negar a presença de um filho ou de um pai.</span>
+<h4><span class="translateHtml">Exemplos:</span></h4>
+<span class="translateHtml">1) Procurar por sentenças em que uma palavra com classe "NOUN" que também é sujeito esteja apontando para um "ADV".</span>
 <ul><li>
 <a id="5" style="cursor:pointer" onclick="pesquisa('5')">4 \tNOUN\t.*nsubj :: \tADV\t</a>
 </li></ul>
 
-!@#<h3>Critério 5: Python</h3>
-Realiza uma condição seguindo a sintaxe em Python.
+!@#<h3 class="translateHtml">Critério 5: Python</h3>
+<span class="translateHtml">Realiza uma condição seguindo a sintaxe em Python.</span>
 <br>
-Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.
-<br><br>Parâmetros:
-<br>Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.
-<br><br>São anotações de um token: <pre style="color:black">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
-Opcional: Utilize um "@" para indicar qual token deve ser negritado.
-<br>Dica: Todos os valores de uma condição são uma expressão regular (regex).
-<h4>Exemplos:</h4>
-1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).
+<span class="translateHtml">Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.</span>
+<br><br><span class="translateHtml">Parâmetros:</span>
+<br><span class="translateHtml">Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.</span>
+<br><br><span class="translateHtml">São anotações de um token:</span> <pre style="color:black" class="translateHtml">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
+<span class="translateHtml">Opcional: Utilize um "@" para indicar qual token deve ser negritado.</span>
+<br><span class="translateHtml">Dica: Todos os valores de uma condição são uma expressão regular (regex).</span>
+<h4 class="translateHtml">Exemplos:</h4>
+<span class="translateHtml">1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).</span>
 <ul><li>
 <a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
-Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.
+<span class="translateHtml">Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.</span>
 <br>

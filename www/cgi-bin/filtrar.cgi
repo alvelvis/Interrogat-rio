@@ -16,7 +16,7 @@ import functions
 from functions import tabela, prettyDate
 import json
 from credenciar import LOGIN
-from functions import fromInterrogarToHtml
+from functions import fromInterrogarToHtml, cleanEstruturaUD
 import html as web
 import sys
 import pickle
@@ -26,7 +26,7 @@ from estrutura_dados import slugify as slugify
 form = cgi.FieldStorage()
 
 if not 'pesquisa' in form and not 'action' in form:
-	html = '<head><title>Filtrar: Interrogatório</title></head>'
+	html = '<head><title class="translateHtml">Filtrar: Interrogatório</title></head>'
 	html += '<body><form action="../cgi-bin/filtrar.cgi" method=POST>'
 	html += '<select name="html">'
 	for arquivo in os.listdir('../interrogar-ud/resultados'):
@@ -36,7 +36,7 @@ if not 'pesquisa' in form and not 'action' in form:
 	for arquivo in os.listdir('../interrogar-ud/conllu'):
 		if os.path.isfile('../interrogar-ud/conllu/' + arquivo):
 			html += '<option value="' + arquivo + '">' + arquivo + '</option>'
-	html += '</select><br><br><input type="text" name="pesquisa" placeholder="Expressão do filtro"><br><input type="text" placeholder="Nome do filtro" name="nome_pesquisa"><br><br><input type="submit" value="Filtrar">'
+	html += '</select><br><br><input type="text" name="pesquisa" placeholder="Expressão do filtro"><br><input type="text" placeholder="Nome do filtro" name="nome_pesquisa"><br><br><input type="submit" class="translateVal" value="Filtrar">'
 	html += '</form></body>'
 	print(html)
 
@@ -142,7 +142,7 @@ elif form['action'].value == 'view':
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
-	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' href='../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro}'>[Desfazer filtro]</a> <a href='#' onclick='window.close()'>[Fechar página]</a><br><br>{parametros}<br><br>Busca inicial: <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>Corpus: <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
+	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' href='../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro}'>[Desfazer filtro]</a> <a href='#' class='translateHtml' onclick='window.close()'>[Fechar página]</a><br><br>{parametros}<br><br><span class='translateHtml'>Busca inicial:</span> <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br><span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
 		nome_filtro=web.escape(nome_filtro),
 		len_filtros=num_filtros,
@@ -166,8 +166,8 @@ elif form['action'].value == 'view':
 	
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
-		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
-			sentence=fromInterrogarToHtml(resultado.sent_id), 
+		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
+			sentence=cleanEstruturaUD(fromInterrogarToHtml(resultado.sent_id)).strip(),
 			text=fromInterrogarToHtml(resultado.text),
 			html=nome_html,
 			filtro=web.escape(nome_filtro),

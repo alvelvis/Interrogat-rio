@@ -63,7 +63,7 @@ for entrada in dicionario:
 	lista.append((entrada, dicionario[entrada]))
 
 pagina = '''
-	<button onclick="topFunction()" id="myBtn" title="Voltar ao topo">Voltar ao topo</button>
+	<button onclick="topFunction()" id="myBtn" class="translateTitle translateHtml" title="Voltar ao topo">Voltar ao topo</button>
 	<style>
 		#myBtn {
 			display: none; /* Hidden by default */
@@ -90,12 +90,12 @@ pagina = '''
 '''
 pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
-pagina += '<a href="#" onclick="window.close()">Fechar</a><br><br>Relatório gerado dia ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
-pagina += f"<hr>Busca: <a href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + form["expressao"].value + "</a><br>"
-pagina += "Corpus: <a href='../interrogar-ud/conllu/"+form["corpus"].value+"' title='Baixar corpus' download>" + form["corpus"].value + "</a>"
-pagina += "<br><br>Quantidade de ocorrências: "+str(len(dist))+"<br>Quantidade de <b>"+form["coluna"].value+"</b>: "+str(len(lista))
+pagina += '<a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
+pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + form["expressao"].value + "</a><br>"
+pagina += "<span class='translateHtml'>Corpus:</span></a> <a href='../interrogar-ud/conllu/"+form["corpus"].value+"' class='translateTitle' title='Baixar corpus' download>" + form["corpus"].value + "</a>"
+pagina += "<br><br><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(len(dist))+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b>: "+str(len(lista))
 if nome_interrogatorio and nome_interrogatorio not in fastSearch:
-	pagina += f"<br>Busca salva em <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
+	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
 pagina += "<hr>"
 
 freq = dict()
@@ -117,7 +117,7 @@ if expressao[0] == "@": expressao = expressao[1:]
 with open("dist.log", 'w') as f:
 	f.write("\n".join([identificador, expressao]))
 
-pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><th>#</th><th>{form['coluna'].value}</th><th>frequência</th><th>%</th>"
+pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><th>#</th><th>{form['coluna'].value}</th><th class='translateHtml'>frequência</th><th>%</th>"
 for i, entrada in enumerate(sorted(lista, key=lambda x: (-x[1], x[0]))):
 	entradaEscapada = re.escape(entrada[0])
 	pagina += f"<tr><td>{i+1}</td><td><a href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={web.escape(expressao.replace(' @', ' '))} and @{identificador}.{form['coluna'].value} == \"{web.escape(entradaEscapada)}\"' title='Buscar casos: {expressao.replace(' @', ' ')} and @{identificador}.{form['coluna'].value} == \"{entradaEscapada}\"' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"

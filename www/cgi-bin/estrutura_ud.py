@@ -79,6 +79,7 @@ class Sentence:
 		self.tokens = list()
 		self.tokens_incompletos = list()
 		self.separator = separator
+		self.map_token_id = {}
 
 
 	def get_head(self, token):
@@ -116,6 +117,7 @@ class Sentence:
 			self.id = txt.split('# id =')[1].split('\n')[0].strip()
 			self.metadados["id"] = self.id
 		
+		n_token = 0
 		for linha in txt.split(self.separator):
 			try:
 				if linha and linha.startswith('# ') and " = " in linha:
@@ -123,13 +125,15 @@ class Sentence:
 					if identificador not in ["text", "sent_id", "source", "id"]:
 						valor = linha.split('=', 1)[1].strip()
 						self.metadados[identificador] = valor
-				if "\t" in linha and not linha.startswith('# '):
+				if not linha.startswith("# ") and "\t" in linha:
 					tok = Token(sent_id = self.sent_id, text = self.text)
 					tok.build(linha)
 					tok.head_token = self.default_token
 					tok.next_token = self.default_token
 					tok.previous_token = self.default_token
+					self.map_token_id[tok.id] = n_token
 					self.tokens.append(tok)
+					n_token += 1
 			except:
 				print(linha)
 				sys.exit()
@@ -143,7 +147,7 @@ class Sentence:
 		return "\n".join([tok.to_str() for tok in self.tokens])
 
 	def metadados_to_str(self):
-		return "\n".join(["# " + x + " = " + self.metadados[x] for x in self.metadados if self.metadados[x]])
+		return "\n".join(["# " + x + " = " + self.metadados[x] for x in self.metadados])
 
 	def to_str(self):
 		return self.metadados_to_str() + "\n" + self.tokens_to_str()

@@ -40,7 +40,7 @@ while True:
     else:
         break
 
-html = [f'<title>Contexto: Interrogatório</title><h1>Contexto</h1><a href="javascript:window.close()">Fechar</a><hr>Página gerada dia {prettyDate(datetime.now()).beautifyDateDMAH()}<br>Corpus: <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito" style="color:blue">Pular para {sent_id or id}</a></h4>']
+html = [f'<script src="http://code.jquery.com/jquery-latest.js"></script><script src="../interrogar-ud/resultados.js?version=12"></script><title class="translateHtml">Contexto: Interrogatório</title><h1 class="translateHtml">Contexto</h1><a href="javascript:window.close()" class="translateHtml">Fechar</a><hr><span class="translateHtml">Página gerada dia</span> {prettyDate(datetime.now()).beautifyDateDMAH()}<br><span class="translateHtml">Corpus:</span> <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito" style="color:blue"><span class="translateHtml">Pular para</span> {sent_id or id}</a></h4>']
 [html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoEsquerda]
 html += [f"<hr><b> <div id='negrito'>{sent_id or id}: {corpus.sentences[sent_id].text or corpus.sentences[id].text}</div></b>"]
 [html.append("<hr>{}: {}".format(x[0], x[1])) for x in contextoDireita]

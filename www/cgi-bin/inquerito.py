@@ -48,15 +48,15 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 	global html2
 	if valor and valor[0] == '#': valor = ''.join(valor[1:])
 
-	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Relatório de inquéritos: Interrogatório</title>')
+	html1 = html1.replace('<title class="translateHtml">Sistema de inquéritos</title>', '<title class="translateHtml">Relatório de inquéritos: Interrogatório</title>')
 
-	html1 += '<form name="form_pesquisa" id="form_pesquisa" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><hr><div id="div_filtro">Filtrar relatório:<br><select name="coluna" id=coluna required><option value=":">Tudo</option><option value="6">Etiqueta</option><option value="0"># text</option><option value="7"># sent_id</option><option value="2">CoNLLU</option><option value="3">Data</option><option value="4">Página no Interrogatório</option></select> <input type=text autofocus="true" name=valor id=valor value="' + valor.replace('"', '&quot;') + '" required> <input name="submit_search" type=submit value="Realizar filtro" style="display:block-inline">'
+	html1 += '<form name="form_pesquisa" id="form_pesquisa" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><hr><div id="div_filtro"><span class="translateHtml">Filtrar relatório:</span><br><select name="coluna" id=coluna required><option value=":" class="translateHtml">Tudo</option><option value="6" class="translateHtml">Etiqueta</option><option value="0" class="translateHtml"># text</option><option value="7" class="translateHtml"># sent_id</option><option value="2" class="translateHtml">CoNLL-U</option><option value="3" class="translateHtml">Data</option><option value="4" class="translateHtml">Página no Interrogatório</option></select> <input type=text autofocus="true" name=valor id=valor value="' + valor.replace('"', '&quot;') + '" required> <input name="submit_search" class="translateVal" type=submit value="Realizar filtro" style="display:block-inline">'
 	if coluna: html1 += ' <a style="display:block-inline" class="close-thik" href="../cgi-bin/inquerito.py"></a>'
 
-	html1 += '<br><br><input type=checkbox name=onlysent checked>Apenas sentenças</input>' if onlysent else '<br><br><input type=checkbox name=onlysent >Apenas sentenças</input>'
+	html1 += '<br><br><input type=checkbox name=onlysent class="translateHtml" checked>Apenas sentenças</input>' if onlysent else '<br><br><input type=checkbox class="translateHtml" name=onlysent >Apenas sentenças</input>'
 
 	if not "HTTP_HOST" in os.environ: os.environ["HTTP_HOST"] = "localhost:8000"
-	html1 += '''</form> - <a href="../interrogar-ud/relatorio.txt" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="../cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
+	html1 += '''</form> - <a href="../interrogar-ud/relatorio.txt" class="translateHtml" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="../cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" class="translateHtml" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
 	relatorio = str(datetime.now()).replace(' ', '_').split('.')[0] + '\nRelatório de Inquéritos - ' + os.environ['HTTP_HOST']
 	if coluna: relatorio += '\nFiltro: ' + valor
 	relatorio += '\nMostrando apenas as sentenças que foram alteradas' if onlysent else '\nMostrando todas as alterações em todas as sentenças'
@@ -223,11 +223,11 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	os.remove('../interrogar-ud/scripts/headers.txt')
 
 elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or (form['action'].value != 'alterar' and form['action'].value != 'filtrar' and form['action'].value != 'script' and form['action'].value != 'manage_tags')):
-	html1 = html1.replace('<title>Sistema de inquéritos</title>', '<title>Novo inquérito: Interrogatório</title>') if not 'finalizado' in form else html1.replace('<title>Sistema de inquéritos</title>', '<title>Inquérito realizado com sucesso: Interrogatório</title>')
+	html1 = html1.replace('<title class="translateHtml">Sistema de inquéritos</title>', '<title class="translateHtml">Novo inquérito: Interrogatório</title>') if not 'finalizado' in form else html1.replace('<title class="translateHtml">Sistema de inquéritos</title>', '<title class="translateHtml">Inquérito realizado com sucesso: Interrogatório</title>')
 	ud = form['conllu'].value
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
-		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" não encontrado</span>'
+		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" <span class="translateHtml">não encontrado</span></span>'
 		ud = bosqueNaoEncontrado
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
 	if 'finalizado' in form:
@@ -236,7 +236,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			erros = validar_UD.validate('../interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value, noMissingToken=True, errorList=variables.validar_UD)
 		alertColor = "cyan" if not erros else "yellow"
 		alertBut = "" if not erros else ", mas atenção:"
-		html1 += f'<span style="background-color: {alertColor}">Alteração realizada com sucesso{alertBut}</span>'
+		html1 += f'<span style="background-color: {alertColor}"><span class="translateHtml">Alteração realizada com sucesso</span>{alertBut}</span>'
 		if alertBut:
 			html1 += "<ul>" 
 			for erro in erros:
@@ -248,7 +248,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			html1 += "</ul>"
 		html1 += '<br>'
 
-	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1>Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
+	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py" class="translateHtml">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 
 	achou = False
 	for i, sentence in enumerate(conlluzao):
@@ -277,9 +277,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					if linha:
 						html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
 				html1 += "</datalist> "
-			html1 += '<h3>Controles:</h3>Esc: Encerrar inquérito<br>Tab / Shift + Tab: ir para coluna à direita/esquerda<br>↑ / ↓: ir para linha acima/abaixo<br>↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende<br>Shift + Scroll: Mover tabela para os lados<br><br>'
-			html1 += '<input style="display: inline-block; margin: 0px;" type="button" onclick="enviar()" class="btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
-			html1 += '<br><br><br><b>Edite as colunas desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
+			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
+			html1 += '<input style="display: inline-block; margin: 0px;" type="button" onclick="enviar()" class="translateVal btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
+			html1 += '<br><br><br><b class="translateHtml">Edite as colunas desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()
 			for a, linha in enumerate(sentence2.splitlines()):
@@ -305,7 +305,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			html1 += '</div></form>'
 			achou = True
 			break
-	if not achou: html1 += 'Sentença não encontrada.'
+	if not achou: html1 += '<span class="translateHtml">Sentença não encontrada.</span>'
 
 	html = html1 + '''<script>function insertTextAtCursor(text) {
   var sel, range, html;

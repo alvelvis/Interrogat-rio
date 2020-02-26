@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>Interrogatório - Ambiente de busca e revisão de corpora anotados</title>
+    <title class="translateHtml">Interrogatório - Ambiente de busca e revisão de corpora anotados</title>
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="../interrogar-ud/jquery.min.js"></script>
@@ -20,42 +20,42 @@
       <img id="loading-image-nobg" src="../interrogar-ud/loading4.gif" alt="Carregando">
     <div class="header">
       <!--h1>Interrogatório</h1-->
-      <h2>nova busca - <a href="../cgi-bin/interrogatorio.cgi">buscas salvas</a> - <a href="../cgi-bin/arquivo_ud.cgi">gerenciar corpora</a></h2>
+      <h2><span class="translateHtml">nova busca</span> - <a href="../cgi-bin/interrogatorio.cgi" class="translateHtml">buscas salvas</a> - <a href="../cgi-bin/arquivo_ud.cgi" class="translateHtml">gerenciar corpora</a></h2>
     </div>
     <div class="content">
     <div style="display: flex; margin:auto; max-width:1280px;">
     <div style='width: 30%; margin: 30px 30px;' class="interrogar">
       <form action="../cgi-bin/interrogar.cgi" enctype="multipart/form-data" class="sendInterrogar" method="post">
         <div class="queryString normalQuery">
-          <p><div style="display:inline;"><div class="tooltip"><b>Expressão de busca:</b><div class="tooltiptext">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
-            <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus> <a style="cursor:pointer; color:red; margin-left:5px; display:none;" class="clearPesquisa" title="Limpar expressão de busca" >x</a></p>
+          <p><div style="display:inline;"><div class="tooltip"><b class="translateHtml">Expressão de busca:</b><div class="tooltiptext translateHtml">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
+            <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus> <a style="cursor:pointer; color:red; margin-left:5px; display:none;" class="clearPesquisa translateTitle" title="Limpar expressão de busca" >x</a></p>
         </div>
         <div class="queryString scriptQuery" style="display:none;">
-          [<a style="cursor:pointer;" onclick="$('.queryString').hide(); $('.normalQuery').show();">Voltar à busca normal</a>]
+          [<a style="cursor:pointer;" class="translateHtml" onclick="$('.queryString').hide(); $('.normalQuery').show();">Voltar à busca normal</a>]
           <ol type="1">
-            <li>Baixe o <a target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.</li>
-            <li>Edite-o de modo a encontrar as frases pretendidas.</li>
-            <li>Submeta o script de busca navegando até o arquivo editado ou arraste-o até o botão abaixo.</li>
-            <li>Lembre-se de renomear o script de modo que especifique o que está sendo buscado.</li>
+            <li class="translateHtml">Baixe o <a target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.</li>
+            <li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
+            <li class="translateHtml">Submeta o script de busca navegando até o arquivo editado ou arraste-o até o botão abaixo.</li>
+            <li class="translateHtml">Lembre-se de renomear o script de modo que especifique o que está sendo buscado.</li>
           </ol>
-            <p><div style="display:inline;"><b>Script de busca:</b></div><br>
+            <p><div style="display:inline;"><b class="translateHtml">Script de busca:</b></div><br>
               <input name="scriptQueryFile" class="scriptQueryFile" id="scriptQueryFile" type="file" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus></p>
         </div>
-          <p><b>Corpus:</b><br>
+          <p><b class="translateHtml">Corpus:</b><br>
             <select class="conllu" style="margin-top: 5px; padding:5px;" name="conllu" data-live-search="true" required>
             <!--selectpicker-->
             </select>
         </p>
         <div style="margin-left:5px;">
-          <input type=radio name=meth value="teste" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();" label="Busca rápida" class="toggle toggleRapida queryString normalQuery" checked><div onclick="$('.toggleRapida').click();" style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery">Busca rápida<div class="tooltiptext">A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.</div></div>
-          <br><input type=radio name=meth value="salvar" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();  document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').select();" label="Salvar busca" class="toggle toggleSalvar"><div onclick="$('.toggleSalvar').click();"style="display:inline; cursor:pointer;" class="tooltip">Salvar resultados da busca<div class="tooltiptext">A busca será salva no sistema, e você poderá acessá-la posteriormente na página de interrogações recentes.</div></div>
-          <br><input type=radio name=meth value="distribution" style="display:inline" onclick="$('.buscaOption').hide(); $('.distDiv').show();" title="Visualizar distribuição de alguma anotação gramatical" class="queryString normalQuery toggle toggleDist"><div style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery" onclick="$('.toggleDist').click();">Visualizar distribuição<div class="tooltiptext">Selecione para visualizar a distribuição das ocorrências que são resultado da sua expressão de busca entre as diferentes categorias de anotação.</div></div>
+          <input type=radio name=meth value="teste" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();" label="Busca rápida" class="translateLabel toggle toggleRapida queryString normalQuery" checked><div onclick="$('.toggleRapida').click();" style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery"><span class="translateHtml">Busca rápida</span><div class="translateHtml tooltiptext">A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.</div></div>
+          <br><input type=radio name=meth value="salvar" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();  document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').select();" label="Salvar busca" class="translateLabel toggle toggleSalvar"><div onclick="$('.toggleSalvar').click();"style="display:inline; cursor:pointer;" class="tooltip"><span class="translateHtml">Salvar resultados da busca</span><div class="tooltiptext translateHtml">A busca será salva no sistema, e você poderá acessá-la posteriormente na página de interrogações recentes.</div></div>
+          <br><input type=radio name=meth value="distribution" style="display:inline" onclick="$('.buscaOption').hide(); $('.distDiv').show();" title="Visualizar distribuição de alguma anotação gramatical" class="queryString normalQuery toggle toggleDist"><div style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery" onclick="$('.toggleDist').click();"><span class="translateHtml">Visualizar distribuição</span><div class="tooltiptext translateHtml">Selecione para visualizar a distribuição das ocorrências que são resultado da sua expressão de busca entre as diferentes categorias de anotação.</div></div>
         </div>
-        <p><div id="meth_salvar" class="buscaOption" style="margin-left:10px; display:none">Nome da busca:<br>
-          <input id="nome" name="nome" value="Busca salva" style="max-width:70%" type="text"><br><br>
+        <p><div id="meth_salvar" class="buscaOption" style="margin-left:10px; display:none"><span class="translateHtml">Nome da busca</span>:<br>
+          <input id="nome" name="nome" value="Busca salva" class="translateVal" style="max-width:70%" type="text"><br><br>
         <!--div class="tooltip">Limitar resultados:<div class="tooltiptext">Pode tornar a busca muito mais rápida. Zero para não limitar a busca.</div></div> <input id="sentLimit" name="sentLimit" value="0" style="width:60px" type="number"-->
         </div></p>
-          <p><input name="enviar" style="margin-left:10px" id="enviar" value="Busca rápida" class="buscaOption btn-gradient orange small"
+          <p><input name="enviar" style="margin-left:10px" id="enviar" value="Busca rápida" class="translateVal buscaOption btn-gradient orange small"
   type="submit" onclick="if(!$('.scriptQuery').is(':visible')){ $('.scriptQueryFile').val(''); } else { $('#pesquisa').val($('.scriptQueryFile').val().replace(/C:\\fakepath\\/i, '')); };"></p>          
         </form>      
         <!--document.getElementById('nome').value = document.getElementById('pesquisa').value;-->
@@ -63,24 +63,24 @@
           <div class="distDiv buscaOption" style="margin-left:10px; display:none">
               
             <div class="dist" style="display:none">
-		<h4>Visualizar distribuição de:</h4>
+		<h4 class="translateHtml">Visualizar distribuição de:</h4>
                 
               <ul>
-                <li><a style="cursor:pointer" class="verDist" title="Número do token na sentença">id</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Forma da palavra">word</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Lema da palavra">lemma</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Classe gramatical">upos</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Classe gramatical específica">xpos</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Atributos morfológicos">feats</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Relação de dependência">deprel</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Relação de dependência específica">deps</a></li>
-                <li><a style="cursor:pointer" class="verDist" title="Miscelânea">misc</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Lema da palavra">lemma</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical">upos</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical específica">xpos</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Atributos morfológicos">feats</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência">deprel</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência específica">deps</a></li>
+                <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
               </ul>
 
             </div>
             <div class="notDist" style="display:none">
-              Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.
+              <span class="translateHtml">Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.</span>
             </div>
           </div>
         <br>

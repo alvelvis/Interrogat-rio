@@ -1,3 +1,16 @@
+import sys
+
+def chunkIt(seq, num):
+    avg = len(seq) / float(num)
+    out = []
+    last = 0.0
+
+    while last < len(seq):
+        out.append(seq[int(last):int(last + avg)])
+        last += avg
+
+    return out
+
 class Token:
 	
 	def __init__(self, separator='\t', sent_id="NONE", text="NONE"):
@@ -10,6 +23,7 @@ class Token:
 		self.dephead = "0"
 		self.deprel = "_"
 		self.deps = "_"
+		self.sema = "_"
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
@@ -40,7 +54,9 @@ class Token:
 		self.col["dephead"] = self.dephead
 		self.col["deprel"] = self.deprel
 		self.col["deps"] = self.deps
+		self.col["sema"] = self.deps
 		self.col["misc"] = self.misc
+		self.col["text"] = self.text
 
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
@@ -48,7 +64,7 @@ class Token:
 
 class Sentence:
 
-	def __init__(self, separator="\n", recursivo=0):
+	def __init__(self, separator="\n", recursivo=True):
 		self.text = ""
 		self.sent_id = ""
 		self.source = ""
@@ -63,6 +79,7 @@ class Sentence:
 		self.tokens = list()
 		self.tokens_incompletos = list()
 		self.separator = separator
+		self.map_token_id = {}
 
 
 	def get_head(self, token):
@@ -71,8 +88,10 @@ class Sentence:
 		for tok in self.tokens:
 			if tok.id == token.dephead:
 				token.head_token = tok
+				break
 
-			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id:
+		for tok in self.tokens:
+			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id and not ">" in tok.id and not ">" in token.id:
 				if int(token.id) == int(tok.id) - 1:
 					token.next_token = tok
 					next_t = True
@@ -81,63 +100,48 @@ class Sentence:
 					previous_t = True
 			if next_t and previous_t:
 				break
-		if not next_t:
-			token.next_token = self.default_token
-		if not previous_t:
-			token.previous_token = self.default_token
 
 		return token
 
 	def build(self, txt):
-		if '# text = ' in txt:
-			self.text = txt.split('# text = ')[1].split('\n')[0]
+		if '# text =' in txt:
+			self.text = txt.split('# text =')[1].split('\n')[0].strip()
 			self.metadados['text'] = self.text
-		if '# sent_id = ' in txt:
-			self.sent_id = txt.split('# sent_id = ')[1].split('\n')[0]
+		if '# sent_id =' in txt:
+			self.sent_id = txt.split('# sent_id =')[1].split('\n')[0].strip()
 			self.metadados['sent_id'] = self.sent_id
-		if '# source = ' in txt:
-			self.source = txt.split('# source = ')[1].split('\n')[0]
+		if '# source =' in txt:
+			self.source = txt.split('# source =')[1].split('\n')[0].strip()
 			self.metadados['source'] = self.source
-		if '# id = ' in txt:
-			self.id = txt.split('# id = ')[1].split('\n')[0]
+		if '# id =' in txt:
+			self.id = txt.split('# id =')[1].split('\n')[0].strip()
 			self.metadados["id"] = self.id
 		
-		tokens_incompletos = list()
+		n_token = 0
 		for linha in txt.split(self.separator):
-			if linha and "#" == linha[0] and "=" in linha:
-				identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
-				if identificador not in ["text", "sent_id", "source", "id"]:
-					valor = linha.split('=', 1)[1].strip()
-					self.metadados[identificador] = valor
-			if "\t" in linha:
-				tok = Token(sent_id = self.sent_id, text = self.text)
-				tok.build(linha)
-				tok.head_token = self.default_token
-				tok.next_token = self.default_token
-				tok.previous_token = self.default_token
-				if self.recursivo == 0: self.tokens.append(tok)
-				else: self.tokens_incompletos.append(tok)
+			try:
+				if linha and linha.startswith('# ') and " = " in linha:
+					identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
+					if identificador not in ["text", "sent_id", "source", "id"]:
+						valor = linha.split('=', 1)[1].strip()
+						self.metadados[identificador] = valor
+				if not linha.startswith("# ") and "\t" in linha:
+					tok = Token(sent_id = self.sent_id, text = self.text)
+					tok.build(linha)
+					tok.head_token = self.default_token
+					tok.next_token = self.default_token
+					tok.previous_token = self.default_token
+					self.map_token_id[tok.id] = n_token
+					self.tokens.append(tok)
+					n_token += 1
+			except:
+				print(linha)
+				sys.exit()
 
-		'''if not self.recursivo:
+
+		if self.recursivo != False:
 			for token in self.tokens:
-				for _token in self.tokens:
-					if token.dephead == _token.id:
-						token.head_token = _token
-					if not "-" in token.id and not "/" in token.id:
-						if not "-" in _token.id and not "/" in _token.id:
-							if int(token.id) == int(_token.id) - 1:
-								token.next_token = _token
-							if int(token.id) == int(_token.id) + 1:
-								token.previous_token = _token'''
-
-		for token in self.tokens_incompletos:
-			self.tokens.append(self.get_head(token))
-
-		if isinstance(self.recursivo, int) and self.recursivo > 0:
-			x = self.recursivo if isinstance(self.recursivo, int) else 4
-			for i in range(1):
-				for token in self.tokens:
-					token = self.get_head(token)
+				token = self.get_head(token)
 
 	def tokens_to_str(self):
 		return "\n".join([tok.to_str() for tok in self.tokens])
@@ -151,15 +155,46 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=0):
+	def __init__(self, separator="\n\n", recursivo=True, sent_id=None, thread=False, encoding="utf-8"):
 		self.len = 0
 		self.sentences = {}
 		self.separator = separator
 		self.sent_list = []
 		self.recursivo = recursivo
+		self.sent_id = sent_id
+		self.encoding = encoding
+		self.pre = ""
+		self.pos = ""
+		self.thread = thread
 
 	def build(self, txt):
+		if self.sent_id:
+			import re
+			old_txt = txt
+			txt = re.search(r"(\n\n|^).*?# sent_id = " + self.sent_id + r"\n.*?(\n\n|$)", txt, flags=re.DOTALL)[0].strip()
+			if '\n\n' in txt: txt = txt.rsplit("\n\n", 1)[1]
+			self.pre = old_txt.split(txt)[0].strip()
+			self.pos = old_txt.split(txt)[1].strip()
+
 		sents = txt.split(self.separator)
+
+		if self.thread:
+			import threading
+			threads = {}
+			chunks = chunkIt(sents, self.thread)
+			for i in range(self.thread):
+				threads[i] = threading.Thread(target=self.sent_build, args=(chunks[i],))
+			for i in range(self.thread):
+				threads[i].start()
+			for i in range(self.thread):
+				threads[i].join()
+
+		else:
+			self.sent_build(sents)
+
+		self.len = len(self.sentences)
+
+	def sent_build(self, sents):
 		for sentence in sents:
 			sent = Sentence(recursivo=self.recursivo)
 			sent.build(sentence)
@@ -171,7 +206,6 @@ class Corpus:
 			elif sent.text:
 				self.sentences[sent.text] = sent
 
-		self.len = len(self.sentences)
 
 	def to_str(self):
 		retorno = list()
@@ -182,9 +216,10 @@ class Corpus:
 		return "\n\n".join(retorno) + '\n\n'
 
 	def load(self, path):
-		with open(path, "r") as f:
+		with open(path, "r", encoding=self.encoding) as f:
 			self.build(f.read())
 
 	def save(self, path):
+		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
 		with open(path, "w") as f:
-			f.write(self.to_str())
+			f.write(final)

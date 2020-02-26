@@ -35,12 +35,12 @@ def sendRequestInterrogar():
 
 	with open("../interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
-		criteriosBusca = [("[<a href='#' class='toggleCriteria' criterio='-1'>Voltar</a>]<br>" if i != 0 else "") + x for i, x in enumerate(criteriosBusca) if x.strip()]
+		criteriosBusca = [("[<a href='#' class='toggleCriteria translateHtml' criterio='-1'>Voltar</a>]<br>" if i != 0 else "") + x for i, x in enumerate(criteriosBusca) if x.strip()]
 
 	paginaHTML[0] += "\n".join(["<div class='container-lr criterio' {2} id=criterio_{0}>{1}</div>".format(i-1, criterio, " style='display:none'" if i-1 != -1 else "") for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
-	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option disabled selected value> -- escolha um corpus -- </option>" + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
+	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option class='translateHtml' disabled selected value> -- escolha um corpus -- </option>" + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
 
 	refazerPesquisa = cgi.FieldStorage()['params'].value.replace("'", '"') if 'params' in cgi.FieldStorage() else ""
 	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
@@ -76,7 +76,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace(')</a></h3>', ')</a></h3><span style="background-color:yellow;">Você deseja <a href="#" onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" title="Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar" style="color:blue" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">salvar esta busca</a>?</span><br>').replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', ''))
+		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace(')</a></h3>', ')</a></h3><span style="background-color:yellow;"><span class="translateHtml">Você deseja</span> <a href="#" onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" title="Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar" class="translateTitle" style="color:blue" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True&go=True\';">salvar esta busca</a>?</span><br>').replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', ''))
 		exit()
 
 	with open(caminhoCompletoHtml, "w") as f:
@@ -173,8 +173,8 @@ class paginaHtml():
 			criterios = f.read().split('!@#')
 		criterios = [x for x in criterios if x.strip()]
 		
-		refazerPesquisa = '<br>Refazer busca</a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
+		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" class="translateTitle" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
 
 		return arquivoHtml
@@ -184,7 +184,7 @@ class paginaHtml():
 			if self.nomePesquisa not in fastSearch:
 				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>").format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)
 			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"')))
-			#return self.arquivoHtml.replace("DIST-->", 'DIST--><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.')
+			#return self.arquivoHtml.replace("DIST-->", 'DIST--><span class="translateHtml"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.</span>')
 		return self.arquivoHtml
 
 	def adicionarExecutarScript(self):

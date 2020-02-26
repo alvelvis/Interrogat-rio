@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>Buscas salvas: Interrogatório</title>
+    <title class="translateHtml">Buscas salvas: Interrogatório</title>
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="../interrogar-ud/jquery-latest.js"></script>
@@ -12,12 +12,13 @@
       <div id="loading-bg"></div>
       <img id="loading-image" src="../interrogar-ud/loading4.gif" alt="Carregando">
       <img id="loading-image-nobg" src="../interrogar-ud/loading4.gif" alt="Carregando">
-  <button onclick="topFunction()" id="myBtn" title="Voltar ao topo">Voltar ao topo</button>
+  <button onclick="topFunction()" id="myBtn" class="translateTitle translateVal" title="Voltar ao topo">Voltar ao topo</button>
   <div><!--style="display: flex; flex-flow: column; height:100vh;"-->
     <div class="header">
       <!--h1>Interrogatório</h1-->
-      <h2><a href="../cgi-bin/interrogar.cgi">nova busca</a> - buscas salvas - <a href="../cgi-bin/arquivo_ud.cgi">gerenciar corpora</a></h2>
+      <h2><a href="../cgi-bin/interrogar.cgi" class="translateHtml">nova busca</a> - <span class="translateHtml">buscas salvas</span> - <a class="translateHtml" href="../cgi-bin/arquivo_ud.cgi">gerenciar corpora</a></h2>
     </div>
+    <input type=hidden class="apagarinterrogacao translateVal" value="Apagar interrogação">
     <div class="content" style="width:50vw;"><!-- style="overflow: auto; flex: 1;-->
       
     
@@ -29,7 +30,7 @@ function carregar_version(){
         window.location = "../interrogar-ud/resultados/" + link_combination[link_combination.length-1].split("?")[0] + "?" + document.getElementById("carregar_edit").value.split("?")[1]
 }
 function apagar(url) {
-if (confirm('Apagar interrogação "' + url + '"?')) {
+if (confirm($('.apagarinterrogacao').val() + ' "' + url + '"?')) {
 window.location = "../cgi-bin/apagar.cgi?query="+url
 }
 }
