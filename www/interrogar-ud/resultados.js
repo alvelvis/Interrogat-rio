@@ -484,7 +484,7 @@ var translations = {
 		'en-US': ''
 	},
 	'Mostrar contexto': {
-		'en-US': ''
+		'en-US': 'Show context'
 	},
 	'Mostrar anotação': {
 		'en-US': ''
@@ -847,7 +847,8 @@ function carregarPosts(){
             });
             $('.metadados_sentence').click(function(){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
-            });
+			});
+			updateTranslation();
         },
         "text",
     );
