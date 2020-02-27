@@ -4,9 +4,9 @@ Interrogatório (Interrogatory) is an enviroment for querying and revising annot
 
 Interrogatório is part of [ET: a workstation for querying, revising and evaluating annotated corpora](http://comcorhd.letras.puc-rio.br/ET). Consider also installing [Julgamento](https://github.com/alvelvis/Julgamento), an enviroment for evaluating annotated corpora, in the same folder as Interrogatório to integrate both.
 
-If you wish to run your own version of Interrogatório, a Linux computer (or a Windows with [Windows Subsystem for Linux](https://docs.microsoft.com/pt-br/windows/wsl/install-win10)) and Python 3 are needed.
+If you wish to run your own version of Interrogatório, a Linux computer (or Windows with [Windows Subsystem for Linux](https://docs.microsoft.com/pt-br/windows/wsl/install-win10)) and Python 3 are needed.
 
-Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) to a broader understanding of Interrogatório tools.
+Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader understanding of Interrogatório tools.
 
 <!---You can also use Interrogatório at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora, or upload your own, be it in the UD format or in plain text to be annotated (in Portuguese).-->
 
