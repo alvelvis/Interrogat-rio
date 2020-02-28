@@ -34,7 +34,7 @@ That way, whenever you want to update the repository, you can simply pull the up
 
 All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/](http://localhost:8000/). End the server by pressing "Ctrl+C" in the terminal window.
 
-# Como citar
+# How to cite
 
 ```
 @inproceedings{ETtilic,
