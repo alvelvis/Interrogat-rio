@@ -637,7 +637,11 @@ var translations = {
 		'en-US': ''
 	},
 	'frequência': {
-		'en-US': ''}
+		'en-US': ''
+	},
+	'Wiki - documentação das ferramentas': {
+		'en-US': 'Wiki - documentation for our tools'
+	}
 };
 
 function updateTranslation(){
