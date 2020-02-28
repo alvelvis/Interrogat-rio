@@ -1,1 +1,6 @@
 *.pyc
+cgi-bin
+interrogar-ud
+inqueritos.txt
+queries.txt
+relatorio.txt
