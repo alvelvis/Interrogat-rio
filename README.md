@@ -20,15 +20,11 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 	$ cd Interrogat-rio
 
-That way, whenever you want to update the repository, you can simply pull the updates inside the folder:
+3) After downloading the repository, run the command below, and it will then create a Python 3 virtual environment and install the requirements in order to run Interrogatório.
 
-	$ git pull
-
-3) Install the Python 3 libraries:
-
-	$ pip3 install -r requirements.txt
-
-4) Then, if you don't intend to publish the platform in a remote server, whenever you want you can initialize the machine by opening a terminal inside the Interrogatório folder and executing the command:
+	$ sh install_interrogatorio.sh
+	
+4) Then, whenever you intend to run Interrogatório locally, run the command below and it will also auto-update when necessary if you cloned the repo using Git:
 
 	$ sh run_interrogatorio.sh
 
