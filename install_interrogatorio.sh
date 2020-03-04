@@ -1,5 +1,8 @@
 if [ ! -d .interrogatorio ]; then
-    virtualenv .interrogatorio -p python3
+    if ! virtualenv .interrogatorio -p python3; then
+        sudo apt install virtualenv
+        virtualenv .interrogatorio -p python3
+    fi
 fi
 
 . .interrogatorio/bin/activate
