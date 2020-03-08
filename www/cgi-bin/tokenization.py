@@ -129,7 +129,7 @@ try:
     if action == "addToken":
         addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
     elif action == "mergeSentences":
-        addToken(conllu, sent_id, option, token_id, mergeSentencesId, form=form, conllu_completo=conllu_completo)
+        addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
 
 except Exception as e:
     print(e)
