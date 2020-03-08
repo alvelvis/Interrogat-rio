@@ -248,7 +248,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 			html1 += "</ul>"
 		html1 += '<br>'
 
-	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + '<br><br><a href="../cgi-bin/inquerito.py" class="translateHtml">Relatório de inquéritos</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
+	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + f'<br><br><a href="../cgi-bin/inquerito.py" class="translateHtml">Relatório de inquéritos</a> - <a href="../cgi-bin/contexto.py?corpus={ud}&sent_id={form["sentid"].value}" target="_blank" class="translateHtml">Mostrar contexto</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 
 	achou = False
 	for i, sentence in enumerate(conlluzao):
@@ -260,6 +260,66 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 		if '# text = ' in form['textheader'].value or '# sent_id = ' in form['textheader'].value:
 			form['textheader'].value = form['textheader'].value.split(' = ', 1)[1]
 		if ('# text = ' + form['textheader'].value + '\n' in sentence2) or ('# sent_id = ' + form['textheader'].value + '\n' in sentence2) or ('sentid' in form and '# sent_id = ' + form['sentid'].value + '\n' in sentence2):
+			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
+			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="enviar()" class="translateVal btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"> '
+			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="$(\'.divTokenization\').slideToggle();" class="translateVal btn-gradient green small" id="sendAnnotation" value="Modificar tokenização"><br><br>'
+			html1 += '<!--br><br><br-->'
+
+			html1 += '''<div class="divTokenization" style="display:none">
+			<b class="translateHtml">Escolha que modificação deseja realizar:</b>
+			<ul>
+				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
+				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
+			</ul>
+			<div class="addToken tokenization" style="display:none">
+				<form action="../cgi-bin/tokenization.py?action=addToken" class="addTokenForm" method="POST">
+					<select name="addTokenOption" onchange="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $('[name=addTokenId]').val());">
+						<option value="add" class="addTokenOptionSelect translateHtml" onclick="$('.addTokenHelp').html(' antes do token de id ');">Adicionar token</option>
+						<option value="rm" class="addTokenOptionSelect translateHtml" onclick="$('.addTokenHelp').html(' de id ');">Remover token</option>
+					</select>
+					<span class="translateHtml addTokenHelp"> antes do token de id </span>
+					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $(this).val());" name="addTokenId">
+					<input type="button" onclick="if ($('[name=addTokenOption]').val() && $('[name=addTokenId]').val()) {{ $('.addTokenForm').submit(); }}" class="translateVal addTokenButton" value="Adicionar token">
+					{sentid}
+					{link}
+					{nome}
+					{occ}
+					{conllu}
+					{tokenId}
+					{sentnum}
+					{textheader}
+				</form>
+			</div>
+			<div class="mergeSentences tokenization" style="display:none">
+				<form action="../cgi-bin/tokenization.py?action=mergeSentences" class="mergeSentencesForm" method="POST">
+					<span class="translateHtml mergeSentencesHelp">Inserir sentença de sent_id </span> 
+					<input style="width:250px;" class="translatePlaceholder" onkeyup="$('.mergeSentencesButton').val('Inserir sentença ' + $(this).val() + ' ' + $('.mergeSentencesOptionSelect:selected').text());" name="mergeSentencesId">
+					<select name="mergeSentencesOption" onchange="$('.mergeSentencesButton').val('Inserir sentença ' + $('[name=mergeSentencesId]').val() + ' ' + $('.mergeSentencesSelect:selected').text());">
+						<option value="right" class="mergeSentencesOptionSelect translateHtml">à direita</option>
+						<option value="left" class="mergeSentencesOptionSelect translateHtml">à esquerda</option>
+					</select>					
+					<input type="button" onclick="if ($('[name=mergeSentencesOption]').val() && $('[name=mergeSentencesId]').val()) {{ $('.mergeSentencesForm').submit(); }}" class="translateVal mergeSentencesButton" value="Inserir sentença">
+					{sentid}
+					{link}
+					{nome}
+					{occ}
+					{conllu}
+					{tokenId}
+					{sentnum}
+					{textheader}
+				</form>
+			</div>
+			</div>'''.format(
+				sentid='<input type=hidden name=tokenization_sentid value="' + form['sentid'].value.replace('"', '\"') + '">' if 'sentid' in form else '',
+				link='<input type=hidden name=tokenization_link_interrogatorio value="' + form['link_interrogatorio'].value + '">' if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
+				nome='<input type=hidden name=tokenization_nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
+				occ='<input type=hidden name=tokenization_occ value="' + form['occ'].value + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] and 'occ' in form else '',
+				conllu='<input type=hidden name=tokenization_conllu value="' + ud + '">',
+				tokenId='<input type=hidden name=tokenization_tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else '',
+				sentnum='<input type=hidden name=tokenization_sentnum value="' + str(i) + '">' if 'sentnum' in form else '',
+				textheader='<input type=hidden name=tokenization_textheader value="' + form['textheader'].value + '">' if 'textheader' in form else '',
+			)
+
 			html1 += '<form action="../cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
 			if 'sentid' in form: html1 = html1 + '<input type=hidden name=sentid value="' + form['sentid'].value.replace('"', '\"') + '">'
 			if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in ['teste', 'Busca rápida']:
@@ -277,9 +337,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 					if linha:
 						html1 += '<option>' + linha.replace('<','&lt;').replace('>','&gt;') + '</option>'
 				html1 += "</datalist> "
-			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
-			html1 += '<input style="display: inline-block; margin: 0px;" type="button" onclick="enviar()" class="translateVal btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"><!--br><br><br-->'
-			html1 += '<br><br><br><b class="translateHtml">Edite as colunas desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
+
+			html1 += '<br><b class="translateHtml">Edite os valores desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()
 			for a, linha in enumerate(sentence2.splitlines()):
