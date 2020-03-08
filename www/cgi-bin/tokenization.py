@@ -125,15 +125,10 @@ option = form['addTokenOption'].value if 'addTokenOption' in form else "add"
 token_id = form['addTokenId'].value if 'addTokenId' in form else form['mergeSentencesOption'].value
 mergeSentencesId = form['mergeSentencesId'].value if "mergeSentencesId" in form else ""
 
-try:
-    if action == "addToken":
-        addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
-    elif action == "mergeSentences":
-        addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
-
-except Exception as e:
-    print(e)
-    exit()
+if action == "addToken":
+    addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
+elif action == "mergeSentences":
+    addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
 
 html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito">'
 for input in form:
