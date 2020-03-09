@@ -81,9 +81,9 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
                     
         if mergeSentencesId:
             if token_id == corpus.sentences[sent_id].tokens[0].id:
-                corpus.sentences[sent_id].metadados['text'] = corpus.sentences[mergeSentencesId].text + corpus.sentences[sent_id].text
+                corpus.sentences[sent_id].metadados['text'] = corpus.sentences[mergeSentencesId].text + ' ' + corpus.sentences[sent_id].text
             else:
-                corpus.sentences[sent_id].metadados['text'] += corpus.sentences[mergeSentencesId].text
+                corpus.sentences[sent_id].metadados['text'] += ' ' + corpus.sentences[mergeSentencesId].text
             corpus.sentences.pop(mergeSentencesId)
 
     elif option == "rm":
