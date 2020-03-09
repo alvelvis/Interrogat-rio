@@ -61,9 +61,10 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 			with open("../cgi-bin/tokenization.json") as f:
 				tokenization = json.load(f)
 
+		html1 += '</div>'
 		for corpus in sorted(tokenization):
-			html1 += '</div><div class="container">'
-			html1 += '<h3><a href="#" title="Pesquisar pelo corpus" class="translateTitle" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + corpus + '\'; document.getElementById(\'form_pesquisa\').submit();">{}</a></h3><hr>'.format(corpus)
+			html1 += '<div class="container">'
+			html1 += '<h3><a href="#" title="Pesquisar pelo corpus" class="translateTitle" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + corpus + '\'; document.getElementById(\'form_pesquisa\').submit();">{}</a></h3>'.format(corpus)
 			for sent_id in sorted(tokenization[corpus]):
 				html1 += f"<b><a title='Editar sentença' class='translateTitle' href='../cgi-bin/inquerito.py?conllu={corpus}&textheader={sent_id}&sentid={sent_id}'>{sent_id}</a></b>: {len(tokenization[corpus][sent_id])} <span class='translateHtml'>modificações de tokenização realizadas</span>"
 			html1 += '</div>'
