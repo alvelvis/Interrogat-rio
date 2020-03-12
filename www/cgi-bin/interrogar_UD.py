@@ -8,7 +8,7 @@ import cgi
 import html as web
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
-def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False):
+def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
 	parametros = parametros.strip()
 	
 	#Lê o arquivo UD
@@ -304,11 +304,16 @@ for ''' + identificador + ''' in sentence.tokens:
 				if linha.split("\\t")[0] == arroba or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba):
 					sentence2.print[l] = "<b>" + sentence2.print[l] + "</b>"
 			sentence2.print = "\\n".join(sentence2.print)
+
+			if separate:
+				sentence2.metadados['corresponde'] = ""
+				final = sentence2.metadados_to_str() + "\\n" + sentence2.print
+				output.append(final)
 			
 	except Exception as e:
 		print(e)
 		pass
-if 'corresponde' in sentence2.metadados:
+if 'corresponde' in sentence2.metadados and not separate:
 	sentence2.metadados['corresponde'] = ""
 	final = sentence2.metadados_to_str() + "\\n" + sentence2.print
 	output.append(final)''')
