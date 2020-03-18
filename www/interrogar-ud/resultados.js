@@ -641,6 +641,15 @@ var translations = {
 	},
 	'Wiki - documentação das ferramentas': {
 		'en-US': 'Wiki - documentation for our tools'
+	},
+	'Dependentes sintáticos': {
+		'en-US': 'Syntactic children'
+	},
+	'dependentes': {
+		'en-US': 'children'
+	},
+	'Nova função: visualizar distribuição dos dependentes sintáticos': {
+		'en-US': 'New feature: view syntactic children distribution'
 	}
 };
 
