@@ -27,6 +27,9 @@ different_distribution = ["dependentes", "children"]
 
 #POST
 form = cgi.FieldStorage()
+if not 'corpus' in form:
+	print("Corpus não selecionado.")
+	exit()
 
 filtros = []
 nome_interrogatorio = ""
