@@ -372,7 +372,7 @@ var translations = {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
 	},
 	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.': {
-		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterium 5:Python</a>.'
+		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterium 5: Python</a>.'
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to the top'
@@ -506,7 +506,7 @@ var translations = {
 		'en-US': 'Open inquiry'
 	},
 	'Você deseja': {
-		'en-US': 'You wish to'
+		'en-US': 'Do you wish to'
 	},
 	'Opções': {
 		'en-US': 'Options'
@@ -664,8 +664,7 @@ var translations = {
 	" antes do token de id ": {
 		"en-US": " before the token (id number) "
 	},
-	"Adicionar ou remover token": {
-	
+	"Adicionar ou remover token": {	
 	},
 	"Adicionar token": {
 		"en-US": "Add token"
@@ -762,6 +761,18 @@ var translations = {
 	},
 	"Página no Interrogatório": {
 		"en-US": "Interrogatório page"
+	},
+	"Pular para": {
+		"en-US": "Jump to"
+	},
+	"Página gerada dia": {
+		"en-US": "Page generated on"
+	},
+	"Contexto": {
+		"en-US": "Context"
+	},
+	"Contexto: Interrogatório": {
+		"en-US": "Context: Interrogatório"
 	}
 };
 
