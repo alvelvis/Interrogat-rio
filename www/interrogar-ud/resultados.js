@@ -3,641 +3,644 @@ var translations = {
 		'en-US': 'Clear query expression'
 	},
 	'Número do token na sentença': {
-		'en-US': ''
+		'en-US': 'Token number in the sentence'
 	},
 	'Forma da palavra': {
-		'en-US': ''
+		'en-US': 'Word form'
 	},
 	'Lema da palavra': {
-		'en-US': ''
+		'en-US': 'Lemma of the word'
 	},
 	'Classe gramatical': {
-		'en-US': ''
+		'en-US': 'Part-of-speech'
 	},
 	'Classe gramatical específica': {
-		'en-US': ''
+		'en-US': 'Specific part-of-speech'
 	},
 	'Atributos morfológicos': {
-		'en-US': ''
+		'en-US': 'Morphological features'
 	},
 	'Número do token do qual é dependente sintaticamente': {
-		'en-US': ''
+		'en-US': 'Number of the token upon which it is syntactically dependent'
 	},
 	'Relação de dependência': {
-		'en-US': ''
+		'en-US': 'Dependency relation'
 	},
 	'Relação de dependência específica': {
-		'en-US': ''
+		'en-US': 'Specific dependency relation'
 	},
 	'Miscelânea': {
-		'en-US': ''
+		'en-US': 'Miscellaneous'
 	},
 	'Ir para interface': {
-		'en-US': ''
+		'en-US': 'Go to the interface'
 	},
 	'Token/palavra que será avaliado nesta condição': {
-		'en-US': ''
+		'en-US': 'Token/word to be evaluated under this condition'
 	},
 	'Token principal': {
-		'en-US': ''
+		'en-US': 'Main token'
 	},
 	'Pai do token': {
-		'en-US': ''
+		'en-US': 'Head of the token'
 	},
 	'Token à direita': {
-		'en-US': ''
+		'en-US': 'Token to the right'
 	},
 	'Token à esquerda': {
-		'en-US': ''
+		'en-US': 'Token to the left'
 	},
 	'Anotação que será avaliada': {
-		'en-US': ''
+		'en-US': 'Annotation to be evaluated'
 	},
 	'Relação de dependência sintática': {
-		'en-US': ''
+		'en-US': 'Syntactic dependency relation'
 	},
 	'Dependência específica': {
-		'en-US': ''
+		'en-US': 'Specific dependency'
 	},
 	'Frase completa': {
-		'en-US': ''
+		'en-US': 'Complete sentence'
 	},
 	'ID da sentença no corpus': {
-		'en-US': ''
+		'en-US': 'Sentence ID in the corpus'
 	},
 	'Forma de avaliação da anotação selecionada': {
-		'en-US': ''
+		'en-US': 'Selected annotation evaluation mode'
 	},
 	'Igual': {
-		'en-US': ''
+		'en-US': 'Equivalent'
 	},
 	'Diferente': {
-		'en-US': ''
+		'en-US': 'Different'
 	},
 	'Valor que a anotação selecionada deve conter': {
-		'en-US': ''
+		'en-US': 'Value that the selected annotation must contain'
 	},
 	'Adjetivo': {
-		'en-US': ''
+		'en-US': 'Adjective'
 	},
 	'Preposição': {
-		'en-US': ''
+		'en-US': 'Adposition'
 	},
 	'Advérbio': {
-		'en-US': ''
+		'en-US': 'Adverb'
 	},
 	'Auxiliar': {
-		'en-US': ''
+		'en-US': 'Auxiliar'
 	},
 	'Conjunção coordenativa': {
-		'en-US': ''
+		'en-US': 'Coordinating conjunction'
 	},
 	'Determinante': {
-		'en-US': ''
+		'en-US': 'Determiner'
 	},
 	'Interjeição': {
-		'en-US': ''
+		'en-US': 'Interjection'
 	},
 	'Substantivo': {
-		'en-US': ''
+		'en-US': 'Noun'
 	},
 	'Numeral': {
-		'en-US': ''
+		'en-US': 'Numeral'
 	},
 	'Partícula': {
-		'en-US': ''
+		'en-US': 'Particle'
 	},
 	'Pronome': {
-		'en-US': ''
+		'en-US': 'Pronoun'
 	},
 	'Nome próprio': {
-		'en-US': ''
+		'en-US': 'Proper noun'
 	},
 	'Pontuação': {
-		'en-US': ''
+		'en-US': 'Punctuation'
 	},
 	'Conjunção subordinativa': {
-		'en-US': ''
+		'en-US': 'Subordinating conjunction'
 	},
 	'Adicionar esta condição à barra de busca (Atalho: Enter)': {
-		'en-US': ''
+		'en-US': 'Add this condition to the query bar (Shortcut: Return)'
 	},
 	'Adicionar condição com o token em negrito': {
-		'en-US': ''
+		'en-US': 'Add condition with the token in bold type'
 	},
 	'Busca salva': {
-		'en-US': ''
+		'en-US': 'Saved query'
 	},
 	'Busca rápida': {
-		'en-US': ''
+		'en-US': 'Quick query'
 	},
 	'Interrogatório - Ambiente de busca e revisão de corpora anotados': {
-		'en-US': ''
+		'en-US': 'Interrogatório - An environment for querying and revising annotated corpora'
 	},
 	'nova busca': {
-		'en-US': ''
+		'en-US': 'new query'
 	},
 	'buscas salvas': {
-		'en-US': ''
+		'en-US': 'saved queries'
 	},
 	'gerenciar corpora': {
-		'en-US': ''
+		'en-US': 'manage corpora'
 	},
 	'Expressão de busca:': {
-		'en-US': ''
+		'en-US': 'Query expression:'
 	},
 	'Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.': {
-		'en-US': ''
+		'en-US': 'Straightforward queries with a regular expression may be done by typing the words in the query bar. For complex queries, it is necessary to include the criterium and its parameters, according to the instructions on the panel to the right.'
 	},
 	'Voltar à busca normal': {
-		'en-US': ''
+		'en-US': 'Return to regular queries'
 	},
 	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.': {
-		'en-US': ''
+		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">query script model</a> in Python.'
 	},
 	'Edite-o de modo a encontrar as frases pretendidas.': {
-		'en-US': ''
+		'en-US': 'Edit it in order to find the intended sentences.'
 	},
 	'Submeta o script de busca navegando até o arquivo editado ou arraste-o até o botão abaixo.': {
-		'en-US': ''
+		'en-US': 'Submit the query script by browsing for the edited file or drag it to the button below.'
 	},
 	'Lembre-se de renomear o script de modo que especifique o que está sendo buscado.': {
-		'en-US': ''
+		'en-US': 'Remember to rename the script so that it specifies what is being queried.'
 	},
 	'Script de busca:': {
-		'en-US': ''
+		'en-US': 'Query script'
 	},
 	'Corpus:': {
-		'en-US': ''
+		'en-US': 'Corpus:'
 	},
 	'A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.': {
-		'en-US': ''
+		'en-US': 'The query will not be saved in the system, but you may save it afterwards in case you find there were good results.'
 	},
 	'Salvar resultados da busca': {
-		'en-US': ''
+		'en-US': 'Save query results'
 	},
 	'A busca será salva no sistema, e você poderá acessá-la posteriormente na página de interrogações recentes.': {
-		'en-US': ''
+		'en-US': 'The query will be saved in the system, and you will be able to access it under the recent queries page.'
 	},
 	'Visualizar distribuição': {
-		'en-US': ''
+		'en-US': 'View distribution'
 	},
 	'Selecione para visualizar a distribuição das ocorrências que são resultado da sua expressão de busca entre as diferentes categorias de anotação.': {
-		'en-US': ''
+		'en-US': 'Select in order to view distribution of your query results among the different annotation categories.'
 	},
 	'Nome da busca': {
-		'en-US': ''
+		'en-US': 'Query name'
 	},
 	'Visualizar distribuição de:': {
-		'en-US': ''
+		'en-US': 'View distribution of:'
 	},
 	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
-		'en-US': ''
+		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_5" criterio="5" class="toggleCriteria">criterium 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
 	},
 	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e revisão de corpora anotados': {
-		'en-US': ''
+		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and revising annotated corpora'
 	},
 	'Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.': {
-		'en-US': ''
+		'en-US': 'Visit the <a href="../cgi-bin/arquivo_ud.cgi">Corpora repository</a> to upload a new corpus or to check for existing ones.'
 	},
 	'Para começar a interrogar algum corpus, siga um dos caminhos abaixo:': {
-		'en-US': ''
+		'en-US': 'To start interrogating a corpus, choose one of the following paths:'
 	},
 	'Buscas simples: Digite as palavras na barra de busca à esquerda.': {
-		'en-US': ''
+		'en-US': 'Straightforward queries: Type the words in the query bar to the left.'
 	},
 	'Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a>': {
-		'en-US': ''
+		'en-US': 'Complex queries: <a title="Go to the interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Build query expressions interactively</a>'
 	},
 	'Para experientes: Utilize algum dos critérios de busca': {
-		'en-US': ''
+		'en-US': 'For the more experienced: Use one of the query criteria'
 	},
 	'Critério 1: Regex': {
-		'en-US': ''
+		'en-US': 'Criterium 1: Regex'
 	},
 	'Critério 2: Ausência de B apontando para A': {
-		'en-US': ''
+		'en-US': 'Criterium 2: Absence of B child of A'
 	},
 	'Critério 3: Regex Independentes': {
-		'en-US': ''
+		'en-US': 'Criterium 3: Independent Regex'
 	},
 	'Critério 4: Pais e filhos': {
-		'en-US': ''
+		'en-US': 'Criterium 4: Parents and children'
 	},
 	'Critério 5: Python': {
-		'en-US': ''
+		'en-US': 'Criterium 5: Python'
 	},
 	'Para experts: <a title="Abrir interface" style="cursor:pointer;" onclick="$(\'.queryString\').hide(); $(\'.scriptQuery\').show(); $(\'.toggleSalvar\').click(); ">Escreva seu próprio script de busca</a>': {
-		'en-US': ''
+		'en-US': 'For experts: <a title="Open interface" style="cursor:pointer;" onclick="$(\'.queryString\').hide(); $(\'.scriptQuery\').show(); $(\'.toggleSalvar\').click(); ">Write your own query script</a>'
 	},
 	'Atualizações': {
-		'en-US': ''
+		'en-US': 'Updates'
 	},
 	'O sistema de filtrar sentenças foi totalmente reformulado': {
-		'en-US': ''
+		'en-US': 'The sentence filtering system has been completely redefined'
 	},
 	'Quando possível, "Mostrar contexto" permite a leitura de todas as sentenças': {
-		'en-US': ''
+		'en-US': 'When possible, "Show context" will show all sentences in a document'
 	},
 	'Links úteis': {
-		'en-US': ''
+		'en-US': 'Useful pages'
 	},
 	'Repositório dos corpora': {
-		'en-US': ''
+		'en-US': 'Corpora repository'
 	},
 	'Relatório de inquéritos finalizados': {
-		'en-US': ''
+		'en-US': 'Finished inquiries report'
 	},
 	'Julgamento - avaliação de corpora anotados': {
-		'en-US': ''
+		'en-US': 'Julgamento - evaluating annotated corpora'
 	},
-	'Código fonte do Interrogatório no Github': {
-		'en-US': ''
+	'Código fonte do Interrogatório no GitHub': {
+		'en-US': 'Interrogatório source code on GitHub'
 	},
 	'Grupo de pesquisa ComCorHd/PUC-Rio': {
-		'en-US': ''
+		'en-US': 'Research group ComCorHd/PUC-Rio'
 	},
 	'Construtor de expressões de busca': {
-		'en-US': ''
+		'en-US': 'Query expressions builder'
 	},
 	'Quero procurar por:': {
-		'en-US': ''
+		'en-US': 'I want to search for:'
 	},
 	'cujo(a)': {
-		'en-US': ''
+		'en-US': 'whose'
 	},
 	'seja': {
-		'en-US': ''
+		'en-US': 'is'
 	},
 	' a ': {
-		'en-US': ''
-    },
-    ' de ': {
-		'en-US': ''
+		'en-US': ' to '
+    	},
+	' de ': {
+		'en-US': ' from '
 	},
 	'Como funciona?': {
-		'en-US': ''
+		'en-US': 'How does it work?'
 	},
 	'Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.': {
-		'en-US': ''
+		'en-US': 'You may add one or more <b>conditions</b> to your query. Conditions involve a main <b>token</b> (or word), its syntactic head (word upon which the token is syntactically dependent), a token to the right, and/or a token to the left of the main token.'
 	},
 	'Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.': {
-		'en-US': ''
+		'en-US': 'One or more <b>grammatical annotations</b> of this token may be verified, meaning that they must be <b>equivalent</b> or <b>different</b> regarding a certain <b>value</b>. All values may be assigned with <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">regular expressions</a>.'
 	},
 	'Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.': {
-		'en-US': ''
-    },
-    'Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$(\'.toggleDist\').click()">ver a distribuição</a> de alguma anotação para este token.': {
-		'en-US': ''
+		'en-US': 'When clicking <b>OK</b> or pressing <b>Return</b>, the condition will be added to the query bar to the left according to <a href="#criterio_5">criterium 5: Python</a>. Add as many conditions as necessary.'
+	},
+	'Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$(\'.toggleDist\').click()">ver a distribuição</a> de alguma anotação para este token.': {
+		'en-US': 'One may specify which token will appear in bold within the sentence by clicking <b>@</b>. In case you specify none, the last token in the query expression will be selected. The token in bold, in addition to being easily distinguishable, is also the one which will be evaluated in case you wish to <a style="cursor:pointer" onclick="$(\'.toggleDist\').click()">see the distribution</a> of any annotation for this token.'
 	},
 	'Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.': {
-		'en-US': ''
+		'en-US': 'In order to read about the Universal Dependencies categories, see <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> and <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.'
 	},
 	'Se a expressão regular for encontrada em alguma sentença, retorná-la.': {
-		'en-US': ''
+		'en-US': 'If the regular expression is found in a sentence, return it.'
 	},
 	'Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.': {
-		'en-US': ''
+		'en-US': 'Tip: Each group from the regular expression (within brackets) will be shown using a different color.'
 	},
 	'Dica 2: Em um arquivo no formato CoNLL-U, "\\t" separa as colunas, e "\\n", as palavras.': {
-		'en-US': ''
+		'en-US': 'In a CoNLL-U file, "\\t" marks the columns, and "\\n", the words.'
 	},
 	'Exemplos:': {
-		'en-US': ''
+		'en-US': 'Examples:'
 	},
 	'1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".': {
-		'en-US': ''
+		'en-US': '1) Return sentences with the lemma "dizer" followed by "PROPN".'
 	},
 	'2) Retornar sentenças com substantivos seguidos ou não de adjetivos, além de um nome próprio que seja aposto.': {
-		'en-US': ''
+		'en-US': '2) Return sentences with nouns followed or not by adjectives, as well as a proper noun that functions as an apposition.'
 	},
 	'3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "nummod".': {
-		'en-US': ''
+		'en-US': '3) Return sentences with tokens whose POS is equivalent to "NUM" and the deprel, different from "nummod".'
 	},
 	'Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.': {
-		'en-US': ''
+		'en-US': 'If a sentence has a token that is marked A in column X and does not have any other token with value B in column Y child of A, return this sentence.'
 	},
 	'Parâmetros: A#X#B#Y': {
-		'en-US': ''
+		'en-US': 'Parameters: A#X#B#Y'
 	},
 	"Dica: O parâmetro B aceita o operador lógico '|' (ou).": {
-		'en-US': ''
+		'en-US': "Hint: Parameter B accepts the logical operator '|' (or)."
 	},
 	"1) Retornar sentenças em que o 'root' não tenha nenhum 'nsubj' ou 'csubj' apontando para ele.": {
-		'en-US': ''
-	},         'Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.': {
-		'en-US': ''
+		'en-US': "1) Return sentences in which the 'root' has no 'nsubj' or 'csubj' child of it."
+	},
+	'Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.': {
+		'en-US': 'Checks if several regular expressions match with a sentence and returns it in case none of the expressions fail.'
 	},
 	'Parâmetros:': {
-		'en-US': ''
+		'en-US': 'Parameters'
 	},
 	"Dica: Utilize '!' para negar uma expressão regular.": {
-		'en-US': ''
+		'en-US': "Hint: Use '!' to negate a regular expression."
 	},
 	"1) Procurar por sentenças em que o 'root' seja 'VERB', e que não tenham nenhum 'nsubj' nem 'csubj'.": {
-		'en-US': ''
-	},   'Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).': {
-		'en-US': ''
+		'en-US': "1) Search for sentences in which the 'root' is 'VERB', and that have neither 'nsubj' nor 'csubj'."
+	},
+	'Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).': {
+		'en-US': 'Searches for syntactic relations between children (regex 1) and parents (regex 2).'
 	},
 	"Dica: Utilize '!' para negar a presença de um filho ou de um pai.": {
-		'en-US': ''
+		'en-US': "Hint: Use '!' to negate the presence of a child or a parent."
 	},
 	'1) Procurar por sentenças em que uma palavra com classe "NOUN" que também é sujeito esteja apontando para um "ADV".': {
-		'en-US': ''
+		'en-US': '1) Search for sentences in which a word with the "NOUN" classification is a subject and is also attached to an "ADV".'
 	},
 	'Realiza uma condição seguindo a sintaxe em Python.': {
-		'en-US': ''
+		'en-US': 'Fulfills a condition following Python syntax.'
 	},
 	'Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.': {
-		'en-US': ''
+		'en-US': 'You may also use the <a href="#interactive">query expression builder</a> to construct your syntax with criterium 5.'
 	},
 	'Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.': {
-		'en-US': ''
+		'en-US': 'One or more conditions that include a token/word annotation, an operator (== or !=), and a value within inverted commas.'
 	},
 	'São anotações de um token:': {
-		'en-US': ''
+		'en-US': 'A token annotation includes:'
 	},
 	'id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text': {
-		'en-US': ''
+		'en-US': 'id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id and text'
 	},
 	'Opcional: Utilize um "@" para indicar qual token deve ser negritado.': {
-		'en-US': ''
+		'en-US': 'Use "@" to indicate which token must be written in bold.'
 	},
 	'Dica: Todos os valores de uma condição são uma expressão regular (regex).': {
-		'en-US': ''
+		'en-US': 'All the values to a condition are a regular expression (regex).'
 	},
 	'1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).': {
-		'en-US': ''
+		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
 	},
 	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.': {
-		'en-US': ''
+		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterium 5:Python</a>.'
 	},
 	'Voltar ao topo': {
-		'en-US': ''
+		'en-US': 'Back to the top'
 	},
 	'undefined': {
-		'en-US': ''
+		'en-US': 'undefined'
 	},
 	'Apagar interrogação': {
-		'en-US': ''
+		'pt-BR': 'Apagar busca',
+		'en-US': 'Delete query'
 	},
 	'Realizar filtro': {
-		'en-US': ''
+		'en-US': 'Execute filters'
 	},
 	'Buscas salvas: Interrogatório': {
-		'en-US': ''
+		'en-US': 'Saved queries: Interrogatório'
 	},
 	'Filtrar buscas:': {
-		'en-US': ''
+		'en-US': 'Filter queries'
 	},
 	'Tudo': {
-		'en-US': ''
+		'en-US': 'All'
 	},
 	'Nome': {
-		'en-US': ''
+		'en-US': 'Name'
 	},
 	'Critério de busca': {
-		'en-US': ''
+		'en-US': 'Query criterium'
 	},
 	'Expressão de busca': {
-		'en-US': ''
+		'en-US': 'Query expression'
 	},
 	'CoNLL-U': {
-		'en-US': ''
+		'en-US': 'CoNLL-U'
 	},
 	'Data': {
-		'en-US': ''
+		'en-US': 'Date'
 	},
 	'Buscas:': {
-		'en-US': ''
+		'en-US': 'Queries'
 	},
 	'excluir': {
-		'en-US': ''
+		'en-US': 'delete'
 	},
 	'Anotar e submeter': {
-		'en-US': ''
+		'en-US': 'Annotate and submit'
 	},
 	'Submeter corpus anotado': {
-		'en-US': ''
+		'en-US': 'Submit annotated corpus'
 	},
 	'Apagar arquivo': {
-		'en-US': ''
+		'en-US': 'Delete file'
 	},
 	'Escolher arquivo': {
-		'en-US': ''
+		'en-US': 'Choose file'
 	},
 	'Repositório: Interrogatório': {
-		'en-US': ''
+		'en-US': 'Repository: Interrogatório'
 	},
 	'Repositório': {
-		'en-US': ''
+		'en-US': 'Repository'
 	},
 	'Atenção: considere enviar um corpus pelo <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> para liberar funções extras da ET.': {
-		'en-US': ''
+		'en-US': 'Attention: consider submitting a corpus via <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> to unlock ET extra functions.'
 	},
 	'Para alimentar o repositório:': {
-		'en-US': ''
+		'en-US': 'To feed the repository:'
 	},
 	'Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.': {
-		'en-US': ''
+		'en-US': 'Submit an annotated file in the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> format to start interrogating it.'
 	},
 	'Você também pode enviar um arquivo em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">língua portuguesa</a>.': {
-		'en-US': ''
+		'en-US': 'You may also submit a plain text file to be processed by an <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">automatic annotator</a> trained in <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">Portuguese</a>. '
 	},
 	'Selecione o arquivo ou arraste-o para o botão abaixo:': {
-		'en-US': ''
+		'en-US': 'Select the file or drag it to the button below:'
 	},
 	'sentenças': {
-		'en-US': ''
+		'en-US': 'sentences'
 	},
 	'validar': {
-		'en-US': ''
+		'en-US': 'validate'
 	},
 	' -- escolha um corpus -- ': {
-		'en-US': ''
+		'en-US': ' -- select a corpus -- '
 	},
 	'Voltar': {
-		'en-US': ''
+		'en-US': 'Back'
 	},
 	'Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar': {
-		'en-US': ''
+		'en-US': 'To use filters on this page, you must save this query; click here to save it'
 	},
 	'Refazer busca': {
-		'en-US': ''
+		'en-US': 'Redo search'
 	},
 	'Baixar corpus': {
-		'en-US': ''
+		'en-US': 'Download corpus'
 	},
 	'Escolha quantas sentenças deseja selecionar': {
-		'en-US': ''
+		'en-US': 'Choose how many sentences you wish to select'
 	},
 	'Abrir inqueritos': {
-		'en-US': ''
+		'en-US': 'Open inquiries'
 	},
 	'Simular alterações': {
-		'en-US': ''
+		'en-US': 'Simulate changes'
 	},
 	'Filtrar': {
-		'en-US': ''
+		'en-US': 'Filter'
 	},
 	'Baixar arquivo': {
-		'en-US': ''
+		'en-US': 'Download file'
 	},
 	'Mostrar contexto': {
 		'en-US': 'Show context'
 	},
 	'Mostrar anotação': {
-		'en-US': ''
+		'en-US': 'Show annotation'
 	},
 	'Mostrar opções': {
-		'en-US': ''
+		'en-US': 'Show options'
 	},
 	'Abrir inquérito': {
-		'en-US': ''
+		'en-US': 'Open inquiry'
 	},
 	'Você deseja': {
-		'en-US': ''
+		'en-US': 'You wish to'
 	},
 	'Opções': {
-		'en-US': ''
+		'en-US': 'Options'
 	},
 	'Abrir inquérito para múltiplas sentenças': {
-		'en-US': ''
+		'en-US': 'Open inquiries for multiple sentences'
 	},
 	'De:': {
-		'en-US': ''
+		'en-US': 'From:'
 	},
 	'Até:': {
-		'en-US': ''
+		'en-US': 'To:'
 	},
 	'': {
 		'en-US': ''
 	},
 	'Abrir anotação de todas as sentenças': {
-		'en-US': ''
+		'en-US': 'Open all sentences annotations'
 	},
 	'Fechar anotação de todas as sentenças': {
-		'en-US': ''
+		'en-US': 'Close all sentences annotations'
 	},
 	'Correção em lote': {
-		'en-US': ''
+		'en-US': 'Batch correction'
 	},
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': ''
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.cgi">criterium 5: Python</a> syntax.'
 	},
 	'Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.': {
-		'en-US': ''
+		'en-US': 'Before executing the changes, you will be taken to a correction simulation screen.'
 	},
 	'Baixe o <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
-		'en-US': ''
+		'en-US': 'Download the <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python.'
 	},
 	'Edite o script de correção de acordo com o exemplo dentro do arquivo.': {
-		'en-US': ''
+		'en-US': 'Edit the script according to the example in the file.'
 	},
 	'Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.': {
-		'en-US': ''
+		'en-US': 'Choose a name for the type of correction you are suggesting and submit your edited version of the script below.'
 	},
 	'Dê um nome à correção:': {
-		'en-US': ''
+		'en-US': 'Name the correction:'
 	},
 	'Navegue até o arquivo editado ou arraste-o até o botão:': {
-		'en-US': ''
+		'en-US': 'Browse for the edited file or drag it to the button:'
 	},
 	'A opção de filtrar retira frases dessa página e as coloca em uma página à parte, com um nome que você decidir.': {
-		'en-US': ''
+		'en-US': 'The filter option takes sentences from this page and places them in a separate one, with the name you choose to give.'
 	},
 	'Para adicionar frases a um filtro já existente, basta escolher o mesmo nome para o filtro.': {
-		'en-US': ''
+		'en-US': 'To add sentences to an existing filter, simply choose the same name for the filter.'
 	},
 	'Você pode realizar filtros de duas formas:': {
-		'en-US': ''
+		'en-US': 'You may execute filters in two ways:'
 	},
 	'Filtrar com uma nova expressão de busca': {
-		'en-US': ''
+		'en-US': 'Filter with a new query expression'
 	},
 	'Filtrar as frases que foram selecionadas manualmente': {
-		'en-US': ''
+		'en-US': 'Filter the sentences that have been selected manually'
 	},
 	'Filtrar com nova busca': {
-		'en-US': ''
+		'en-US': 'Filter with a new query'
 	},
 	'Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.<br><br>Sintaxe: nº do critério + espaço + parâmetros</span>': {
-		'en-US': ''
+		'en-US': 'Query expression (?):<span class="tooltiptext">Sentences will be removed from the current page and saved in a separate one. If you so desire, it is possible to return to the original query later.<br><br>Syntax: criterium number + parameters</span>'
 	},
 	'Nome do filtro (opcional):': {
-		'en-US': ''
+		'en-US': 'Filter name (optional):'
 	},
 	'Filtrar frases selecionadas': {
-		'en-US': ''
+		'en-US': 'Filter selected sentences'
 	},
 	'Nome do arquivo (sem <em>.conllu</em>):': {
-		'en-US': ''
+		'en-US': 'File name (without <em>.conllu</em>):'
 	},
 	'Anotar frase com o UDPipe': {
-		'en-US': ''
+		'en-US': 'Annotate sentence with UDPipe'
 	},
 	'Visualizar árvore de dependências': {
-		'en-US': ''
+		'en-US': 'Display dependency tree'
 	},
 	'acabaram as sentenças': {
-		'en-US': ''
+		'en-US': 'there are no more sentences'
 	},
 	'Selecionar sentença para filtragem': {
-		'en-US': ''
+		'en-US': 'Select sentence to be filtered'
 	},
 	'Selecionar múltiplas sentenças': {
-		'en-US': ''
+		'en-US': 'Select multiple sentences'
 	},
 	'Selecionar todas as sentenças': {
-		'en-US': ''
+		'en-US': 'Select all sentences'
 	},
 	'Deselecionar todas as sentenças': {
-		'en-US': ''
+		'en-US': 'Deselect all sentences'
 	},
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': ''
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">criterium 5: Python</a> syntax.'
 	},
 	'Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
-		'en-US': ''
+		'en-US': 'Download the <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
 	},
 	'Todas as sentenças voltarão para a busca inicial': {
-		'en-US': ''
+		'en-US': 'All sentences will return to the initial query'
 	},
 	'Retornar esta sentença para a busca inicial': {
-		'en-US': ''
+		'en-US': 'Return this sentence to the initial query'
 	},
 	'Clique para mostrar a anotação': {
-		'en-US': ''
+		'en-US': 'Click to show annotation'
 	},
 	'[Desfazer filtro]': {
-		'en-US': ''
+		'en-US': '[Undo filter]'
 	},
 	'[Fechar página]': {
-		'en-US': ''
+		'en-US': '[Close window]'
 	},
 	'Busca inicial:': {
-		'en-US': ''
+		'en-US': 'Initial query'
 	},
 	'Fechar': {
-		'en-US': ''
+		'en-US': 'Close'
 	},
 	'Relatório gerado dia': {
-		'en-US': ''
+		'en-US': 'Report generated on day'
 	},
 	'Busca:': {
-		'en-US': ''
+		'en-US': 'Query:'
 	},
 	'Quantidade de ocorrências:': {
-		'en-US': ''
+		'en-US': 'Number of occurences:'
 	},
 	'Quantidade de': {
-		'en-US': ''
+		'en-US': 'Number of'
 	},
 	'Busca salva em': {
-		'en-US': ''
+		'en-US': 'Query saved in'
 	},
 	'frequência': {
-		'en-US': ''
+		'en-US': 'frequency'
 	},
 	'Wiki - documentação das ferramentas': {
 		'en-US': 'Wiki - documentation for our tools'
@@ -650,6 +653,51 @@ var translations = {
 	},
 	'Nova função: visualizar distribuição dos dependentes sintáticos': {
 		'en-US': 'New feature: view syntactic children distribution'
+	},
+	" antes do token de id ": {
+		"en-US": " before the token (id number) "
+	},
+	"Adicionar ou remover token": {
+	
+	},
+	"Adicionar token": {
+		"en-US": "Add token"
+	},
+	"Escolha que modificação deseja realizar:": {
+		"en-US": "Choose a modification"
+	},
+	"Inserir sentença": {
+		"en-US": "Insert sentence"
+	},
+	"Inserir sentença de sent_id ": {
+		"en-US": "Insert sentence (sent_id)"
+	},
+	"Mesclar duas sentenças": {
+		"en-US": "Merge two sentences"
+	},
+	"Modificar tokenização": {
+		"en-US": "Modify tokenization"
+	},
+	"Remover token": {
+		"en-US": "Remove token"
+	},
+	"à direita": {
+		"en-US": "To the right"
+	},
+	"à esquerda": {
+		"en-US": "To the left"
+	},
+	"Relatório de tokenização": {
+		"en-US": "Tokenization report"
+	},
+	"modificações de tokenização realizadas": {
+		"en-US": "tokenization changes applied"
+	},
+	"Pesquisar pelo corpus": {
+		"en-US": "Search in the corpus"
+	},
+	"Editar sentença": {
+		"en-US": "Edit sentence"
 	}
 };
 
