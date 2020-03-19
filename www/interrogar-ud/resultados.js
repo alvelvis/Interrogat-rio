@@ -330,7 +330,7 @@ var translations = {
 		'en-US': 'Checks if several regular expressions match with a sentence and returns it in case none of the expressions fail.'
 	},
 	'Parâmetros:': {
-		'en-US': 'Parameters'
+		'en-US': 'Parameters:'
 	},
 	"Dica: Utilize '!' para negar uma expressão regular.": {
 		'en-US': "Hint: Use '!' to negate a regular expression."
@@ -475,6 +475,7 @@ var translations = {
 		'en-US': 'Choose how many sentences you wish to select'
 	},
 	'Abrir inqueritos': {
+		'pt-BR': 'Abrir inquéritos',
 		'en-US': 'Open inquiries'
 	},
 	'Simular alterações': {
