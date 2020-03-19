@@ -148,13 +148,13 @@ pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-al
 for i, entrada in enumerate(sorted(lista, key=lambda x: (-x[1], x[0]))):
 	entradaEscapada = re.escape(entrada[0])
 	if not form["coluna"].value in different_distribution:
-		pagina += f"<tr><td>{i+1}</td><td><a href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(expressao.replace(' @', ' '))} and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entradaEscapada)}\"' title='Buscar casos: {expressao.replace(' @', ' ')} and @{identificador}.{form['coluna'].value} == \"{entradaEscapada}\"' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"
+		pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(expressao.replace(' @', ' '))} and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entradaEscapada)}\"' title='Buscar casos: {expressao.replace(' @', ' ')} and @{identificador}.{form['coluna'].value} == \"{entradaEscapada}\"' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:
 		sent_ids = []
 		for sent_id in all_children[entrada[0]]:
 			sent_ids.append(f"# sent_id = {sent_id}")
 		sent_ids = "1 (" + "|".join(sent_ids) + ")"
-		pagina += f"<tr><td>{i+1}</td><td><a href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids)}' title='Buscar frases: {'|'.join(all_children[entrada[0]])}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"
+		pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids)}' title='Buscar frases: {'|'.join(all_children[entrada[0]])}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/len(dist))*100)+"%</td></tr>"
 pagina += "</table>"
 
 '''
