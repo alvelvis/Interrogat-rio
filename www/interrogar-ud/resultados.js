@@ -465,6 +465,12 @@ var translations = {
 	'Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar': {
 		'en-US': 'To use filters on this page, you must save this query; click here to save it'
 	},
+	'salvar esta busca': {
+		'en-US': 'save this query'
+	},
+	'Casos': {
+		'en-US': 'Occurrences'
+	},
 	'Refazer busca': {
 		'en-US': 'Redo search'
 	},
@@ -699,6 +705,63 @@ var translations = {
 	},
 	"Editar sentença": {
 		"en-US": "Edit sentence"
+	},
+	"Edite as colunas desejadas:": {
+		"en-US": "Edit any cells:"
+	},
+	"Realizar alteração (Ctrl+Enter)": {
+		"en-US": "Execute changes (Ctrl+Enter)"
+	},
+	"Esc: Encerrar inquérito": {
+		"en-US": "Esc: End inquiry"
+	},
+	"Tab / Shift + Tab: ir para coluna à direita/esquerda": {
+		"en-US": "Tab / Shift + Tab: go the column to the right/left"
+	},
+	"↑ / ↓: ir para linha acima/abaixo": {
+		"en-US": "↑ / ↓: go to the line above/below"
+	},
+	"↖: Arraste a coluna dephead de um token para a linha do token do qual ele depende": {
+		"en-US": "↖: Drag a token dephead column to the line of which token it is child"
+	},
+	"Shift + Scroll: Mover tabela para os lados": {
+		"en-US": "Shift + Scroll: Move table horizontally"
+	},
+	"Controles:": {
+		"en-US": "Shortcuts:"
+	},
+	"Relatório de inquéritos": {
+		"en-US": "Inquiries report"
+	},
+	"Visualizar árvore": {
+		"en-US": "Display tree"
+	},
+	"Encerrar inquérito": {
+		"en-US": "End inquiry"
+	},
+	"Novo inquérito": {
+		"en-US": "New inquiry"
+	},
+	"Etiqueta": {
+		"en-US": "Tag"
+	},
+	"Apenas sentenças": {
+		"en-US": "Only sentences"
+	},
+	"Baixar relatório": {
+		"en-US": "Download report"
+	},
+	"Gerenciar etiquetas": {
+		"en-US": "Manage tags"
+	},
+	"Filtrar relatório:": {
+		"en-US": "Filter report:"
+	},
+	"Inquéritos": {
+		"en-US": "Inquiries"
+	},
+	"Página no Interrogatório": {
+		"en-US": "Interrogatório page"
 	}
 };
 

@@ -53,7 +53,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 	html1 += '<form name="form_pesquisa" id="form_pesquisa" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><hr><div id="div_filtro"><span class="translateHtml">Filtrar relatório:</span><br><select name="coluna" id=coluna required><option value=":" class="translateHtml">Tudo</option><option value="6" class="translateHtml">Etiqueta</option><option value="0" class="translateHtml"># text</option><option value="7" class="translateHtml"># sent_id</option><option value="2" class="translateHtml">CoNLL-U</option><option value="3" class="translateHtml">Data</option><option value="4" class="translateHtml">Página no Interrogatório</option></select> <input type=text autofocus="true" name=valor id=valor value="' + valor.replace('"', '&quot;') + '" required> <input name="submit_search" class="translateVal" type=submit value="Realizar filtro" style="display:block-inline">'
 	if coluna: html1 += ' <a style="display:block-inline" class="close-thik" href="../cgi-bin/inquerito.py"></a>'
 
-	html1 += '<br><br><input type=checkbox name=onlysent class="translateHtml" checked>Apenas sentenças</input>' if onlysent else '<br><br><input type=checkbox class="translateHtml" name=onlysent >Apenas sentenças</input>'
+	html1 += '<br><br><input type=checkbox name=onlysent checked><span class="translateHtml">Apenas sentenças</span>' if onlysent else '<br><br><input type=checkbox name=onlysent ><span class="translateHtml">Apenas sentenças</span>'
 
 	if not "HTTP_HOST" in os.environ: os.environ["HTTP_HOST"] = "localhost:8000"
 	html1 += '''</form> - <a href="../interrogar-ud/relatorio.txt" class="translateHtml" target="_blank">Baixar relatório</a> - <form style="display:inline-block" method="POST" id="managetags_form" action="../cgi-bin/inquerito.py"><input type=hidden name="action" value="manage_tags"><a style="cursor:pointer" class="translateHtml" onclick="managetags_form.submit()">Gerenciar etiquetas</a></form></div><hr>'''
@@ -108,7 +108,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False):
 					javistos.append(linha.split('!@#')[6])
 
 
-	html = html1 + 'Inquéritos: ' + str(total) + '<br><br>' + html42 + html2
+	html = html1 + '<span class="translateHtml">Inquéritos</span>: ' + str(total) + '<br><br>' + html42 + html2
 	open('../interrogar-ud/relatorio.txt', 'w').write(relatorio + '\n\n' + 'Inquéritos: ' + str(total) + '\n\nResumo: ' + str(len(lista_sentences)) + ' sentenças alteradas\n' + '\n'.join(lista_sentences) + relatorio42)
 
 
@@ -227,6 +227,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and (not 'action' in form.keys() or 
 	ud = form['conllu'].value
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
+		print(f"Corpus {ud} não encontrado.")
+		exit()
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" <span class="translateHtml">não encontrado</span></span>'
 		ud = bosqueNaoEncontrado
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
