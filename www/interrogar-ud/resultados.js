@@ -264,7 +264,7 @@ var translations = {
 		'en-US': 'I want to search for:'
 	},
 	'cujo(a)': {
-		'en-US': 'whose'
+		'en-US': 'which'
 	},
 	'seja': {
 		'en-US': 'is'
