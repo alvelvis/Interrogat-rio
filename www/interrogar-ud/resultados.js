@@ -779,7 +779,7 @@ var translations = {
 function updateTranslation(){
     $('.translateHtml').each(function(){
         if (translations[$(this).html()]) {
-            if (userLang == "pt-BR") {
+            if (userLang == "pt-BR" || userLang == "pt-PT") {
                 if (translations[$(this).html()]["pt-BR"]) {
                     $(this).html(translations[$(this).html()]["pt-BR"]);
                 }
@@ -792,7 +792,7 @@ function updateTranslation(){
     });
     $('.translateVal').each(function(){
         if (translations[$(this).attr("value")]) {
-            if (userLang == "pt-BR") {
+            if (userLang == "pt-BR" || userLang == "pt-PT") {
                 if (translations[$(this).attr("value")]["pt-BR"]) {
                     $(this).attr("value", translations[$(this).attr("value")]["pt-BR"]);
                 }
@@ -805,7 +805,7 @@ function updateTranslation(){
     });
     $('.translateTitle').each(function(){
         if (translations[$(this).attr("title")]) {
-            if (userLang == "pt-BR") {
+            if (userLang == "pt-BR" || userLang == "pt-PT") {
                 if (translations[$(this).attr("title")]["pt-BR"]) {
                     $(this).attr("title", translations[$(this).attr("title")]["pt-BR"]);
                 }
@@ -818,7 +818,7 @@ function updateTranslation(){
     });
     $('.translateLabel').each(function(){
         if (translations[$(this).attr("label")]) {
-            if (userLang == "pt-BR") {
+            if (userLang == "pt-BR" || userLang == "pt-PT") {
                 if (translations[$(this).attr("label")]["pt-BR"]) {
                     $(this).attr("label", translations[$(this).attr("label")]["pt-BR"]);
                 }
