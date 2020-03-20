@@ -1113,7 +1113,8 @@ $(document).ready(function(){
             $('.ade').html(' a ');
         } else {
             $('.ade').html(' de ');
-        };
+		};
+		updateTranslation();
     });
 
     $('#pesquisa').on('keyup', function(){pesquisaChange()});
