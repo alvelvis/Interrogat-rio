@@ -1,0 +1,3 @@
+[submodule "www/cgi-bin/tools"]
+	path = www/cgi-bin/tools
+	url = https://github.com/UniversalDependencies/tools
