@@ -109,7 +109,7 @@ elif not 'validate' in form:
 else:
     print('<html><head><meta charset="UTF-8"><title>validate.py</title></head><body>')
     try:
-        output = subprocess.check_output('python3 ../cgi-bin/validate.py --max-err=0 --lang=pt ../interrogar-ud/conllu/' + form['validate'].value, shell=True, stderr=subprocess.STDOUT)
+        output = subprocess.check_output('python3 ../cgi-bin/tools/validate.py --max-err=0 --lang=pt ../interrogar-ud/conllu/' + form['validate'].value, shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         output = e.output.decode()
     for line in output.split('\n'):
