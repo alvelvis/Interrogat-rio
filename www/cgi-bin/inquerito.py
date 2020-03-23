@@ -127,10 +127,17 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 					total += 1
 					javistos.append(linha.split('!@#')[6])
 
+<<<<<<< HEAD
 	html = html1 + 'Inquéritos: ' + str(total) + '<br><br>' + html42 + html2
 	with open('../interrogar-ud/relatorio.txt', 'w') as f:
 		f.write(relatorio + '\n\n' + 'Inquéritos: ' + str(total) + '\n\nResumo: ' + str(len(lista_sentences)) + ' sentenças alteradas\n' + '\n'.join(lista_sentences) + relatorio42)
 	return html
+=======
+
+	html = html1 + '<span class="translateHtml">Inquéritos</span>: ' + str(total) + '<br><br>' + html42 + html2
+	open('../interrogar-ud/relatorio.txt', 'w').write(relatorio + '\n\n' + 'Inquéritos: ' + str(total) + '\n\nResumo: ' + str(len(lista_sentences)) + ' sentenças alteradas\n' + '\n'.join(lista_sentences) + relatorio42)
+
+>>>>>>> 8ebd00f83da7edf9cc5b4f4b52f8ef8e3e07644d
 
 if (os.environ['REQUEST_METHOD'] == "POST") or ('textheader' in cgi.FieldStorage() and 'corpus' in cgi.FieldStorage()):
 	if LOGIN:
@@ -257,6 +264,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 	ud = form['conllu'].value
 	colored_ud = ud
 	if not os.path.isfile('../interrogar-ud/conllu/' + ud):
+		print(f"Corpus {ud} não encontrado.")
+		exit()
 		colored_ud = '<span style="background-color:red; color:white;">"' + ud + '" <span class="translateHtml">não encontrado</span></span>'
 		ud = bosqueNaoEncontrado
 	conlluzao = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
