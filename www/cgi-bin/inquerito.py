@@ -305,9 +305,9 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 			</ul>
 			<div class="addToken tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=addToken" class="addTokenForm" method="POST">
-					<select name="addTokenOption" onchange="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $('[name=addTokenId]').val());">
-						<option value="add" class="addTokenOptionSelect translateHtml" onclick="$('.addTokenHelp').html(' antes do token de id ');">Adicionar token</option>
-						<option value="rm" class="addTokenOptionSelect translateHtml" onclick="$('.addTokenHelp').html(' de id ');">Remover token</option>
+					<select name="addTokenOption" class="addTokenOption">
+						<option value="add" class="addTokenOptionSelect translateHtml">Adicionar token</option>
+						<option value="rm" class="addTokenOptionSelect translateHtml">Remover token</option>
 					</select>
 					<span class="translateHtml addTokenHelp"> antes do token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $(this).val());" name="addTokenId">

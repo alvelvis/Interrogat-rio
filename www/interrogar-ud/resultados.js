@@ -1115,6 +1115,17 @@ $(document).ready(function(){
             $('.ade').html(' de ');
 		};
 		updateTranslation();
+	});
+	
+	$('.addTokenOption').change(function(){
+		$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $('[name=addTokenId]').val());
+        if ($('.addTokenOption').prop('selectedIndex') == 0){
+			$('.addTokenHelp').html(' antes do token de id ');
+		};
+        if ($('.addTokenOption').prop('selectedIndex') == 1){
+            $('.addTokenHelp').html(' de id ');
+		};
+		updateTranslation();
     });
 
     $('#pesquisa').on('keyup', function(){pesquisaChange()});
