@@ -178,7 +178,7 @@
 !@#<h3 class="translateHtml">Critério 5: Python</h3>
 <span class="translateHtml">Realiza uma condição seguindo a sintaxe em Python.</span>
 <br>
-<span class="translateHtml">Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.</span>
+<span class="translateHtml">Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.</span>
 <br><br><span class="translateHtml">Parâmetros:</span>
 <br><span class="translateHtml">Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.</span>
 <br><br><span class="translateHtml">São anotações de um token:</span> <pre style="color:black" class="translateHtml">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
