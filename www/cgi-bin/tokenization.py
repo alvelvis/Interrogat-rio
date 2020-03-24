@@ -31,7 +31,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
     elif token_id == "right":
         token_id = str(int(corpus.sentences[sent_id].tokens[-1].id)+1)
 
-    if option == "add":
+    if option in ["add", "addContraction"]:
         
         if not new_tokens:
             if not mergeSentencesId:
@@ -58,14 +58,15 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
                 corpus.sentences[sent_id].map_token_id[token_id] = len(corpus.sentences[sent_id].tokens) - 1
             else:
                 corpus.sentences[sent_id].tokens.insert(corpus.sentences[sent_id].map_token_id[token_id], novo_token)
-            for t, token in enumerate(corpus.sentences[sent_id].tokens):
-                if not '-' in novo_token.id:
-                    if t > corpus.sentences[sent_id].map_token_id[token_id]:
-                        token.id = str(int(token.id)+1) if not '-' in token.id else str(int(token.id.split("-")[0])+1) + "-" + str(int(token.id.split("-")[1])+1)
-                        corpus.sentences[sent_id].map_token_id[token.id] = t
-            for t, token in enumerate(corpus.sentences[sent_id].tokens):
-                if not mergeSentencesId and token.dephead not in ["0", "_"] and corpus.sentences[sent_id].map_token_id[token.dephead] >= corpus.sentences[sent_id].map_token_id[token_id]:
-                    token.dephead = str(int(token.dephead)+1)
+            if option == "add":
+                for t, token in enumerate(corpus.sentences[sent_id].tokens):
+                    if not '-' in novo_token.id:
+                        if t > corpus.sentences[sent_id].map_token_id[token_id]:
+                            token.id = str(int(token.id)+1) if not '-' in token.id else str(int(token.id.split("-")[0])+1) + "-" + str(int(token.id.split("-")[1])+1)
+                            corpus.sentences[sent_id].map_token_id[token.id] = t
+                for t, token in enumerate(corpus.sentences[sent_id].tokens):
+                    if not mergeSentencesId and token.dephead not in ["0", "_"] and corpus.sentences[sent_id].map_token_id[token.dephead] >= corpus.sentences[sent_id].map_token_id[token_id]:
+                        token.dephead = str(int(token.dephead)+1)
 
             if form:
                 if not conllu in tokenization:
@@ -86,13 +87,14 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
                 corpus.sentences[sent_id].metadados['text'] += ' ' + corpus.sentences[mergeSentencesId].text
             corpus.sentences.pop(mergeSentencesId)
 
-    elif option == "rm":
-        for t, token in enumerate(corpus.sentences[sent_id].tokens):
-            if t > corpus.sentences[sent_id].map_token_id[token_id]:
-                token.id = str(int(token.id)-1) if not '-' in token.id else str(int(token.id.split("-")[0])-1) + "-" + str(int(token.id.split("-")[1])-1)
-            if token.dephead not in ["_", "0"]:
-                if corpus.sentences[sent_id].map_token_id[token.dephead] > corpus.sentences[sent_id].map_token_id[token_id]:
-                    token.dephead = str(int(token.dephead)-1)
+    elif option in ["rm", "rmContraction"]:
+        if option == "rm":
+            for t, token in enumerate(corpus.sentences[sent_id].tokens):
+                if t > corpus.sentences[sent_id].map_token_id[token_id]:
+                    token.id = str(int(token.id)-1) if not '-' in token.id else str(int(token.id.split("-")[0])-1) + "-" + str(int(token.id.split("-")[1])-1)
+                if token.dephead not in ["_", "0"]:
+                    if corpus.sentences[sent_id].map_token_id[token.dephead] > corpus.sentences[sent_id].map_token_id[token_id]:
+                        token.dephead = str(int(token.dephead)-1)
         corpus.sentences[sent_id].tokens = [x for t, x in enumerate(corpus.sentences[sent_id].tokens) if t != corpus.sentences[sent_id].map_token_id[token_id]]
 
         if form:
