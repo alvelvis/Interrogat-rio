@@ -19,6 +19,7 @@ if [ -d .git ]; then
   git update-index --assume-unchanged www/cgi-bin/credenciar.py
   git update-index --assume-unchanged www/cgi-bin/variables.py
   git update-index --assume-unchanged www/cgi-bin/max_upload.py
+  git submodule update --init
   git pull
 fi
 
