@@ -312,7 +312,7 @@ var translations = {
 		'en-US': '2) Return sentences with nouns followed or not by adjectives, as well as a proper noun that functions as an apposition.'
 	},
 	'3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "nummod".': {
-		'en-US': '3) Return sentences with tokens whose POS is equivalent to "NUM" and the deprel, different from "nummod".'
+		'en-US': '3) Return sentences with tokens which POS is equivalent to "NUM" and the deprel, different from "nummod".'
 	},
 	'Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.': {
 		'en-US': 'If a sentence has a token that is marked A in column X and does not have any other token with value B in column Y child of A, return this sentence.'
