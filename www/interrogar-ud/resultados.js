@@ -1118,7 +1118,6 @@ $(document).ready(function(){
 	});
 	
 	$('.addTokenOption').change(function(){
-		$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $('[name=addTokenId]').val());
         if ($('.addTokenOption').prop('selectedIndex') == 0){
 			$('.addTokenHelp').html(' antes do token de id ');
 		};
@@ -1131,6 +1130,7 @@ $(document).ready(function(){
 		if ($('.addTokenOption').prop('selectedIndex') == 3){
             $('.addTokenHelp').html(' de id ');
 		};
+		$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + $('.addTokenHelp').html() + $('[name=addTokenId]').val());
 		updateTranslation();
     });
 

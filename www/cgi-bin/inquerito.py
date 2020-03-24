@@ -312,7 +312,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						<option value="rmContraction" class="addTokenOptionSelect translateHtml">Remover contração</option>
 					</select>
 					<span class="translateHtml addTokenHelp"> antes do token de id </span>
-					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + ' ' + $(this).val());" name="addTokenId">
+					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + $('.addTokenHelp').html() + $(this).val());" name="addTokenId">
 					<input type="button" onclick="if ($('[name=addTokenOption]').val() && $('[name=addTokenId]').val()) {{ $('.addTokenForm').submit(); }}" class="translateVal addTokenButton" value="Adicionar token">
 					{sentid}
 					{link}
