@@ -676,6 +676,9 @@ var translations = {
 	"Adicionar token": {
 		"en-US": "Add token"
 	},
+	"Adicionar contração": {
+		"en-US": "Add contraction"
+	},
 	"Escolha que modificação deseja realizar:": {
 		"en-US": "Choose a modification"
 	},
