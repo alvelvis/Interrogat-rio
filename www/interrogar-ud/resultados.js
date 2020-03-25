@@ -1115,6 +1115,23 @@ $(document).ready(function(){
             $('.ade').html(' de ');
 		};
 		updateTranslation();
+	});
+	
+	$('.addTokenOption').change(function(){
+        if ($('.addTokenOption').prop('selectedIndex') == 0){
+			$('.addTokenHelp').html(' antes do token de id ');
+		};
+		if ($('.addTokenOption').prop('selectedIndex') == 2){
+			$('.addTokenHelp').html(' antes do token de id ');
+		};
+        if ($('.addTokenOption').prop('selectedIndex') == 1){
+            $('.addTokenHelp').html(' de id ');
+		};
+		if ($('.addTokenOption').prop('selectedIndex') == 3){
+            $('.addTokenHelp').html(' de id ');
+		};
+		$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + $('.addTokenHelp').html() + $('[name=addTokenId]').val());
+		updateTranslation();
     });
 
     $('#pesquisa').on('keyup', function(){pesquisaChange()});
