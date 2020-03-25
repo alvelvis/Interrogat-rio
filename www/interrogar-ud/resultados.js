@@ -1,4 +1,11 @@
 var translations = {
+	'Ver documentação': {
+		'en-US': 'Go to documentation'
+	},
+	'Nova função: modificar tokenização de uma sentença': {
+		'pt-BR': 'Nova função: modificar tokenização de uma sentença dentro de um inquérito',
+		'en-US': 'New function: modify a sentence tokenization inside an inquiry'
+	},
 	'Limpar expressão de busca': {
 		'en-US': 'Clear query expression'
 	},

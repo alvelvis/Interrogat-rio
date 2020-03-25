@@ -16,6 +16,7 @@
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
+    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
     <li class="translateHtml">Nova função: visualizar distribuição dos dependentes sintáticos</li>
     <li class="translateHtml">O sistema de filtrar sentenças foi totalmente reformulado</li>
     <li class="translateHtml">Quando possível, "Mostrar contexto" permite a leitura de todas as sentenças</li>
