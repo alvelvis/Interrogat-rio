@@ -16,6 +16,12 @@ import functions
 from chardet import detect
 from max_upload import max_filesize
 
+JULGAMENTO = False
+if os.path.isdir("../../Julgamento"):
+    JULGAMENTO = "../../Julgamento"
+if os.path.isdir("../../../Julgamento"):
+    JULGAMENTO = "../../../Julgamento"
+
 def get_encoding_type(file):
     with open(file, 'rb') as f:
         rawdata = f.read()
@@ -36,8 +42,8 @@ def file_size(file_path):
 
 if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     html = open('../interrogar-ud/arquivo_ud.html', 'r').read()
-    if os.path.isdir("../../Julgamento") or os.path.isdir("../../../Julgamento"):
-        html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
+    #if JULGAMENTO:
+        #html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
 
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
@@ -84,6 +90,10 @@ elif not 'validate' in form:
                 with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
                     text = ff.read() # for small files, for big use chunks
                     e.write(text)
+                if JULGAMENTO:
+                    with open(srcfile, 'r', encoding=from_codec) as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w', encoding='utf-8') as e:
+                        text = ff.read() # for small files, for big use chunks
+                        e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
@@ -100,8 +110,12 @@ elif not 'validate' in form:
                     e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
-                os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ../cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ../cgi-bin/' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu")
+                os.system('cat ../interrogar-ud/conllu/' + slugify(f) + ' | ../cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ../cgi-bin/' + functions.modelo + ' > ../interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu")
                 os.system('rm ../interrogar-ud/conllu/' + slugify(f))
+                if JULGAMENTO:
+                    with open('../interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu") as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w') as e:
+                        text = ff.read() # for small files, for big use chunks
+                        e.write(text)
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
         else:
             print('Arquivo não está no formato indicado.')
