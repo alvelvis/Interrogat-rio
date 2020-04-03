@@ -143,6 +143,9 @@ class Sentence:
 			for token in self.tokens:
 				token = self.get_head(token)
 
+	def refresh_map_token_id(self):
+		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
+
 	def tokens_to_str(self):
 		return "\n".join([tok.to_str() for tok in self.tokens])
 

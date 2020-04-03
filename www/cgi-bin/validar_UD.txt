@@ -37,7 +37,7 @@ upos = "ADV" and feats !== "_|Polarity=Neg"
 upos = "AUX" and feats !== "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
 upos = "CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_" and feats !== "_"
 upos = "DET" and feats !== "Definite=Def|Gender=Masc|Number=Sing|PronType=Art|Definite=Ind|Gender=Fem|Number=Plur|PronType=Ind|PronType=Dem|PronType=Prs|PronType=Tot|PronType=Neg|PronType=Emp|PronType=Int|PronType=Rel|Gender=Unsp|Number=Unsp"
-upos = "NOUN" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
+upos = "(NOUN|PROPN)" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
 upos = "NUM" and feats !== "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
 upos = "PART" and feats !== "_|Gender=Masc|Number=Sing"
 upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind"
@@ -48,8 +48,11 @@ upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 upos|erro: UPOS inválido
 upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
 
+upos|erro: Este deprel deve ter upos NOUN, PRON, PROPN, SYM ou NUM
+deprel = "obl" and upos != "(NOUN|PRON|PROPN|SYM|NUM)"
+
 deprel|erro: DEPREL inválido
-deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis)"
+deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl)"
 
 misc|erro: Falta MWE no misc
 misc = "MWEPOS=.*" and misc != "MWE=.*"
@@ -64,5 +67,36 @@ misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_"
 deprel|erro: Este deprel não pode ter dependentes
 head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and head_token.misc != "MWE=.*"
 
-deprel|erro: PRON não pode ter deprel "det"
-upos = "PRON" and deprel = "det"
+upos|erro: Este upos não pode ter deprel "det"
+upos != "DET" and deprel = "det"
+
+deprel|erro: DET deve ter deprel "det"
+upos = "DET" and deprel != "det|fixed"
+
+deprel|erro: ADP deve ter deprel "case"
+upos = "ADP" and deprel != "case|fixed"
+
+deprel|erro: SCONJ deve ter deprel "mark"
+upos = "SCONJ" and deprel != "mark|fixed"
+
+upos|erro: Este upos não pode ter deprel "mark"
+upos != "SCONJ" and deprel = "mark"
+
+upos|erro: Este upos não pode ter ter deprel "cc"
+upos != "CCONJ" and deprel == "cc"
+
+deprel|erro: CCONJ deve ter deprel "cc"
+upos = "CCONJ" and deprel != "cc"
+
+upos|erro: Este upos não pode ter ter deprel "aux"
+upos != "AUX" and deprel == "aux"
+
+deprel|erro: AUX deve ter deprel "aux" ou "cop"
+upos = "AUX" and deprel != "(aux|aux:pass|cop)"
+
+deprel|erro: advmod deve ser filho de ADV, VERB ou ADJ
+deprel = "advmod" and head_token.upos != "(ADV|VERB|ADJ)"
+
+deprel|erro: ADV deve ser advmod
+deprel = "advmod" and upos != "ADV"
+deprel != "advmod" and upos = "ADV"
