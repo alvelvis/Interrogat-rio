@@ -94,9 +94,6 @@ upos != "AUX" and deprel == "aux"
 deprel|erro: AUX deve ter deprel "aux" ou "cop"
 upos = "AUX" and deprel != "(aux|aux:pass|cop)"
 
-deprel|erro: advmod deve ser filho de ADV, VERB ou ADJ
-deprel = "advmod" and head_token.upos != "(ADV|VERB|ADJ)"
-
 deprel|erro: ADV deve ser advmod
 deprel = "advmod" and upos != "ADV"
 deprel != "advmod" and upos = "ADV"
