@@ -17,18 +17,16 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		import estrutura_ud
 		qualquercoisa = estrutura_dados.LerUD(arquivoUD)
 
-	if criterio in [5, 2]:
+	if criterio in [2]:
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
-			with open(arquivoUD, "r") as f:
-				if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
-					#qtd = len(parametros.split("head_token")) -1 + len(parametros.split("previous_token")) -1 + len(parametros.split("next_token")) -1
-					corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
-				else:
-					corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
-				start = time.time()
-				corpus.build(f.read())
-				sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
+			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id)
+			else:
+				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
+			start = time.time()
+			corpus.load(arquivoUD)
+			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
 		else:
 			corpus = arquivoUD
 			
@@ -262,19 +260,23 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		arroba = "token." + arroba
 		arroba = arroba.replace("token.token", "token")
 		arroba = arroba.rsplit(".", 1)[0]
-		#if " in " in arroba: arroba = arroba.split(" in ")[1]
-
-		#with open("expressao_busca.txt", "w") as f:
-			#f.write(f"parametro: {parametros}\npesquisa: {pesquisa}\narroba: {arroba}")
 
 		agilizar = re.findall(r'"([^"]*)"', parametros)
-		#print(agilizar)
-		#agilizado = [x for x in corpus.sentences.values() if all(re.search(y, x.to_str()) for y in agilizar)]
-		#agilizado = corpus.sentences.values()
-		agilizado = filter(lambda x: all(re.search(y, x.to_str()) for y in agilizar), corpus.sentences.values())
-		#print(agilizado)
+
+		import estrutura_ud
+		if isinstance(arquivoUD, str):
+			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar)
+			else:
+				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar)
+			start = time.time()
+			corpus.load(arquivoUD)
+			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
+		else:
+			corpus = arquivoUD
+
 		casos = []
-		for sentence in agilizado:
+		for sentence in corpus.sentences.values():
 			if limit and limit == len(output):
 				break
 			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str();"
