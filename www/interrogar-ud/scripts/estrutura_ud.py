@@ -178,8 +178,8 @@ class Corpus:
 			if '\n\n' in txt: txt = txt.rsplit("\n\n", 1)[1]
 			self.pre = old_txt.split(txt)[0].strip()
 			self.pos = old_txt.split(txt)[1].strip()
-
-		if self.keywords:
+			sents = txt.split(self.separator)
+		elif self.keywords:
 			sents = [x for x in txt.split(self.separator) if all(re.search(y, x) for y in self.keywords)]
 		else:
 			sents = txt.split(self.separator)
@@ -194,7 +194,6 @@ class Corpus:
 				threads[i].start()
 			for i in range(self.thread):
 				threads[i].join()
-
 		else:
 			self.sent_build(sents)
 
