@@ -227,7 +227,11 @@ class Corpus:
 					sentence.append(line)
 				else:
 					sentence = "\n".join(sentence)
-					if self.keywords:
+					if self.sent_id:
+						if '# sent_id = ' + self.sent_id + "\n" in sentence:
+							self.sent_build([sentence])
+							break
+					elif self.keywords:
 						if all(re.search(x, sentence) for x in self.keywords):
 							self.sent_build([sentence])
 					else:
