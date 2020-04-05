@@ -222,21 +222,20 @@ class Corpus:
 	def load(self, path):
 		sentence = []
 		with open(path, "r", encoding=self.encoding) as f:
-			for line in f:
-				if line.strip():
-					sentence.append(line)
-				else:
-					sentence = "\n".join(sentence)
-					if self.sent_id:
-						if '# sent_id = ' + self.sent_id + "\n" in sentence:
-							self.sent_build([sentence])
-							break
-					elif self.keywords:
-						if all(re.search(x, sentence) for x in self.keywords):
-							self.sent_build([sentence])
+			if not self.sent_id:
+				for line in f:
+					if line.strip():
+						sentence.append(line)
 					else:
-						self.sent_build([sentence])
-					sentence = []
+						sentence = "\n".join(sentence)
+						if self.keywords:
+							if all(re.search(x, sentence) for x in self.keywords):
+								self.sent_build([sentence])
+						else:
+							self.sent_build([sentence])
+						sentence = []
+			else:
+				self.build(f.read())
 
 	def save(self, path):
 		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
