@@ -85,7 +85,6 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	if not os.path.isdir('../cgi-bin/json'):
 		os.mkdir('../cgi-bin/json')
 	try:
-		sys.stderr.write("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"))
 		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
 			pickle.dump(resultados, f)
 	except:
@@ -155,7 +154,6 @@ elif form['action'].value == 'view':
 	resultados = []
 	sentences_ja_filtrados = []
 	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
-		sys.stderr.write('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"))
 		if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
 			with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
 				busca = pickle.load(f)
