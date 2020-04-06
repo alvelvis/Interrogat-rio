@@ -85,6 +85,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	if not os.path.isdir('../cgi-bin/json'):
 		os.mkdir('../cgi-bin/json')
 	try:
+		sys.stderr.write("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p")
 		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
 			pickle.dump(resultados, f)
 	except:
