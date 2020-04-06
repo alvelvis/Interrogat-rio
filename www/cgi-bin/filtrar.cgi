@@ -76,10 +76,9 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	busca_original = [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in busca_original['output']]
 	
 	if not 'nome_pesquisa' in form:
-		nome_filtro = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '')
+		nome_filtro = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '').strip()
 	else:
-		nome_filtro = form['nome_pesquisa'].value
-
+		nome_filtro = form['nome_pesquisa'].value.strip()
 
 	resultados = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(criterio), parametros)
 	if not os.path.isdir('../cgi-bin/json'):
