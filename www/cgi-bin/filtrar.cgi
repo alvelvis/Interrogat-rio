@@ -72,8 +72,8 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		with open("../cgi-bin/json/" + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")) as f:
 			busca_original = json.load(f)
 	else:
-		busca_original = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1])
-	busca_original = [x['resultado'].split("# sent_id = ")[1].split("\n")[0] for x in busca_original['output']]
+		busca_original = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1], fastSearch=True)
+	busca_original = [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in busca_original['output']]
 	
 	if not 'nome_pesquisa' in form:
 		nome_filtro = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '')
@@ -81,12 +81,12 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		nome_filtro = form['nome_pesquisa'].value
 
 
-	resultados = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(criterio), parametros)
+	resultados = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(criterio), parametros, fastSearch=True)
 	if not os.path.isdir('../cgi-bin/json'):
 		os.mkdir('../cgi-bin/json')
 	try:
-		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
-			pickle.dump(resultados, f)
+		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".json"), "w") as f:
+			json.dump(resultados, f)
 	except:
 		pass
 
@@ -100,7 +100,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		filtros[pagina_html] = {'ud': ud, 'filtros': {}}
 	if not nome_filtro in filtros[pagina_html]['filtros']:
 		filtros[pagina_html]['filtros'][nome_filtro] = {'parametros': [], 'sentences': []}
-	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id if 'sent_id' in x['resultadoEstruturado'].metadados else x['resultadoEstruturado'].text for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
+	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
 	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append(criterio + ' ' + parametros)
 
 	with open("../cgi-bin/filtros.json", "w") as f:
@@ -154,11 +154,11 @@ elif form['action'].value == 'view':
 	resultados = []
 	sentences_ja_filtrados = []
 	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
-		if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
-			with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
-				busca = pickle.load(f)
-		else:
-			busca = interrogar_UD.main(f"../interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
+		#if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".json")):
+			#with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".json"), "r") as f:
+				#busca = json.load(f)
+		#else:
+		busca = interrogar_UD.main(f"../interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
 		for x in busca['sentences']:
 			if x in sentences and x not in sentences_ja_filtrados:
 				resultados.append(busca['output'][busca['sentences'][x]]['resultadoAnotado'])
