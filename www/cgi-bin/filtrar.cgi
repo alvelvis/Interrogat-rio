@@ -154,6 +154,7 @@ elif form['action'].value == 'view':
 	resultados = []
 	sentences_ja_filtrados = []
 	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
+		sys.stderr.write('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")
 		if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
 			with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
 				busca = pickle.load(f)
