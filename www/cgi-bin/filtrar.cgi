@@ -48,7 +48,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 			print(html)
 			exit()
 
-	pesquisa = form['pesquisa'].value
+	pesquisa = form['pesquisa'].value.strip()
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]):
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
