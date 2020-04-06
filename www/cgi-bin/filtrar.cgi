@@ -68,9 +68,9 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	pagina_html = form['html'].value
 	pesquisa_original = form['pesquisa_original'].value
 
-	if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".p")):
-		with open("../cgi-bin/json/" + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".p"), "rb") as f:
-			busca_original = pickle.load(f)
+	if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")):
+		with open("../cgi-bin/json/" + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")) as f:
+			busca_original = json.load(f)
 	else:
 		busca_original = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1])
 	busca_original = [x['resultadoEstruturado'].sent_id for x in busca_original['output']]
