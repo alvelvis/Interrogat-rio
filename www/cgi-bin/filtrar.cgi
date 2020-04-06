@@ -73,7 +73,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 			busca_original = json.load(f)
 	else:
 		busca_original = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1])
-	busca_original = [x['resultadoEstruturado'].sent_id for x in busca_original['output']]
+	busca_original = [x['resultado'].split("# sent_id = ")[1].split("\n")[0] for x in busca_original['output']]
 	
 	if not 'nome_pesquisa' in form:
 		nome_filtro = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '')
