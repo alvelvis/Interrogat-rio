@@ -212,6 +212,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				output.append(qualquercoisa[a])
 
 	#Python
+
 	if criterio == 5:
 		pesquisa = parametros
 
