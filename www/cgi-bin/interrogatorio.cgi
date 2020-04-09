@@ -24,15 +24,20 @@ import html as web
 
 def printar(coluna = '', valor = ''):
 	from estrutura_dados import slugify as slugify
-	html = open('../interrogar-ud/index1.html', 'r').read()
+	with open('../interrogar-ud/index1.html', 'r') as f:
+		html = f.read()
 
-	if not os.path.isfile('../interrogar-ud/queries.txt'): open('../interrogar-ud/queries.txt', 'w').write('')
-	queries = open('../interrogar-ud/queries.txt', 'r').read().splitlines()
+	if not os.path.isfile('../interrogar-ud/queries.txt'):
+		with open('../interrogar-ud/queries.txt', 'w') as f:
+			f.write('')
+	with open('../interrogar-ud/queries.txt', 'r') as f:
+		queries = f.read().splitlines()
 	queries = [x for x in queries if x.strip() != '']
 
 	novo_html = ''
 
-	criterios = open('../interrogar-ud/criterios.txt', 'r').read().split('!@#')
+	with open('../interrogar-ud/criterios.txt', 'r') as f:
+		criterios = f.read().split('!@#')
 	criterios = [x for x in criterios if x.strip()]
 
 	novo_html += '<form id=pesquisa action="../cgi-bin/interrogatorio.cgi" method="POST"><table><tr><td style="padding-bottom:0px; margin-bottom:0px;" class="translateHtml">Filtrar buscas:</td></tr><tr><td style="padding-right:0px;"><select id=coluna name="coluna" required><option value=":" class="translateHtml">Tudo</option><option value="1" class="translateHtml">Nome</option><option value="3" class="translateHtml">Critério de busca</option><option value="4" class="translateHtml">Expressão de busca</option><option value="5" class="translateHtml">CoNLL-U</option><option value="6" class="translateHtml">Data</option></select></td><td style="width:100%"><input type=text style="width:100%; max-width:100%;" id=valor name=valor value="' + valor + '" autofocus=true required></td><td style="padding-left:0px;"><input type=submit class="btn-gradient mini orange translateVal" value="Realizar filtro" style="display:inline-block">'

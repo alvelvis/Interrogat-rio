@@ -11,7 +11,8 @@ def LerUD(ud_file):
 	codification = "utf-8"
 
 	#Abre o arquivo no caminho fornecido e segmenta as sentenças
-	arquivo = open(ud_file, 'r').read().split('\n\n')
+	with open(ud_file, 'r') as f:
+		arquivo = f.read().split('\n\n')
 	#Agora que "arquivo" é uma lista de sentenças, apagar os itens que estiverem vazios (no caso, por exemplo, de linhas em excesso no final do arquivo, resultando em splits("\n\n") que não são de fato sentenças)
 	arquivo = [x for x in arquivo if x]
 
@@ -49,7 +50,8 @@ def EscreverUD(UD, arquivo):
 	UD = "\n\n".join(UD) + '\n\n' #O "\n" no final é necessário pois todo arquivo UD deve ter uma linha vazia no final, é uma exigência dos códigos de comparação, avaliação, etc.
 
 	#Salvar :)
-	open(arquivo, 'w', encoding=codification).write(UD)
+	with open(arquivo, 'w', encoding=codification) as f:
+		f.write(UD)
 
 #Depois de feitas as alterações em um arquivo UD (variável "UD"), essa função retorna o conjunto de listas para o formato "string" normal para ser salvo em um arquivo (variável "arquivo")
 def PrintarUD(UD, arquivo):

@@ -90,7 +90,8 @@ def sendPOSTInterrogar():
 	with open('../interrogar-ud/queries.txt', 'r') as f:
 		queries.extend(f.read().splitlines())
 
-	open('../interrogar-ud/queries.txt', 'w').write("\n".join(queries))
+	with open('../interrogar-ud/queries.txt', 'w')as f:
+		f.write("\n".join(queries))
 
 	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "'+caminhoCompletoHtml+'" }</script></body>')
 
