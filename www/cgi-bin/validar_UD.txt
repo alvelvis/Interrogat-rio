@@ -82,7 +82,7 @@ upos = "SCONJ" and deprel != "mark|fixed"
 upos|erro: Este upos não pode ter deprel "mark"
 upos != "SCONJ" and deprel = "mark"
 
-upos|erro: Este upos não pode ter ter deprel "cc"
+upos|erro: Este upos não pode ter deprel "cc"
 upos != "CCONJ" and deprel == "cc"
 
 deprel|erro: CCONJ deve ter deprel "cc"
@@ -97,3 +97,6 @@ upos = "AUX" and deprel != "(aux|aux:pass|cop)"
 deprel|erro: ADV deve ser advmod
 deprel = "advmod" and upos != "ADV"
 deprel != "advmod" and upos = "ADV"
+
+feats|erro: VERB deve ter feats VerbForm
+upos = "(AUX|VERB)" and feats != "VerbForm=.*"
