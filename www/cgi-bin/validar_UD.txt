@@ -55,8 +55,8 @@ deprel|erro: DEPREL inválido
 deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl)"
 
 misc|erro: Falta MWE no misc
-misc = "MWEPOS=.*" and misc != "MWE=.*"
-deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
+#misc = "MWEPOS=.*" and misc != "MWE=.*"
+#deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
 
 misc|erro: Falta MWEPOS no misc
 misc = "MWE=.*" and misc != "MWEPOS=.*"
@@ -64,8 +64,8 @@ misc = "MWE=.*" and misc != "MWEPOS=.*"
 misc|erro: MISC inválido
 misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_"
 
-deprel|erro: Este deprel não pode ter dependentes
-head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and head_token.misc != "MWE=.*"
+deprel|erro: O pai deste token não pode ter dependentes
+head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and @deprel != "(fixed|compound|flat|flat:name)"
 
 upos|erro: Este upos não pode ter deprel "det"
 upos != "DET" and deprel = "det"
