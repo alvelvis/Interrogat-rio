@@ -308,7 +308,7 @@ for ''' + identificador + ''' in sentence.tokens:
 			sentence2.print = "\\n".join(sentence2.print)
 
 			if separate:
-				sentence2.metadados['corresponde'] = ""
+				sentence2.metadados.pop('corresponde', None)
 				final = sentence2.metadados_to_str() + "\\n" + sentence2.print
 				output.append(final)
 			
@@ -316,7 +316,7 @@ for ''' + identificador + ''' in sentence.tokens:
 		print(e)
 		pass
 if 'corresponde' in sentence2.metadados and not separate:
-	sentence2.metadados['corresponde'] = ""
+	sentence2.metadados.pop('corresponde', None)
 	final = sentence2.metadados_to_str() + "\\n" + sentence2.print
 	output.append(final)''')
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
