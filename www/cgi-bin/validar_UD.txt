@@ -100,3 +100,10 @@ deprel != "advmod" and upos = "ADV"
 
 feats|erro: VERB deve ter feats VerbForm
 upos = "(AUX|VERB)" and feats != "VerbForm=.*"
+
+feats|erro: DET e PRON devem ter feats PronType e/ou Definite
+upos = "DET|PRON" and feats != "PronType=.*"
+upos != "DET|PRON" and feats = "PronType=.*"
+upos != "DET|PRON" and feats = "Definite.*"
+feats = "PronType=Art" and feats != "Definite=.*"
+feats = "Definite=.*" and feats != "PronType=Art"
