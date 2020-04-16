@@ -21,9 +21,21 @@ import sys
 import functions
 import json
 
+form = cgi.FieldStorage()
+
+def loadCorpus(ud):
+    try:
+        corpus = estrutura_ud.Corpus(recursivo=False)
+        corpus.load("../interrogar-ud/conllu/" + ud)
+        n_sent = len(corpus.sentences)
+        n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
+
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'ud': ud}))
+    except:
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK"}))
+
 def renderSentences(script=""):
 
-    form = cgi.FieldStorage()
     conllu = form['conllu'].value
     corpus = conllu
     caminhoCompletoConllu = '../interrogar-ud/conllu/' + conllu
@@ -144,6 +156,9 @@ def renderSentences(script=""):
         }))
 
 if os.environ['REQUEST_METHOD'] == "POST":
-    start = time.time()
-    renderSentences()
-    sys.stderr.write('\nrenderSentences: ' + str(time.time() - start))
+    if not 'ud' in form:
+        start = time.time()
+        renderSentences()
+        sys.stderr.write('\nrenderSentences: ' + str(time.time() - start))
+    else:
+        loadCorpus(form['ud'].value)

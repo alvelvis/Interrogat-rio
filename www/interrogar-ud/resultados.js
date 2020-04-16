@@ -841,6 +841,21 @@ function updateTranslation(){
     });
 };
 
+function loadCorpora(){
+	$('.n_sent').each(function(){
+		$ud = $(this).attr('ud');
+		$.post('../cgi-bin/api.py', {
+            'ud': $ud,
+        },
+        function(data) {
+			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
+			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+        },
+        "text",
+    	);
+	});
+};
+
 function loadingScreen(){
     $('#loading-bg').show();
     $('#loading-image').show();
