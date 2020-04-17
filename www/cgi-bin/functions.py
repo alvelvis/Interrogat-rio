@@ -61,21 +61,21 @@ def encodeUrl(s):
         .replace("&", "%26")\
         .replace("@", "%40")\
         .replace('`', "%60")\
-        .replace('/', "%\2F")\
+        .replace('/', "%2F")\
         .replace(":", "%3A")\
         .replace(";", "%3B")\
         .replace("<", "%3C")\
         .replace("=", "%3D")\
-        .replace(">", "%\3E")\
-        .replace("?", "%\3F")\
+        .replace(">", "%3E")\
+        .replace("?", "%3F")\
         .replace("[", "%5B")\
         .replace("\\", "%5C")\
         .replace("]", "%5D")\
-        .replace("^", "%\5E")\
+        .replace("^", "%5E")\
         .replace("{", "%7B")\
         .replace("|", "%7C")\
         .replace("}", "%7D")\
-        .replace("~", "%\7E")\
+        .replace("~", "%7E")\
         .replace('"', "%22")\
         .replace("'", "%27")\
         .replace("+", "%2B")\
