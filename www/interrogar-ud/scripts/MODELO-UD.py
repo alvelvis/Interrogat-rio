@@ -26,6 +26,7 @@ import sys, os, re
 from datetime import datetime
 import copy
 from chardet import detect
+import html
 
 
 # get file encoding type
@@ -84,7 +85,7 @@ for x, linha in enumerate(codigo):
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'
-		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except:\n" + tab + "\tpass\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(alterar + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", tokens) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sent_id)\n" + tab + "\tsim.append(alterar + '''\n''' + 'ANTES: ' + anterior + '''\n''' + 'DEPOIS: ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", tokens) + ')'))\n" + tab + "except:\n" + tab + "\tpass"
+		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except:\n" + tab + "\tpass\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(alterar + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", tokens) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sent_id)\n" + tab + "\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', alterar) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", tokens) + ')')))\n" + tab + "except:\n" + tab + "\tpass"
 
 with open("codigo", "w") as f:
 	f.write("\n".join(codigo))
@@ -102,7 +103,12 @@ for head in arquivo_ud.sentences:
 		sent_id = sentence.sent_id
 	if alterar:
 		for n, token in enumerate(tokens):
-			exec(codigo)
+			try:
+				exec(codigo)
+			except Exception as e:
+				with open("../cgi-bin/error.log", "w") as f:
+					f.write(html.escape(str(e)))
+					exit()
 										
 if action == 'sim': open('../interrogar-ud/scripts/sim.txt', 'w').write('\n\n'.join(sim))
 if action == 'exec':

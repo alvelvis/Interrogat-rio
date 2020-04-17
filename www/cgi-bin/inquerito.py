@@ -30,6 +30,11 @@ if os.path.isdir("../../../Julgamento"):
 
 form = cgi.FieldStorage()
 
+if not os.path.isfile("../interrogar-ud/inqueritos_cars.txt"):
+	with open("../interrogar-ud/inqueritos_cars.txt", "w") as f:
+		f.write("")
+
+
 mostrarEtiqueta = False
 bosqueNaoEncontrado = corpusGenericoInquerito
 
@@ -246,14 +251,15 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 				sim = f.read()
 		except:
 			with open("../cgi-bin/error.log", "r") as f:
-				print(f.read().splitlines()[-1])
-				exit()
+				file_errors = f.read()
+			os.remove("../cgi-bin/error.log")
+			print(file_errors.splitlines()[-1])
+			exit()
 		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação ({round(len(sim.splitlines())/4)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
 		<br>Nome da correção: ' + form['scriptName'].value + '\
 		<br>Corpus: <a target="_blank" href="../interrogar-ud/conllu/' + form['conllu'].value + '" download>' + form['conllu'].value + '</a>\
 		<hr>'
-		html += '<pre>' + sim.replace('<', '&lt;').replace('>', '&gt;')
-		html += '</pre>'
+		html += "<pre>" + sim + "</pre>"#.replace('<', '&lt;').replace('>', '&gt;')
 		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" method="POST"><input type=hidden name=parametros value=\''+form['parametros'].value+'\'><input type=hidden name=criterio value=\"'+form['criterio'].value+'\"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="Executar script"></form>'''
 		os.remove('../interrogar-ud/scripts/sim.txt')
 
