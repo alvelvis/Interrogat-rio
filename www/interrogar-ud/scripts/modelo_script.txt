@@ -1,6 +1,7 @@
 #Escreva seu script abaixo, seguindo a sintaxe das classes em estrutura_ud.py
 #"token" é o nome do primeiro token sendo procurado, e "tokens" é a lista de tokens na sentença atual
 #Também existe a variável "sentence", para a sentença atual, e "n", para o número do token atual
+#Para adicionar novos valores a colunas com múltiplos valores (features, misc), utilize as funções append_to() e remove_from(), como no exemplo abaixo
 
 if token.upos == "NUM" and token.deprel == "nmod":
 	token.deprel = "editar aqui!"
