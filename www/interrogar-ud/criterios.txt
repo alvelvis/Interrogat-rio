@@ -17,7 +17,7 @@
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
+    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
