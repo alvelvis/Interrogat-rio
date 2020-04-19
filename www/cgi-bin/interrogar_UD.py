@@ -333,8 +333,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 		agilizar = re.findall(r'"([^"]*)"', parametros)
 
-		with open("interrogar_UD.txt", "w") as f:
-			f.write(pesquisa)
+#		with open("interrogar_UD.txt", "w") as f:
+#			f.write(pesquisa)
 
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
