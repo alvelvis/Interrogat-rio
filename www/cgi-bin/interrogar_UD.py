@@ -298,6 +298,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace(" and ", " and token.")
 		pesquisa = pesquisa.replace(" or ", " or token.")
 		pesquisa = pesquisa.replace(" in ", " in token.")
+		pesquisa = pesquisa.replace(" text ", " sentence.text ")
+		pesquisa = pesquisa.replace(" sent_id ", " sentence.sent_id ")
 		pesquisa = pesquisa.replace('token."', '"')
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
@@ -330,6 +332,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		arroba = arroba.rsplit(".", 1)[0]
 
 		agilizar = re.findall(r'"([^"]*)"', parametros)
+
+		with open("interrogar_UD.txt", "w") as f:
+			f.write(pesquisa)
 
 		import estrutura_ud
 		if isinstance(arquivoUD, str):

@@ -1275,11 +1275,11 @@ function topFunction() {
 
 function excluir_selection() {
     
-    $('#pesquisa_filtro').val("1 ");
+    $('#pesquisa_filtro').val('5 sent_id = "');
     $(".cb:checked").each(function(){
-        $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + '(\\s' + escapeRegExp($(this).attr('sent_id')) + '$)|');
+        $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + '(' + escapeRegExp($(this).attr('sent_id')) + ')|');
     });
-    $('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + '');
+    $('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + '" and ' + $('[name=parametros]').val());
     /**for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
             if (document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf("<b>") !== -1){
