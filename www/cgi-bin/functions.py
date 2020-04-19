@@ -43,11 +43,11 @@ class prettyDate:
 
     def beautifyDateDMAH(self):
         
-        return f"{self.dia} de {self.mesExtenso_3}/{self.ano} às {self.tempo}"
+        return f"{self.dia} de {self.mesExtenso_3}. {self.ano} {self.tempo}"
 
     def beautifyDateDMH(self):
 
-        return f"{self.dia} de {self.mesExtenso_3} às {self.tempo}"
+        return f"{self.dia} de {self.mesExtenso_3}. às {self.tempo}"
 
     def beautifyDateDMA(self):
 
