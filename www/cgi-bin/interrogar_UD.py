@@ -44,7 +44,7 @@ def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[
 									children_future.append(_t)
 						[children.append(x) for x in children_future if x not in children]
 						children_future = []
-					children_list = [cleanEstruturaUD(sentence.tokens[x].word) for x in sorted(children)]
+					children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
 					if len(children_list) > 1:
 						dist.append(" ".join(children_list))
 						if children_list:
@@ -55,7 +55,7 @@ def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[
 
 	dicionario = dict()
 	for entrada in dist:
-		entrada = entrada.replace("<b>", "").replace("</b>", "")
+		#entrada = entrada.replace("<b>", "").replace("</b>", "")
 		if not entrada in dicionario: dicionario[entrada] = 1
 		else: dicionario[entrada] += 1
 
@@ -304,6 +304,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
+		pesquisa = pesquisa.replace("token.sentence.", "sentence.")
 		pesquisa = pesquisa.replace('token.int(', 'int(')
 #		pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
