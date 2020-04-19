@@ -96,7 +96,7 @@ def renderSentences(script=""):
     arquivoHtml = ""
     resultados = []
     quantos = 0
-    filtrado = 0
+    filtrado = int(form['filtrado'].value)
     for ocorrencia in resultadosBusca['output'][startPoint:]:
         anotado = estrutura_ud.Sentence(recursivo=False)
         estruturado = estrutura_ud.Sentence(recursivo=False)
