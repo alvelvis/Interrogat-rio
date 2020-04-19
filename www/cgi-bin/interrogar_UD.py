@@ -9,13 +9,13 @@ import html as web
 
 different_distribution = ["dependentes", "children"]
 
-def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[]):
+def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[], sent_id=""):
 	import estrutura_ud
 
 	if not isinstance(arquivoUD, dict):
-		sentences = main(arquivoUD, criterio, parametros, fastSearch=True)['output']
+		sentences = main(arquivoUD, criterio, parametros, sent_id=sent_id, fastSearch=True)['output']
 	else:
-		sentences = dic_interrogar_UD['output']
+		sentences = arquivoUD['output']
 		
 	corpus = list()
 	for sentence in sentences:
