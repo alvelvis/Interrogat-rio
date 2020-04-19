@@ -596,6 +596,12 @@ var translations = {
 	'Visualizar árvore de dependências': {
 		'en-US': 'Display dependency tree'
 	},
+	'Árvore': {
+		'en-US': 'Tree'
+	},
+	'Sintagmas': {
+		'en-US': 'Phrases'
+	},
 	'acabaram as sentenças': {
 		'en-US': 'there are no more sentences'
 	},

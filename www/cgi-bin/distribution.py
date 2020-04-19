@@ -41,7 +41,7 @@ if "link_dist" in form and os.path.isfile("../cgi-bin/filtros.json"):
 		filtros = []
 
 
-dic_dist = interrogar_UD.getDistribution("../interrogar-ud/conllu/" + form['corpus'].value, 5, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
+dic_dist = interrogar_UD.getDistribution("../interrogar-ud/conllu/" + form['corpus'].value, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
 
 pagina = '''
 	<button onclick="topFunction()" id="myBtn" class="translateTitle translateHtml" title="Voltar ao topo">Voltar ao topo</button>

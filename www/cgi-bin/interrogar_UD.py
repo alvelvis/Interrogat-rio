@@ -9,10 +9,10 @@ import html as web
 
 different_distribution = ["dependentes", "children"]
 
-def getDistribution(arquivoUD, criterio, parametros, coluna="lemma", filtros=[], dic_interrogar_UD={}):
+def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[]):
 	import estrutura_ud
 
-	if not dic_interrogar_UD:
+	if not isinstance(arquivoUD, dict):
 		sentences = main(arquivoUD, criterio, parametros, fastSearch=True)['output']
 	else:
 		sentences = dic_interrogar_UD['output']

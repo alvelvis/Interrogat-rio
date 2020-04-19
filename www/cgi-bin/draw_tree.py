@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import estrutura_ud
-import os
+import os, sys
+import interrogar_UD
 import cgi, cgitb
 cgitb.enable()
 
@@ -134,5 +135,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	forest = Forest()
 	forest.build(sentence.tokens_to_str())
 
+	sintagmas = interrogar_UD.getDistribution(conllu, parametros='sent_id = "' + form['sent_id'].value + '" and word = ".*"', coluna="children")
+
 	print('''<html><head><title class="translateHtml">Visualizar árvore: Interrogatório</title><script src=\"../../interrogar-ud/jquery-latest.js\"></script><script src=\"../../interrogar-ud/resultados.js?version=15\"></script><meta charset="UTF-8" name="viewport"><style>body { width: 90%; margin: 20px auto; }</style></head><body><h1 class="translateHtml">Visualizar árvore</h1><hr><a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br>
-	''' + form['conllu'].value + "<br><br>" + sentence.text + '<pre style="font-size: 14px; line-height: 1.5;">' + forest.to_str() + '</pre></body></html>')
+	''' + form['conllu'].value + "<br><br>" + sentence.text + "<br><h2 class='translateHtml'>Sintagmas</h2><pre>" + "\n".join(sintagmas["all_children"]) + "</pre>" + '<h2 class="translateHtml">Árvore</h2><pre style="font-size: 14px; line-height: 1.5;">' + forest.to_str() + '</pre></body></html>')
