@@ -3,9 +3,75 @@ import re
 import copy
 import sys
 import time
-from functions import tabela as tabelaf
+from functions import tabela as tabelaf, cleanEstruturaUD
 import cgi
 import html as web
+
+different_distribution = ["dependentes", "children"]
+
+def getDistribution(arquivoUD, criterio, parametros, coluna="lemma", filtros=[], dic_interrogar_UD={}):
+	import estrutura_ud
+
+	if not dic_interrogar_UD:
+		sentences = main(arquivoUD, criterio, parametros, fastSearch=True)['output']
+	else:
+		sentences = dic_interrogar_UD['output']
+		
+	corpus = list()
+	for sentence in sentences:
+		sent = estrutura_ud.Sentence()
+		sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
+		if sent.sent_id not in filtros:
+			corpus.append(sent)
+	
+	dist = list()
+	all_children = {}
+	for sentence in corpus:
+		for t, token in enumerate(sentence.tokens):
+			if '<b>' in token.to_str() or "</b>" in token.to_str():
+				if not coluna in different_distribution:
+					dist.append(token.col.get(coluna))
+				elif coluna in ["dependentes", "children"]:
+					children = [t]
+					children_already_seen = []
+					children_future = []
+					while children_already_seen != children:
+						for child in children:
+							if not child in children_already_seen:
+								children_already_seen.append(child)
+							for _t, _token in enumerate(sentence.tokens):
+								if cleanEstruturaUD(_token.dephead) == cleanEstruturaUD(sentence.tokens[child].id):
+									children_future.append(_t)
+						[children.append(x) for x in children_future if x not in children]
+						children_future = []
+					children_list = [cleanEstruturaUD(sentence.tokens[x].word) for x in sorted(children)]
+					if len(children_list) > 1:
+						dist.append(" ".join(children_list))
+						if children_list:
+							if not " ".join(children_list) in all_children:
+								all_children[" ".join(children_list)] = []
+							all_children[" ".join(children_list)].append(sentence.sent_id)
+
+
+	dicionario = dict()
+	for entrada in dist:
+		entrada = entrada.replace("<b>", "").replace("</b>", "")
+		if not entrada in dicionario: dicionario[entrada] = 1
+		else: dicionario[entrada] += 1
+
+	lista = list()
+	for entrada in dicionario:
+		lista.append((entrada, dicionario[entrada]))
+
+	freq = dict()
+	for entrada in dicionario:
+		if not dicionario[entrada] in freq: freq[dicionario[entrada]] = 1
+		else: freq[dicionario[entrada]] += 1
+	lista_freq = list()
+	for entrada in freq:
+		lista_freq.append((entrada, freq[entrada]))
+
+	return {"all_children": all_children, "lista": lista, "dist": len(dist)}
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
@@ -319,7 +385,7 @@ if 'corresponde' in sentence2.metadados and not separate:
 	sentence2.metadados.pop('corresponde', None)
 	final = sentence2.metadados_to_str() + "\\n" + sentence2.print
 	output.append(final)''')
-		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
+		sys.stderr.write("\ncritério 5: " + str(time.time() - start) + "\n")
 		casos = len(casos)
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	if criterio not in [5, 2]:
@@ -395,6 +461,9 @@ if __name__ == '__main__':
 					printar[a][i] = '\t'.join(printar[a][i])
 			printar[a] = '\n'.join(printar[a])
 		printar = '\n\n'.join(printar)
+	elif criterio in [5]:
+		printar = "\n\n".join([x['resultado'] for x in printar])
+		print(getDistribution(arquivoUD, criterio, parametros))
 	
 	print(printar)
-
+	
