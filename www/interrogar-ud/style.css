@@ -161,7 +161,7 @@ transition: 0.3s;
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-background-color: #ddd;
+background-color: #ccc;
 }
 
 /* Create an active/current tablink class */

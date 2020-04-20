@@ -123,7 +123,7 @@ def renderSentences(script=""):
         arquivoHtml += f'<p>{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}</p>' + '\n'
         if estruturado.sent_id:
             arquivoHtml += '<p onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" style="cursor:pointer;" class="metadados_sentence">'
-            arquivoHtml += f'''<input class="cb translateTitle" id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" type=checkbox>''' if nomePesquisa not in fastSearch else ""
+            arquivoHtml += f'''<input class="cb translateTitle" id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" type=checkbox>''' if nomePesquisa not in fastSearch and criterio == 5 else ""
             arquivoHtml += f'''{estruturado.sent_id}</p>''' + '\n'
         arquivoHtml += f"<p><span id=text_{str(startPoint+i+1)}>{anotado.text.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
         if ((estruturado.sent_id and ('-' in estruturado.sent_id or re.search(r'^\d+$', estruturado.sent_id))) or estruturado.id) and estruturado.text:

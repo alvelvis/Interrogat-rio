@@ -504,10 +504,18 @@ var translations = {
 		'en-US': 'Show context'
 	},
 	'Mostrar anotação': {
-		'en-US': 'Show annotation'
+		'en-US': 'Show annotation',
+		'pt-BR': 'Mostrar anotação'
+	},
+	'Esconder anotação': {
+		'en-US': 'Hide annotation',
+		'pt-BR': 'Esconder anotação'
 	},
 	'Mostrar opções': {
 		'en-US': 'Show options'
+	},
+	'Esconder opções': {
+		'en-US': 'Hide options'
 	},
 	'Abrir inquérito': {
 		'en-US': 'Open inquiry'
@@ -727,6 +735,9 @@ var translations = {
 	"Realizar alteração (Ctrl+Enter)": {
 		"en-US": "Execute changes (Ctrl+Enter)"
 	},
+	"Função exclusiva para critério 5": {
+		'en-US': 'Feature exclusively available for criterion 5'
+	},
 	"Esc: Encerrar inquérito": {
 		"en-US": "Esc: End inquiry"
 	},
@@ -765,6 +776,12 @@ var translations = {
 	},
 	"Baixar relatório": {
 		"en-US": "Download report"
+	},
+	"Exportar resultados para .html": {
+		'en-US': "Export results to .html"
+	},
+	"Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.": {
+		'en-US': "Inquiries will be opened for X sentences. In case the sentences won't open, you must guarantee your web browser is not blocking pop-ups."
 	},
 	"Gerenciar etiquetas": {
 		"en-US": "Manage tags"
@@ -971,6 +988,11 @@ $(document).on('keydown', function(e){
 });
 
 function carregarPosts(){
+	if($('[name=criterio]').val() !== '5'){
+		if($('[tab=selectionFilter]').hasClass('filterAnchor')){
+			$('[tab=selectionFilter]').removeClass('filterAnchor').addClass('translateTitle').attr('title', 'Função exclusiva para critério 5').css('text-decoration', 'line-through');
+		};
+	};
     $(window).unbind('scroll');
     $("title").text("Carregando | " + $("title").text());
     var url;
@@ -1060,8 +1082,8 @@ $(document).ready(function(){
         }
     });
 
-    $('.tablinks').click(function(){
-        $('.tablinks').css('background-color', 'transparent');
+    $('.tab button').click(function(){
+        $('.tab button').css('background-color', '');
         $('.filterDiv').hide();
         $('#script').hide();
         $('.selectSome').hide();
@@ -1338,7 +1360,7 @@ function tudo(event) {
 
     if (event == "abrir") {
         for (i = 0; i < anotacoes.length; i++) {
-            if (anotacoes[i].value == "Mostrar anotação") {
+            if (Object.values(translations['Mostrar anotação']).indexOf(anotacoes[i].value) > -1) {
                 anotacoes[i].click();
             }
         }
@@ -1346,7 +1368,7 @@ function tudo(event) {
 
     if (event == "fechar") {
         for (i = 0; i < anotacoes.length; i++) {
-            if (anotacoes[i].value == "Esconder anotação") {
+            if (Object.values(translations['Esconder anotação']).indexOf(anotacoes[i].value) > -1) {
                 anotacoes[i].click();
             }
         }
@@ -1357,20 +1379,24 @@ function tudo(event) {
 function mostrar(nome, botao) {
     if (document.getElementById(nome).style.display == "none"){
         document.getElementById(nome).style.display = "block"
-        document.getElementById(botao).value = "Esconder anotação"
+		document.getElementById(botao).value = "Esconder anotação"
+		updateTranslation()
     } else {
         document.getElementById(nome).style.display = "none"
-        document.getElementById(botao).value = "Mostrar anotação"
+		document.getElementById(botao).value = "Mostrar anotação"
+		updateTranslation()
     }
 }
 
 function mostraropt(nome, botao) {
     if (document.getElementById(nome).style.display == "none"){
         document.getElementById(nome).style.display = "block"
-        document.getElementById(botao).value = "Esconder opções"
+		document.getElementById(botao).value = "Esconder opções"
+		updateTranslation()
     } else {
         document.getElementById(nome).style.display = "none"
-        document.getElementById(botao).value = "Mostrar opções"
+		document.getElementById(botao).value = "Mostrar opções"
+		updateTranslation()
     }
 }
 
