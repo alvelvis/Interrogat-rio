@@ -685,7 +685,8 @@ var translations = {
 	" antes do token de id ": {
 		"en-US": " before the token (id number) "
 	},
-	"Adicionar ou remover token": {	
+	"Adicionar ou remover token": {
+		"en-US": "Add or remove token"
 	},
 	"Adicionar token": {
 		"en-US": "Add token"
