@@ -220,6 +220,7 @@ class paginaHtml():
 			self.arquivoHtml = self.adicionarExecutarScript()
 		if self.script:
 			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{slugify(self.script)}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{cgi.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
+			self.arquivoHtml = self.arquivoHtml.replace("Correção em lote", "")
 
 		return self.arquivoHtml
 
