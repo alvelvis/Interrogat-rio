@@ -419,7 +419,7 @@ var translations = {
 		'en-US': 'Date'
 	},
 	'Buscas:': {
-		'en-US': 'Queries'
+		'en-US': 'Queries:'
 	},
 	'excluir': {
 		'en-US': 'delete'
