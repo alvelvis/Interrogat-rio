@@ -95,7 +95,7 @@ for i, entrada in enumerate(sorted(dic_dist["lista"], key=lambda x: (-x[1], x[0]
 	entradaEscapada = re.escape(entrada[0])
 	pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])
 	if not form["coluna"].value in interrogar_UD.different_distribution:
-		pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(expressao.replace(' @', ' '))}{pipeline}' title='Buscar casos: {expressao.replace(' @', ' ')} and @{identificador}.{form['coluna'].value} == \"{entradaEscapada}\"' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+		pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(expressao.replace(' @', ' '))}{pipeline}' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
