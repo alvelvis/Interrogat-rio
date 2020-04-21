@@ -21,7 +21,7 @@
     <div class="content">
       <h2 class="translateHtml">Repositório</h2>
       <hr>
-      <!--JULGAMENTOh2 style="padding:10px; background-color:orange; color:white;" class="translateHtml">Atenção: considere enviar um corpus pelo <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> para liberar funções extras da ET.</h2JULGAMENTO-->
+      <!--JULGAMENTOh3 style="padding:10px; background-color:orange; color:white;" class="translateHtml">Atenção: O Interrogatório está integrado ao <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, ou seja, os corpora aqui listados também estarão disponívels por lá.</h3JULGAMENTO-->
       <h3 class="translateHtml">Para alimentar o repositório:</h3>
       <ul>
         <li class="translateHtml">Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
@@ -40,7 +40,7 @@
       </form>
       <!--SPLIT--> </div>
       <script>
-      function apagar(conllu){
+      function apagarCorpus(conllu){
       	if (confirm($('.apagararquivo').val() + ' "' + conllu + '"?')) {
           $('.fieldUd').val(conllu);
           $('.apagarCorpus').submit();

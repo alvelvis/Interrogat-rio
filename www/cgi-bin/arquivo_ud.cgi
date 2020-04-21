@@ -42,8 +42,8 @@ def file_size(file_path):
 
 if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     html = open('../interrogar-ud/arquivo_ud.html', 'r').read()
-    #if JULGAMENTO:
-        #html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
+    if JULGAMENTO:
+        html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
 
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
@@ -55,15 +55,7 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
 
     for ud in sorted(uds):
         if ud != 'README':
-            #try:
-                #with open('../interrogar-ud/conllu/' + ud, 'r') as f:
-                    #leitura = f.read()
-            #n_sent = str(len(leitura.split('# text = ')) -1)
-            #n_tokens = str(len([x for x in leitura.splitlines() if len(x.split("\t")) > 2 and not '-' in x.split("\t")[0]]))
-            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + f'</a> &nbsp;&nbsp; <span ud="{ud}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a class="translateHtml" href="#" onclick='apagar("''' + ud + '''")' >excluir</a> | <a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
-            #except Exception as e:
-                #sys.stderr.write(str(e))
-                #html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a> &nbsp;&nbsp; MemoryError &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a href="#" class="translateHtml" onclick='apagar("''' + ud + '''")' >excluir</a> | <a href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''" class="translateHtml" target="_blank">validar</a></div>\n'''
+            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + f'</a> &nbsp;&nbsp; <span ud="{ud}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> | <a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
 
     novo_html = html1 + "<script>loadCorpora()</script>" + html2
 

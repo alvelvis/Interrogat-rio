@@ -442,8 +442,8 @@ var translations = {
 	'Repositório': {
 		'en-US': 'Repository'
 	},
-	'Atenção: considere enviar um corpus pelo <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> para liberar funções extras da ET.': {
-		'en-US': 'Attention: consider submitting a corpus via <a style="color:yellow" href="https://github.com/alvelvis/Julgamento">Julgamento</a> to unlock ET extra functions.'
+	'Atenção: O Interrogatório está integrado ao <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, ou seja, os corpora aqui listados também estarão disponívels por lá.': {
+		'en-US': 'Warning: Interrogatório is integrated to <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, which means every corpus listed here is also available there.'
 	},
 	'Para alimentar o repositório:': {
 		'en-US': 'To feed the repository:'

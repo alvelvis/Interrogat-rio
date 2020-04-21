@@ -153,7 +153,7 @@ if (os.environ['REQUEST_METHOD'] == "POST") or ('textheader' in cgi.FieldStorage
 		pass
 
 if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
-	os.system('rm ../interrogar-ud/conllu/' + form['ud'].value)
+	os.system('mv ../interrogar-ud/conllu/' + form['ud'].value + ' ../interrogar-ud/tmp/')
 	if JULGAMENTO:
 		os.system(f'rm {JULGAMENTO}/static/uploads/' + form['ud'].value.rsplit(".", 1)[0] + "_original.conllu")
 	print('<script>window.location = "../cgi-bin/arquivo_ud.cgi"</script>')
