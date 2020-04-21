@@ -8,5 +8,10 @@ import os
 import cgi, cgitb
 cgitb.enable()
 
+print("atualizando")
 os.system("git pull")
+julgamento_folder = ["../Julgamento/", "../../Julgamento/", "../../../Julgamento"]
+for folder in julgamento_folder:
+	if os.path.isdir(folder):
+		os.system(f"cd {folder}; git pull")
 print("ok")
