@@ -19,6 +19,7 @@ import html as web
 import time
 import sys
 import json
+from chardet import detect
 import functions
 
 def main():
@@ -29,7 +30,7 @@ def main():
 
 def sendRequestInterrogar():
 	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
-	
+
 	with open("../interrogar-ud/interrogar_UDnew.html", "r") as f:
 		paginaHTML = f.read().split("<!--SPLIT-->")
 
@@ -99,13 +100,23 @@ def sendPOSTInterrogar():
 	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "'+caminhoCompletoHtml+'" }</script></body>')
 
 
+# get file encoding type
+def get_encoding_type(file):
+    with open(file, 'rb') as f:
+        rawdata = f.read()
+    return detect(rawdata)['encoding']
+
 def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
 		if not os.path.isdir('../cgi-bin/scripts'):
 			os.mkdir('../cgi-bin/scripts')
+		with open("../interrogar-ud/modelo_query.py") as f:
+			modelo_query = f.read()
 		with open('../cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		os.system("cp '../cgi-bin/scripts/" + form['scriptQueryFile'].filename + "' ../cgi-bin/queryScript.py")
+		with open("../cgi-bin/scripts/" + form['scriptQueryFile'].filename, encoding=get_encoding_type("../cgi-bin/scripts/" + form['scriptQueryFile'].filename)) as f:
+			with open("../cgi-bin/queryScript.py", "w") as w:
+				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().splitlines())))
 		script = form['scriptQueryFile'].filename
 		parametros = form['scriptQueryFile'].filename
 	else:
@@ -167,7 +178,7 @@ class paginaHtml():
 		self.numeroOcorrencias = numeroOcorrencias
 		self.casosOcorrencias = casosOcorrencias
 		self.script = script
-	
+
 	def adicionarHeader(self):
 		arquivoHtml = self.arquivoHtml.replace('<title>link de pesquisa 1 (203): Interrogatório</title>', '<title>' + cgi.escape(self.nomePesquisa) + ' (' + self.numeroOcorrencias + '): Interrogatório</title>')
 		casos = f"<br><span class='translateHtml'>Casos</span>: {str(self.casosOcorrencias)}" if self.casosOcorrencias else ""
@@ -176,7 +187,7 @@ class paginaHtml():
 		with open ('../interrogar-ud/criterios.txt', 'r') as f:
 			criterios = f.read().split('!@#')
 		criterios = [x for x in criterios if x.strip()]
-		
+
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
 		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" class="translateTitle" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')

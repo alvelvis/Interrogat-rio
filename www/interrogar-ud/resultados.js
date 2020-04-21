@@ -989,11 +989,7 @@ $(document).on('keydown', function(e){
 });
 
 function carregarPosts(){
-	if($('[name=criterio]').val() !== '5'){
-		if($('[tab=selectionFilter]').hasClass('filterAnchor')){
-			$('[tab=selectionFilter]').removeClass('filterAnchor').addClass('translateTitle').attr('title', 'Função exclusiva para critério 5').css('text-decoration', 'line-through');
-		};
-	};
+	
     $(window).unbind('scroll');
     $("title").text("Carregando | " + $("title").text());
     var url;
@@ -1302,7 +1298,10 @@ function excluir_selection() {
     $(".cb:checked").each(function(){
         $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + '(' + escapeRegExp($(this).attr('sent_id')) + ')|');
     });
-    $('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + '" and ' + $('[name=parametros]').val());
+	$('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + '"');
+	if($('#expressao').html().split(" ")[0] == "5"){
+		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').html().split(" ").slice(1,$('#expressao').html().split(" ").length).join(" "));
+	}
     /**for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
             if (document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf("<b>") !== -1){
