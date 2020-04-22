@@ -34,6 +34,10 @@ if not os.path.isfile("../interrogar-ud/inqueritos_cars.txt"):
 	with open("../interrogar-ud/inqueritos_cars.txt", "w") as f:
 		f.write("")
 
+if not os.path.isfile("../interrogar-ud/inqueritos.txt"):
+	with open("../interrogar-ud/inqueritos.txt", "w") as f:
+		f.write("")
+
 
 mostrarEtiqueta = False
 bosqueNaoEncontrado = corpusGenericoInquerito
