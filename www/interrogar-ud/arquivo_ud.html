@@ -31,7 +31,7 @@
         <input type=hidden class="anotaresubmeter translateVal" value="Anotar e submeter">
         <input type=hidden class="submetercorpusanotado translateVal" value="Submeter corpus anotado">
         <input type=hidden class="apagararquivo translateVal" value="Apagar arquivo">
-          <input name="file" onchange="if(/\.txt$/.test($(this).val())) { $('#submeter').val($('.anotaresubmeter').val()); $('#submeter').show(); } else {if(/\.conllu$/.test($(this).val())) { $('#submeter').val($('.submetercorpusanotado').val()); $('#submeter').show(); } else { $('#submeter').hide(); }} " value="Escolher arquivo" class="translateVal" required="required" type="file"> </label><br><br><input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit"></form>
+          <input name="file" onchange="if(/\.txt$/.test($(this).val())) { $('#submeter').val($('.anotaresubmeter').val()); $('#submeter').show(); } else {if(/\.conllu$/.test($(this).val())) { $('#submeter').val($('.submetercorpusanotado').val()); $('#submeter').show(); } else { $('#submeter').hide(); }} " value="Escolher arquivo" class="translateVal uploadFile" required="required" type="file"> </label><br><br><input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit"></form>
       <br>
       <br>
       <form action="../cgi-bin/inquerito.py" method="POST" class="apagarCorpus">

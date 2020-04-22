@@ -76,6 +76,7 @@ def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
 	parametros = parametros.strip()
+	pesquisa = ""
 	
 	#Lê o arquivo UD
 	if criterio in [1, 3, 4]:
@@ -424,7 +425,7 @@ if 'corresponde' in sentence2.metadados and not separate:
 	if not fastSearch:
 		sentences = {x['resultadoEstruturado'].sent_id: i for i, x in enumerate(output)}
 
-	return {'output': output, 'casos': casos, 'sentences': sentences}
+	return {'output': output, 'casos': casos, 'sentences': sentences, 'parameters': pesquisa if pesquisa else parametros}
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web
 if __name__ == '__main__':

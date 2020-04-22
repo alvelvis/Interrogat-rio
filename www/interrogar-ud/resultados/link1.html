@@ -59,19 +59,19 @@
           <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
           <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
           <ol type="1">
-            <li class="translateHtml">Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download>modelo de script de correção</a> em Python.</li>
+            <li class="translateHtml">Baixe o <a href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">modelo de script de correção</a> em Python.</li>
             <li class="translateHtml">Edite o script de correção de acordo com o exemplo dentro do arquivo.</li>
             <li class="translateHtml">Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.</li>
           </ol>
         </ul>
         <div style="margin-left:40px;">
           <form class='scriptForm' method=POST action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
-            <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>
-            <input name="scriptName" id="nomeScript" required>
-            <br><br>
             <label for="fileScript"><b class="translateHtml">Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
             <br>
-            <input type="file" name="fileScript" id="fileScript" required>
+            <input type="file" onchange="if (! $('#nomeScript').val()) { $('#nomeScript').val($('#fileScript').val().split(/(\\|\/)/g).pop().split('.txt')[0]) }" name="fileScript" id="fileScript" required>
+            <br><br>
+            <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>
+            <input name="scriptName" id="nomeScript" required>
             <br><br>
             <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="translateVal buscaOption btn-gradient orange small"
   type="submit" onclick="">
