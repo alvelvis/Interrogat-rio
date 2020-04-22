@@ -16,7 +16,7 @@ dephead != "\d+"
 id|erro: 5 - ID inválido
 id != "[0-9\-]+"
 
-erro: 6 - Alguma anotação está vazia (sem underline)
+word|erro: 6 - Alguma anotação está vazia (sem underline)
 id == ""
 word == ""
 lemma == ""
@@ -41,7 +41,6 @@ upos = "(NOUN|PROPN)" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=P
 upos = "NUM" and feats !== "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
 upos = "PART" and feats !== "_|Gender=Masc|Number=Sing"
 upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind"
-upos = "PROPN" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp"
 upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
