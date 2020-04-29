@@ -23,16 +23,21 @@ import json
 
 form = cgi.FieldStorage()
 
-def loadCorpus(ud):
-    try:
-        corpus = estrutura_ud.Corpus(recursivo=False)
-        corpus.load("../interrogar-ud/conllu/" + ud)
-        n_sent = len(corpus.sentences)
-        n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
+def loadCorpus(ud, size="0.0"):
+    #sys.stderr.write(ud)
+    #sys.stderr.write(size)
+    if size and float(size) < 50.0:
+        try:
+            corpus = estrutura_ud.Corpus(recursivo=False)
+            corpus.load("../interrogar-ud/conllu/" + ud)
+            n_sent = len(corpus.sentences)
+            n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
 
-        print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'ud': ud}))
-    except:
-        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK"}))
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'ud': ud}))
+        except:
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'ud': ud}))
+    else:
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'ud': ud}))
 
 def renderSentences(script=""):
 
@@ -161,4 +166,4 @@ if os.environ['REQUEST_METHOD'] == "POST":
         renderSentences()
         sys.stderr.write('\nrenderSentences: ' + str(time.time() - start))
     else:
-        loadCorpus(form['ud'].value)
+        loadCorpus(form['ud'].value, form['size'].value)

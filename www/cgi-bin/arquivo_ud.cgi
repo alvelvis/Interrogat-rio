@@ -51,11 +51,10 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     if not os.path.isdir('../interrogar-ud/conllu'):
         os.mkdir('../interrogar-ud/conllu')
 
-    uds = [x for x in os.listdir('../interrogar-ud/conllu') if os.path.isfile('../interrogar-ud/conllu/' + x)]
+    uds = [x for x in os.listdir('../interrogar-ud/conllu') if os.path.isfile('../interrogar-ud/conllu/' + x) if x != "README.md" and x.endswith(".conllu")]
 
     for ud in sorted(uds):
-        if ud != 'README':
-            html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + f'</a> &nbsp;&nbsp; <span ud="{ud}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> | <a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
+        html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + f'</a> &nbsp;&nbsp; <span ud="{ud}" size="{str(file_size("../interrogar-ud/conllu/" + ud)).split(" ")[0]}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; ' + str(file_size('../interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('../interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + ''' &nbsp;&nbsp;&nbsp; <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> | <a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.cgi?validate=''' + ud + '''">validar</a></div>\n'''
 
     novo_html = html1 + "<script>loadCorpora()</script>" + html2
 

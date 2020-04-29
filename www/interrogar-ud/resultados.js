@@ -868,8 +868,10 @@ function updateTranslation(){
 function loadCorpora(){
 	$('.n_sent').each(function(){
 		$ud = $(this).attr('ud');
+		$size = $(this).attr('size');
 		$.post('../cgi-bin/api.py', {
-            'ud': $ud,
+			'ud': $ud,
+			'size': $size
         },
         function(data) {
 			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
