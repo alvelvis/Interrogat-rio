@@ -31,19 +31,19 @@ if LOGIN:
 html = form['html'].value
 if os.path.isfile(f"../interrogar-ud/resultados/{html}.html"):
     os.remove(f"../interrogar-ud/resultados/{html}.html")
-    if os.path.isfile("../cgi-bin/filtros.json"):
-        with open("../cgi-bin/filtros.json") as f:
-            filtros = json.load(f)
-        if html in filtros:
-            filtros.pop(html)
-            with open("../cgi-bin/filtros.json", "w") as f:
-                json.dump(filtros, f)
-    with open("../interrogar-ud/queries.txt") as f:
-        queries = f.read()
-    queries = [x for x in queries.splitlines() if not html in x]
-    with open("../interrogar-ud/queries.txt", "w") as f:
-        f.write("\n".join(queries))
-    
-    print("<script>window.location = '../cgi-bin/interrogatorio.cgi'</script>")
 else:
     print(f"{html} não encontrado")
+if os.path.isfile("../cgi-bin/filtros.json"):
+    with open("../cgi-bin/filtros.json") as f:
+        filtros = json.load(f)
+    if html in filtros:
+        filtros.pop(html)
+        with open("../cgi-bin/filtros.json", "w") as f:
+            json.dump(filtros, f)
+with open("../interrogar-ud/queries.txt") as f:
+    queries = f.read()
+queries = [x for x in queries.splitlines() if not html in x]
+with open("../interrogar-ud/queries.txt", "w") as f:
+    f.write("\n".join(queries))
+
+print("<script>window.location = '../cgi-bin/interrogatorio.cgi'</script>")
