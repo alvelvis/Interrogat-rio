@@ -333,7 +333,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		arroba = arroba.replace("token.token", "token")
 		arroba = arroba.rsplit(".", 1)[0]
 
-		agilizar = re.findall(r'"([^"]*)"', parametros)
+		agilizar = re.findall(r'"([^"]*)"', parametros)# if any(x in parametros for x in [".lemma", ".word", ".misc", ".feats", ".deps", ".xpos"]) else []
 
 #		with open("interrogar_UD.txt", "w") as f:
 #			f.write(pesquisa)
