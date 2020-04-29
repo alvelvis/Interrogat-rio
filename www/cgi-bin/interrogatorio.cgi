@@ -49,7 +49,7 @@ def printar(coluna = '', valor = ''):
 
 	for arquivo in os.listdir("../interrogar-ud/inProgress"):
 		if arquivo != "README.txt":
-			if int(str(datetime.now()).split(" ")[0].rsplit("-", 1)[1]) != int(str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + arquivo)))).split(" ")[0].split("-")[1]) or int(str(datetime.now()).split(" ")[1].split(":")[0]) > int(str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + arquivo)))).split(" ")[1].split(":")[0]) + 4:
+			if int(str(datetime.now()).split(" ")[0].split("-")[2]) != int(str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + arquivo)))).split(" ")[0].split("-")[2]) or int(str(datetime.now()).split(" ")[1].split(":")[0]) > int(str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + arquivo)))).split(" ")[1].split(":")[0]) + 4:
 				os.remove("../interrogar-ud/inProgress/" + arquivo)
 
 	inProgress = ["<tr><td>" + prettyDate(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime("../interrogar-ud/inProgress/" + x)))).beautifyDateDMAH() + "</td><td>" + x.split(" ", 1)[1].rsplit(' ', 1)[0] + "</td><td>" + x.split(" ", 1)[0] + "</td></tr>" for x in os.listdir('../interrogar-ud/inProgress/') if x.endswith('.inProgress')]

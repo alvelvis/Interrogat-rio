@@ -62,7 +62,7 @@ def sendPOSTInterrogar():
 	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora + '.html'
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		with open("../interrogar-ud/inProgress/{}.inProgress".format(slugify(f"{conllu} {criterio} {parametros} {dataAgora}")), 'w') as f:
+		with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"), 'w') as f:
 			try:
 				f.write("")
 			except:
@@ -73,7 +73,7 @@ def sendPOSTInterrogar():
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script, fullParameters).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		os.remove("../interrogar-ud/inProgress/{}.inProgress".format(slugify(f"{conllu} {criterio} {parametros} {dataAgora}")))
+		os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"))
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
