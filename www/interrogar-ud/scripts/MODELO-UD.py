@@ -27,6 +27,7 @@ from datetime import datetime
 import copy
 from chardet import detect
 import html
+import multiprocessing
 
 
 # get file encoding type
@@ -39,7 +40,8 @@ conllu = sys.argv[1]
 action = sys.argv[2]
 issue = sys.argv[3]
 
-headers = [x.lower() for x in open('../interrogar-ud/scripts/headers.txt', 'r').read().splitlines()]
+with open('../interrogar-ud/scripts/headers.txt', 'r') as f:
+	headers = f.read().splitlines()
 
 arquivo_ud = estrutura_ud.Corpus(recursivo=True)
 arquivo_ud.load('../interrogar-ud/conllu/' + conllu)
@@ -62,11 +64,8 @@ def remove_from(original, s, delimiter="|"):
 
 	return delimiter.join(sorted(original))
 
-def get_head(tok, tokens):
-	for token in tokens:
-		if token.id == tok.dephead:
-			return token.word
-	return "_"
+def get_head(tok, sentence):
+	return sentence.tokens[sentence.map_token_id[tok.dephead]].word if tok.dephead in sentence.map_token_id else "_"
 
 srcfile = '../interrogar-ud/scripts/' + issue
 trgfile = 'codification'
@@ -85,32 +84,29 @@ for x, linha in enumerate(codigo):
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'
-		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except:\n" + tab + "\tpass\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(alterar + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", tokens) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sent_id)\n" + tab + "\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', alterar) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", tokens) + ')')))\n" + tab + "except:\n" + tab + "\tpass"
+		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(sentence.text + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", sentence) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sentence.sent_id)\n" + tab + "\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', sentence.text) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", sentence) + ')')))\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))"
 
 with open("codigo", "w") as f:
 	f.write("\n".join(codigo))
 
 codigo = "\n".join(codigo)
 
-for head in arquivo_ud.sentences:
-	alterar = ''
-	sent_id = "NONE"
+for head in headers:
 	sentence = arquivo_ud.sentences[head]
 	tokens = sentence.tokens
-	if sentence.text and '# text = ' + sentence.text.lower() in headers:
-		alterar = sentence.text
-	if sentence.sent_id:
-		sent_id = sentence.sent_id
-	if alterar:
-		for n, token in enumerate(tokens):
-			try:
-				exec(codigo)
-			except Exception as e:
-				with open("../cgi-bin/error.log", "w") as f:
-					f.write(html.escape(str(e)))
-					exit()
+	for n, token in enumerate(tokens):
+		try:
+			exec(codigo)
+			#sys.stderr.write(codigo)
+			#exit()
+		except Exception as e:
+			with open("../cgi-bin/error.log", "w") as f:
+				f.write(html.escape(str(e)))
+				exit()
 										
-if action == 'sim': open('../interrogar-ud/scripts/sim.txt', 'w').write('\n\n'.join(sim))
+if action == 'sim':
+	with open('../interrogar-ud/scripts/sim.txt', 'w') as f:
+		f.write('\n\n'.join(sim))
 if action == 'exec':
 	with open('../interrogar-ud/scripts/novos_inqueritos.txt', 'w') as f:
 		f.write('\n'.join(novo_inquerito))

@@ -13,7 +13,7 @@ def chunkIt(seq, num):
 
 class Token:
 	
-	def __init__(self, separator='\t', sent_id="NONE", text="NONE"):
+	def __init__(self, separator='\t'):
 		self.id = "0"
 		self.word = "_"
 		self.lemma = "_"
@@ -81,28 +81,6 @@ class Sentence:
 		self.separator = separator
 		self.map_token_id = {}
 
-
-	def get_head(self, token):
-		next_t = False
-		previous_t = False
-		for tok in self.tokens:
-			if tok.id == token.dephead:
-				token.head_token = tok
-				break
-
-		for tok in self.tokens:
-			if not "-" in token.id and not "-" in tok.id and not "/" in token.id and not "/" in tok.id and not ">" in tok.id and not ">" in token.id:
-				if int(token.id) == int(tok.id) - 1:
-					token.next_token = tok
-					next_t = True
-				if int(token.id) == int(tok.id) + 1:
-					token.previous_token = tok
-					previous_t = True
-			if next_t and previous_t:
-				break
-
-		return token
-
 	def build(self, txt):
 		if '# text =' in txt:
 			self.text = txt.split('# text =')[1].split('\n')[0].strip()
@@ -126,7 +104,7 @@ class Sentence:
 						valor = linha.split('=', 1)[1].strip()
 						self.metadados[identificador] = valor
 				if not linha.startswith("# ") and "\t" in linha:
-					tok = Token(sent_id = self.sent_id, text = self.text)
+					tok = Token()
 					tok.build(linha)
 					tok.head_token = self.default_token
 					tok.next_token = self.default_token
@@ -138,10 +116,12 @@ class Sentence:
 				print(linha)
 				sys.exit()
 
-
 		if self.recursivo != False:
-			for token in self.tokens:
-				token = self.get_head(token)
+			for t, token in enumerate(self.tokens):
+				if not '-' in token.id:
+					self.tokens[t].head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
+					self.tokens[t].next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
+					self.tokens[t].previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
 
 	def refresh_map_token_id(self):
 		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
@@ -185,15 +165,14 @@ class Corpus:
 			sents = txt.split(self.separator)
 
 		if self.thread:
-			import threading
-			threads = {}
+			
+			import multiprocessing
+
 			chunks = chunkIt(sents, self.thread)
-			for i in range(self.thread):
-				threads[i] = threading.Thread(target=self.sent_build, args=(chunks[i],))
-			for i in range(self.thread):
-				threads[i].start()
-			for i in range(self.thread):
-				threads[i].join()
+			p = multiprocessing.Pool(processes=self.thread)
+			p.map(self.sent_build, [chunks[i] for i in range(self.thread)])
+			p.close()
+
 		else:
 			self.sent_build(sents)
 

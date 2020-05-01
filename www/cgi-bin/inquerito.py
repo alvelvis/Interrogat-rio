@@ -7,6 +7,7 @@ print('\n\n')
 import sys
 import cgi, cgitb
 cgitb.enable()
+import time
 import estrutura_dados
 import estrutura_ud
 import os
@@ -209,11 +210,16 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		else:
 			filtros = []
 
+	start = time.time()
 	#pega os headers
 	headers = list()
-	for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value)['output']:
-		if sentence['resultadoEstruturado'].sent_id not in filtros:
-			headers.append("# text = " + sentence['resultadoEstruturado'].text)	
+	for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value, fastSearch=True)['output']:
+		sent_id = re.sub(r"<.*?>", "", sentence['resultado'].split("# sent_id = ")[1].split("\n")[0])
+		headers.append(sent_id)
+	#for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value)['output']:
+		#if sentence['resultadoEstruturado'].sent_id not in filtros:
+			#headers.append("# text = " + sentence['resultadoEstruturado'].text)
+	sys.stderr.write('\nheaders: {}'.format(time.time() - start))
 
 	if form['executar'].value == 'sim':
 		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
@@ -222,8 +228,10 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	with open('../interrogar-ud/scripts/headers.txt', 'w') as f:
 		f.write("\n".join(headers))
 	
+	start = time.time()
 	if call('python3 "../interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True):
 		pass
+	sys.stderr.write('\nMODELO-UD: {}'.format(time.time() - start))
 	
 	if form['executar'].value == 'exec':
 		with open('../interrogar-ud/scripts/novos_inqueritos.txt', 'r') as f:

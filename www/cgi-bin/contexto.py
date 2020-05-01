@@ -13,9 +13,6 @@ from datetime import datetime
 
 form = cgi.FieldStorage()
 
-corpus = estrutura_ud.Corpus(recursivo=False)
-corpus.load('../interrogar-ud/conllu/' + form['corpus'].value)
-
 contextoEsquerda = ["", ""]
 contextoDireita = ["", ""]
 sent_id = form['sent_id'].value if 'sent_id' in form else ""
@@ -24,6 +21,9 @@ conllu = form['corpus'].value
 
 numero = re.search(r'^\d+$', sent_id.rsplit('-', 1)[1])[0] if '-' in sent_id else id
 identificador = sent_id.rsplit("-", 1)[0] + "-" if '-' in sent_id else ""
+
+corpus = estrutura_ud.Corpus(recursivo=False, keywords=[re.escape(identificador)])
+corpus.load('../interrogar-ud/conllu/' + form['corpus'].value)
 
 contextoEsquerda = []
 contextoDireita = []
