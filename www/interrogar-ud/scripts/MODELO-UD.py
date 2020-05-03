@@ -77,7 +77,7 @@ with open(srcfile, 'r') as f:
 
 keywords = []
 for linha in codigo:
-	if 'if ' in linha and ':' in linha:
+	if 'if ' in linha:
 		keywords.extend(re.findall(r'"([^"]*)"', linha))
 arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywords=headers)
 arquivo_ud.load('../interrogar-ud/conllu/' + conllu)

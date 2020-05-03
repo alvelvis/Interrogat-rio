@@ -117,14 +117,16 @@ class Sentence:
 				sys.exit()
 
 		if self.recursivo != False:
-			real_token = filter(lambda x: not '-' in x.id, self.tokens)
-			for token in real_token:
-				token.head_token = self.tokens[self.map_token_id[re.sub(r"<.*?>", "", token.dephead)]] if re.sub(r"<.*?>", "", token.dephead) in self.map_token_id else self.default_token
-				token.next_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))+1)]] if str(int(re.sub(r"<.*?>", "", token.id))+1) in self.map_token_id else self.default_token
-				token.previous_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))-1)]] if str(int(re.sub(r"<.*?>", "", token.id))-1) in self.map_token_id else self.default_token
-				#token.head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
-				#token.next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
-				#token.previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
+			for token in self.tokens:
+				if not '-' in token.id:
+					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
+					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
+					token.head_token = self.tokens[self.map_token_id[token_dephead]] if token_dephead in self.map_token_id else self.default_token
+					token.next_token = self.tokens[self.map_token_id[str(int(token_id)+1)]] if str(int(token_id)+1) in self.map_token_id else self.default_token
+					token.previous_token = self.tokens[self.map_token_id[str(int(token_id)-1)]] if str(int(token_id)-1) in self.map_token_id else self.default_token
+					#token.head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
+					#token.next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
+					#token.previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
 
 	def refresh_map_token_id(self):
 		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
@@ -196,7 +198,7 @@ class Corpus:
 						sentence += line
 					else:
 						if self.keywords:
-							if any(re.search(y, sentence) for y in self.any_of_keywords) or all(re.search(x, sentence) for x in self.keywords):
+							if (self.any_of_keywords and any(y in sentence for y in self.any_of_keywords)) or (all(re.search(x, sentence) for x in self.keywords)):
 								self.sent_build([sentence])
 							elif '# sent_id = ' in sentence:
 								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
