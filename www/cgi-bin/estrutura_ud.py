@@ -141,9 +141,10 @@ class Sentence:
 
 class Corpus:
 
-	def __init__(self, separator="\n\n", recursivo=True, sent_id=None, thread=False, encoding="utf-8", keywords=[]):
+	def __init__(self, separator="\n\n", recursivo=True, sent_id=None, thread=False, encoding="utf-8", keywords=[], any_of_keywords=[]):
 		self.len = 0
 		self.sentences = {}
+		self.sentences_not_built = {}
 		self.separator = separator
 		self.recursivo = recursivo
 		self.sent_id = sent_id
@@ -152,6 +153,7 @@ class Corpus:
 		self.pos = ""
 		self.thread = thread
 		self.keywords = keywords
+		self.any_of_keywords = any_of_keywords
 
 	def build(self, txt):
 		if self.sent_id:
@@ -164,9 +166,9 @@ class Corpus:
 			sents = txt.split(self.separator)
 		elif self.keywords:
 			txt_split = txt.split(self.separator)
-			sents = filter(lambda x: all(re.search(y, x) for y in self.keywords), txt_split)
+			sents = filter(lambda x: all(re.search(y, x) for y in self.keywords) and any(re.search(z, x) for z in self.any_of_keywords), txt_split)
 		else:
-			sents = txt.split(self.separator)
+			sents = filter(lambda x: any(re.search(y, x) for y in self.any_of_keywords), txt.split(self.separator))
 
 		if self.thread:
 			
@@ -195,7 +197,8 @@ class Corpus:
 
 
 	def to_str(self):
-		retorno = [x.to_str() for x in self.sentences.values()]		
+		self.sentences_not_built.update(self.sentences)
+		retorno = [x.to_str() if isinstance(x, Sentence) else x for x in self.sentences_not_built.values()]
 		return "\n\n".join(retorno) + '\n\n'
 
 	def load(self, path):
@@ -204,11 +207,13 @@ class Corpus:
 			if not self.sent_id:
 				for line in f:
 					if line.strip():
-						sentence += line + "\n"
+						sentence += line
 					else:
 						if self.keywords:
 							if all(re.search(x, sentence) for x in self.keywords):
 								self.sent_build([sentence])
+							elif '# sent_id = ' in sentence:
+								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
 						else:
 							self.sent_build([sentence])
 						sentence = ""
