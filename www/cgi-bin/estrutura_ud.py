@@ -196,12 +196,12 @@ class Corpus:
 						sentence += line
 					else:
 						if self.keywords:
-							if all(re.search(x, sentence) for x in self.keywords) or any(re.search(y, sentence) for y in self.any_of_keywords):
+							if any(re.search(y, sentence) for y in self.any_of_keywords) or all(re.search(x, sentence) for x in self.keywords):
 								self.sent_build([sentence])
 							elif '# sent_id = ' in sentence:
 								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
 						else:
-							if any(re.search(y, sentence) for y in self.any_of_keywords):
+							if not self.any_of_keywords or any(re.search(y, sentence) for y in self.any_of_keywords):
 								self.sent_build([sentence])
 						sentence = ""
 			else:
