@@ -790,6 +790,9 @@ var translations = {
 	"Filtrar relatório:": {
 		"en-US": "Filter report:"
 	},
+	"atualizar": {
+		"en-US": "update"
+	},
 	"Inquéritos": {
 		"en-US": "Inquiries"
 	},
@@ -1055,7 +1058,25 @@ var userLang = navigator.language || navigator.userLanguage;
 
 $(document).ready(function(){
 
-    updateTranslation();
+	updateTranslation();
+	
+	$('.updateCorpus').click(function(){
+		loadingScreen();
+		$ud = $(this).attr('ud');
+		$size = 0.0;
+		$.post('../cgi-bin/api.py', {
+			'ud': $ud,
+			'updateCorpus': true,
+			'size': $size,
+        },
+        function(data) {
+			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
+			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+			endLoadingScreen();
+        },
+        "text",
+    	);
+	});
 
     $('.toggleCriteria').click(function(){
         $('.criterio').hide();

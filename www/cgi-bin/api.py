@@ -23,16 +23,28 @@ import json
 
 form = cgi.FieldStorage()
 
-def loadCorpus(ud, size="0.0"):
-    #sys.stderr.write(ud)
-    #sys.stderr.write(size)
-    if size and float(size) < 50.0:
-        try:
-            corpus = estrutura_ud.Corpus(recursivo=False)
-            corpus.load("../interrogar-ud/conllu/" + ud)
-            n_sent = len(corpus.sentences)
-            n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
+def loadCorpus(ud, size="0.0", updateCorpus=False):
+    
+    conllus = {}
+    if os.path.isfile("../interrogar-ud/conllu.json"):
+        with open("../interrogar-ud/conllu.json") as f:
+            conllus = json.load(f)
 
+    if (updateCorpus) or (size and float(size) < 50.0) or (ud in conllus):
+        try:
+            if not ud in conllus or updateCorpus:
+                conllus[ud] = {}
+                corpus = estrutura_ud.Corpus(recursivo=False)
+                corpus.load("../interrogar-ud/conllu/" + ud)
+                n_sent = len(corpus.sentences)
+                n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
+                conllus[ud]['n_sent'] = n_sent
+                conllus[ud]['n_tokens'] = n_tokens
+                with open("../interrogar-ud/conllu.json", "w") as f:
+                    json.dump(conllus, f)
+            else:
+                n_sent = conllus[ud]['n_sent']
+                n_tokens = conllus[ud]['n_tokens']
             print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'ud': ud}))
         except:
             print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'ud': ud}))
@@ -166,4 +178,4 @@ if os.environ['REQUEST_METHOD'] == "POST":
         renderSentences()
         sys.stderr.write('\nrenderSentences: ' + str(time.time() - start))
     else:
-        loadCorpus(form['ud'].value, form['size'].value)
+        loadCorpus(form['ud'].value, form['size'].value, form['updateCorpus'].value if 'updateCorpus' in form else False)
