@@ -118,12 +118,12 @@ class Sentence:
 
 		if self.recursivo != False:
 			for token in filter(lambda x: not '-' in x.id, self.tokens):
-				#self.tokens[t].head_token = self.tokens[self.map_token_id[re.sub(r"<.*?>", "", token.dephead)]] if re.sub(r"<.*?>", "", token.dephead) in self.map_token_id else self.default_token
-				#self.tokens[t].next_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))+1)]] if str(int(re.sub(r"<.*?>", "", token.id))+1) in self.map_token_id else self.default_token
-				#self.tokens[t].previous_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))-1)]] if str(int(re.sub(r"<.*?>", "", token.id))-1) in self.map_token_id else self.default_token
-				token.head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
-				token.next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
-				token.previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
+				token.head_token = self.tokens[self.map_token_id[re.sub(r"<.*?>", "", token.dephead)]] if re.sub(r"<.*?>", "", token.dephead) in self.map_token_id else self.default_token
+				token.next_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))+1)]] if str(int(re.sub(r"<.*?>", "", token.id))+1) in self.map_token_id else self.default_token
+				token.previous_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))-1)]] if str(int(re.sub(r"<.*?>", "", token.id))-1) in self.map_token_id else self.default_token
+				#token.head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
+				#token.next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
+				#token.previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
 
 	def refresh_map_token_id(self):
 		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
