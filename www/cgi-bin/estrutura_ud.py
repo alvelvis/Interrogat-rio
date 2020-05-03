@@ -164,20 +164,6 @@ class Corpus:
 			self.pre = old_txt.split(txt)[0].strip()
 			self.pos = old_txt.split(txt)[1].strip()
 			sents = txt.split(self.separator)
-		elif self.keywords:
-			txt_split = txt.split(self.separator)
-			sents = filter(lambda x: all(re.search(y, x) for y in self.keywords) and any(re.search(z, x) for z in self.any_of_keywords), txt_split)
-		else:
-			sents = filter(lambda x: any(re.search(y, x) for y in self.any_of_keywords), txt.split(self.separator))
-
-		if self.thread:
-			
-			import multiprocessing
-
-			chunks = chunkIt(sents, self.thread)
-			p = multiprocessing.Pool(processes=self.thread)
-			p.map(self.sent_build, [chunks[i] for i in range(self.thread)])
-			p.close()
 
 		else:
 			self.sent_build(sents)
@@ -210,12 +196,13 @@ class Corpus:
 						sentence += line
 					else:
 						if self.keywords:
-							if all(re.search(x, sentence) for x in self.keywords):
+							if all(re.search(x, sentence) for x in self.keywords) or any(re.search(y, sentence) for y in self.any_of_keywords):
 								self.sent_build([sentence])
 							elif '# sent_id = ' in sentence:
 								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
 						else:
-							self.sent_build([sentence])
+							if any(re.search(y, sentence) for y in self.any_of_keywords):
+								self.sent_build([sentence])
 						sentence = ""
 			else:
 				self.build(f.read())
