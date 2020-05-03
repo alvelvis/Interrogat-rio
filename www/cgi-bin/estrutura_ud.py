@@ -117,7 +117,8 @@ class Sentence:
 				sys.exit()
 
 		if self.recursivo != False:
-			for token in filter(lambda x: not '-' in x.id, self.tokens):
+			real_token = filter(lambda x: not '-' in x.id, self.tokens)
+			for token in real_token:
 				token.head_token = self.tokens[self.map_token_id[re.sub(r"<.*?>", "", token.dephead)]] if re.sub(r"<.*?>", "", token.dephead) in self.map_token_id else self.default_token
 				token.next_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))+1)]] if str(int(re.sub(r"<.*?>", "", token.id))+1) in self.map_token_id else self.default_token
 				token.previous_token = self.tokens[self.map_token_id[str(int(re.sub(r"<.*?>", "", token.id))-1)]] if str(int(re.sub(r"<.*?>", "", token.id))-1) in self.map_token_id else self.default_token
@@ -162,7 +163,8 @@ class Corpus:
 			self.pos = old_txt.split(txt)[1].strip()
 			sents = txt.split(self.separator)
 		elif self.keywords:
-			sents = [x for x in txt.split(self.separator) if all(re.search(y, x) for y in self.keywords)]
+			txt_split = txt.split(self.separator)
+			sents = filter(lambda x: all(re.search(y, x) for y in self.keywords), txt_split)
 		else:
 			sents = txt.split(self.separator)
 
@@ -193,28 +195,23 @@ class Corpus:
 
 
 	def to_str(self):
-		retorno = list()
-
-		for sentence in self.sentences.values():
-			retorno.append(sentence.to_str())
-		
+		retorno = [x.to_str() for x in self.sentences.values()]		
 		return "\n\n".join(retorno) + '\n\n'
 
 	def load(self, path):
-		sentence = []
+		sentence = ""
 		with open(path, "r", encoding=self.encoding) as f:
 			if not self.sent_id:
 				for line in f:
 					if line.strip():
-						sentence.append(line)
+						sentence += line + "\n"
 					else:
-						sentence = "\n".join(sentence)
 						if self.keywords:
 							if all(re.search(x, sentence) for x in self.keywords):
 								self.sent_build([sentence])
 						else:
 							self.sent_build([sentence])
-						sentence = []
+						sentence = ""
 			else:
 				self.build(f.read())
 
