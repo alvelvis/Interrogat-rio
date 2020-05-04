@@ -30,14 +30,19 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
         with open("../interrogar-ud/conllu.json") as f:
             conllus = json.load(f)
 
+    n_sent = 0
+    n_tokens = 0
+
     if (updateCorpus) or (size and float(size) < 50.0) or (ud in conllus):
         try:
             if not ud in conllus or updateCorpus:
                 conllus[ud] = {}
-                corpus = estrutura_ud.Corpus(recursivo=False)
-                corpus.load("../interrogar-ud/conllu/" + ud)
-                n_sent = len(corpus.sentences)
-                n_tokens = len([x for sentence in corpus.sentences.values() for x in sentence.tokens if not '-' in x.id])
+                with open("../interrogar-ud/conllu/" + ud) as f:
+                    for line in f:
+                        if line.strip().startswith('# sent_id = '):
+                            n_sent += 1
+                        if line and not line.strip().startswith('#') and len(line.split("\t")) > 5 and not '-' in line.split("\t")[0]:
+                            n_tokens += 1
                 conllus[ud]['n_sent'] = n_sent
                 conllus[ud]['n_tokens'] = n_tokens
                 with open("../interrogar-ud/conllu.json", "w") as f:
