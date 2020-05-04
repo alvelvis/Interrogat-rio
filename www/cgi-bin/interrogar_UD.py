@@ -77,9 +77,12 @@ def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[
 def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
 	parametros = parametros.strip()
 	pesquisa = ""
+
+	if criterio in [1]:
+		import estrutura_ud
 	
 	#Lê o arquivo UD
-	if criterio in [1, 3, 4]:
+	if criterio in [3, 4]:
 		import estrutura_dados
 		import estrutura_ud
 		qualquercoisa = estrutura_dados.LerUD(arquivoUD)
@@ -106,38 +109,40 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	tabela = ['@YELLOW/','@PURPLE/','@BLUE/','@RED/','@CYAN/']
 	
 	if criterio == 1:
-		for a, sentence in enumerate(qualquercoisa):
-			if limit and len(output) == limit:
-				break
-			sentence2 = sentence
-			for b, linha in enumerate(sentence):
-				linha2 = linha
-				if isinstance(linha2, list):
-					sentence2[b] = "\t".join(sentence2[b])
-			sentence2 = "\n".join(sentence2)
-			regex = re.search(parametros, sentence2, flags=re.IGNORECASE|re.MULTILINE)
-			if regex:
-				casos += len(re.findall(parametros, sentence2, flags=re.IGNORECASE|re.MULTILINE))
-				cores = len(regex.groups())
-				new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence2, flags=re.IGNORECASE|re.MULTILINE)
-				tokens = list()
-				header = '!@#'
-				for linha in new_sentence.splitlines():
-					if '# text = ' in linha:
-						header = linha
-					if 'b>' in linha and '\t' in linha:
-						tokens.append(linha.split('\t')[1].replace('<b>','').replace('</b>',''))
-				header2 = header
-				for token in tokens:
-					header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', header2)
-				for i in range(cores):
-					if regex[i+1] != None and i < len(tabela):
-						token = regex[i+1]
-						if '\t' in regex[i+1]:
-							token = regex[i+1].split('\t')[1]
-							header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i] + token + '/FONT', header2)
-				new_sentence = new_sentence.replace(header, header2)
-				output.append(new_sentence.splitlines())
+		start = time.time()
+		sentence = ""
+		with open(arquivoUD) as f:
+			for line in f:
+				if line.strip():
+					sentence += line
+				else:
+					if limit and len(output) == limit:
+						break
+					regex = re.findall(parametros, sentence)
+					if regex:
+						casos += len(regex)
+						new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence)
+						tokens = list()
+						header = '!@#'
+						for linha in new_sentence.splitlines():
+							if '# text = ' in linha:
+								header = linha
+							if 'b>' in linha and '\t' in linha:
+								tokens.append(linha.split('\t')[1].replace('<b>','').replace('</b>',''))
+						header2 = header
+						for token in tokens:
+							header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', header2)
+						for reg in regex:
+							if not isinstance(reg, str):
+								for i, grupo in enumerate(reg):
+									if grupo and i < len(tabela):
+										if '\t' in grupo:
+											token = grupo.split('\t')[1]
+										header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i] + token + '/FONT', header2)
+						new_sentence = new_sentence.replace(header, header2)
+						output.append(new_sentence)
+					sentence = ""
+		sys.stderr.write(f"\ncriterio 1: {time.time() - start}")
 
 	#If critério 2
 	if criterio == 2:
@@ -397,7 +402,7 @@ if 'corresponde' in sentence2.metadados and not separate:
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start) + "\n")
 		casos = len(casos)
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
-	if criterio not in [5, 2]:
+	if criterio not in [5, 2, 1]:
 		for a, sentence in enumerate(output):
 			for b, linha in enumerate(sentence):
 				if isinstance(linha, list):

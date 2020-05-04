@@ -159,18 +159,15 @@ class Corpus:
 
 	def build(self, txt):
 		if self.sent_id:
-			import re
 			old_txt = txt
 			txt = re.search(r"(\n\n|^).*?# sent_id = " + self.sent_id + r"\n.*?(\n\n|$)", txt, flags=re.DOTALL)[0].strip()
 			if '\n\n' in txt: txt = txt.rsplit("\n\n", 1)[1]
 			self.pre = old_txt.split(txt)[0].strip()
 			self.pos = old_txt.split(txt)[1].strip()
-			sents = txt.split(self.separator)
-		else:
-			self.sent_build(sents)
-
-	def sent_build(self, sents):
-		for sentence in sents:
+			txt = txt.split(self.separator)
+		if isinstance(txt, str):
+			txt = [txt]
+		for sentence in txt:
 			if sentence:
 				sent = Sentence(recursivo=self.recursivo)
 				sent.build(sentence)
@@ -180,7 +177,7 @@ class Corpus:
 					self.sentences[sent.id] = sent
 				elif sent.text:
 					self.sentences[sent.text] = sent
-		#return self.sentences
+
 
 	def to_str(self):
 		self.sentences_not_built.update(self.sentences)
@@ -199,7 +196,7 @@ class Corpus:
 
 				threads = []
 				for i in range(multiprocessing.cpu_count()):
-					p = threading.Thread(target=self.sent_build, args=(chunks[i],))
+					p = threading.Thread(target=self.build, args=(chunks[i],))
 					threads.append(p)
 					p.start()
 				
@@ -213,12 +210,12 @@ class Corpus:
 					else:
 						if self.keywords:
 							if (self.any_of_keywords and any(y in sentence for y in self.any_of_keywords)) or (all(re.search(x, sentence) for x in self.keywords)):
-								self.sent_build([sentence])
+								self.build([sentence])
 							elif '# sent_id = ' in sentence:
 								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
 						else:
 							if not self.any_of_keywords or any(re.search(y, sentence) for y in self.any_of_keywords):
-								self.sent_build([sentence])
+								self.build([sentence])
 						sentence = ""
 			else:
 				self.build(f.read())
