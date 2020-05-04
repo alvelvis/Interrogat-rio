@@ -118,7 +118,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				else:
 					if limit and len(output) == limit:
 						break
-					regex = re.findall(parametros, sentence)
+					regex = re.findall('(' + parametros + ')', sentence)
 					if regex:
 						casos += len(regex)
 						new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence)
@@ -135,10 +135,11 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 						for reg in regex:
 							if not isinstance(reg, str):
 								for i, grupo in enumerate(reg):
-									if grupo and i < len(tabela):
-										if '\t' in grupo:
-											token = grupo.split('\t')[1]
-										header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i] + token + '/FONT', header2)
+									if i != 0:
+										if grupo and i-1 < len(tabela):
+											if '\t' in grupo:
+												token = grupo.split('\t')[1]
+											header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2)
 						new_sentence = new_sentence.replace(header, header2)
 						output.append(new_sentence)
 					sentence = ""
