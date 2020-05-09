@@ -14,7 +14,7 @@ def getResultadosBusca():
     corpus = estrutura_ud.Corpus(recursivo=True)
     corpus.load("<!--corpus-->")
 
-    resultadosBusca = {'output': [], 'casos': 0}
+    resultadosBusca = {'output': [], 'casos': 0, 'parameters': ""}
 
     for sentence in corpus.sentences.values():
         bold_tokens = []
