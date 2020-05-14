@@ -42,9 +42,12 @@
               <input name="scriptQueryFile" class="scriptQueryFile" id="scriptQueryFile" type="file" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus></p>
         </div>
           <p><b class="translateHtml">Corpus:</b><br>
-            <select class="conllu" style="margin-top: 5px; padding:5px;" name="conllu" data-live-search="true" required>
-            <!--selectpicker-->
-            </select>
+            <div style="max-height:40vh; overflow-y: auto; padding:5px;">
+              <!--corpora-cloud-->
+              <select class="conllu" style="margin-top: 5px; padding:5px; display:none;" name="conllu" data-live-search="true" required>
+              <!--selectpicker-->
+              </select>
+            </div>
         </p>
         <div style="margin-left:5px;">
           <input type=radio name=meth value="teste" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();" label="Busca rápida" class="translateLabel toggle toggleRapida queryString normalQuery" checked><div onclick="$('.toggleRapida').click();" style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery"><span class="translateHtml">Busca rápida</span><div class="translateHtml tooltiptext">A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.</div></div>
