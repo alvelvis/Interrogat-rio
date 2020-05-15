@@ -1061,8 +1061,8 @@ function updateInterrogarBusca(){
 		$('.interrogarBusca').css('width', "auto");
 		$('.interrogarFlex').css('display', 'block');
 		$('.interrogarNews').css('max-width', '100%');
+		$('.interrogarNews').css('max-height', '90vh');
 	};
-
 };
 
 $(document).ready(function(){
