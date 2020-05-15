@@ -80,8 +80,8 @@ def sendPOSTInterrogar():
 		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace(')</a></h3>', ')</a></h3><span style="background-color:yellow;"><span class="translateHtml">Você deseja</span> <a href="#" onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');" title="Para realizar filtros na página, é preciso salvar esta busca; clique aqui para salvar" class="translateTitle translateHtml" style="color:blue" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">salvar esta busca</a>?</span><br>').replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', ''))
 		exit()
 
-	if int(criterio) != 5:
-		arquivoHtml = arquivoHtml.replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '')
+	#if int(criterio) != 5:
+	#arquivoHtml = arquivoHtml.replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '')
 
 	with open(caminhoCompletoHtml, "w") as f:
 		f.write(arquivoHtml)
