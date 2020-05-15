@@ -305,6 +305,15 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				html1 += "</ul>"
 			html1 += "</ul>"
 		html1 += '<br>'
+	if 'tokenizado' in form:
+		new_sentid = ""
+		if form['tokenizado'].value != "True":
+			new_sentid = form['tokenizado'].value
+		if not new_sentid:
+			html1 += f'<span style="background-color: cyan"><span class="translateHtml">Tokenização modificada com sucesso</span></span>'
+		elif new_sentid:
+			html1 += f'<span style="background-color: yellow"><span class="translateHtml">Tokenização modificada com sucesso, mas atenção: edite também a nova sentença -- </span> <a href="../cgi-bin/inquerito.py?conllu={ud}&sentid={new_sentid}&textheader={new_sentid}" target="_blank">{new_sentid}</a></span>'
+		html1 += "<br>"
 
 	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + f'<br><br><a href="../cgi-bin/inquerito.py" class="translateHtml">Relatório de inquéritos</a> - <a href="../cgi-bin/contexto.py?corpus={ud}&sent_id={form["sentid"].value}" target="_blank" class="translateHtml">Mostrar contexto</a> - <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form> - <a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 
@@ -328,6 +337,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 			<ul>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
+				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.splitSentence').show();">Separar sentença em duas</a></li>
 			</ul>
 			<div class="addToken tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=addToken" class="addTokenForm" method="POST">
@@ -339,6 +349,21 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					<span class="translateHtml addTokenHelp"> antes do token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + $('.addTokenHelp').html() + $(this).val());" name="addTokenId">
 					<input type="button" onclick="if ($('[name=addTokenOption]').val() && $('[name=addTokenId]').val()) {{ $('.addTokenForm').submit(); }}" class="translateVal addTokenButton" value="Adicionar token">
+					{sentid}
+					{link}
+					{nome}
+					{occ}
+					{conllu}
+					{tokenId}
+					{sentnum}
+					{textheader}
+				</form>
+			</div>
+			<div class="splitSentence tokenization" style="display:none">
+				<form action="../cgi-bin/tokenization.py?action=splitSentence" class="splitSentenceForm" method="POST">
+					<span class="translateHtml splitSentenceHelp">Separar sentença após o token de id </span>
+					<input class="translatePlaceholder" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
+					<input type="button" onclick="if ($('[name=splitSentenceTokenId]').val()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
 					{sentid}
 					{link}
 					{nome}

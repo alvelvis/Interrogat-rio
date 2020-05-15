@@ -267,6 +267,21 @@ var translations = {
 	'Construtor de expressões de busca': {
 		'en-US': 'Query expressions builder'
 	},
+	'Tokenização modificada com sucesso': {
+		'en-US': 'Tokenization modified successfuly'
+	},
+	'Tokenização modificada com sucesso, mas atenção: edite também a nova sentença -- ': {
+		'en-US': 'Tokenization modified successfuly, but please pay attention: edit, too, the new sentence -- '
+	},
+	'Separar sentença em duas': {
+		'en-US': 'Split sentence in two'
+	},
+	'Separar sentença após o token de id ': {
+		'en-US': 'Split sentence after the token id '
+	},
+	'Separar sentença': {
+		'en-US': 'Split sentence'
+	},
 	'Quero procurar por:': {
 		'en-US': 'I want to search for:'
 	},

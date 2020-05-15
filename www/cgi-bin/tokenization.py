@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-print('Content-type:text/html; charset=utf-8')
-print('\n\n')
-
 import cgi, cgitb
 cgitb.enable()
 import estrutura_ud
@@ -11,6 +8,62 @@ import os
 import sys
 import json
 from credenciar import LOGIN
+
+def splitSentence(conllu, sent_id, token_id, conllu_completo="", form=False):
+
+    if form:
+        if not os.path.isfile("../cgi-bin/tokenization.json"):
+            tokenization = {}
+            with open("../cgi-bin/tokenization.json", "w") as f:
+                json.dump(tokenization, f)
+
+        with open("../cgi-bin/tokenization.json") as f:
+            tokenization = json.load(f)
+
+    corpus = estrutura_ud.Corpus(recursivo=False)
+    corpus.load(conllu if not conllu_completo else conllu_completo)
+
+    new_sentence = estrutura_ud.Sentence(recursivo=True)
+    new_sentence.build(corpus.sentences[sent_id].to_str())
+
+    sent_id_file = sent_id.rsplit("-", 1)[0] if '-' in sent_id else ""
+    all_sentid = [int(x.rsplit("-", 1)[1]) if '-' in x else int(x) for x in corpus.sentences if x.startswith(sent_id_file)]
+    new_sentence.sent_id = f"{sent_id_file}{'-' if sent_id_file else ''}{max(all_sentid) + 1}"
+    new_sentence.metadados['sent_id'] = f"{sent_id_file}{'-' if sent_id_file else ''}{max(all_sentid) + 1}"
+
+    new_token = False
+    new_sentence_tokens = []
+    old_sentence_tokens = []
+    removed_tokens = 0
+    for token in corpus.sentences[sent_id].tokens:
+        if new_token:
+            new_sentence_tokens.append(token)
+        else:
+            old_sentence_tokens.append(token)
+        if not '-' in token.id and not new_token:
+            removed_tokens += 1
+        if token.id == token_id:
+            new_token = True
+        
+    new_sentence.tokens = new_sentence_tokens
+    corpus.sentences[sent_id].tokens = old_sentence_tokens
+    corpus.sentences[new_sentence.sent_id] = new_sentence
+    corpus.sentences[new_sentence.sent_id].refresh_map_token_id()
+
+    for t, token in enumerate(corpus.sentences[new_sentence.sent_id].tokens):
+        token.id = str(int(token.id)-removed_tokens) if not '-' in token.id else str(int(token.id.split("-")[0])-removed_tokens) + "-" + str(int(token.id.split("-")[1])-removed_tokens)
+        if token.dephead not in ["_", "0"]:
+            token.dephead = str(int(token.dephead)-removed_tokens)
+            if int(token.dephead) < 0:
+                token.dephead = "0"
+
+    if form:
+        with open("../cgi-bin/tokenization.json", "w") as f:
+            json.dump(tokenization, f)
+        corpus.save(conllu if not conllu_completo else conllu_completo)
+        return new_sentence.sent_id
+    else:
+        print(corpus.to_str())
 
 def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[], mergeSentencesId="", form=False):
 
@@ -114,6 +167,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
     else:
         print(corpus.to_str())
 
+form = ""
 if 'REQUEST_METHOD' in os.environ and os.environ['REQUEST_METHOD'] == 'POST':
     form = cgi.FieldStorage()
     if LOGIN:
@@ -122,22 +176,35 @@ if 'REQUEST_METHOD' in os.environ and os.environ['REQUEST_METHOD'] == 'POST':
             print(html)
             exit()
 
-sent_id = form['tokenization_sentid'].value
-conllu = form['tokenization_conllu'].value
-conllu_completo = "../interrogar-ud/conllu/" + conllu
-action = form['action'].value
-option = form['addTokenOption'].value if 'addTokenOption' in form else "add"
-token_id = form['addTokenId'].value if 'addTokenId' in form else form['mergeSentencesOption'].value
-mergeSentencesId = form['mergeSentencesId'].value if "mergeSentencesId" in form else ""
+if form:
+    print('Content-type:text/html; charset=utf-8')
+    print('\n\n')
 
-if action == "addToken":
-    addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
-elif action == "mergeSentences":
-    addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
+    sent_id = form['tokenization_sentid'].value
+    conllu = form['tokenization_conllu'].value
+    conllu_completo = "../interrogar-ud/conllu/" + conllu
+    action = form['action'].value
+    option = form['addTokenOption'].value if 'addTokenOption' in form else "add"
+    if 'addTokenId' in form:
+        token_id = form['addTokenId'].value 
+    elif 'mergeSentencesOption' in form:
+        token_id = form['mergeSentencesOption'].value
+    elif 'splitSentenceTokenId' in form:
+        token_id = form['splitSentenceTokenId'].value
 
-html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito">'
-for input in form:
-    html += f'<input type=hidden name="{input.split("tokenization_")[1] if "tokenization_" in input else input}" value="{form[input].value}">'
-html += "</form>"
-html += "<script>inquerito.submit();</script>"
-print(html)
+    mergeSentencesId = form['mergeSentencesId'].value if "mergeSentencesId" in form else ""
+
+    new_sent_id = ""
+    if action == "addToken":
+        addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
+    elif action == "mergeSentences":
+        addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
+    elif action == "splitSentence":
+        new_sent_id = splitSentence(conllu, sent_id, token_id, form=form, conllu_completo=conllu_completo)
+
+    html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
+    for input in form:
+        html += f'<input type=hidden name="{input.split("tokenization_")[1] if "tokenization_" in input else input}" value="{form[input].value}">'
+    html += "</form>"
+    html += "<script>inquerito.submit();</script>"
+    print(html)
