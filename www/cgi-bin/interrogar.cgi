@@ -29,8 +29,21 @@ def main():
 	sendRequestInterrogar() if os.environ['REQUEST_METHOD'] != "POST" else sendPOSTInterrogar()
 
 def sendRequestInterrogar():
-	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
+	
+	conllu_json = []
+	if os.path.isfile('../interrogar-ud/conllu.json'):
+		with open("../interrogar-ud/conllu.json") as f:
+			conllu_json = json.load(f)
 
+	
+	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
+	corpora_cloud = sorted(['''<a title='{2}' style="cursor:pointer; margin:5px;" onclick="$('.conllu').val('{0}'); $('.cloud-corpus').css('font-weight', 'normal'); $(this).css('font-weight', 'bold'); $('.cloud-corpus').css('color', ''); $(this).css('color', 'black'); $('.cloud-corpus').css('cursor', 'pointer'); $(this).css('cursor', 'text');" class="cloud-corpus" value='{0}'>{1}</a>'''.format(
+		slugify(arquivo), 
+		slugify(arquivo).rsplit(".conllu", 1)[0],
+		str(conllu_json[slugify(arquivo)]['n_sent']) + ' sentenças' if slugify(arquivo) in conllu_json else "",
+		) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
+
+	
 	with open("../interrogar-ud/interrogar_UDnew.html", "r") as f:
 		paginaHTML = f.read().split("<!--SPLIT-->")
 
@@ -41,7 +54,8 @@ def sendRequestInterrogar():
 	paginaHTML[0] += "\n".join(["<div class='container-lr criterio' {2} id=criterio_{0}>{1}</div>".format(i-1, criterio, " style='display:none'" if i-1 != -1 else "") for i, criterio in enumerate(criteriosBusca)])
 
 	paginaHTML = "".join(paginaHTML)
-	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option class='translateHtml' disabled selected value> -- escolha um corpus -- </option>" + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
+	paginaHTML = paginaHTML.split("<!--corpora-cloud-->")[0] + " ".join(corpora_cloud) + paginaHTML.split("<!--corpora-cloud-->")[1]
+	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option style='display:none' class='translateHtml' disabled selected value> -- escolha um corpus -- </option>" + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
 
 	refazerPesquisa = cgi.FieldStorage()['params'].value.replace("'", '"') if 'params' in cgi.FieldStorage() else ""
 	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
@@ -191,7 +205,7 @@ class paginaHtml():
 		criterios = [x for x in criterios if x.strip()]
 
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" class="translateTitle" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.cgi?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao>' + self.criterio + ' ' + cgi.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br><br><a href="../../interrogar-ud/conllu/{self.conllu}" class="translateTitle" title="Baixar corpus" download><span id=corpus>' + self.conllu + '</span></a><br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
 
 		return arquivoHtml

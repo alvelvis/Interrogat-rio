@@ -1,3 +1,28 @@
+.sentence-control {
+    /*background-color: lightgoldenrodyellow;*/
+    border-radius:30px;
+    background-color: inherit;
+    /*float: left;*/
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 13px;
+    transition: 0.3s;
+}
+
+.interrogarFlex {
+    overflow-x: hidden;
+}
+
+.interrogarSaved {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+
+.sentence-control:hover {
+    background-color: lightgray;
+}
 
 li{
     padding-bottom:2px;
@@ -26,9 +51,9 @@ li{
   
 #loading-image {
   position: fixed;
-  left:47vw;
+  left:calc(50vw - 5vh);
   text-align:center;
-  top:48vh;
+  top:50%;
   z-index: 1020;
   width: 10vh;
   height: auto;
@@ -38,8 +63,8 @@ li{
 #loading-image-nobg {
   position: fixed;
   text-align:center;
-  left: 47vw;
-  top:48vh;
+  left:calc(50vw - 5vh);
+  top:50%;
   z-index: 1020;
   width: 10vh;
   height: auto;
@@ -328,8 +353,8 @@ pre .val {color: #e6db74;} /* value */
     //border-radius: 4px;
     text-align: left;
     //border-top: 1px dotted black;
-    padding: 15px 0px 15px 0px;
-    //margin-bottom: 20px;
+    padding: 12px 0px 2px 0px;
+    margin-bottom: 10px;
     //margin-top: 20px;
 }
 .container p, .leftright {

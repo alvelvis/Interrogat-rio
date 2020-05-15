@@ -1071,9 +1071,21 @@ function scrollPosts(){
 
 var userLang = navigator.language || navigator.userLanguage;
 
+function updateInterrogarBusca(){
+	if(parseInt($('#pesquisa').css('width'), 10) < 300){
+		$('.interrogarBusca').css('width', "auto");
+		$('.interrogarFlex').css('display', 'block');
+		$('.interrogarNews').css('max-width', '100%');
+		$('.interrogarNews').css('max-height', '90vh');
+	};
+};
+
 $(document).ready(function(){
 
 	updateTranslation();
+	updateInterrogarBusca();
+
+	/*window.addEventListener('resize', updateInterrogarBusca);*/
 	
 	$('.updateCorpus').click(function(){
 		loadingScreen();
@@ -1109,7 +1121,11 @@ $(document).ready(function(){
 
     if($('#expressao').length){
         carregarPosts();
-    };
+	};
+	
+	if ($('.conllu').val()){
+		$('[value="' + $('.conllu').val() + '"].cloud-corpus').click();
+	};
 
     $('.desfazerFiltro').click(function(){
         if (confirm('Todos os filtros posteriores ao "' + $(this).attr('nomeFiltro') +  '" serão apagados também. Continuar?')){
@@ -1398,7 +1414,7 @@ function tudo(event) {
 
     if (event == "abrir") {
         for (i = 0; i < anotacoes.length; i++) {
-            if (Object.values(translations['Mostrar anotação']).indexOf(anotacoes[i].value) > -1) {
+            if (Object.values(translations['Mostrar anotação']).indexOf(anotacoes[i].innerHTML) > -1) {
                 anotacoes[i].click();
             }
         }
@@ -1406,7 +1422,7 @@ function tudo(event) {
 
     if (event == "fechar") {
         for (i = 0; i < anotacoes.length; i++) {
-            if (Object.values(translations['Esconder anotação']).indexOf(anotacoes[i].value) > -1) {
+            if (Object.values(translations['Esconder anotação']).indexOf(anotacoes[i].innerHTML) > -1) {
                 anotacoes[i].click();
             }
         }
@@ -1417,11 +1433,11 @@ function tudo(event) {
 function mostrar(nome, botao) {
     if (document.getElementById(nome).style.display == "none"){
         document.getElementById(nome).style.display = "block"
-		document.getElementById(botao).value = "Esconder anotação"
+		document.getElementById(botao).innerHTML = "Esconder anotação"
 		updateTranslation()
     } else {
         document.getElementById(nome).style.display = "none"
-		document.getElementById(botao).value = "Mostrar anotação"
+		document.getElementById(botao).innerHTML = "Mostrar anotação"
 		updateTranslation()
     }
 }
@@ -1429,11 +1445,11 @@ function mostrar(nome, botao) {
 function mostraropt(nome, botao) {
     if (document.getElementById(nome).style.display == "none"){
         document.getElementById(nome).style.display = "block"
-		document.getElementById(botao).value = "Esconder opções"
+		document.getElementById(botao).innerHTML = "Esconder opções"
 		updateTranslation()
     } else {
         document.getElementById(nome).style.display = "none"
-		document.getElementById(botao).value = "Mostrar opções"
+		document.getElementById(botao).innerHTML = "Mostrar opções"
 		updateTranslation()
     }
 }
