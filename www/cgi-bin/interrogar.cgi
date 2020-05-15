@@ -37,11 +37,11 @@ def sendRequestInterrogar():
 
 	
 	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
-	corpora_cloud = sorted(['''<a title='{2}' style="cursor:pointer; margin:5px;" onclick="$('.conllu').val('{0}'); $('.cloud-corpus').css('font-weight', 'normal'); $(this).css('font-weight', 'bold'); $('.cloud-corpus').css('color', ''); $(this).css('color', 'black'); $('.cloud-corpus').css('cursor', 'pointer'); $(this).css('cursor', 'text');" class="cloud-corpus" value='{0}'>{1}</a>'''.format(
+	corpora_cloud = ['''<a title='{2}' style="cursor:pointer;" onclick="$('.conllu').val('{0}'); $('.cloud-corpus').css('font-weight', 'normal'); $(this).css('font-weight', 'bold'); $('.cloud-corpus').css('color', ''); $(this).css('color', 'black'); $('.cloud-corpus').css('cursor', 'pointer'); $(this).css('cursor', 'text');" class="cloud-corpus" value='{0}'>{1}</a>'''.format(
 		slugify(arquivo), 
 		slugify(arquivo).rsplit(".conllu", 1)[0],
 		str(conllu_json[slugify(arquivo)]['n_sent']) + ' sentenças' if slugify(arquivo) in conllu_json else "",
-		) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
+		) for arquivo in sorted(os.listdir("../interrogar-ud/conllu")) if arquivo.endswith(".conllu")]
 
 	
 	with open("../interrogar-ud/interrogar_UDnew.html", "r") as f:
