@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
+    <!--meta name="viewport" content="width=device-width"-->
     <title class="translateHtml">Interrogatório - Ambiente de busca e revisão de corpora anotados</title>
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
@@ -23,8 +24,8 @@
       <h2><span class="translateHtml">nova busca</span> - <a href="../cgi-bin/interrogatorio.cgi" class="translateHtml">buscas salvas</a> - <a href="../cgi-bin/arquivo_ud.cgi" class="translateHtml">gerenciar corpora</a></h2>
     </div>
     <div class="content">
-    <div style="display: flex; margin:auto; max-width:1280px;">
-    <div style='width: 30%; margin: 30px 30px;' class="interrogar">
+    <div style="display: flex; margin:auto; max-width:1280px;" class="interrogarFlex">
+    <div style='width: 30%; margin: 30px;' class="interrogar interrogarBusca">
       <form action="../cgi-bin/interrogar.cgi" enctype="multipart/form-data" class="sendInterrogar" method="post">
         <div class="queryString normalQuery">
           <p><div style="display:inline;"><div class="tooltip"><b class="translateHtml">Expressão de busca:</b><div class="tooltiptext translateHtml">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
@@ -42,14 +43,14 @@
               <input name="scriptQueryFile" class="scriptQueryFile" id="scriptQueryFile" type="file" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus></p>
         </div>
           <p><b class="translateHtml">Corpus:</b><br>
-            <div style="max-height:40vh; overflow-y: auto; padding:5px;">
+            <div style="max-height:40vh; overflow-y: auto; padding:10px; line-height:1.5;">
               <!--corpora-cloud-->
               <select class="conllu" style="margin-top: 5px; padding:5px; display:none;" name="conllu" data-live-search="true" required>
               <!--selectpicker-->
               </select>
             </div>
         </p>
-        <div style="margin-left:5px;">
+        <div style="margin-left:0px;">
           <input type=radio name=meth value="teste" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();" label="Busca rápida" class="translateLabel toggle toggleRapida queryString normalQuery" checked><div onclick="$('.toggleRapida').click();" style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery"><span class="translateHtml">Busca rápida</span><div class="translateHtml tooltiptext">A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.</div></div>
           <br><input type=radio name=meth value="salvar" style="display:inline" onclick="$('.buscaOption').hide(); $('#enviar').show();  document.getElementById('meth_salvar').style.display = 'block'; document.getElementById('nome').focus(); document.getElementById('nome').select();" label="Salvar busca" class="translateLabel toggle toggleSalvar"><div onclick="$('.toggleSalvar').click();"style="display:inline; cursor:pointer;" class="tooltip"><span class="translateHtml">Salvar resultados da busca</span><div class="tooltiptext translateHtml">A busca será salva no sistema, e você poderá acessá-la posteriormente na página de interrogações recentes.</div></div>
           <br><input type=radio name=meth value="distribution" style="display:inline" onclick="$('.buscaOption').hide(); $('.distDiv').show();" title="Visualizar distribuição de alguma anotação gramatical" class="queryString normalQuery toggle toggleDist"><div style="display:inline; cursor:pointer;" class="tooltip queryString normalQuery" onclick="$('.toggleDist').click();"><span class="translateHtml">Visualizar distribuição</span><div class="tooltiptext translateHtml">Selecione para visualizar a distribuição das ocorrências que são resultado da sua expressão de busca entre as diferentes categorias de anotação.</div></div>
@@ -58,7 +59,7 @@
           <input id="nome" name="nome" value="Busca salva" class="translateVal" style="max-width:70%" type="text"><br><br>
         <!--div class="tooltip">Limitar resultados:<div class="tooltiptext">Pode tornar a busca muito mais rápida. Zero para não limitar a busca.</div></div> <input id="sentLimit" name="sentLimit" value="0" style="width:60px" type="number"-->
         </div></p>
-          <p><input name="enviar" style="margin-left:10px" id="enviar" value="Busca rápida" class="translateVal buscaOption btn-gradient orange small"
+          <p><input name="enviar" style="margin-left:5px" id="enviar" value="Busca rápida" class="translateVal buscaOption btn-gradient orange small"
   type="submit" onclick="if(!$('.scriptQuery').is(':visible')){ $('.scriptQueryFile').val(''); } else { $('#pesquisa').val($('.scriptQueryFile').val().replace(/C:\\fakepath\\/i, '')); };"></p>          
         </form>      
         <!--document.getElementById('nome').value = document.getElementById('pesquisa').value;-->
@@ -95,7 +96,7 @@
           <input id=corpus_dist type=hidden name=corpus>
         </form>
       </div>
-      <div style='border-radius: 0 0 4px 4px; flex: 1; flex-grow: 1; overflow: auto; max-width: 70%; max-height: 80vh;' class="interrogar">
+      <div style='border-radius: 0 0 4px 4px; flex: 1; flex-grow: 1; overflow: auto; max-width: 70%; max-height: 80vh;' class="interrogar interrogarNews">
       <!--SPLIT-->
       </div>
       

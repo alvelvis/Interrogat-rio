@@ -10,6 +10,14 @@
     transition: 0.3s;
 }
 
+.interrogarFlex {
+    overflow-x: hidden;
+}
+.interrogarSaved {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
 .sentence-control:hover {
     background-color: lightgray;
 }

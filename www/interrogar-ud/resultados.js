@@ -1056,9 +1056,21 @@ function scrollPosts(){
 
 var userLang = navigator.language || navigator.userLanguage;
 
+function updateInterrogarBusca(){
+	if(parseInt($('#pesquisa').css('width'), 10) < 300){
+		$('.interrogarBusca').css('width', "auto");
+		$('.interrogarFlex').css('display', 'block');
+		$('.interrogarNews').css('max-width', '100%');
+	};
+
+};
+
 $(document).ready(function(){
 
 	updateTranslation();
+	updateInterrogarBusca();
+
+	/*window.addEventListener('resize', updateInterrogarBusca);*/
 	
 	$('.updateCorpus').click(function(){
 		loadingScreen();
