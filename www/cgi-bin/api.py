@@ -86,7 +86,7 @@ def renderSentences(script=""):
                 filtros = [x for nome in filtros_json[pagina_html]['filtros'] for x in filtros_json[pagina_html]['filtros'][nome]['sentences']]
                 for pagina in [[x, len(filtros_json[pagina_html]['filtros'][x]['sentences'])] for x in filtros_json[pagina_html]['filtros']]:
                     filtrar_filtros += f'<li><a style="cursor:pointer;" title="Clique para adicionar ao mesmo filtro" onclick="$(\'#nome_pesquisa,#nome_pesquisa_sel\').val($(this).children(nome).text());"><span id="nome">{pagina[0]}</a> ({pagina[1]})</li>'
-                    pagina_filtros += f'<li><a style="cursor:pointer;" title="Clique para adicionar ao mesmo filtro" target="_blank" href=\'../../cgi-bin/filtrar.cgi?action=view&html={pagina_html}&filtro=' + web.escape(pagina[0]) + f'\'>{pagina[0]} ({pagina[1]})</li>'
+                    pagina_filtros += f'<li><a style="cursor:pointer;" title="Clique para adicionar ao mesmo filtro" target="_blank" href=\'../../cgi-bin/filtrar.cgi?action=view&html={pagina_html}&filtro=' + encodeUrl(web.escape(pagina[0])) + f'\'>{pagina[0]} ({pagina[1]})</li>'
             else:
                 filtros = []
 
