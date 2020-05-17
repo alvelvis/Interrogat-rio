@@ -137,9 +137,11 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 								for i, grupo in enumerate(reg):
 									if i != 0:
 										if grupo and i-1 < len(tabela):
+											token = ""
 											if '\t' in grupo:
 												token = grupo.split('\t')[1]
-											header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2)
+											if token:
+												header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2)
 						new_sentence = new_sentence.replace(header, header2)
 						output.append(new_sentence)
 					sentence = ""
