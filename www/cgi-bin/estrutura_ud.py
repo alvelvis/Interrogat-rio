@@ -166,7 +166,7 @@ class Corpus:
 			self.pos = old_txt.split(txt)[1].strip()
 			txt = txt.split(self.separator)
 		if isinstance(txt, str):
-			txt = [txt]
+			txt = txt.split(self.separator)
 		for sentence in txt:
 			if sentence:
 				sent = Sentence(recursivo=self.recursivo)
