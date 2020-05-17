@@ -106,6 +106,11 @@ def renderSentences(script=""):
             import queryScript
             resultadosBusca = queryScript.getResultadosBusca()
 
+    sent_id_list = []
+    if 'sent_id_list' in form and form['sent_id_list'].value:
+        sent_id_list = [re.sub(r'<.*?>', '', re.findall(r'# sent_id = (.*?)\n', x['resultado'])[0]) for x in resultadosBusca['output']]
+        sent_id_list = [x for x in sent_id_list if x not in filtros]
+
     numeroOcorrencias = len(resultadosBusca['output']) - len(filtros)
     #numeroOcorrenciasMenosFiltro = numeroOcorrencias - len(filtros)
     if numeroOcorrencias > startPoint + 21 and numeroOcorrencias >= 1:
@@ -175,6 +180,8 @@ def renderSentences(script=""):
             'filtrar_filtros': filtrar_filtros,
             'pagina_filtros': pagina_filtros,
             'filtros': len(filtros),
+            'sent_id_list': "|".join(sent_id_list),
+            'sent_id_count': str(len(sent_id_list))
         }))
 
 if os.environ['REQUEST_METHOD'] == "POST":

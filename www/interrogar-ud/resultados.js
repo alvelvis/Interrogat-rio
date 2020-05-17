@@ -808,8 +808,8 @@ var translations = {
 	"atualizar": {
 		"en-US": "update"
 	},
-	"Mostrar lista de sent_id das frases visíveis": {
-		'en-US': 'Show list of visible sentences sent_id',
+	"Mostrar lista de sent_id das frases": {
+		'en-US': 'Show list of sentences sent_id',
 	},
 	'Extrair lista de sent_id': {
 		'en-US': 'Extract list of sent_id',
@@ -1117,12 +1117,32 @@ $(document).ready(function(){
 	});
 	
 	$('.extractSentid').click(function(){
-		sentid_list = ""
-		$('[name=sent_id]').each(function(){
-			sentid_list = sentid_list + $(this).val() + "|";
-		});
-		sentid_list = sentid_list.rsplit("|", 1)[0]
-		$('.extractSentidInput').val(sentid_list).toggle();
+
+		loadingScreen();
+
+		var url;
+		if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
+			url = '../cgi-bin/api.py'
+		} else {
+			url = '../../cgi-bin/api.py'
+		};
+		$.post(url, {
+				'indexSentences': $('.indexSentences').val(),
+				'filtrado': $('.filtrado').val(),
+				'nomePesquisa': $('[name=nome_interrogatorio]').val(),
+				'html': $('[name=link_interrogatorio]').val(),
+				'conllu': $('[name=conllu]').val(),
+				'parametros': $('#expressao').text(),
+				'script': $('[name=queryScript]').val(),
+				'sent_id_list': true,
+			},
+			function(data) {
+				$('.extractSentidInput').val(data.sent_id_list).toggle();
+				$('.extractSentidSpan').html('(' + data.sent_id_count + ')').toggle();
+				endLoadingScreen();
+			}
+		);
+
 	});
 
     $('.exportHtml').click(function(){
