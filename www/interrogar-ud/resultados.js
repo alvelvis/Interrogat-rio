@@ -808,6 +808,12 @@ var translations = {
 	"atualizar": {
 		"en-US": "update"
 	},
+	"Mostrar lista de sent_id das frases visíveis": {
+		'en-US': 'Show list of visible sentences sent_id',
+	},
+	'Extrair lista de sent_id': {
+		'en-US': 'Extract list of sent_id',
+	},
 	"Inquéritos": {
 		"en-US": "Inquiries"
 	},
@@ -1108,7 +1114,16 @@ $(document).ready(function(){
     $('.toggleCriteria').click(function(){
         $('.criterio').hide();
         $('#criterio_' + $(this).attr('criterio')).show();
-    });
+	});
+	
+	$('.extractSentid').click(function(){
+		sentid_list = ""
+		$('[name=sent_id]').each(function(){
+			sentid_list = sentid_list + $(this).val() + "|";
+		});
+		sentid_list = sentid_list.rsplit("|", 1)[0]
+		$('.extractSentidInput').val(sentid_list).toggle();
+	});
 
     $('.exportHtml').click(function(){
         if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
