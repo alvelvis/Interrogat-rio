@@ -130,7 +130,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	conllu = estrutura_ud.Corpus(recursivo=False)
 	conllu.build(arquivo)
 
-	sentence = conllu.sentences[form['text'].value] if 'text' in conllu.sentences else conllu.sentences[form['sent_id'].value]
+	sentence = conllu.sentences[form['text'].value] if 'text' in form else conllu.sentences[form['sent_id'].value]
 
 	forest = Forest()
 	forest.build(sentence.tokens_to_str())
