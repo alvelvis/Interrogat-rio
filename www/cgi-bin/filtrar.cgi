@@ -52,7 +52,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]):
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
-	elif any(x in pesquisa for x in [' == ', ' = ', ' != ', ' !== ', ' === ']):
+	elif any(x in pesquisa for x in [' == ', ' = ', ' != ', ' !== ', ' === ']) and len(pesquisa.split('"')) > 2:
 		criterio = '5'
 		parametros = pesquisa
 	else:
