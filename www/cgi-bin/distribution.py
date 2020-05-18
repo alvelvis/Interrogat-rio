@@ -44,6 +44,7 @@ if "link_dist" in form and os.path.isfile("../cgi-bin/filtros.json"):
 dic_dist = interrogar_UD.getDistribution("../interrogar-ud/conllu/" + form['corpus'].value, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
 
 pagina = '''
+	<meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
 	<button onclick="topFunction()" id="myBtn" class="translateTitle translateHtml" title="Voltar ao topo">Voltar ao topo</button>
 	<style>
 		#myBtn {
