@@ -8,9 +8,29 @@ import cgi
 import html as web
 
 different_distribution = ["dependentes", "children"]
+coluna_tab = {
+	'id': 0,
+	'word': 1,
+	'lemma': 2,
+	'upos': 3,
+	'xpos': 4,
+	'feats': 5,
+	'dephead': 6,
+	'deprel': 7,
+	'deps': 8,
+	'misc': 9
+}
 
-def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[], sent_id=""):
+def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id=""):
 	import estrutura_ud
+
+	if re.search(r"^\d+\s", parametros):
+		criterio = int(parametros.split(" ", 1)[0])
+		parametros = parametros.split(" ", 1)[1]
+	elif any(x in parametros for x in [' = ', ' == ', ' != ', ' !== ']) and len(parametros.split('"')) > 2:
+		criterio = 5
+	else:
+		criterio = 1
 
 	if not isinstance(arquivoUD, dict):
 		sentences = main(arquivoUD, criterio, parametros, sent_id=sent_id, fastSearch=True)['output']
@@ -19,38 +39,50 @@ def getDistribution(arquivoUD, parametros, criterio=5, coluna="lemma", filtros=[
 		
 	corpus = list()
 	for sentence in sentences:
-		sent = estrutura_ud.Sentence()
-		sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
-		if sent.sent_id not in filtros:
-			corpus.append(sent)
+		if sentence:
+			if coluna in different_distribution:
+				sent = estrutura_ud.Sentence()
+				sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
+				sent_id = sent.sent_id
+			else:
+				sent = sentence['resultado']
+				sent_id = re.sub(r"<.*?>", "", re.findall(r"# sent_id = (.*?)\n", sent)[0])
+			if sent_id not in filtros:
+				corpus.append(sent)
 	
 	dist = list()
 	all_children = {}
-	for sentence in corpus:
-		for t, token in enumerate(sentence.tokens):
-			if '<b>' in token.to_str() or "</b>" in token.to_str():
-				if not coluna in different_distribution:
-					dist.append(token.col.get(coluna))
-				elif coluna in ["dependentes", "children"]:
-					children = [t]
-					children_already_seen = []
-					children_future = []
-					while children_already_seen != children:
-						for child in children:
-							if not child in children_already_seen:
-								children_already_seen.append(child)
-							for _t, _token in enumerate(sentence.tokens):
-								if cleanEstruturaUD(_token.dephead) == cleanEstruturaUD(sentence.tokens[child].id):
-									children_future.append(_t)
-						[children.append(x) for x in children_future if x not in children]
+	if not coluna in different_distribution:
+		for sentence in corpus:
+			for t, token in enumerate(sentence.splitlines()):
+				if ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
+					dist.append(re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]))
+	if coluna in different_distribution:
+		for sentence in corpus:
+			for t, token in enumerate(sentence.tokens):
+				if '<b>' in token.to_str() or "</b>" in token.to_str():
+					if not coluna in different_distribution:
+						dist.append(re.sub(r'<.*?>', '', token.col.get(coluna)))
+					elif coluna in ["dependentes", "children"]:
+						children = [t]
+						children_already_seen = []
 						children_future = []
-					children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
-					if len(children_list) > 1:
-						dist.append(" ".join(children_list))
-						if children_list:
-							if not " ".join(children_list) in all_children:
-								all_children[" ".join(children_list)] = []
-							all_children[" ".join(children_list)].append(sentence.sent_id)
+						while children_already_seen != children:
+							for child in children:
+								if not child in children_already_seen:
+									children_already_seen.append(child)
+								for _t, _token in enumerate(sentence.tokens):
+									if cleanEstruturaUD(_token.dephead) == cleanEstruturaUD(sentence.tokens[child].id):
+										children_future.append(_t)
+							[children.append(x) for x in children_future if x not in children]
+							children_future = []
+						children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
+						if len(children_list) > 1:
+							dist.append(" ".join(children_list))
+							if children_list:
+								if not " ".join(children_list) in all_children:
+									all_children[" ".join(children_list)] = []
+								all_children[" ".join(children_list)].append(sentence.sent_id)
 
 
 	dicionario = dict()

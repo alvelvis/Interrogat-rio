@@ -993,7 +993,7 @@ function pesquisaChange(){
         $('.clearPesquisa').hide();
     };
     if ($('.toggleDist').is(':checked')) {
-        if (/(^5 )|( == )|( = )|( != )|( !== )/.test($('#pesquisa').val())) {
+        if (/(^(5|1) )|(^\D)|( == )|( = )|( != )|( !== )/.test($('#pesquisa').val())) {
             $('.dist').show();
             $('.notDist').hide();
         } else {
@@ -1309,7 +1309,7 @@ $(document).ready(function(){
     $('#pesquisa').on('keyup', function(){pesquisaChange()});
 
     $('.toggleDist').on('click', function(){
-        if (/(^5 )|( == )|( = )|( != )|( !== )|( !=== )/.test($('#pesquisa').val())) {
+        if (/(^(5|1) )|(^\D)|( == )|( = )|( != )|( !== )|( !=== )/.test($('#pesquisa').val())) {
             $('.dist').show();
             $('.notDist').hide();
         } else {
@@ -1322,7 +1322,7 @@ $(document).ready(function(){
 
     $('.verDist').click(function(){
         if ($('#pesquisa').length){
-            $('#html_dist').val($('#pesquisa').val().replace(/^5 /, ""));
+            $('#html_dist').val($('#pesquisa').val());//.replace(/(^(5|1) )/, ""));
             $('#expressao_dist').val($('#pesquisa').val());
             $('#corpus_dist').val($('.conllu').val());
             $lastDistribution = $(this);
