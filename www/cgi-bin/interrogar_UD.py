@@ -155,10 +155,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 						casos += len(regex)
 						new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence)
 						tokens = list()
-						header = '!@#'
+						header = '!@#' if not '# text = ' in new_sentence else '# text = ' + new_sentence.split("# text = ")[1].split("\n")
 						for linha in new_sentence.splitlines():
-							if '# text = ' in linha:
-								header = linha
 							if 'b>' in linha and '\t' in linha:
 								if '\\' in linha:
 									linha = re.sub(r"\\(\d+)", r"\\\\\1", linha)
@@ -403,16 +401,16 @@ for ''' + identificador + ''' in sentence.tokens:
 	try:
 		if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :
 			sentence2.metadados['corresponde'] = 1
-			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'])
 			sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
 	'''#try por causa de não ter um next_token no fim de sentença, por ex.
 			if identificador + ".head_token" in pesquisa:
 				condition += '''
-			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'])
 			sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
 			
 			condition += '''
-			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'], flags=re.IGNORECASE|re.MULTILINE)
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'])
 			'''
 
 			exec(condition + '''
