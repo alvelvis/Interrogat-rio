@@ -111,7 +111,7 @@ for i, entrada in enumerate(sorted(dic_dist["lista"], key=lambda x: (-x[1], x[0]
 		if criterio != 5:
 			pagina += f"<tr><td>{i+1}</td><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', '') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
