@@ -128,10 +128,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 							if '# text = ' in linha:
 								header = linha
 							if 'b>' in linha and '\t' in linha:
+								if '\\' in linha:
+									linha = re.sub(r"\\(\d+)", r"\\\\\1", linha)
 								tokens.append(linha.split('\t')[1].replace('<b>','').replace('</b>',''))
 						header2 = header
 						for token in tokens:
-							header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + re.escape(token) + '</b>', header2)
+							header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', header2)
 						for reg in regex:
 							if not isinstance(reg, str):
 								for i, grupo in enumerate(reg):
@@ -141,7 +143,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 											if '\t' in grupo:
 												token = grupo.split('\t')[1]
 											if token:
-												header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + re.escape(token) + '/FONT', header2)
+												header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2)
 						new_sentence = new_sentence.replace(header, header2)
 						output.append(new_sentence)
 					sentence = ""
