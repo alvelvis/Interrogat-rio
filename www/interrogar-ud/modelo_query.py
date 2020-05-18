@@ -20,6 +20,8 @@ def getResultadosBusca():
         bold_tokens = []
         <!--pesquisa-->
 
+        resultadosBusca['casos'] += len(bold_tokens)
+
         if 'corresponde' in sentence.metadados and sentence.metadados['corresponde']:
             sentence.metadados['corresponde'] = ""
             resultadosBusca['output'].append({'resultado': bold_tokenize(bold_tokens, sentence)})
