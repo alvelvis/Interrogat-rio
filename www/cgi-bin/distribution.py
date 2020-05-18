@@ -108,7 +108,7 @@ for i, entrada in enumerate(sorted(dic_dist["lista"], key=lambda x: (-x[1], x[0]
 		pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
 		if criterio != 5:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl('\\b' + entrada[0] + '\\b') + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 		else:
 			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', '') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
@@ -119,7 +119,7 @@ for i, entrada in enumerate(sorted(dic_dist["lista"], key=lambda x: (-x[1], x[0]
 		if criterio == 5:
 			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(entrada[0].split('<b>')[1].split('</b>')[0])}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl('\\b' + entrada[0].split('<b>')[1].split('</b>')[0] + '\\b') + f"\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
 pagina += "</table>"
 
 '''
