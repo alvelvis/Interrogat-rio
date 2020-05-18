@@ -1066,37 +1066,6 @@ function carregarPosts(){
     );
 };
 
-if ($('.indexSentences').length){
-	window.addEventListener('focus', function(){
-		var url;
-		if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
-			url = '../cgi-bin/api.py'
-		} else {
-			url = '../../cgi-bin/api.py'
-		};
-		$.post(url, {
-				'indexSentences': $('.indexSentences').val(),
-				'filtrado': $('.filtrado').val(),
-				'nomePesquisa': $('[name=nome_interrogatorio]').val(),
-				'html': $('[name=link_interrogatorio]').val(),
-				'conllu': $('[name=conllu]').val(),
-				'parametros': $('#expressao').text(),
-				'script': $('[name=queryScript]').val(),
-			},
-			function(data) {
-				$('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
-				if (JSON.parse(data).pagina_filtros.length) {
-					$('.pagina_filtros').html('<li><h4>Filtros (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
-				} else {
-					$('.pagina_filtros_br').remove();
-				};
-				updateTranslation();
-			},
-			"text",
-		);
-	});
-};
-
 function scrollPosts(){
 	if ($('.indexSentences').length){
 		$(window).scroll(function() {    
@@ -1125,6 +1094,37 @@ $(document).ready(function(){
 	updateInterrogarBusca();
 
 	/*window.addEventListener('resize', updateInterrogarBusca);*/
+
+	if ($('.indexSentences').length){
+		window.addEventListener('focus', function(){
+			var url;
+			if ($('[name=nome_interrogatorio]').val() == 'Busca rápida'){
+				url = '../cgi-bin/api.py'
+			} else {
+				url = '../../cgi-bin/api.py'
+			};
+			$.post(url, {
+					'indexSentences': $('.indexSentences').val(),
+					'filtrado': $('.filtrado').val(),
+					'nomePesquisa': $('[name=nome_interrogatorio]').val(),
+					'html': $('[name=link_interrogatorio]').val(),
+					'conllu': $('[name=conllu]').val(),
+					'parametros': $('#expressao').text(),
+					'script': $('[name=queryScript]').val(),
+				},
+				function(data) {
+					$('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
+					if (JSON.parse(data).pagina_filtros.length) {
+						$('.pagina_filtros').html('<li><h4>Filtros (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
+					} else {
+						$('.pagina_filtros_br').remove();
+					};
+					updateTranslation();
+				},
+				"text",
+			);
+		});
+	};
 	
 	$('.updateCorpus').click(function(){
 		loadingScreen();
