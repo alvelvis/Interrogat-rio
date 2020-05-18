@@ -155,7 +155,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 						casos += len(regex)
 						new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence)
 						tokens = list()
-						header = '!@#' if not '# text = ' in new_sentence else '# text = ' + new_sentence.split("# text = ")[1].split("\n")
+						header = '!@#' if not '# text = ' in new_sentence else '# text = ' + new_sentence.split("# text = ")[1].split("\n")[0]
 						for linha in new_sentence.splitlines():
 							if 'b>' in linha and '\t' in linha:
 								if '\\' in linha:
