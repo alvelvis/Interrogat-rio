@@ -1383,11 +1383,11 @@ function topFunction() {
 
 function excluir_selection() {
     
-    $('#pesquisa_filtro').val('5 sent_id = "');
+    $('#pesquisa_filtro').val('5 sent_id = "(');
     $(".cb:checked").each(function(){
         $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + escapeRegExp($(this).attr('sent_id')) + '|');
     });
-	$('#pesquisa_filtro').val('(' + $('#pesquisa_filtro').val().rsplit('|', 1)[0] + ')"');
+	$('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + ')"');
 	if($('#expressao').html().split(" ")[0] == "5"){
 		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').html().split(" ").slice(1,$('#expressao').html().split(" ").length).join(" "));
 	}
