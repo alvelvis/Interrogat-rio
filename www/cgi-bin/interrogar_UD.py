@@ -46,7 +46,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 				sent_id = sent.sent_id
 			else:
 				sent = sentence['resultado']
-				sent_id = re.sub(r"<.*?>", "", re.findall(r"# sent_id = (.*?)\n", sent)[0])
+				sent_id = re.findall(r"# sent_id = (.*?)\n", re.sub(r'<.*?>', '', sent))[0]
 			if sent_id not in filtros:
 				corpus.append(sent)
 	

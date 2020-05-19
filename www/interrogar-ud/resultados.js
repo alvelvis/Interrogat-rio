@@ -1321,15 +1321,19 @@ $(document).ready(function(){
     $('.toggle:checked').click();
 
     $('.verDist').click(function(){
-        if ($('#pesquisa').length){
-            $('#html_dist').val($('#pesquisa').val());//.replace(/(^(5|1) )/, ""));
-            $('#expressao_dist').val($('#pesquisa').val());
-            $('#corpus_dist').val($('.conllu').val());
-            $lastDistribution = $(this);
-            $('.verDist').css('color', '');
-            $(this).css('color', 'rgba(255,105,30,1)');
-        };
-        dist($(this).html());
+		if ($('.conllu').val()) {
+			if ($('#pesquisa').length){
+				$('#html_dist').val($('#pesquisa').val());//.replace(/(^(5|1) )/, ""));
+				$('#expressao_dist').val($('#pesquisa').val());
+				$('#corpus_dist').val($('.conllu').val());
+				$lastDistribution = $(this);
+				$('.verDist').css('color', '');
+				$(this).css('color', 'rgba(255,105,30,1)');
+			};
+			dist($(this).html());
+		} else {
+			$('.corpusLabel').css('color', 'red');
+		};
     });
 
     if($('.drag').length){
