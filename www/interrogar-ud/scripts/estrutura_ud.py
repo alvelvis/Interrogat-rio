@@ -112,8 +112,9 @@ class Sentence:
 					self.map_token_id[re.sub(r"<.*?>", "", tok.id) if '<' in tok.id else tok.id] = n_token
 					self.tokens.append(tok)
 					n_token += 1
-			except:
-				print(linha)
+			except Exception as e:
+				sys.stderr.write(str(e + "\n"))
+				sys.stderr.write(str(linha + "\n"))
 				sys.exit()
 
 		if self.recursivo != False:
