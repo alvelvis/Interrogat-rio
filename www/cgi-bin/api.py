@@ -32,6 +32,8 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
 
     n_sent = 0
     n_tokens = 0
+    n_files = 0
+    files = []
 
     if (updateCorpus) or (size and float(size) < 50.0) or (ud in conllus):
         try:
@@ -41,20 +43,28 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
                     for line in f:
                         if line.strip().startswith('# sent_id = '):
                             n_sent += 1
+                            if '-' in line:
+                                filename = line.rsplit("# sent_id = ", 1)[1].rsplit("-", 1)[0].strip()
+                                if not filename in files:
+                                    files.append(filename)
                         if line and not line.strip().startswith('#') and len(line.split("\t")) > 5 and not '-' in line.split("\t")[0]:
                             n_tokens += 1
+                n_files = len(files)
                 conllus[ud]['n_sent'] = n_sent
                 conllus[ud]['n_tokens'] = n_tokens
+                conllus[ud]['n_files'] = n_files
                 with open("../interrogar-ud/conllu.json", "w") as f:
                     json.dump(conllus, f)
             else:
                 n_sent = conllus[ud]['n_sent']
                 n_tokens = conllus[ud]['n_tokens']
-            print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'ud': ud}))
-        except:
-            print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'ud': ud}))
+                n_files = conllus[ud]['n_files'] if 'n_files' in conllus[ud] else "MEMORY_LEAK"
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'n_files': n_files, 'ud': ud}))
+        except Exception as e:
+            sys.stderr.write(str(e))
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_files': 'MEMORY_LEAK', 'ud': ud}))
     else:
-        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'ud': ud}))
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_files': 'MEMORY_LEAK', 'ud': ud}))
 
 def renderSentences(script=""):
 

@@ -69,6 +69,62 @@ pagina = '''
 	</style>
 	<script src="../interrogar-ud/jquery.min.js"></script>
 	<script src="../interrogar-ud/resultados.js?version=12"></script>
+	<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("mainTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc";
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if ((n == 0 && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) || (n != 0 && parseFloat(x.innerHTML) > parseFloat(y.innerHTML))) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if ((n == 0 && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) || (n != 0 && parseFloat(x.innerHTML) < parseFloat(y.innerHTML))) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
 '''
 pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
@@ -102,7 +158,7 @@ if criterio == 5:
 	with open("dist.log", 'w') as f:
 		f.write("\n".join([identificador, expressao]))
 
-pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><th>#</th><th>{form['coluna'].value}</th><th class='translateHtml'>frequência</th><th>%</th><th class='translateHtml'>em arquivos</th>"
+pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{form['coluna'].value}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
 for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
 	entradaEscapada = re.escape(entrada[0])
@@ -110,18 +166,18 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 		pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
 		if criterio != 5:
-			pagina += f"<tr><td>{i+1}</td><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+"{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
+			pagina += f"<tr><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+ "{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
 			sent_ids.append(sent_id)
 		sent_ids = '5 sentence.sent_id == "(' + ')|('.join(sent_ids) + ')" and ' + form['notSaved'].value
 		if criterio == 5:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(entrada[0].split('<b>')[1].split('</b>')[0])}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>"+ "{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(entrada[0].split('<b>')[1].split('</b>')[0])}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>"+"{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
+			pagina += f"<tr><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 pagina += "</table>"
 
 '''

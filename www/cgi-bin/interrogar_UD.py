@@ -60,15 +60,17 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 				if token.startswith("# sent_id = "):
 					sent_id = token.split("# sent_id = ")[1]
 				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
-					dist.append(re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]))
-					if not re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]) in lista:
-						lista[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] = 0
-					lista[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] += 1
+					entrada = re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])
+					dist.append(entrada)
+					if not entrada in lista:
+						lista[entrada] = 0
+					lista[entrada] += 1
 					if '-' in sent_id:
-						if not re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]) in dispersion_files:
-							dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] = []
-						if not sent_id.rsplit("-", 1)[0] in dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])]:
-							dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])].append(sent_id.rsplit("-", 1)[0])
+						if not entrada in dispersion_files:
+							dispersion_files[entrada] = []
+						filename = sent_id.rsplit("-", 1)[0]
+						if not filename in dispersion_files[entrada]:
+							dispersion_files[entrada].append(filename)
 		if coluna in different_distribution:
 			for t, token in enumerate(sentence.tokens):
 				if '<b>' in token.to_str() or "</b>" in token.to_str():
@@ -89,19 +91,21 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 							children_future = []
 						children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
 						if len(children_list) > 1:
-							dist.append(" ".join(children_list))
-							if not " ".join(children_list) in lista:
-								lista[" ".join(children_list)] = 0
-							lista[" ".join(children_list)] += 1
+							entrada = " ".join(children_list)
+							dist.append(entrada)
+							if not entrada in lista:
+								lista[entrada] = 0
+							lista[entrada] += 1
 							if '-' in sentence.sent_id:
-								if not " ".join(children_list) in dispersion_files:
-									dispersion_files[" ".join(children_list)] = []
-								if not sentence.sent_id.rsplit("-", 1)[0] in dispersion_files[" ".join(children_list)]:
-									dispersion_files[" ".join(children_list)].append(sentence.sent_id.rsplit("-", 1)[0])
+								filename = sentence.sent_id.rsplit("-", 1)[0]
+								if not entrada in dispersion_files:
+									dispersion_files[entrada] = []
+								if not filename in dispersion_files[entrada]:
+									dispersion_files[entrada].append(filename)
 							if children_list:
-								if not " ".join(children_list) in all_children:
-									all_children[" ".join(children_list)] = []
-								all_children[" ".join(children_list)].append(sentence.sent_id)
+								if not entrada in all_children:
+									all_children[entrada] = []
+								all_children[entrada].append(sentence.sent_id)
 
 
 	#dicionario = dict()

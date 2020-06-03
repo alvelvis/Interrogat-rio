@@ -21,6 +21,9 @@ var translations = {
 	'em arquivos': {
 		'en-US': 'in files'
 	},
+	'porcentagem': {
+		'en-US': 'percentage'
+	},
 	'Classe gramatical': {
 		'en-US': 'Part-of-speech'
 	},
@@ -906,6 +909,7 @@ function loadCorpora(){
         function(data) {
 			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
 			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+			$("[ud='" + JSON.parse(data).ud + "'].n_files").html(JSON.parse(data).n_files);
         },
         "text",
     	);
@@ -1144,6 +1148,7 @@ $(document).ready(function(){
         function(data) {
 			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
 			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+			$("[ud='" + JSON.parse(data).ud + "'].n_files").html(JSON.parse(data).n_files);
 			endLoadingScreen();
         },
         "text",
