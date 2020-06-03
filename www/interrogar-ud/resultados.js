@@ -18,6 +18,9 @@ var translations = {
 	'Lema da palavra': {
 		'en-US': 'Lemma of the word'
 	},
+	'em arquivos': {
+		'en-US': 'in files'
+	},
 	'Classe gramatical': {
 		'en-US': 'Part-of-speech'
 	},
@@ -696,6 +699,9 @@ var translations = {
 	},
 	'Nova função: visualizar distribuição dos dependentes sintáticos': {
 		'en-US': 'New feature: view syntactic children distribution'
+	},
+	'Nova função: visualizar dispersão': {
+		'en-US': 'New feature: view dispersion'
 	},
 	" antes do token de id ": {
 		"en-US": " before the token (id number) "

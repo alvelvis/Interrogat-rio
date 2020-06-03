@@ -102,25 +102,26 @@ if criterio == 5:
 	with open("dist.log", 'w') as f:
 		f.write("\n".join([identificador, expressao]))
 
-pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><th>#</th><th>{form['coluna'].value}</th><th class='translateHtml'>frequência</th><th>%</th>"
-for i, entrada in enumerate(sorted(dic_dist["lista"], key=lambda x: (-x[1], x[0]))):
+pagina += f"<br><table style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><th>#</th><th>{form['coluna'].value}</th><th class='translateHtml'>frequência</th><th>%</th><th class='translateHtml'>em arquivos</th>"
+for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
+	entrada = [dicionario, dic_dist["lista"][dicionario]]
 	entradaEscapada = re.escape(entrada[0])
 	if criterio == 5:
 		pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
 		if criterio != 5:
-			pagina += f"<tr><td>{i+1}</td><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td>" + cgi.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>"+"{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + cgi.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>"+ "{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
 			sent_ids.append(sent_id)
 		sent_ids = '5 sentence.sent_id == "(' + ')|('.join(sent_ids) + ')" and ' + form['notSaved'].value
 		if criterio == 5:
-			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(entrada[0].split('<b>')[1].split('</b>')[0])}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(entrada[0].split('<b>')[1].split('</b>')[0])}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>"+ "{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 		else:
-			pagina += f"<tr><td>{i+1}</td><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>"+str((entrada[1]/dic_dist["dist"])*100)+"%</td></tr>"
+			pagina += f"<tr><td>{i+1}</td><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>"+"{:.2f}".format((entrada[1]/dic_dist["dist"])*100)+"</td><td>" + str(len(dic_dist["dispersion_files"][entrada[0]])) + "</td></tr>"
 pagina += "</table>"
 
 '''

@@ -52,13 +52,24 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	
 	dist = list()
 	all_children = {}
-	if not coluna in different_distribution:
-		for sentence in corpus:
+	lista = {}
+	dispersion_files = {}
+	for sentence in corpus:
+		if not coluna in different_distribution:	
 			for t, token in enumerate(sentence.splitlines()):
-				if ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
+				if token.startswith("# sent_id = "):
+					sent_id = token.split("# sent_id = ")[1]
+				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
 					dist.append(re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]))
-	if coluna in different_distribution:
-		for sentence in corpus:
+					if not re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]) in lista:
+						lista[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] = 0
+					lista[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] += 1
+					if '-' in sent_id:
+						if not re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]]) in dispersion_files:
+							dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])] = []
+						if not sent_id.rsplit("-", 1)[0] in dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])]:
+							dispersion_files[re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])].append(sent_id.rsplit("-", 1)[0])
+		if coluna in different_distribution:
 			for t, token in enumerate(sentence.tokens):
 				if '<b>' in token.to_str() or "</b>" in token.to_str():
 					if not coluna in different_distribution:
@@ -79,31 +90,39 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 						children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
 						if len(children_list) > 1:
 							dist.append(" ".join(children_list))
+							if not " ".join(children_list) in lista:
+								lista[" ".join(children_list)] = 0
+							lista[" ".join(children_list)] += 1
+							if '-' in sentence.sent_id:
+								if not " ".join(children_list) in dispersion_files:
+									dispersion_files[" ".join(children_list)] = []
+								if not sentence.sent_id.rsplit("-", 1)[0] in dispersion_files[" ".join(children_list)]:
+									dispersion_files[" ".join(children_list)].append(sentence.sent_id.rsplit("-", 1)[0])
 							if children_list:
 								if not " ".join(children_list) in all_children:
 									all_children[" ".join(children_list)] = []
 								all_children[" ".join(children_list)].append(sentence.sent_id)
 
 
-	dicionario = dict()
-	for entrada in dist:
+	#dicionario = dict()
+	#for entrada in dist:
 		#entrada = entrada.replace("<b>", "").replace("</b>", "")
-		if not entrada in dicionario: dicionario[entrada] = 1
-		else: dicionario[entrada] += 1
+		#if not entrada in dicionario: dicionario[entrada] = 1
+		#else: dicionario[entrada] += 1
 
-	lista = list()
-	for entrada in dicionario:
-		lista.append((entrada, dicionario[entrada]))
+	#lista = list()
+	#for entrada in dicionario:
+		#lista.append((entrada, dicionario[entrada]))
 
-	freq = dict()
-	for entrada in dicionario:
-		if not dicionario[entrada] in freq: freq[dicionario[entrada]] = 1
-		else: freq[dicionario[entrada]] += 1
-	lista_freq = list()
-	for entrada in freq:
-		lista_freq.append((entrada, freq[entrada]))
+	#freq = dict()
+	#for entrada in dicionario:
+		#if not dicionario[entrada] in freq: freq[dicionario[entrada]] = 1
+		#else: freq[dicionario[entrada]] += 1
+	#lista_freq = list()
+	#for entrada in freq:
+		#lista_freq.append((entrada, freq[entrada]))
 
-	return {"all_children": all_children, "lista": lista, "dist": len(dist)}
+	return {"all_children": all_children, "lista": lista, "dist": len(dist), "dispersion_files": dispersion_files}
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
