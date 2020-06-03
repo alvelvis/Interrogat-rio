@@ -55,10 +55,12 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	lista = {}
 	dispersion_files = {}
 	for sentence in corpus:
+		sent_id = ""
 		if not coluna in different_distribution:	
 			for t, token in enumerate(sentence.splitlines()):
-				if token.startswith("# sent_id = "):
-					sent_id = token.split("# sent_id = ")[1]
+				if not sent_id:
+					if token.startswith("# sent_id = "):
+						sent_id = token.split("# sent_id = ")[1]
 				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
 					entrada = re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])
 					dist.append(entrada)
