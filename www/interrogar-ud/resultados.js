@@ -1333,10 +1333,15 @@ $(document).ready(function(){
 
     $('.verDist').click(function(){
 		if ($('.conllu').val()) {
+			corpus = $('.conllu').val()
+		} else {
+			corpus = $('#corpus').html()
+		}
+		if (corpus.length) {
 			if ($('#pesquisa').length){
 				$('#html_dist').val($('#pesquisa').val());//.replace(/(^(5|1) )/, ""));
 				$('#expressao_dist').val($('#pesquisa').val());
-				$('#corpus_dist').val($('.conllu').val());
+				$('#corpus_dist').val(corpus);
 				$lastDistribution = $(this);
 				$('.verDist').css('color', '');
 				$(this).css('color', 'rgba(255,105,30,1)');
