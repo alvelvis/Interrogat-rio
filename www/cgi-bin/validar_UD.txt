@@ -53,6 +53,12 @@ deprel = "obl" and upos != "(NOUN|PRON|PROPN|SYM|NUM)"
 deprel|erro: DEPREL inválido
 deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl)"
 
+upos|erro: acl:relcl deve ser filha de nome
+@head_token.upos != "NOUN" and deprel = "acl:relcl"
+
+upos|erro: conj deve ser subordinado à mesma POS
+deprel = "conj" and @head_token.upos != upos
+
 misc|erro: Falta MWE no misc
 #misc = "MWEPOS=.*" and misc != "MWE=.*"
 #deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
