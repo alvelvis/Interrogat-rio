@@ -58,10 +58,12 @@ class Token:
 		self.col["misc"] = self.misc
 		if self.feats != "_":
 			for feat in self.feats.split("|"):
-				self.col[feat.split("=")[0].lower()] = feat.split("=")[1]
+				if '=' in feat:
+					self.col[feat.split("=")[0].lower()] = feat.split("=")[1]
 		if self.misc != "_":
 			for misc in self.misc.split("|"):
-				self.col[misc.split("=")[0].lower()] = misc.split("=")[1]
+				if '=' in misc:
+					self.col[misc.split("=")[0].lower()] = misc.split("=")[1]
 		#self.col["text"] = self.text
 
 	def to_str(self):
