@@ -1,4 +1,4 @@
-import sys, re
+import sys, re, time
 
 def chunkIt(seq, num):
     avg = len(seq) / float(num)
@@ -56,6 +56,12 @@ class Token:
 		self.col["deps"] = self.deps
 		self.col["sema"] = self.deps
 		self.col["misc"] = self.misc
+		if self.feats != "_":
+			for feat in self.feats.split("|"):
+				self.col[feat.split("=")[0].lower()] = feat.split("=")[1]
+		if self.misc != "_":
+			for misc in self.misc.split("|"):
+				self.col[misc.split("=")[0].lower()] = misc.split("=")[1]
 		#self.col["text"] = self.text
 
 	def to_str(self):
@@ -71,6 +77,7 @@ class Sentence:
 		self.id = ""
 		self.metadados = {}
 		self.recursivo = recursivo
+		self.processed = {}
 
 		f = "_\t" * 10
 		self.default_token = Token()
@@ -81,13 +88,15 @@ class Sentence:
 		self.separator = separator
 		self.map_token_id = {}
 
-	def build(self, txt):
+	def build(self, txt, sent_id=""):
 		if '# text =' in txt:
 			self.text = txt.split('# text =')[1].split('\n')[0].strip()
 			self.metadados['text'] = self.text
-		if '# sent_id =' in txt:
+		if sent_id:
+			self.sent_id = sent_id
+		elif '# sent_id =' in txt:
 			self.sent_id = txt.split('# sent_id =')[1].split('\n')[0].strip()
-			self.metadados['sent_id'] = self.sent_id
+		self.metadados['sent_id'] = self.sent_id
 		if '# source =' in txt:
 			self.source = txt.split('# source =')[1].split('\n')[0].strip()
 			self.metadados['source'] = self.source
@@ -106,6 +115,13 @@ class Sentence:
 				if not linha.startswith("# ") and "\t" in linha:
 					tok = Token()
 					tok.build(linha)
+					if not '-' in tok.id:
+						for col in tok.col:
+							if not col in self.processed:
+								self.processed[col] = {}
+							if not tok.col[col] in self.processed[col]:
+								self.processed[col][tok.col[col]] = []
+							self.processed[col][tok.col[col]].append([self.sent_id, n_token])
 					tok.head_token = self.default_token
 					tok.next_token = self.default_token
 					tok.previous_token = self.default_token
@@ -113,7 +129,7 @@ class Sentence:
 					self.tokens.append(tok)
 					n_token += 1
 			except Exception as e:
-				sys.stderr.write(str(e + "\n"))
+				sys.stderr.write(str(e) + "\n")
 				sys.stderr.write(str(linha + "\n"))
 				sys.exit()
 
@@ -157,6 +173,18 @@ class Corpus:
 		self.thread = thread
 		self.keywords = keywords
 		self.any_of_keywords = any_of_keywords
+		self.time = time.time()
+
+	def process(self):
+		self.processed = {}
+		for sent_id, sentence in self.sentences.items():
+			for col in sentence.processed:
+				if not col in self.processed:
+					self.processed[col] = {}
+				for value in sentence.processed[col]:
+					if not value in self.processed[col]:
+						self.processed[col][value] = []
+					self.processed[col][value].extend(sentence.processed[col][value])
 
 	def build(self, txt):
 		if self.sent_id:
@@ -178,6 +206,8 @@ class Corpus:
 					self.sentences[sent.id] = sent
 				elif sent.text:
 					self.sentences[sent.text] = sent
+		self.process()
+		sys.stderr.write("build: " + str(time.time() - self.time))
 
 
 	def to_str(self):
@@ -220,6 +250,7 @@ class Corpus:
 						sentence = ""
 			else:
 				self.build(f.read())
+		self.process()
 
 	def save(self, path):
 		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"

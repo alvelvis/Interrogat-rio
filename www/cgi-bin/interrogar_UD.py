@@ -3,9 +3,24 @@ import re
 import copy
 import sys
 import time
-from functions import tabela as tabelaf, cleanEstruturaUD
 import cgi
 import html as web
+
+tabelaf = {      'yellow': 'green',
+                        'purple': 'purple',
+                        'blue': 'blue',
+                        'red': 'red',
+                        'cyan': 'cyan',
+}
+
+def slugify(value):
+        return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
+
+def cleanEstruturaUD(s):
+    return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
+
+def fromInterrogarToHtml(s):
+    return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabelaf['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabelaf['purple'] + '>').replace('@BLUE/', '<font color=' + tabelaf['blue'] + '>').replace('@RED/', '<font color=' + tabelaf['red'] + '>').replace('@CYAN/', '<font color=' + tabelaf['cyan'] + '>').replace('/FONT', '</font>')
 
 different_distribution = ["dependentes", "children"]
 coluna_tab = {
@@ -21,16 +36,17 @@ coluna_tab = {
 	'misc': 9
 }
 
-def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id=""):
+def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="", criterio=0):
 	import estrutura_ud
 
-	if re.search(r"^\d+\s", parametros):
-		criterio = int(parametros.split(" ", 1)[0])
-		parametros = parametros.split(" ", 1)[1]
-	elif any(x in parametros for x in [' = ', ' == ', ' != ', ' !== ']) and len(parametros.split('"')) > 2:
-		criterio = 5
-	else:
-		criterio = 1
+	if not criterio:
+		if re.search(r"^\d+\s", parametros):
+			criterio = int(parametros.split(" ", 1)[0])
+			parametros = parametros.split(" ", 1)[1]
+		elif any(x in parametros for x in [' = ', ' == ', ' != ', ' !== ']) and len(parametros.split('"')) > 2:
+			criterio = 5
+		else:
+			criterio = 1
 
 	if not isinstance(arquivoUD, dict):
 		sentences = main(arquivoUD, criterio, parametros, sent_id=sent_id, fastSearch=True)['output']
@@ -137,6 +153,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 	if criterio in [1]:
 		import estrutura_ud
+		if isinstance(arquivoUD, str):
+			with open(arquivoUD) as f:
+				arquivoUD = f.read()
+		else:
+			arquivoUD = arquivoUD.to_str()
+				
 	
 	#Lê o arquivo UD
 	if criterio in [3, 4]:
@@ -168,40 +190,40 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	if criterio == 1:
 		start = time.time()
 		sentence = ""
-		with open(arquivoUD) as f:
-			for line in f:
-				if line.strip():
-					sentence += line
-				else:
-					if limit and len(output) == limit:
-						break
-					regex = re.findall('(' + parametros + ')', sentence)
-					if regex:
-						casos += len(regex)
-						new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence)
-						tokens = list()
-						header = '!@#' if not '# text = ' in new_sentence else '# text = ' + new_sentence.split("# text = ")[1].split("\n")[0]
-						for linha in new_sentence.splitlines():
-							if 'b>' in linha and '\t' in linha:
-								if '\\' in linha:
-									linha = re.sub(r"\\(\d+)", r"\\\\\1", linha)
-								tokens.append(linha.split('\t')[1].replace('<b>','').replace('</b>',''))
-						header2 = header
-						for token in tokens:
-							header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', header2)
-						for reg in regex:
-							if not isinstance(reg, str):
-								for i, grupo in enumerate(reg):
-									if i != 0:
-										if grupo and i-1 < len(tabela):
-											token = ""
-											if '\t' in grupo:
-												token = grupo.split('\t')[1]
-											if token:
-												header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2)
-						new_sentence = new_sentence.replace(header, header2)
-						output.append(new_sentence)
-					sentence = ""
+		f = arquivoUD.splitlines(keepends=True)
+		for line in f:
+			if line.strip():
+				sentence += line
+			else:
+				if limit and len(output) == limit:
+					break
+				regex = re.findall('(' + parametros + ')', sentence, flags=re.I)
+				if regex:
+					casos += len(regex)
+					new_sentence = re.sub('(' + parametros + ')', r'<b>\1</b>', sentence, flags=re.I)
+					tokens = list()
+					header = '!@#' if not '# text = ' in new_sentence else '# text = ' + new_sentence.split("# text = ")[1].split("\n")[0]
+					for linha in new_sentence.splitlines():
+						if 'b>' in linha and '\t' in linha:
+							if '\\' in linha:
+								linha = re.sub(r"\\(\d+)", r"\\\\\1", linha, flags=re.I)
+							tokens.append(linha.split('\t')[1].replace('<b>','').replace('</b>',''))
+					header2 = header
+					for token in tokens:
+						header2 = re.sub(r'\b' + re.escape(token) + r'\b', '<b>' + token + '</b>', header2, flags=re.I)
+					for reg in regex:
+						if not isinstance(reg, str):
+							for i, grupo in enumerate(reg):
+								if i != 0:
+									if grupo and i-1 < len(tabela):
+										token = ""
+										if '\t' in grupo:
+											token = grupo.split('\t')[1]
+										if token:
+											header2 = re.sub(r'\b' + re.escape(token) + r'\b', tabela[i-1] + token + '/FONT', header2, flags=re.I)
+					new_sentence = new_sentence.replace(header, header2)
+					output.append(new_sentence)
+				sentence = ""
 		sys.stderr.write(f"\ncriterio 1: {time.time() - start}")
 
 	#If critério 2
@@ -346,6 +368,11 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	#Python
 
 	if criterio == 5:
+		
+		if not any(x in parametros for x in [' = ', ' == ']):
+			parametros = re.findall(r'@?"[^"]+?"', parametros.replace(" ", ""))
+			parametros = [("@" if "@" in x else "") + ("next_token."*i) + "word = " + x.replace("@", "") for i, x in enumerate(parametros) if x]
+			parametros = " and ".join(parametros)
 		pesquisa = parametros
 
 		pesquisa = pesquisa.replace(" = ", " == ")
@@ -379,6 +406,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 #		pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
+		indexed_conditions = {x.split(" == ")[0].strip().replace("token.", ""): x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and not any(y in x for y in ["head_token", "next_token", "previous_token"])}
+		pesquisa = re.sub(r"token\.([^. ]+?)\s", r"token.col['\1'] ", pesquisa)
+
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
@@ -398,10 +428,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		arroba = arroba.replace("token.token", "token")
 		arroba = arroba.rsplit(".", 1)[0]
 
-		agilizar = re.findall(r'"([^"]*)"', parametros)# if any(x in parametros for x in [".lemma", ".word", ".misc", ".feats", ".deps", ".xpos"]) else []
-
-#		with open("interrogar_UD.txt", "w") as f:
-#			f.write(pesquisa)
+		agilizar = re.findall(r'"([^"]*)"', parametros)
 
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
@@ -416,23 +443,41 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 			corpus = arquivoUD
 		start = time.time()
 		casos = []
-		for sentence in corpus.sentences.values():
+
+		if indexed_conditions:
+			sentences = {}
+			for col in indexed_conditions:
+				values = [x for x in re.findall(r"^" + indexed_conditions[col] + r"$", "\n".join(list(corpus.processed[col].keys())), flags=re.M) if x]
+				for value in values:
+					for entry in corpus.processed[col][value]:
+						if not entry[0] in sentences:
+							sentences[entry[0]] = []
+						sentences[entry[0]].append(entry[1])
+		else:
+			sentences = corpus.sentences
+		for sent_id in sentences:
+			sentence = corpus.sentences[sent_id]
 			if limit and limit == len(output):
 				break
-			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.copy(sentence); sentence2.print = sentence2.tokens_to_str();"
+			condition = "global sim; global sentence2; sim = 0; sentence2 = copy.deepcopy(sentence); sentence2.print = sentence2.tokens_to_str();"
 			
 			condition += '''
-for ''' + identificador + ''' in sentence.tokens:
+if not indexed_conditions:
+	available_tokens = list(range(len(sentence.tokens)))
+else:
+	available_tokens = sentences[sent_id]
+for token_t in available_tokens:
+	token = sentence.tokens[token_t]
 	try:
-		if not "-" in '''+identificador+'''.id and (''' + pesquisa + ''') :
+		if not "-" in token.id and (''' + pesquisa + ''') :
 			sentence2.metadados['corresponde'] = 1
-			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'])
-			sentence2.print = sentence2.print.replace('''+ identificador +'''.to_str(), "@RED/" + '''+ identificador +'''.to_str() + "/FONT")
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.word) + r')\\b', r"@RED/\\1/FONT", sentence2.metadados['text'])
+			sentence2.print = sentence2.print.replace(token.to_str(), "@RED/" + token.to_str() + "/FONT")
 	'''#try por causa de não ter um next_token no fim de sentença, por ex.
-			if identificador + ".head_token" in pesquisa:
+			if "token.head_token" in pesquisa:
 				condition += '''
-			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ identificador +'''.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'])
-			sentence2.print = sentence2.print.replace('''+ identificador +'''.head_token.to_str(), "@BLUE/" + '''+ identificador +'''.head_token.to_str() + "/FONT")'''
+			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape(token.head_token.word) + r')\\b', r"@BLUE/\\1/FONT", sentence2.metadados['text'])
+			sentence2.print = sentence2.print.replace(token.head_token.to_str(), "@BLUE/" + token.head_token.to_str() + "/FONT")'''
 			
 			condition += '''
 			sentence2.metadados['text'] = re.sub(r'\\b(' + re.escape('''+ arroba +'''.word) + r')\\b', r"<b>\\1</b>", sentence2.metadados['text'])
