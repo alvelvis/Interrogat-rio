@@ -191,15 +191,6 @@ class Corpus:
 		self.time = time.time()
 		self.loading = False
 
-	def process(self):
-		sys.stderr.write("build: " + str(time.time() - self.time))
-		self.processed = {}
-		for sent_id in self.sentences:
-			for col in self.sentences[sent_id].processed:
-				if not col in self.processed:
-					self.processed[col] = defaultdict(list)
-				[self.processed[col][x].extend(self.sentences[sent_id].processed[col][x]) for x in self.sentences[sent_id].processed[col]]
-
 	def build(self, txt):
 		if self.sent_id:
 			old_txt = txt
@@ -221,7 +212,7 @@ class Corpus:
 				elif sent.text:
 					self.sentences[sent.text] = sent
 		if not self.loading:
-			self.process()
+			sys.stderr.write("build: " + str(time.time() - self.time))
 
 	def to_str(self):
 		self.sentences_not_built.update(self.sentences)
@@ -248,7 +239,7 @@ class Corpus:
 						sentence = ""
 			else:
 				self.build(f.read())
-		self.process()
+		sys.stderr.write("build: " + str(time.time() - self.time))
 
 	def save(self, path):
 		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
