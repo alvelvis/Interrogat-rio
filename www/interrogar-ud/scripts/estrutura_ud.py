@@ -230,23 +230,7 @@ class Corpus:
 	def load(self, path):
 		sentence = ""
 		with open(path, "r", encoding=self.encoding) as f:
-			if self.keywords and all(x in "ADJ|ADP|ADV|AUX|CCONJ|DET|INTJ|NOUN|NUM|PART|PRON|PROPN|PUNCT|SCONJ|SYM|VERB|X|acl|advcl|advmod|amod|appos|aux|case|cc|ccomp|clf|compound|conj|cop|csubj|dep|det|discourse|dislocated|expl|fixed|flat|goeswith|iobj|list|mark|nmod|nsubj|nummod|obj|obl|orphan|parataxis|punct|reparandum|root|vocative|xcomp".split("|") for x in self.keywords):
-				sys.stderr.write("\nthreading active\n")
-				
-				import threading
-				import multiprocessing
-				chunks = chunkIt(f.read().split(self.separator), multiprocessing.cpu_count())
-
-				threads = []
-				for i in range(multiprocessing.cpu_count()):
-					p = threading.Thread(target=self.build, args=(chunks[i],))
-					threads.append(p)
-					p.start()
-				
-				for thread in threads:
-					thread.join()
-
-			elif not self.sent_id:
+			if not self.sent_id:
 				for line in f:
 					if line.strip():
 						sentence += line
