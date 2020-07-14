@@ -489,7 +489,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		for sent_id in sentences:
 			sentence = corpus.sentences[sent_id]
 			sentence2 = sentence
-			clean_text = sentence2.metadados['clean_text']
+			clean_text = " ".join([x.word for x in sentence2.tokens if not '-' in x.id])
 			corresponde = 0
 			tokens = sentence2.tokens_to_str()
 			if limit and limit == len(output):
@@ -537,7 +537,7 @@ for token_t in available_tokens:
 			if separate:
 				clean_text = " ".join(clean_text)
 				corresponde = 0
-				final = sentence2.metadados_to_str().replace(sentence2.metadados['clean_text'], clean_text) + "\\n" + tokens
+				final = "# clean_text = " + clean_text + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 				clean_text = clean_text.split(" ")
 			
@@ -547,7 +547,7 @@ for token_t in available_tokens:
 clean_text = " ".join(clean_text)
 if corresponde and not separate:
 	corresponde = 0
-	final = sentence2.metadados_to_str().replace(sentence2.metadados['clean_text'], clean_text) + "\\n" + tokens
+	final = "# clean_text = " + clean_text + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)''')
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)

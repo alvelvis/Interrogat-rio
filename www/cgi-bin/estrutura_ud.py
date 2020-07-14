@@ -128,7 +128,6 @@ class Sentence:
 				sys.stderr.write(str(e) + "\n")
 				sys.stderr.write(str(linha + "\n"))
 				sys.exit()
-		self.metadados["clean_text"] = " ".join([x.word for x in self.tokens if not '-' in x.id])
 		
 		for t, token in enumerate(self.tokens):
 			if not '-' in token.id:
