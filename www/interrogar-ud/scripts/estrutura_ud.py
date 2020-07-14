@@ -189,8 +189,10 @@ class Corpus:
 		self.keywords = keywords
 		self.any_of_keywords = any_of_keywords
 		self.time = time.time()
+		self.loading = False
 
 	def process(self):
+		sys.stderr.write("build: " + str(time.time() - self.time))
 		self.processed = {}
 		for sent_id in self.sentences:
 			for col in self.sentences[sent_id].processed:
@@ -218,9 +220,8 @@ class Corpus:
 					self.sentences[sent.id] = sent
 				elif sent.text:
 					self.sentences[sent.text] = sent
-		self.process()
-		sys.stderr.write("build: " + str(time.time() - self.time))
-
+		if not self.loading:
+			self.process()
 
 	def to_str(self):
 		self.sentences_not_built.update(self.sentences)
@@ -228,6 +229,7 @@ class Corpus:
 		return "\n\n".join(retorno) + '\n\n'
 
 	def load(self, path):
+		self.loading = True
 		sentence = ""
 		with open(path, "r", encoding=self.encoding) as f:
 			if not self.sent_id:
