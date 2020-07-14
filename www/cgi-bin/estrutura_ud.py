@@ -1,4 +1,5 @@
 import sys, re, time
+from collections import defaultdict
 
 def chunkIt(seq, num):
     avg = len(seq) / float(num)
@@ -64,7 +65,7 @@ class Token:
 			for misc in self.misc.split("|"):
 				if '=' in misc:
 					self.col[misc.split("=")[0].lower()] = misc.split("=")[1]
-		#self.col["text"] = self.text
+		self.string = txt
 
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
@@ -117,13 +118,6 @@ class Sentence:
 				if not linha.startswith("# ") and "\t" in linha:
 					tok = Token()
 					tok.build(linha)
-					if not '-' in tok.id:
-						for col in tok.col:
-							if not col in self.processed:
-								self.processed[col] = {}
-							if not tok.col[col] in self.processed[col]:
-								self.processed[col][tok.col[col]] = []
-							self.processed[col][tok.col[col]].append([self.sent_id, n_token])
 					tok.head_token = self.default_token
 					tok.next_token = self.default_token
 					tok.previous_token = self.default_token
@@ -134,18 +128,37 @@ class Sentence:
 				sys.stderr.write(str(e) + "\n")
 				sys.stderr.write(str(linha + "\n"))
 				sys.exit()
-
-		if self.recursivo != False:
-			for token in self.tokens:
-				if not '-' in token.id:
+		self.metadados["clean_text"] = " ".join([x.word for x in self.tokens if not '-' in x.id])
+		
+		for t, token in enumerate(self.tokens):
+			if not '-' in token.id:
+				if self.recursivo != False:
 					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
 					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
 					token.head_token = self.tokens[self.map_token_id[token_dephead]] if token_dephead in self.map_token_id else self.default_token
 					token.next_token = self.tokens[self.map_token_id[str(int(token_id)+1)]] if str(int(token_id)+1) in self.map_token_id else self.default_token
 					token.previous_token = self.tokens[self.map_token_id[str(int(token_id)-1)]] if str(int(token_id)-1) in self.map_token_id else self.default_token
-					#token.head_token = self.tokens[self.map_token_id[token.dephead]] if token.dephead in self.map_token_id else self.default_token
-					#token.next_token = self.tokens[self.map_token_id[str(int(token.id)+1)]] if str(int(token.id)+1) in self.map_token_id else self.default_token
-					#token.previous_token = self.tokens[self.map_token_id[str(int(token.id)-1)]] if str(int(token.id)-1) in self.map_token_id else self.default_token
+				for col in token.col:
+					if not col in self.processed:
+						self.processed[col] = defaultdict(list)
+					self.processed[col][token.col[col]].append(self.sent_id + "<tok>" + str(t))
+				if self.recursivo != False:
+					if not '-' in token.head_token.id and token.head_token.id != "_":
+						for col in token.head_token.col:
+							if not 'head_token.' + col in self.processed:
+								self.processed['head_token.' + col] = defaultdict(list)
+							self.processed['head_token.' + col][token.head_token.col[col]].append(self.sent_id + "<tok>" + str(t))
+					if not '-' in token.next_token.id and token.next_token.id != "_":
+						for col in token.next_token.col:
+							if not 'next_token.' + col in self.processed:
+								self.processed['next_token.' + col] = defaultdict(list)
+							self.processed['next_token.' + col][token.next_token.col[col]].append(self.sent_id + "<tok>" + str(t))
+					if not '-' in token.previous_token.id and token.previous_token.id != "_":
+						for col in token.previous_token.col:
+							if not 'previous_token.' + col in self.processed:
+								self.processed['previous_token.' + col] = defaultdict(list)
+							self.processed['previous_token.' + col][token.previous_token.col[col]].append(self.sent_id + "<tok>" + str(t))
+
 
 	def refresh_map_token_id(self):
 		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
@@ -179,14 +192,11 @@ class Corpus:
 
 	def process(self):
 		self.processed = {}
-		for sent_id, sentence in self.sentences.items():
-			for col in sentence.processed:
+		for sent_id in self.sentences:
+			for col in self.sentences[sent_id].processed:
 				if not col in self.processed:
-					self.processed[col] = {}
-				for value in sentence.processed[col]:
-					if not value in self.processed[col]:
-						self.processed[col][value] = []
-					self.processed[col][value].extend(sentence.processed[col][value])
+					self.processed[col] = defaultdict(list)
+				[self.processed[col][x].extend(self.sentences[sent_id].processed[col][x]) for x in self.sentences[sent_id].processed[col]]
 
 	def build(self, txt):
 		if self.sent_id:
