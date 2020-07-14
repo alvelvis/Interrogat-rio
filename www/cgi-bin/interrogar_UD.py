@@ -44,7 +44,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 		if re.search(r"^\d+\s", parametros):
 			criterio = int(parametros.split(" ", 1)[0])
 			parametros = parametros.split(" ", 1)[1]
-		elif any(x in parametros for x in [' = ', ' == ', ' != ', ' !== ']) and len(parametros.split('"')) > 2:
+		elif len(parametros.split('"')) > 2:
 			criterio = 5
 		else:
 			criterio = 1
@@ -410,7 +410,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 #		pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
-		indexed_conditions = {x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and not any(y in x for y in ["head_token.head", "head_token.next", "head_token.previous", "next_token.head", "next_token.next", "next_token.previous", "previous_token.head", "previous_token.next", "previous_token.previous"])}
+		indexed_conditions = {x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 'token.' in x and not any(y in x for y in ["head_token.head", "head_token.next", "head_token.previous", "next_token.head", "next_token.next", "next_token.previous", "previous_token.head", "previous_token.next", "previous_token.previous"])}
 		pesquisa = re.sub(r"token\.([^. ]+?)\s", r"token.col['\1'] ", pesquisa)
 
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
@@ -489,9 +489,11 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		for sent_id in sentences:
 			sentence = corpus.sentences[sent_id]
 			sentence2 = sentence
-			clean_text = " ".join([x.word for x in sentence2.tokens if not '-' in x.id])
+			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id]
+			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id]
 			corresponde = 0
 			tokens = sentence2.tokens_to_str()
+			map_id = {x: t for t, x in enumerate(clean_id)}
 			if limit and limit == len(output):
 				break
 			condition = "global sim; sim = 0"
@@ -501,29 +503,28 @@ if not indexed_conditions:
 	available_tokens = list(range(len(sentence.tokens)))
 else:
 	available_tokens = sentences[sent_id]
-clean_text = clean_text.split(" ")
 for token_t in available_tokens:
 	token = sentence.tokens[token_t]
 	try:
 		if (not "-" in token.id and (''' + pesquisa + ''')) :
 			corresponde = 1
-			clean_text[token_t] = "@BLUE/" + clean_text[token_t] + "/FONT"
+			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
 	'''#try por causa de não ter um next_token no fim de sentença, por ex.
 			if "token.head_token" in pesquisa:
 				condition += '''
-			clean_text[sentence2.map_token_id[token.head_token.id]] = "@RED/" + clean_text[sentence2.map_token_id[token.head_token.id]] + "/FONT"
+			clean_text[map_id[token.head_token.id]] = "@RED/" + clean_text[map_id[token.head_token.id]] + "/FONT"
 			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
 			if "token.next_token" in pesquisa:
 				condition += '''
-			clean_text[sentence2.map_token_id[token.next_token.id]] = "@BLUE/" + clean_text[sentence2.map_token_id[token.next_token.id]] + "/FONT"
+			clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
 			tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
 			if "token.previous_token" in pesquisa:
 				condition += '''
-			clean_text[sentence2.map_token_id[token.previous_token.id]] = "@BLUE/" + clean_text[sentence2.map_token_id[token.previous_token.id]] + "/FONT"
+			clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
 			tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
 			condition += '''
-			clean_text[sentence2.map_token_id['''+arroba+'''.id]] = "<b>" + clean_text[sentence2.map_token_id['''+arroba+'''.id]] + "</b>"'''		
+			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"'''		
 			
 			exec(condition + '''
 			casos.append(1)
@@ -535,19 +536,16 @@ for token_t in available_tokens:
 			tokens = "\\n".join(tokens)
 
 			if separate:
-				clean_text = " ".join(clean_text)
 				corresponde = 0
-				final = "# clean_text = " + clean_text + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
+				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 				clean_text = clean_text.split(" ")
 			
 	except Exception as e:
-		print(e)
 		pass
-clean_text = " ".join(clean_text)
 if corresponde and not separate:
 	corresponde = 0
-	final = "# clean_text = " + clean_text + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
+	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)''')
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
