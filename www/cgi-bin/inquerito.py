@@ -301,7 +301,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				html1 += f'<li>{erro}</li><ul>'
 				for sentence in erros[erro]:
 					if sentence and sentence['sentence']:
-						html1 += f'''<li><a style="cursor:pointer" onclick="$('.id_{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)}').focus();">{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].col[sentence['attribute']]) if sentence['attribute'] else ""}</a></li>'''
+						html1 += f'''<li><a style="cursor:pointer" onclick="$('.id_{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)}').focus();">{cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].id)} / {cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].word)}{' / ' + cleanEstruturaUD(sentence['sentence'].tokens[sentence['t']].__dict__[sentence['attribute']]) if sentence['attribute'] else ""}</a></li>'''
 				html1 += "</ul>"
 			html1 += "</ul>"
 		html1 += '<br>'

@@ -28,7 +28,6 @@ class Token:
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
-		self.col = self.__dict__
 		#self.sent_id = sent_id
 		#self.text = text
 		self.color = ""		
@@ -94,11 +93,11 @@ class Sentence:
 					if tok.feats != "_":
 						for feat in tok.feats.split("|"):
 							if '=' in feat:
-								tok.col[feat.split("=")[0].lower()] = feat.split("=")[1]
+								tok.__dict__[feat.split("=")[0].lower()] = feat.split("=")[1]
 					if tok.misc != "_":
 						for misc in tok.misc.split("|"):
 							if '=' in misc:
-								tok.col[misc.split("=")[0].lower()] = misc.split("=")[1]
+								tok.__dict__[misc.split("=")[0].lower()] = misc.split("=")[1]
 					self.map_token_id[tok.id if not '<' in tok.id else re.sub(r"<.*?>", "", tok.id)] = n_token
 					self.tokens.append(tok)
 					n_token += 1
@@ -109,8 +108,8 @@ class Sentence:
 		
 		for t, token in enumerate(self.tokens):
 			if not '-' in token.id:
-				for col in token.col:
-					self.processed[col][token.col[col]].append(self.sent_id + "<tok>" + str(t))
+				for col in token.__dict__:
+					self.processed[col][token.__dict__[col]].append(self.sent_id + "<tok>" + str(t))
 				if self.recursivo:
 					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
 					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
