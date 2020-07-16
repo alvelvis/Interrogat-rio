@@ -460,7 +460,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 						values = re.findall(r"\n(" + indexed_conditions[col] + r")\n", "\n" + "\n\n".join(list(corpus.sentences[sent_id].processed[col])) + "\n")
 						for value in values:
 							if value:
-								if isinstance(value, list):
+								if not isinstance(value, str):
 									value = value[0]
 								tokens[col].extend(corpus.sentences[sent_id].processed[col][value])
 			for col in tokens:
