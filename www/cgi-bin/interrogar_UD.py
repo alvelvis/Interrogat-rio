@@ -544,7 +544,6 @@ for token_t in available_tokens:
 				corresponde = 0
 				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
-				clean_text = clean_text.split(" ")
 			
 	except Exception as e:
 		print(str(e))
