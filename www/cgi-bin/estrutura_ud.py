@@ -109,7 +109,8 @@ class Sentence:
 		for t, token in enumerate(self.tokens):
 			if not '-' in token.id:
 				for col in token.__dict__:
-					self.processed[col][token.__dict__[col]].append(self.sent_id + "<tok>" + str(t))
+					if isinstance(token.__dict__[col], str):
+						self.processed[col][token.__dict__[col]].append(self.sent_id + "<tok>" + str(t))
 				if self.recursivo:
 					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
 					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
