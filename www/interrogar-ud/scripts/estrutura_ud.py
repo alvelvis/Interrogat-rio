@@ -28,7 +28,7 @@ class Token:
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
-		self.col = dict()
+		self.col = self.__dict__
 		#self.sent_id = sent_id
 		#self.text = text
 		self.color = ""		
@@ -91,17 +91,6 @@ class Sentence:
 					tok.deprel = coluna[7]
 					tok.deps = coluna[8]
 					tok.misc = coluna[9]
-					tok.col["id"] = coluna[0]
-					tok.col["word"] = coluna[1]
-					tok.col["lemma"] = coluna[2]
-					tok.col["upos"] = coluna[3]
-					tok.col["xpos"] = coluna[4]
-					tok.col["feats"] = coluna[5]
-					tok.col["dephead"] = coluna[6]
-					tok.col["deprel"] = coluna[7]
-					tok.col["deps"] = coluna[8]
-					tok.col["sema"] = coluna[8]
-					tok.col["misc"] = coluna[9]
 					if tok.feats != "_":
 						for feat in tok.feats.split("|"):
 							if '=' in feat:
