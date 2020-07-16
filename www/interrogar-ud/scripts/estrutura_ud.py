@@ -31,41 +31,7 @@ class Token:
 		self.col = dict()
 		#self.sent_id = sent_id
 		#self.text = text
-		self.color = ""
-
-	def build(self, txt):
-		coluna = txt.split(self.separator)
-
-		self.id = coluna[0]
-		self.word = coluna[1]
-		self.lemma = coluna[2]
-		self.upos = coluna[3]
-		self.xpos = coluna[4]
-		self.feats = coluna[5]
-		self.dephead = coluna[6]
-		self.deprel = coluna[7]
-		self.deps = coluna[8]
-		self.misc = coluna[9]
-		self.col["id"] = self.id
-		self.col["word"] = self.word
-		self.col["lemma"] = self.lemma
-		self.col["upos"] = self.upos
-		self.col["xpos"] = self.xpos
-		self.col["feats"] = self.feats
-		self.col["dephead"] = self.dephead
-		self.col["deprel"] = self.deprel
-		self.col["deps"] = self.deps
-		self.col["sema"] = self.deps
-		self.col["misc"] = self.misc
-		if self.feats != "_":
-			for feat in self.feats.split("|"):
-				if '=' in feat:
-					self.col[feat.split("=")[0].lower()] = feat.split("=")[1]
-		if self.misc != "_":
-			for misc in self.misc.split("|"):
-				if '=' in misc:
-					self.col[misc.split("=")[0].lower()] = misc.split("=")[1]
-		self.string = txt
+		self.color = ""		
 
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
@@ -80,12 +46,8 @@ class Sentence:
 		self.id = ""
 		self.metadados = {}
 		self.recursivo = recursivo
-		self.processed = {}
-
-		f = "_\t" * 10
+		self.processed = defaultdict(lambda: defaultdict(list))
 		self.default_token = Token()
-		self.default_token.build(f.rsplit('\t', 1)[0])
-
 		self.tokens = list()
 		self.tokens_incompletos = list()
 		self.separator = separator
@@ -117,11 +79,38 @@ class Sentence:
 						self.metadados[identificador] = valor
 				if not linha.startswith("# ") and "\t" in linha:
 					tok = Token()
-					tok.build(linha)
-					tok.head_token = self.default_token
-					tok.next_token = self.default_token
-					tok.previous_token = self.default_token
-					self.map_token_id[re.sub(r"<.*?>", "", tok.id) if '<' in tok.id else tok.id] = n_token
+					tok.string = linha
+					coluna = linha.split("\t")
+					tok.id = coluna[0]
+					tok.word = coluna[1]
+					tok.lemma = coluna[2]
+					tok.upos = coluna[3]
+					tok.xpos = coluna[4]
+					tok.feats = coluna[5]
+					tok.dephead = coluna[6]
+					tok.deprel = coluna[7]
+					tok.deps = coluna[8]
+					tok.misc = coluna[9]
+					tok.col["id"] = coluna[0]
+					tok.col["word"] = coluna[1]
+					tok.col["lemma"] = coluna[2]
+					tok.col["upos"] = coluna[3]
+					tok.col["xpos"] = coluna[4]
+					tok.col["feats"] = coluna[5]
+					tok.col["dephead"] = coluna[6]
+					tok.col["deprel"] = coluna[7]
+					tok.col["deps"] = coluna[8]
+					tok.col["sema"] = coluna[8]
+					tok.col["misc"] = coluna[9]
+					if tok.feats != "_":
+						for feat in tok.feats.split("|"):
+							if '=' in feat:
+								tok.col[feat.split("=")[0].lower()] = feat.split("=")[1]
+					if tok.misc != "_":
+						for misc in tok.misc.split("|"):
+							if '=' in misc:
+								tok.col[misc.split("=")[0].lower()] = misc.split("=")[1]
+					self.map_token_id[tok.id if not '<' in tok.id else re.sub(r"<.*?>", "", tok.id)] = n_token
 					self.tokens.append(tok)
 					n_token += 1
 			except Exception as e:
@@ -131,33 +120,14 @@ class Sentence:
 		
 		for t, token in enumerate(self.tokens):
 			if not '-' in token.id:
+				for col in token.col:
+					self.processed[col][token.col[col]].append(self.sent_id + "<tok>" + str(t))
 				if self.recursivo != False:
 					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
 					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
 					token.head_token = self.tokens[self.map_token_id[token_dephead]] if token_dephead in self.map_token_id else self.default_token
 					token.next_token = self.tokens[self.map_token_id[str(int(token_id)+1)]] if str(int(token_id)+1) in self.map_token_id else self.default_token
 					token.previous_token = self.tokens[self.map_token_id[str(int(token_id)-1)]] if str(int(token_id)-1) in self.map_token_id else self.default_token
-				for col in token.col:
-					if not col in self.processed:
-						self.processed[col] = defaultdict(list)
-					self.processed[col][token.col[col]].append(self.sent_id + "<tok>" + str(t))
-				if self.recursivo != False:
-					if not '-' in token.head_token.id and token.head_token.id != "_":
-						for col in token.head_token.col:
-							if not 'head_token.' + col in self.processed:
-								self.processed['head_token.' + col] = defaultdict(list)
-							self.processed['head_token.' + col][token.head_token.col[col]].append(self.sent_id + "<tok>" + str(t))
-					if not '-' in token.next_token.id and token.next_token.id != "_":
-						for col in token.next_token.col:
-							if not 'next_token.' + col in self.processed:
-								self.processed['next_token.' + col] = defaultdict(list)
-							self.processed['next_token.' + col][token.next_token.col[col]].append(self.sent_id + "<tok>" + str(t))
-					if not '-' in token.previous_token.id and token.previous_token.id != "_":
-						for col in token.previous_token.col:
-							if not 'previous_token.' + col in self.processed:
-								self.processed['previous_token.' + col] = defaultdict(list)
-							self.processed['previous_token.' + col][token.previous_token.col[col]].append(self.sent_id + "<tok>" + str(t))
-
 
 	def refresh_map_token_id(self):
 		self.map_token_id = {x.id: y for y, x in enumerate(self.tokens)}
