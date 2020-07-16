@@ -122,7 +122,7 @@ class Sentence:
 			if not '-' in token.id:
 				for col in token.col:
 					self.processed[col][token.col[col]].append(self.sent_id + "<tok>" + str(t))
-				if self.recursivo != False:
+				if self.recursivo:
 					token_dephead = token.dephead if not '<' in token.dephead else re.sub(r"<.*?>", "", token.dephead)
 					token_id = token.id if not '<' in token.id else re.sub(r"<.*?>", "", token.id)
 					token.head_token = self.tokens[self.map_token_id[token_dephead]] if token_dephead in self.map_token_id else self.default_token

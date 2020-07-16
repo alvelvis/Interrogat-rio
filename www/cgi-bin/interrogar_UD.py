@@ -372,7 +372,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		
 		parametros = parametros.split(" and ")
 		for t, parametro in enumerate(parametros):
-			if not any(x in parametros[t] for x in [' = ', '==', '!=']):
+			if not any(x in parametros[t] for x in [' = ', '==', '!=', ' < ', ' > ']):
 				parametros[t] = re.findall(r'@?"[^"]+?"', parametros[t].replace(" ", ""))
 				parametros[t] = [("@" if "@" in x else "") + ("next_token."*i) + "word = " + x.replace("@", "") for i, x in enumerate(parametros[t]) if x]
 				parametros[t] = " and ".join(parametros[t])
@@ -407,6 +407,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace("token.text", "sentence.text")
 		pesquisa = pesquisa.replace("token.sent_id", "sentence.sent_id")
 		pesquisa = pesquisa.replace('token.int(', 'int(')
+		#pesquisa = pesquisa.replace("token.and", "and")
 #		pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
@@ -419,8 +420,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = pesquisa.strip()
 
-		if (".id" in pesquisa or ".dephead" in pesquisa) and (not "int(" in pesquisa) and ("<" in pesquisa or ">" in pesquisa):
-			pesquisa = re.sub(r"(\b\S+\.(id|dephead)\b)", r"int(\1)", pesquisa)
+		if (".col['id']" in pesquisa or ".col['dephead']" in pesquisa) and (not "int(" in pesquisa) and ("<" in pesquisa or ">" in pesquisa):
+			pesquisa = re.sub(r"(\b\S+\.col\['(id|dephead)'\]\b)", r"int(\1)", pesquisa)
 
 		identificador = "token"
 
