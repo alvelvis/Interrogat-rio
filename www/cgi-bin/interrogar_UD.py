@@ -494,8 +494,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		for sent_id in sentences:
 			sentence = corpus.sentences[sent_id]
 			sentence2 = sentence
-			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id]
-			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id]
+			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
 			corresponde = 0
 			tokens = sentence2.tokens_to_str()
 			map_id = {x: t for t, x in enumerate(clean_id)}
@@ -511,7 +511,7 @@ else:
 for token_t in available_tokens:
 	token = sentence.tokens[token_t]
 	try:
-		if (not "-" in token.id and (''' + pesquisa + ''')) :
+		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')) :
 			corresponde = 1
 			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
