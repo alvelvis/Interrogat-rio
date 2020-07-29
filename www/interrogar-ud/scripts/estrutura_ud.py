@@ -107,7 +107,7 @@ class Sentence:
 				sys.exit()
 		
 		for t, token in enumerate(self.tokens):
-			if not '-' in token.id:
+			if not '-' in token.id and not '.' in token.id:
 				for col in token.__dict__:
 					if col not in ["string", "color", "head_token", "next_token", "previous_token", "separator", "children"] and isinstance(token.__dict__[col], str):
 						self.processed[col][token.__dict__[col]].append(self.sent_id + "<tok>" + str(t))
