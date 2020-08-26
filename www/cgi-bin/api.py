@@ -58,13 +58,13 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
             else:
                 n_sent = conllus[ud]['n_sent']
                 n_tokens = conllus[ud]['n_tokens']
-                n_files = conllus[ud]['n_files'] if 'n_files' in conllus[ud] else "MEMORY_LEAK"
+                n_files = conllus[ud]['n_files'] if 'n_files' in conllus[ud] else "NEEDS UPDATE"
             print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'n_files': n_files, 'ud': ud}))
         except Exception as e:
             sys.stderr.write(str(e))
             print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_files': 'MEMORY_LEAK', 'ud': ud}))
     else:
-        print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_files': 'MEMORY_LEAK', 'ud': ud}))
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': "NEEDS UPDATE", 'n_tokens': "NEEDS UPDATE", 'n_files': 'NEEDS UPDATE', 'ud': ud}))
 
 def renderSentences(script=""):
 
