@@ -35,6 +35,19 @@ class Token:
 	def to_str(self):
 		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
 
+	def build(self, txt):
+		coluna = txt.split(self.separator)
+		self.id = coluna[0]
+		self.word = coluna[1]
+		self.lemma = coluna[2]
+		self.upos = coluna[3]
+		self.xpos = coluna[4]
+		self.feats = coluna[5]
+		self.dephead = coluna[6]
+		self.deprel = coluna[7]
+		self.deps = coluna[8]
+		self.misc = coluna[9]
+
 
 class Sentence:
 
