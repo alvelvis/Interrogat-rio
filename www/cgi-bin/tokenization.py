@@ -191,12 +191,14 @@ if form:
         token_id = form['mergeSentencesOption'].value
     elif 'splitSentenceTokenId' in form:
         token_id = form['splitSentenceTokenId'].value
+    token_id = token_id.replace(" ", "")
 
     mergeSentencesId = form['mergeSentencesId'].value if "mergeSentencesId" in form else ""
 
     new_sent_id = ""
     if action == "addToken":
-        list_tokens = [x for x in token_id.split(",") if '-' in x] + sorted([int(x) for x in token_id.split(",") if x.isnumeric()], reverse=True) + [x for x in token_id.split(",") if not x.isnumeric() and not '-' in x]
+        token_split = token_id.split(",")
+        list_tokens = [x for x in token_split if '-' in x] + sorted([int(x) for x in token_split if x.isnumeric()], reverse=True) + [x for x in token_split if not x.isnumeric() and not '-' in x]
         for token in list_tokens:
             if token:
                 addToken(conllu, sent_id, option, str(token), new_tokens=[], mergeSentencesId="", form=form, conllu_completo=conllu_completo)
