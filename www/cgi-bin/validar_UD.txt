@@ -67,7 +67,7 @@ misc|erro: Falta MWEPOS no misc
 misc = "MWE=.*" and misc != "MWEPOS=.*"
 
 misc|erro: MISC inválido
-misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_"
+misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_|start_char=.*|end_char=.*"
 
 deprel|erro: O pai deste token não pode ter dependentes
 head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and @deprel != "(fixed|compound|flat|flat:name)"
