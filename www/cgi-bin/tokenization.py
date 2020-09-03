@@ -89,7 +89,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
         if not new_tokens:
             if not mergeSentencesId:
                 novo_token = estrutura_ud.Token()
-                novo_token.build("\t".join("_"*10))
+                novo_token.build("_\t_\t_\t_\t_\t_\t0\t_\t_\t_")
                 new_tokens.append(novo_token)
             else:
                 new_tokens = corpus.sentences[mergeSentencesId].tokens
@@ -196,7 +196,10 @@ if form:
 
     new_sent_id = ""
     if action == "addToken":
-        addToken(conllu, sent_id, option, token_id, form=form, conllu_completo=conllu_completo)
+        list_tokens = [x for x in token_id.split(",") if '-' in x] + sorted([int(x) for x in token_id.split(",") if x.isnumeric()], reverse=True) + [x for x in token_id.split(",") if not x.isnumeric() and not '-' in x]
+        for token in list_tokens:
+            if token:
+                addToken(conllu, sent_id, option, str(token), new_tokens=[], mergeSentencesId="", form=form, conllu_completo=conllu_completo)
     elif action == "mergeSentences":
         addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
     elif action == "splitSentence":
