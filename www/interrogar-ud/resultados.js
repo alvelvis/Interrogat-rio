@@ -843,6 +843,10 @@ var translations = {
 	}
 };
 
+$('.annotationValue').on('keyup', (function(){
+	$(this).css('background-color', '#ffc6c4')
+}))
+
 function updateTranslation(){
     $('.translateHtml').each(function(){
         if (translations[$(this).html()]) {
