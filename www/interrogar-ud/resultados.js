@@ -840,6 +840,12 @@ var translations = {
 	},
 	"Contexto: Interrogatório": {
 		"en-US": "Context: Interrogatório"
+	},
+	"Dica: Utilize vírgula para determinar mais de um sent_id.": {
+		'en-US': "Tip: Use commas to specify more than one sent_id."
+	},
+	"Dica: Utilize vírgula para determinar mais de um id de token.": {
+		'en-US': 'Tip: Use commas to specify more than one token id.'
 	}
 };
 

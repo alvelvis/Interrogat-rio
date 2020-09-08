@@ -203,7 +203,9 @@ if form:
             if token:
                 addToken(conllu, sent_id, option, str(token), new_tokens=[], mergeSentencesId="", form=form, conllu_completo=conllu_completo)
     elif action == "mergeSentences":
-        addToken(conllu, sent_id, option, token_id, mergeSentencesId=mergeSentencesId, form=form, conllu_completo=conllu_completo)
+        sent_split = [x.strip() for x in mergeSentencesId.split(",")]
+        for sent in sent_split:
+            addToken(conllu, sent_id, option, token_id, mergeSentencesId=sent, form=form, conllu_completo=conllu_completo)
     elif action == "splitSentence":
         new_sent_id = splitSentence(conllu, sent_id, token_id, form=form, conllu_completo=conllu_completo)
 
