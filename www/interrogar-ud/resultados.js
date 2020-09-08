@@ -849,6 +849,25 @@ var translations = {
 	}
 };
 
+$('#deleteSentence').click(function(){
+	if (confirm("Tem certeza de que deseja excluir a sentença " + $(this).attr('sent_id') + " do corpus " + $(this).attr('corpus') + "?")) {
+		loadingScreen()
+		$.ajax({
+			url: '/cgi-bin/api.py',
+			method: 'POST',
+			data: {
+				'corpus': $(this).attr('corpus'),
+				'sent_id': $(this).attr('sent_id'),
+				'action': 'delete_sentence',
+			}
+		})
+		.done(function(){
+			alert("Operação realizada com sucesso. Feche esta janela.")
+			window.close()
+		})
+	}
+})
+
 $('.annotationValue').on('keyup', (function(){
 	$(this).css('background-color', '#ffc6c4')
 }))

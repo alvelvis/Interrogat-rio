@@ -194,8 +194,18 @@ def renderSentences(script=""):
             'sent_id_count': str(len(sent_id_list))
         }))
 
+def delete_sentence(filename, sent_id):
+    corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
+    corpus.load("../interrogar-ud/conllu/" + filename)
+    del corpus.sentences[sent_id]
+    corpus.save("../interrogar-ud/conllu/" + filename)
+    return True
+
 if os.environ['REQUEST_METHOD'] == "POST":
-    if not 'ud' in form:
+    if 'action' in form and form['action'].value == "delete_sentence":
+        delete_sentence(form['corpus'].value, form['sent_id'].value)
+        print(json.JSONEncoder().encode({'success': True}))
+    elif not 'ud' in form:
         start = time.time()
         renderSentences()
         sys.stderr.write('\nrenderSentences: ' + str(time.time() - start))

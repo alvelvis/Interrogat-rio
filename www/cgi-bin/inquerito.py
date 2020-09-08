@@ -338,6 +338,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.splitSentence').show();">Separar sentença em duas</a></li>
+				<li><a class="translateHtml" style="cursor:pointer" id="deleteSentence" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Deletar sentença</a></li>
 			</ul>
 			<div class="addToken tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=addToken" class="addTokenForm" method="POST">
@@ -404,6 +405,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				tokenId='<input type=hidden name=tokenization_tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else '',
 				sentnum='<input type=hidden name=tokenization_sentnum value="' + str(i) + '">' if 'sentnum' in form else '',
 				textheader='<input type=hidden name=tokenization_textheader value="' + form['textheader'].value + '">' if 'textheader' in form else '',
+				corpus_plain=ud,
+				sent_id_plain=form['sentid'].value,
 			)
 
 			html1 += '<form action="../cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
