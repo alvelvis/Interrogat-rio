@@ -11,6 +11,7 @@ import time
 import estrutura_dados
 import estrutura_ud
 import os
+import shutil
 from functions import prettyDate, cleanEstruturaUD
 from datetime import datetime
 from functions import corpusGenericoInquerito
@@ -110,7 +111,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 	with open('../interrogar-ud/inqueritos.txt', 'r') as f:
 		inqueritos = f.read()
 	for a, linha in enumerate(inqueritos.splitlines()):
-		if linha.strip() != '':
+		if linha.strip() != '' and len(linha.split("!@#")) >= 5:
 			if not managetags:
 				if (coluna != ':' and valor and len(linha.split('!@#')) > int(coluna) and (re.search(valor, linha.split('!@#')[int(coluna)], flags=re.I|re.M)) and linha.split('!@#')[int(coluna)] != 'NONE') or (not coluna) or (coluna == ':' and re.search(valor, linha, flags=re.I|re.M)):
 					if (not onlysent) or (onlysent and not linha.split('!@#')[0] in javistos):
@@ -546,7 +547,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	if tag != 'NONE' and not tag in inqueritos_cars:
 		with open('../interrogar-ud/inqueritos_cars.txt', 'w') as f:
 			f.write(tag + '\n' + inqueritos_cars)
-	estrutura_dados.EscreverUD(conlluzao, '../interrogar-ud/conllu/' + ud)
+	estrutura_dados.EscreverUD(conlluzao, '../interrogar-ud/conllu/' + ud + '_inquerito')
+	os.remove('../interrogar-ud/conllu/' + ud)
+	os.rename('../interrogar-ud/conllu/' + ud + "_inquerito", '../interrogar-ud/conllu/' + ud)
 
 	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="../cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
 	if 'tag' in form: html += '<input type=hidden name=tag value="' + form['tag'].value + '">'

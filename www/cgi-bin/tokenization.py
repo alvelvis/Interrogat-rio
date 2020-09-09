@@ -60,7 +60,9 @@ def splitSentence(conllu, sent_id, token_id, conllu_completo="", form=False):
     if form:
         with open("../cgi-bin/tokenization.json", "w") as f:
             json.dump(tokenization, f)
-        corpus.save(conllu if not conllu_completo else conllu_completo)
+        corpus.save(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization")
+        os.remove(conllu if not conllu_completo else conllu_completo)
+        os.rename(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization", conllu if not conllu_completo else conllu_completo)
         return new_sentence.sent_id
     else:
         print(corpus.to_str())
@@ -163,7 +165,9 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
     if form:
         with open("../cgi-bin/tokenization.json", "w") as f:
             json.dump(tokenization, f)
-        corpus.save(conllu if not conllu_completo else conllu_completo)
+        corpus.save(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization")
+        os.remove(conllu if not conllu_completo else conllu_completo)
+        os.rename(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization", conllu if not conllu_completo else conllu_completo)
     else:
         print(corpus.to_str())
 
