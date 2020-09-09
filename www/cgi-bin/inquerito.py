@@ -514,7 +514,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 			token = int(key.split('-')[0])
 			if key.split('-')[1] != 'meta': coluna = int(key.split('-')[1])
 			else: coluna = 'meta'
-			value = webpage.unescape(value.value)
+			value = webpage.unescape(value.value.replace("\n", "").replace("\r", ""))
 
 			#if (coluna == ':' and conlluzao[int(form['sentnum'].value)][token] != value) or (coluna != ':' and conlluzao[int(form['sentnum'].value)][token][coluna] != value):
 				#try:
