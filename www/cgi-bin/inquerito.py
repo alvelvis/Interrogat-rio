@@ -111,38 +111,41 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 	with open('../interrogar-ud/inqueritos.txt', 'r') as f:
 		inqueritos = f.read()
 	for a, linha in enumerate(inqueritos.splitlines()):
-		if linha.strip() != '' and len(linha.split("!@#")) >= 5:
-			if not managetags:
-				if (coluna != ':' and valor and len(linha.split('!@#')) > int(coluna) and (re.search(valor, linha.split('!@#')[int(coluna)], flags=re.I|re.M)) and linha.split('!@#')[int(coluna)] != 'NONE') or (not coluna) or (coluna == ':' and re.search(valor, linha, flags=re.I|re.M)):
-					if (not onlysent) or (onlysent and not linha.split('!@#')[0] in javistos):
-						html42 += '<div class="container"><form id="form_' + str(a) + '" action="../cgi-bin/inquerito.py" target="_blank" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
-						relatorio42 += '\n\n-------------------------'
-						if len(linha.split('!@#')) >= 7 and linha.split('!@#')[6] != 'NONE':
-							html42 += '<p><small><a href="#" onclick="document.getElementById(\'coluna\').value=\'6\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[6].replace('"', '&quot;') + '\'; document.getElementById(\'form_pesquisa\').submit();">#' + linha.split('!@#')[6].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></small></p>'
-							relatorio42 += '\n\n#' + linha.split('!@#')[6].replace('<b>', '').replace('</b>', '')
-						html42 += '<p><h3><a style="cursor:pointer" onclick="form_' + str(a) + '.submit()">' + linha.split('!@#')[0] + '</a></h3></p>'
-						relatorio42 += '\n\ntext = ' + linha.split('!@#')[0]
-						if not '# text = ' + linha.split('!@#')[0] in lista_sentences: lista_sentences.append('# text = ' + linha.split('!@#')[0])
-						if len(linha.split('!@#')) >= 8 and linha.split('!@#')[7] != 'NONE':
-							html42 += '<p>sent_id = <a href="#" onclick="document.getElementById(\'coluna\').value=\'7\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[7] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split('!@#')[7] + '</a></p><input name="sentid" type="hidden" value="' + linha.split('!@#')[7] + '">'
-							relatorio42 += '\nsent = ' + linha.split('!@#')[7]
-						if len(linha.split('!@#')) >= 6 and linha.split('!@#')[4] != 'NONE' and linha.split('!@#')[5] != 'NONE':
-							html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
-							relatorio42 += '\n\nPágina no interrogatório: ' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '').replace('</b>', '')
-						if not onlysent:
-							html42 += '<pre>ANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre><pre>DEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre>'
-							relatorio42 += '\n\nANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '').replace('</b>','') + '\nDEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','').replace('</b>','')
-						html42 += '<small><p><a href="#" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[2] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split("!@#")[2] + '</a></p><p>' + prettyDate(linha.split('!@#')[3].replace("_", ' ')).beautifyDateDMAH() + '</p></small></form></div>'
-						relatorio42 += '\n\n' + linha.split('!@#')[2]
-						relatorio42 += '\n' + linha.split('!@#')[3]
-						total += 1
-						javistos.append(linha.split('!@#')[0])
+		try:
+			if linha.strip() != '':
+				if not managetags:
+					if (coluna != ':' and valor and len(linha.split('!@#')) > int(coluna) and (re.search(valor, linha.split('!@#')[int(coluna)], flags=re.I|re.M)) and linha.split('!@#')[int(coluna)] != 'NONE') or (not coluna) or (coluna == ':' and re.search(valor, linha, flags=re.I|re.M)):
+						if (not onlysent) or (onlysent and not linha.split('!@#')[0] in javistos):
+							html42 += '<div class="container"><form id="form_' + str(a) + '" action="../cgi-bin/inquerito.py" target="_blank" method="POST"><input name="textheader" type="hidden" value="' + linha.split('!@#')[0] + '"><input name="conllu" type="hidden" value="' + linha.split('!@#')[2] + '">'
+							relatorio42 += '\n\n-------------------------'
+							if len(linha.split('!@#')) >= 7 and linha.split('!@#')[6] != 'NONE':
+								html42 += '<p><small><a href="#" onclick="document.getElementById(\'coluna\').value=\'6\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[6].replace('"', '&quot;') + '\'; document.getElementById(\'form_pesquisa\').submit();">#' + linha.split('!@#')[6].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></small></p>'
+								relatorio42 += '\n\n#' + linha.split('!@#')[6].replace('<b>', '').replace('</b>', '')
+							html42 += '<p><h3><a style="cursor:pointer" onclick="form_' + str(a) + '.submit()">' + linha.split('!@#')[0] + '</a></h3></p>'
+							relatorio42 += '\n\ntext = ' + linha.split('!@#')[0]
+							if not '# text = ' + linha.split('!@#')[0] in lista_sentences: lista_sentences.append('# text = ' + linha.split('!@#')[0])
+							if len(linha.split('!@#')) >= 8 and linha.split('!@#')[7] != 'NONE':
+								html42 += '<p>sent_id = <a href="#" onclick="document.getElementById(\'coluna\').value=\'7\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[7] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split('!@#')[7] + '</a></p><input name="sentid" type="hidden" value="' + linha.split('!@#')[7] + '">'
+								relatorio42 += '\nsent = ' + linha.split('!@#')[7]
+							if len(linha.split('!@#')) >= 6 and linha.split('!@#')[4] != 'NONE' and linha.split('!@#')[5] != 'NONE':
+								html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
+								relatorio42 += '\n\nPágina no interrogatório: ' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '').replace('</b>', '')
+							if not onlysent:
+								html42 += '<pre>ANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre><pre>DEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre>'
+								relatorio42 += '\n\nANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '').replace('</b>','') + '\nDEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','').replace('</b>','')
+							html42 += '<small><p><a href="#" onclick="document.getElementById(\'coluna\').value=\'2\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[2] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split("!@#")[2] + '</a></p><p>' + prettyDate(linha.split('!@#')[3].replace("_", ' ')).beautifyDateDMAH() + '</p></small></form></div>'
+							relatorio42 += '\n\n' + linha.split('!@#')[2]
+							relatorio42 += '\n' + linha.split('!@#')[3]
+							total += 1
+							javistos.append(linha.split('!@#')[0])
 			
 			elif managetags:
 				if len(linha.split('!@#')) >= 7 and not linha.split('!@#')[6] in javistos and linha.split('!@#')[6] != 'NONE':
 					html42 += '''<div class=container><form method="POST" action="../cgi-bin/inquerito.py"><input name="delete_tag" type=hidden value="''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''"><a style="cursor:pointer" onclick="document.getElementsByName('coluna')[0].value = '6'; document.getElementsByName('valor')[0].value = \'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\'; document.getElementsByName('form_pesquisa')[0].submit();">#''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''</a> <a style="cursor:pointer" onclick="if (confirmar(\'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\') == true) { this.parentNode.submit(); return false; }" class="close-thik"></a></form></div>'''
 					total += 1
 					javistos.append(linha.split('!@#')[6])
+		except:
+			sys.stderr.write('erro em inqueritos.txt: ' + linha)
 
 	html = html1 + '<span class="translateHtml">Inquéritos</span>: ' + str(total) + '<br><br>' + html42 + html2
 	with open('../interrogar-ud/relatorio.txt', 'w') as f:
