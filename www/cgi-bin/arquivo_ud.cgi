@@ -78,13 +78,19 @@ elif not 'validate' in form:
                 srcfile = '../interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'
                 from_codec = get_encoding_type(srcfile)
-                with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
-                    text = ff.read() # for small files, for big use chunks
-                    e.write(text)
-                if JULGAMENTO:
-                    with open(srcfile, 'r', encoding=from_codec) as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w', encoding='utf-8') as e:
+                try:
+                    with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
                         text = ff.read() # for small files, for big use chunks
                         e.write(text)
+                except Exception as e:
+                    sys.stderr.write("Could not convert to utf-8: " + str(e))
+                if JULGAMENTO:
+                    try:
+                        with open(srcfile, 'r', encoding=from_codec) as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w', encoding='utf-8') as e:
+                            text = ff.read() # for small files, for big use chunks
+                            e.write(text)
+                    except Exception as e:
+                        sys.stderr.write("Could not convert to utf-8 to Julgamento: " + str(e))
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
