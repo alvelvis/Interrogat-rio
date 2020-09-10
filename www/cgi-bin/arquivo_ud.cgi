@@ -85,6 +85,7 @@ elif not 'validate' in form:
                             e.write(text)
                 except Exception as e:
                     sys.stderr.write("Could not convert to utf-8: " + str(e))
+                    print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
                 if JULGAMENTO:
                     try:
                         with open(srcfile, 'r', encoding=from_codec) as ff:
@@ -93,9 +94,9 @@ elif not 'validate' in form:
                                 e.write(text)
                     except Exception as e:
                         sys.stderr.write("Could not convert to utf-8 to Julgamento: " + str(e))
-                if os.path.isfile(trgfile):
-                    os.remove(srcfile) # remove old encoding file
-                    os.rename(trgfile, srcfile) # rename new encoding
+                        print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+                os.remove(srcfile) # remove old encoding file
+                os.rename(trgfile, srcfile) # rename new encoding
                 print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
         elif form['file'].filename.endswith(".txt"):
             if os.path.isfile('../interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu"):
