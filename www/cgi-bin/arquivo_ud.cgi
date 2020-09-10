@@ -67,7 +67,7 @@ elif not 'validate' in form:
     filesize = fileitem.tell() # Get the position of EOF.
     fileitem.seek(0) # Reset the file position to the beginning.
     f = os.path.basename(form['file'].filename)
-    if filesize > max_filesize:
+    if filesize <= 0: #max_filesize:
         print(f"Arquivo maior que {str(max_filesize)[:-6]}mb não suportado.")
     else:
         if form['file'].filename.endswith('.conllu'):
