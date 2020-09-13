@@ -17,7 +17,7 @@ from datetime import datetime
 from functions import corpusGenericoInquerito
 import re
 from subprocess import call
-import html as webpage
+import html as web
 import validar_UD
 from credenciar import LOGIN
 import interrogar_UD
@@ -128,8 +128,8 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 								html42 += '<p>sent_id = <a href="#" onclick="document.getElementById(\'coluna\').value=\'7\'; document.getElementById(\'valor\').value=\'' + linha.split('!@#')[7] + '\'; document.getElementById(\'form_pesquisa\').submit();">' + linha.split('!@#')[7] + '</a></p><input name="sentid" type="hidden" value="' + linha.split('!@#')[7] + '">'
 								relatorio42 += '\nsent = ' + linha.split('!@#')[7]
 							if len(linha.split('!@#')) >= 6 and linha.split('!@#')[4] != 'NONE' and linha.split('!@#')[5] != 'NONE':
-								html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
-								relatorio42 += '\n\nPágina no interrogatório: ' + cgi.escape(linha.split('!@#')[4]).replace('<b>', '').replace('</b>', '')
+								html42 = html42 + '<p>Página no Interrogatório: <a target="_blank" href="' + linha.split('!@#')[5] + '">' + web.escape(linha.split('!@#')[4]).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<', '&lt;').replace('>', '&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</a></p>'
+								relatorio42 += '\n\nPágina no interrogatório: ' + web.escape(linha.split('!@#')[4]).replace('<b>', '').replace('</b>', '')
 							if not onlysent:
 								html42 += '<pre>ANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre><pre>DEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','@BOLD').replace('</b>','/BOLD').replace('<','&lt;').replace('>','&gt;').replace('@BOLD', '<b>').replace('/BOLD', '</b>') + '</pre>'
 								relatorio42 += '\n\nANTES:\t' + linha.split('!@#')[1].split(' --> ')[0].replace('<b>', '').replace('</b>','') + '\nDEPOIS:\t' + linha.split('!@#')[1].split(' --> ')[1].replace('<b>','').replace('</b>','')
@@ -141,7 +141,7 @@ def printar(coluna='', valor='', onlysent=False, managetags=False, tokenization_
 			
 			elif managetags:
 				if len(linha.split('!@#')) >= 7 and not linha.split('!@#')[6] in javistos and linha.split('!@#')[6] != 'NONE':
-					html42 += '''<div class=container><form method="POST" action="../cgi-bin/inquerito.py"><input name="delete_tag" type=hidden value="''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''"><a style="cursor:pointer" onclick="document.getElementsByName('coluna')[0].value = '6'; document.getElementsByName('valor')[0].value = \'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\'; document.getElementsByName('form_pesquisa')[0].submit();">#''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''</a> <a style="cursor:pointer" onclick="if (confirmar(\'''' + cgi.escape(linha.split('!@#')[6], quote=True) + '''\') == true) { this.parentNode.submit(); return false; }" class="close-thik"></a></form></div>'''
+					html42 += '''<div class=container><form method="POST" action="../cgi-bin/inquerito.py"><input name="delete_tag" type=hidden value="''' + web.escape(linha.split('!@#')[6], quote=True) + '''"><a style="cursor:pointer" onclick="document.getElementsByName('coluna')[0].value = '6'; document.getElementsByName('valor')[0].value = \'''' + web.escape(linha.split('!@#')[6], quote=True) + '''\'; document.getElementsByName('form_pesquisa')[0].submit();">#''' + web.escape(linha.split('!@#')[6], quote=True) + '''</a> <a style="cursor:pointer" onclick="if (confirmar(\'''' + web.escape(linha.split('!@#')[6], quote=True) + '''\') == true) { this.parentNode.submit(); return false; }" class="close-thik"></a></form></div>'''
 					total += 1
 					javistos.append(linha.split('!@#')[6])
 		except:
@@ -176,14 +176,14 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'delete_tag' in form.keys():
 
 	novo_inqueritos = list()
 	for inquerito in inqueritos.splitlines():
-		if len(inquerito.split('!@#')) >= 7 and inquerito.split('!@#')[6] == webpage.unescape(form['delete_tag'].value):
+		if len(inquerito.split('!@#')) >= 7 and inquerito.split('!@#')[6] == web.unescape(form['delete_tag'].value):
 			continue
 		else:
 			novo_inqueritos.append(inquerito)
 
 	novo_tags = list()
 	for tag in tags.splitlines():
-		if tag == webpage.unescape(form['delete_tag'].value):
+		if tag == web.unescape(form['delete_tag'].value):
 			continue
 		else:
 			novo_tags.append(tag)
@@ -514,7 +514,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 			token = int(key.split('-')[0])
 			if key.split('-')[1] != 'meta': coluna = int(key.split('-')[1])
 			else: coluna = 'meta'
-			value = webpage.unescape(value.value.replace("\n", "").replace("\r", ""))
+			value = web.unescape(value.value.replace("\n", "").replace("\r", ""))
 
 			#if (coluna == ':' and conlluzao[int(form['sentnum'].value)][token] != value) or (coluna != ':' and conlluzao[int(form['sentnum'].value)][token][coluna] != value):
 				#try:
