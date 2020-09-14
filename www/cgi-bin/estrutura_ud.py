@@ -207,12 +207,17 @@ class Corpus:
 						else:
 							if not self.any_of_keywords or any(re.search(y, sentence) for y in self.any_of_keywords):
 								self.build([sentence])
+							elif self.any_of_keywords and "# sent_id = " in sentence:
+								self.sentences_not_built[sentence.split("# sent_id = ")[1].split("\n")[0]] = sentence.strip()
 						sentence = ""
 			else:
 				self.build(f.read())
 		sys.stderr.write("build: " + str(time.time() - self.time))
 
 	def save(self, path):
-		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
+		if not self.any_of_keywords:
+			final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
+		else:
+			final = self.to_str() + "\n\n".join(self.sentences_not_built)
 		with open(path, "w") as f:
 			f.write(final)

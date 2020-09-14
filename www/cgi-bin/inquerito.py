@@ -354,7 +354,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					<span class="translateHtml addTokenHelp"> antes do token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.addTokenButton').val($('.addTokenOptionSelect:selected').text() + $('.addTokenHelp').html() + $(this).val());" name="addTokenId">
 					<input type="button" onclick="if ($('[name=addTokenOption]').val() && $('[name=addTokenId]').val()) {{ $('.addTokenForm').submit(); }}" class="translateVal addTokenButton" value="Adicionar token">
-					<br><i><span class="translateHtml">Dica: Utilize vírgula para determinar mais de um id de token.</span></i>
+					<br><br><i><span class="translateHtml">Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior ">" para indicar intervalo de id (por ex., "4>6" para "de 4 até 6")</span></i>
 					{sentid}
 					{link}
 					{nome}
@@ -389,7 +389,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						<option value="left" class="mergeSentencesOptionSelect translateHtml">à esquerda</option>
 					</select>					
 					<input type="button" onclick="if ($('[name=mergeSentencesOption]').val() && $('[name=mergeSentencesId]').val()) {{ $('.mergeSentencesForm').submit(); }}" class="translateVal mergeSentencesButton" value="Inserir sentença">
-					<br><i><span class="translateHtml">Dica: Utilize vírgula para determinar mais de um sent_id.</span></i>
+					<br><br><i><span class="translateHtml">Dica: Utilize vírgula para determinar mais de um sent_id.</span></i>
 					{sentid}
 					{link}
 					{nome}

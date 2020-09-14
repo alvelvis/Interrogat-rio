@@ -7,6 +7,7 @@ import estrutura_ud
 import os
 import sys
 import json
+import re
 from credenciar import LOGIN
 
 def splitSentence(conllu, sent_id, token_id, conllu_completo="", form=False):
@@ -78,7 +79,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
         with open("../cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
-    corpus = estrutura_ud.Corpus(recursivo=False)
+    corpus = estrutura_ud.Corpus(recursivo=False, any_of_keywords=[re.escape("# sent_id = " + sent_id + "\n"), re.escape("# sent_id = " + mergeSentencesId + "\n")])
     corpus.load(conllu if not conllu_completo else conllu_completo)
 
     if token_id == "left":
@@ -148,10 +149,10 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
     elif option in ["rm"]:
         if not '-' in token_id:
             for t, token in enumerate(corpus.sentences[sent_id].tokens):
-                    if t > corpus.sentences[sent_id].map_token_id[token_id]:
+                    if token_id in corpus.sentences[sent_id].map_token_id and t > corpus.sentences[sent_id].map_token_id[token_id]:
                         token.id = str(int(token.id)-1) if not '-' in token.id else str(int(token.id.split("-")[0])-1) + "-" + str(int(token.id.split("-")[1])-1)
                     if token.dephead not in ["_", "0"]:
-                        if corpus.sentences[sent_id].map_token_id[token.dephead] > corpus.sentences[sent_id].map_token_id[token_id]:
+                        if token.dephead in corpus.sentences[sent_id].map_token_id and token_id in corpus.sentences[sent_id].map_token_id and corpus.sentences[sent_id].map_token_id[token.dephead] > corpus.sentences[sent_id].map_token_id[token_id]:
                             token.dephead = str(int(token.dephead)-1)
         corpus.sentences[sent_id].tokens = [x for t, x in enumerate(corpus.sentences[sent_id].tokens) if t != corpus.sentences[sent_id].map_token_id[token_id]]
 
@@ -202,7 +203,14 @@ if form:
     new_sent_id = ""
     if action == "addToken":
         token_split = token_id.split(",")
-        list_tokens = [x for x in token_split if '-' in x] + sorted([int(x) for x in token_split if x.isnumeric()], reverse=True) + [x for x in token_split if not x.isnumeric() and not '-' in x]
+        token_split_range = []
+        for token in token_split:
+            if not '>' in token:
+                token_split_range.append(token)
+            else:
+                for i in range(int(token.split(">")[0]), int(token.split(">")[1])+1):
+                    token_split_range.append(str(i))
+        list_tokens = [x for x in token_split_range if '-' in x] + sorted([int(x) for x in token_split_range if x.isnumeric()], reverse=True) + [x for x in token_split_range if not x.isnumeric() and not '-' in x]
         for token in list_tokens:
             if token:
                 addToken(conllu, sent_id, option, str(token), new_tokens=[], mergeSentencesId="", form=form, conllu_completo=conllu_completo)

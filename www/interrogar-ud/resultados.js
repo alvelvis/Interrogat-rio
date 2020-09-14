@@ -844,8 +844,8 @@ var translations = {
 	"Dica: Utilize vírgula para determinar mais de um sent_id.": {
 		'en-US': "Tip: Use commas to specify more than one sent_id."
 	},
-	"Dica: Utilize vírgula para determinar mais de um id de token.": {
-		'en-US': 'Tip: Use commas to specify more than one token id.'
+	'Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior ">" para indicar intervalo de id (por ex., "4>6" para "de 4 até 6")': {
+		'en-US': 'Tips:<br>Use commas to specify more than one token id.<br>Use "greater than" to indicate an id range (i.e. "4>6" to "from 4 to 6")'
 	}
 };
 
