@@ -201,9 +201,21 @@ def delete_sentence(filename, sent_id):
     corpus.save("../interrogar-ud/conllu/" + filename)
     return True
 
+def modify_sentid(filename, sent_id, new_sentid):
+    corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
+    corpus.load("../interrogar-ud/conllu/" + filename)
+    corpus.sentences[sent_id].sent_id = new_sentid
+    corpus.sentences[sent_id].metadados['sent_id'] = new_sentid
+    corpus.sentences[new_sentid] = corpus.sentences.pop(sent_id)
+    corpus.save("../interrogar-ud/conllu/" + filename)
+    return True
+
 if os.environ['REQUEST_METHOD'] == "POST":
     if 'action' in form and form['action'].value == "delete_sentence":
         delete_sentence(form['corpus'].value, form['sent_id'].value)
+        print(json.JSONEncoder().encode({'success': True}))
+    elif 'action' in form and form['action'].value == 'modify_sentid':
+        modify_sentid(form['corpus'].value, form['sent_id'].value, form['new_sentid'].value)
         print(json.JSONEncoder().encode({'success': True}))
     elif not 'ud' in form:
         start = time.time()

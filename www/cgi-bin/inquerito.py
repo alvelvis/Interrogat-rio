@@ -342,6 +342,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.splitSentence').show();">Separar sentença em duas</a></li>
+				<li><a class="translateHtml" style="cursor:pointer" id="modifySentid" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Modificar sent_id</a></li>
 				<li><a class="translateHtml" style="cursor:pointer" id="deleteSentence" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Deletar sentença</a></li>
 			</ul>
 			<div class="addToken tokenization" style="display:none">
@@ -370,7 +371,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					<span class="translateHtml splitSentenceHelp">Separar sentença após o token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
 					<br><span class="translateHtml splitSentenceHelp">A nova sentença receberá o sent_id </span>
-					<input class="translatePlaceholder" value="{sent_id_plain}-NEW" name="newSentenceId">
+					<input class="translatePlaceholder" style="width:300px" value="{sent_id_plain}-NEW" name="newSentenceId">
 					<input type="button" onclick="if ($('[name=splitSentenceTokenId]').val()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
 					{sentid}
 					{link}
@@ -512,7 +513,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 
 	for key in dict(form).keys():
 		value = dict(form)[key]
-		if re.search(r'^\d+-(\d+|meta)$', key):
+		if re.search(r'^\d+-(\d+|meta)$', key) and not '# sent_id = ' in value.value:
 			token = int(key.split('-')[0])
 			if key.split('-')[1] != 'meta': coluna = int(key.split('-')[1])
 			else: coluna = 'meta'
