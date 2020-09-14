@@ -215,9 +215,6 @@ class Corpus:
 		sys.stderr.write("build: " + str(time.time() - self.time))
 
 	def save(self, path):
-		if not self.any_of_keywords:
-			final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
-		else:
-			final = self.to_str() + "\n\n".join(self.sentences_not_built)
+		final = self.to_str() if not self.sent_id else (self.pre + "\n\n" + self.to_str() + self.pos).strip() + "\n\n"
 		with open(path, "w") as f:
 			f.write(final)
