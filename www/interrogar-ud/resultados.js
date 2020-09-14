@@ -276,8 +276,8 @@ var translations = {
 	'Tokenização modificada com sucesso': {
 		'en-US': 'Tokenization modified successfuly'
 	},
-	'Tokenização modificada com sucesso, mas atenção: edite também a nova sentença -- ': {
-		'en-US': 'Tokenization modified successfuly, but please pay attention: edit, too, the new sentence -- '
+	'Atenção: edite também o sent_id desta sentença e/ou a nova sentença:': {
+		'en-US': 'Warning: edit, too, this sent_id and/or the new sentence:'
 	},
 	'Separar sentença em duas': {
 		'en-US': 'Split sentence in two'
