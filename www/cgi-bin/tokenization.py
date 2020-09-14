@@ -10,7 +10,7 @@ import json
 import re
 from credenciar import LOGIN
 
-def splitSentence(conllu, sent_id, token_id, conllu_completo="", form=False):
+def splitSentence(conllu, sent_id, newSentenceId, token_id, conllu_completo="", form=False):
 
     if form:
         if not os.path.isfile("../cgi-bin/tokenization.json"):
@@ -21,16 +21,14 @@ def splitSentence(conllu, sent_id, token_id, conllu_completo="", form=False):
         with open("../cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
-    corpus = estrutura_ud.Corpus(recursivo=False)
+    corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
     corpus.load(conllu if not conllu_completo else conllu_completo)
 
     new_sentence = estrutura_ud.Sentence(recursivo=True)
     new_sentence.build(corpus.sentences[sent_id].to_str())
 
-    sent_id_file = sent_id.rsplit("-", 1)[0] if '-' in sent_id else ""
-    all_sentid = [int(x.rsplit("-", 1)[1]) if '-' in x else int(x) for x in corpus.sentences if x.startswith(sent_id_file)]
-    new_sentence.sent_id = f"{sent_id_file}{'-' if sent_id_file else ''}{max(all_sentid) + 1}"
-    new_sentence.metadados['sent_id'] = f"{sent_id_file}{'-' if sent_id_file else ''}{max(all_sentid) + 1}"
+    new_sentence.sent_id = newSentenceId
+    new_sentence.metadados['sent_id'] = newSentenceId
 
     new_token = False
     new_sentence_tokens = []
@@ -219,7 +217,7 @@ if form:
         for sent in sent_split:
             addToken(conllu, sent_id, option, token_id, mergeSentencesId=sent, form=form, conllu_completo=conllu_completo)
     elif action == "splitSentence":
-        new_sent_id = splitSentence(conllu, sent_id, token_id, form=form, conllu_completo=conllu_completo)
+        new_sent_id = splitSentence(conllu, sent_id, form['newSentenceId'].value, token_id, form=form, conllu_completo=conllu_completo)
 
     html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
     for input in form:

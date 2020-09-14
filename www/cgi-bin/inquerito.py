@@ -369,6 +369,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				<form action="../cgi-bin/tokenization.py?action=splitSentence" class="splitSentenceForm" method="POST">
 					<span class="translateHtml splitSentenceHelp">Separar sentença após o token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
+					<br><span class="translateHtml splitSentenceHelp">A nova sentença receberá o sent_id </span>
+					<input class="translatePlaceholder" value="{sent_id_plain}-NEW" name="newSentenceId">
 					<input type="button" onclick="if ($('[name=splitSentenceTokenId]').val()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
 					{sentid}
 					{link}

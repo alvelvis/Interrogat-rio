@@ -285,6 +285,9 @@ var translations = {
 	'Separar sentença após o token de id ': {
 		'en-US': 'Split sentence after the token id '
 	},
+	'A nova sentença receberá o sent_id ': {
+		'en-US': 'The new sentence will have the following sent_id '
+	},
 	'Separar sentença': {
 		'en-US': 'Split sentence'
 	},
