@@ -122,7 +122,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
                             token.id = str(int(token.id)+1) if not '-' in token.id else str(int(token.id.split("-")[0])+1) + "-" + str(int(token.id.split("-")[1])+1)
                             corpus.sentences[sent_id].map_token_id[token.id] = t
                 for t, token in enumerate(corpus.sentences[sent_id].tokens):
-                    if not mergeSentencesId and token.dephead not in ["0", "_"] and corpus.sentences[sent_id].map_token_id[token.dephead] >= corpus.sentences[sent_id].map_token_id[token_id]:
+                    if not mergeSentencesId and token.dephead not in ["0", "_"] and token.dephead in corpus.sentences[sent_id].map_token_id and token_id in corpus.sentences[sent_id].map_token_id and corpus.sentences[sent_id].map_token_id[token.dephead] >= corpus.sentences[sent_id].map_token_id[token_id]:
                         token.dephead = str(int(token.dephead)+1)
 
             if form:
