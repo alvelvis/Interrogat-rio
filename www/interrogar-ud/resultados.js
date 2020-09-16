@@ -853,7 +853,7 @@ var translations = {
 };
 
 $('#modifySentid').click(function(){
-	new_sentid = prompt("Qual deverá ser o novo sent_id?", $(this).attr('sent_id'))
+	new_sentid = prompt("Qual deverá ser o novo sent_id?\nAtenção: esta janela será fechada.", $(this).attr('sent_id'))
 	if (new_sentid) {
 		loadingScreen()
 		$.ajax({
