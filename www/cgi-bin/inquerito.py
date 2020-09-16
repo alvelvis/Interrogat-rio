@@ -447,7 +447,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 
 			for a, linha in enumerate(sentence2.splitlines()):
 				if not '\t' in linha:
-					html1 += f'''<tr><input class="field" value="{linha.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type="hidden" name="''' +str(a)+ '''-''' + '''meta"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + '''meta" contenteditable=True class="annotationValue plaintext" colspan="42">''' + html.escape(linha) + '</td></tr>'
+					html1 += f'''<tr><input class="field" value="{linha.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type="hidden" name="''' +str(a)+ '''-''' + '''meta"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + '''meta" contenteditable=True class="annotationValue plaintext" colspan="42">''' + web.escape(linha) + '</td></tr>'
 				else:
 					isBold = "background-color: lightgray;" if 'tokenId' in form and linha.split('\t')[0] == form['tokenId'].value else ""
 					html1 += f'<tr style="{isBold}">'
@@ -456,7 +456,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						dragId = 'id ' if b == 0 else ''
 						notPipe = "" if b in [1, 2, 4, 5, 9] and coluna != "_" else "notPipe "
 						tokenId = f"id_{coluna} " if b == 0 else ""
-						html1 += f'''<input class="field" value="{coluna.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + html.escape(coluna) + '</td>'
+						html1 += f'''<input class="field" value="{coluna.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + web.escape(coluna) + '</td>'
 					html1 += '</tr>'
 
 			html1 += '</table></div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
