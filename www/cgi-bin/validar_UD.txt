@@ -112,3 +112,8 @@ upos != "DET|PRON" and feats = "PronType=.*"
 upos != "DET|PRON" and feats = "Definite.*"
 feats = "PronType=Art" and feats != "Definite=.*"
 feats = "Definite=.*" and feats != "PronType=Art"
+
+upos|erro: < > seguido de link deve apontar para o link
+word = ">" and previous_token.word = "http.*" and dephead != previous_token.id
+word = "<" and next_token.word = "http.*" and dephead != next_token.id
+
