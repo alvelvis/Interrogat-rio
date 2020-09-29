@@ -333,17 +333,17 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 		if ('# text = ' + form['textheader'].value + '\n' in sentence2) or ('# sent_id = ' + form['textheader'].value + '\n' in sentence2) or ('sentid' in form and '# sent_id = ' + form['sentid'].value + '\n' in sentence2):
 			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
 			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="enviar()" class="translateVal btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"> '
-			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="$(\'.divTokenization\').slideToggle();" class="translateVal btn-gradient green small" id="sendAnnotation" value="Modificar tokenização"><br><br>'
+			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient green small" id="changeTokenization" value="Modificar tokenização"><br><br>'
 			html1 += '<!--br><br><br-->'
 
 			html1 += '''<div class="divTokenization" style="display:none">
 			<b class="translateHtml">Escolha que modificação deseja realizar:</b>
 			<ul>
-				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
-				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
-				<li><a class="translateHtml" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.splitSentence').show();">Separar sentença em duas</a></li>
-				<li><a class="translateHtml" style="cursor:pointer" id="modifySentid" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Modificar sent_id</a></li>
-				<li><a class="translateHtml" style="cursor:pointer" id="deleteSentence" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Deletar sentença</a></li>
+				<li><a class="translateHtml tokenizationMenu" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.addToken').show();">Adicionar ou remover token</a></li>
+				<li><a class="translateHtml tokenizationMenu" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.mergeSentences').show();">Mesclar duas sentenças</a></li>
+				<li><a class="translateHtml tokenizationMenu" style="cursor:pointer" onclick="$('.tokenization').hide(); $('.splitSentence').show();">Separar sentença em duas</a></li>
+				<li><a class="translateHtml tokenizationMenu" style="cursor:pointer" id="modifySentid" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Modificar sent_id</a></li>
+				<li><a class="translateHtml tokenizationMenu" style="cursor:pointer" id="deleteSentence" corpus="{corpus_plain}" sent_id="{sent_id_plain}">Deletar sentença</a></li>
 			</ul>
 			<div class="addToken tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=addToken" class="addTokenForm" method="POST">
@@ -364,15 +364,24 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					{tokenId}
 					{sentnum}
 					{textheader}
+					{text}
 				</form>
 			</div>
 			<div class="splitSentence tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=splitSentence" class="splitSentenceForm" method="POST">
 					<span class="translateHtml splitSentenceHelp">Separar sentença após o token de id </span>
 					<input class="translatePlaceholder" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
-					<br><span class="translateHtml splitSentenceHelp">A nova sentença receberá o sent_id </span>
-					<input class="translatePlaceholder" style="width:300px" value="{sent_id_plain}-NEW" name="newSentenceId">
+					<br><br><span class="translateHtml splitSentenceHelp">Esta sentença terá seu sent_id modificado?</span>
+					<input class="translatePlaceholder" style="width:100%" value="{sent_id_plain}" name="sameSentenceId">
+					<br><br><span class="translateHtml splitSentenceHelp">A nova sentença receberá qual sent_id?</span>
+					<input class="translatePlaceholder" style="width:100%" value="{sent_id_plain}-NEW" name="newSentenceId">
+					<br><br><span class="translateHtml splitSentenceHelp">Esta sentença terá seu "text" modificado?</span>
+					<input class="translatePlaceholder" style="width:100%" value="{text_plain}" name="sameText">
+					<br><br><span class="translateHtml splitSentenceHelp">A nova sentença receberá qual "text"?</span>
+					<input class="translatePlaceholder" style="width:100%" value="{text_plain}" name="newText">
+					<br><br>
 					<input type="button" onclick="if ($('[name=splitSentenceTokenId]').val()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
+					<br><br>
 					{sentid}
 					{link}
 					{nome}
@@ -381,6 +390,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					{tokenId}
 					{sentnum}
 					{textheader}
+					{text}
 				</form>
 			</div>
 			<div class="mergeSentences tokenization" style="display:none">
@@ -401,10 +411,12 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 					{tokenId}
 					{sentnum}
 					{textheader}
+					{text}
 				</form>
 			</div>
+			<span class="changesNotSaved translateHtml" style="background-color:yellow;"></span>
 			</div>'''.format(
-				sentid='<input type=hidden name=tokenization_sentid value="' + form['sentid'].value.replace('"', '\"') + '">' if 'sentid' in form else '',
+				sentid='<input type=hidden name=tokenization_sentid value="' + form['sentid'].value.replace('"', '&quot;') + '">' if 'sentid' in form else '',
 				link='<input type=hidden name=tokenization_link_interrogatorio value="' + form['link_interrogatorio'].value + '">' if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
 				nome='<input type=hidden name=tokenization_nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
 				occ='<input type=hidden name=tokenization_occ value="' + form['occ'].value + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] and 'occ' in form else '',
@@ -414,6 +426,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				textheader='<input type=hidden name=tokenization_textheader value="' + form['textheader'].value + '">' if 'textheader' in form else '',
 				corpus_plain=ud,
 				sent_id_plain=form['sentid'].value,
+				text='<input type=hidden name=text value="' + form['text'].value.replace('"', '&quot;') + '">' if 'text' in form else '',
+				text_plain=form['text'].value if 'text' in form else '',
 			)
 
 			html1 += '<form action="../cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
@@ -459,7 +473,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						html1 += f'''<input class="field" value="{coluna.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type=hidden name="''' +str(a)+ '''-''' + str(b) + f'''"><td style="cursor:pointer; color:black;" id="''' +str(a)+ '''-''' + str(b) + f'''" class="{tokenId}{drag}{dragId}{notPipe}annotationValue plaintext" contenteditable=True>''' + web.escape(coluna) + '</td>'
 					html1 += '</tr>'
 
-			html1 += '</table></div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
+			html1 += '</table>'
+			html1 += '</div><input type="hidden" name="textheader" value="' + form['textheader'].value + '"></label><br><br>'
 			html1 += '<input type=hidden name=tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else ''
 			html1 += '</div></form>'
 			achou = True

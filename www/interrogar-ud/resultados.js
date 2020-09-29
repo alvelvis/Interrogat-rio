@@ -285,8 +285,17 @@ var translations = {
 	'Separar sentença após o token de id ': {
 		'en-US': 'Split sentence after the token id '
 	},
-	'A nova sentença receberá o sent_id ': {
-		'en-US': 'The new sentence will have the following sent_id '
+	'Esta sentença terá seu sent_id modificado?': {
+		'en-US': 'This sentence will have it sent_id modified?'
+	},
+	'A nova sentença receberá qual sent_id?': {
+		'en-US': 'The new sentence will have what sent_id?'
+	},
+	'Esta sentença terá seu "text" modificado?': {
+		'en-US': 'This sentence will have its "text" modified?'
+	},
+	'A nova sentença receberá qual "text"?': {
+		'en-US': 'The new sentence will have what "text"?'
 	},
 	'Separar sentença': {
 		'en-US': 'Split sentence'
@@ -407,6 +416,9 @@ var translations = {
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to the top'
+	},
+	'Atenção: modificações em vermelho serão descartadas caso deseje modificar a tokenização.': {
+		'en-US': 'Warning: changes in red will be discarded if you proceed tokenization.'
 	},
 	'undefined': {
 		'en-US': 'undefined'
@@ -892,10 +904,6 @@ $('#deleteSentence').click(function(){
 	}
 })
 
-$('.annotationValue').on('keyup', (function(){
-	$(this).css('background-color', '#ffc6c4')
-}))
-
 function updateTranslation(){
     $('.translateHtml').each(function(){
         if (translations[$(this).html()]) {
@@ -1044,7 +1052,7 @@ $(window).on('unload', function() {
 });
 
 $(window).ready(function(){
-    endLoadingScreen();
+	endLoadingScreen();
 });
 
 function pesquisaChange(){
@@ -1076,6 +1084,10 @@ $(document).on('keydown', function(e){
         $('.endInquerito').click();
     }
 });
+
+$('.abrirInquerito').click(function(){
+	$(this).css("background-color", "lightgray")
+})
 
 function carregarPosts(){
 	
@@ -1426,7 +1438,24 @@ $(document).ready(function(){
                 };
             }
         });
-    };
+	};
+
+	$('.tokenizationMenu').click(function(){
+		$('.tokenizationMenu').css('color', '#0069B1').css('font-weight', 'normal')
+		$(this).css('color', 'orange').css('font-weight', 'bold')
+	})
+	
+	$('body').on('DOMSubtreeModified', '.annotationValue', function(){
+		$(this).css('background-color', '#ffc6c4')
+		if (!$('.changesNotSaved').text().length) {
+			$('.changesNotSaved').html("Atenção: modificações em vermelho serão descartadas caso deseje modificar a tokenização.")
+			updateTranslation()
+		}
+	})
+
+	$('#changeTokenization').click(function(){
+		$('.divTokenization').slideToggle()
+	})
 
     $(document).on('keydown', function(event){
         if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
@@ -1457,7 +1486,6 @@ $(document).ready(function(){
     });
 
 });
-
 
 function dist(coluna){
     if (! $('#pesquisa').length){

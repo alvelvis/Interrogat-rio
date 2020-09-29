@@ -10,7 +10,7 @@ import json
 import re
 from credenciar import LOGIN
 
-def splitSentence(conllu, sent_id, newSentenceId, token_id, conllu_completo="", form=False):
+def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newText, token_id, conllu_completo="", form=False):
 
     if form:
         if not os.path.isfile("../cgi-bin/tokenization.json"):
@@ -46,8 +46,16 @@ def splitSentence(conllu, sent_id, newSentenceId, token_id, conllu_completo="", 
         
     new_sentence.tokens = new_sentence_tokens
     corpus.sentences[sent_id].tokens = old_sentence_tokens
+    corpus.sentences[sent_id].metadados['text'] = sameText
+    corpus.sentences[sent_id].text = sameText
     corpus.sentences[new_sentence.sent_id] = new_sentence
     corpus.sentences[new_sentence.sent_id].refresh_map_token_id()
+    corpus.sentences[new_sentence.sent_id].metadados['text'] = newText
+    corpus.sentences[new_sentence.sent_id].text = newText
+    corpus.sent_id = sameSentenceId
+    corpus.sentences[sameSentenceId] = corpus.sentences.pop(sent_id)
+    corpus.sentences[sameSentenceId].metadados['sent_id'] = sameSentenceId
+    corpus.sentences[sameSentenceId].sent_id = sameSentenceId
 
     for t, token in enumerate(corpus.sentences[new_sentence.sent_id].tokens):
         token.id = str(int(token.id)-removed_tokens) if not '-' in token.id else str(int(token.id.split("-")[0])-removed_tokens) + "-" + str(int(token.id.split("-")[1])-removed_tokens)
@@ -217,9 +225,12 @@ if form:
         for sent in sent_split:
             addToken(conllu, sent_id, option, token_id, mergeSentencesId=sent, form=form, conllu_completo=conllu_completo)
     elif action == "splitSentence":
-        new_sent_id = splitSentence(conllu, sent_id, form['newSentenceId'].value, token_id, form=form, conllu_completo=conllu_completo)
+        new_sent_id = splitSentence(conllu, sent_id, form['sameSentenceId'].value, form['newSentenceId'].value, form['sameText'].value, form['newText'].value, token_id, form=form, conllu_completo=conllu_completo)
 
     html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
+    if 'sameSentenceId' in form:
+        form['tokenization_sentid'].value = form['sameSentenceId'].value
+        form['tokenization_textheader'].value = form['sameSentenceId'].value
     for input in form:
         html += f'<input type=hidden name="{input.split("tokenization_")[1] if "tokenization_" in input else input}" value="{form[input].value}">'
     html += "</form>"
