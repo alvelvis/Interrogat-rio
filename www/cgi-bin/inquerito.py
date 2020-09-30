@@ -370,17 +370,17 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 			<div class="splitSentence tokenization" style="display:none">
 				<form action="../cgi-bin/tokenization.py?action=splitSentence" class="splitSentenceForm" method="POST">
 					<span class="translateHtml splitSentenceHelp">Separar sentença após o token de id </span>
-					<input class="translatePlaceholder" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
+					<input class="splitSentenceField" onkeyup="$('.splitSentenceButton').val('Separar sentença após o token de id ' + $(this).val());" name="splitSentenceTokenId">
 					<br><br><span class="translateHtml splitSentenceHelp">Esta sentença terá seu sent_id modificado?</span>
-					<input class="translatePlaceholder" style="width:100%" value="{sent_id_plain}" name="sameSentenceId">
+					<input class="splitSentenceField" style="width:100%" value="{sent_id_plain}" name="sameSentenceId">
 					<br><br><span class="translateHtml splitSentenceHelp">A nova sentença receberá qual sent_id?</span>
-					<input class="translatePlaceholder" style="width:100%" value="{sent_id_plain}-NEW" name="newSentenceId">
+					<input class="splitSentenceField" style="width:100%" value="{sent_id_plain}-NEW" name="newSentenceId">
 					<br><br><span class="translateHtml splitSentenceHelp">Esta sentença terá seu "text" modificado?</span>
-					<input class="translatePlaceholder" style="width:100%" value="{text_plain}" name="sameText">
+					<input class="splitSentenceField" style="width:100%" value="{text_plain}" name="sameText">
 					<br><br><span class="translateHtml splitSentenceHelp">A nova sentença receberá qual "text"?</span>
-					<input class="translatePlaceholder" style="width:100%" value="{text_plain}" name="newText">
+					<input class="splitSentenceField" style="width:100%" value="{text_plain}" name="newText">
 					<br><br>
-					<input type="button" onclick="if ($('[name=splitSentenceTokenId]').val()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
+					<input type="button" onclick="if (!anySplitSentenceFieldEmpty()) {{ $('.splitSentenceForm').submit(); }}" class="translateVal splitSentenceButton" value="Separar sentença">
 					<br><br>
 					{sentid}
 					{link}

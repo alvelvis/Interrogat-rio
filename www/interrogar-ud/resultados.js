@@ -1089,6 +1089,12 @@ $('.abrirInquerito').click(function(){
 	$(this).css("background-color", "lightgray")
 })
 
+function anySplitSentenceFieldEmpty() {
+	return $(".splitSentenceField").filter(function() {
+	  return $.trim($(this).val()).length == 0
+	}).length > 0;
+  }
+
 function carregarPosts(){
 	
     $(window).unbind('scroll');
