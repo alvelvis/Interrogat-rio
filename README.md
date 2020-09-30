@@ -10,6 +10,10 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 <!---You can also use Interrogatório at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora, or upload your own, be it in the UD format or in plain text to be annotated (in Portuguese).-->
 
+# How to run on a Windows machine
+
+1) Download [Interrogatório.bat](Interrogatório.bat) and double-click it. It will prompt you to install Ubuntu (though Windows Subsystem for Linux) and, once complete, double-click `Interrogatório.bat` to install the software and open it.
+
 # How to install in a local server: 4-steps Tutorial
 
 If you wish to run Interrogatório in a local server, a Linux computer (or Windows with [Windows Subsystem for Linux](https://docs.microsoft.com/pt-br/windows/wsl/install-win10)), `python3` and `virtualenv` are needed.
