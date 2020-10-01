@@ -76,11 +76,11 @@ def sendPOSTInterrogar():
 	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora + '.html'
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"), 'w') as f:
-			try:
+		try:
+			with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"), 'w') as f:
 				f.write("")
-			except:
-				pass
+		except:
+			pass
 
 	numeroOcorrencias, casosOcorrencias, fullParameters = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
 
