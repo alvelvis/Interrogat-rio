@@ -12,7 +12,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 # How to run on a Windows machine
 
-1) Download <a href="https://raw.githubusercontent.com/alvelvis/Interrogat-rio/master/Interrogat%C3%B3rio.bat" download>Interrogatório.bat</a> and double-click it (make sure to save it with the ending ".bat"). WARNING: It will first enable Windows Subsystem for Linux and your computer will be rebooted after the process is complete.
+1) Download <a href="https://raw.githubusercontent.com/alvelvis/Interrogat-rio/master/Interrogat%C3%B3rio.bat" download>Interrogatório.bat</a> (make sure to save it with the ending ".bat") and run it as administrator (left click on the icon). WARNING: This part will enable Windows Subsystem for Linux and your computer will be rebooted after the process is complete.
 
 2) In case WSL is enabled or you have enabled it in the previous step, double-click `Interrogatório.bat` again and it will install Ubuntu.
 

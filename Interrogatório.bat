@@ -17,9 +17,14 @@ ubuntu run exit >nul 2>&1 && (
       start "" https://www.microsoft.com/pt-br/p/ubuntu/9nblggh4msv6
       exit
     ) else (
-      powershell -Command "dism.exe -Verb RunAs -ArgumentList '/online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart /c'"
-      echo WSL enabled> Interrogatorio_ini
-      shutdown /r /t 30
+    NET SESSION >nul 2>&1
+    IF %ERRORLEVEL% EQU 0 (
+        powershell -Command "dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart"
+        echo WSL enabled> Interrogatorio_ini
+        shutdown /r
+    ) ELSE (
+        ECHO Run this as administrator for the first time.
+        exit
     )
 )
 pause
