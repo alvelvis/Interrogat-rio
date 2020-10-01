@@ -87,7 +87,10 @@ def sendPOSTInterrogar():
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script, fullParameters).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
-		os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"))
+		try:
+			os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"))
+		except:
+			pass
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
