@@ -16,7 +16,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 2) Once you have enabled Windows Subsystem for Linux, double-click `Interrogatório.bat` again and it will guide you on how to install Ubuntu.
 
-3) After Ubuntu is installed, double-click `Interrogatório.bat` and it will configure Ubuntu and install Interrogatório. Please note that while installing Ubuntu it will ask you for a new username and password: take note on the password you choose because you will need it when installing Interrogatório. Tip: passwords on Ubuntu are invisible instead of being shown as asterysks ***.
+3) After Ubuntu is installed, double-click `Interrogatório.bat` and it will configure Ubuntu and install Interrogatório. Please note that while installing Ubuntu it will ask you for a new username and password: take note on the password you choose because you will need it when installing Interrogatório. Tip¹: passwords on Ubuntu are invisible instead of being shown as asterysks \*\*\*. Tip²: When installing Interrogat-rio, it might have to update Ubuntu, process which will ask you to type "Y" (and press Enter) for YES for proceeding.
 
 4) Double-click `Interrogatório.bat` whenever you want to start the software. Reload the page if the browser is open before the software started.
 
