@@ -3,6 +3,7 @@ ubuntu run exit && (
   del /f C:\Interrogatorio_ini >nul 2>&1
   if exist Interrogat-rio (
     start "" ubuntu run LANG="en_US.UTF-8"; cd Interrogat-rio; sh run_interrogatorio.sh
+    ping 127.0.0.1 -n 10 > nul
     start "" http://localhost:8000
     exit
   ) else ( 
