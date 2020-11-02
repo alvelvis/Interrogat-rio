@@ -1,7 +1,7 @@
 @ECHO OFF
 ubuntu run exit && (
+  del /f C:\Interrogatorio_ini >nul 2>&1
   if exist Interrogat-rio (
-    del /f C:\Interrogatorio_ini
     start "" ubuntu run LANG="en_US.UTF-8"; cd Interrogat-rio; sh run_interrogatorio.sh
     start "" http://localhost:8000
     exit
