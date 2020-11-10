@@ -864,46 +864,6 @@ var translations = {
 	}
 };
 
-$('#modifySentid').click(function(){
-	new_sentid = prompt("Qual deverá ser o novo sent_id?\nAtenção: esta janela será fechada.", $(this).attr('sent_id'))
-	if (new_sentid) {
-		loadingScreen()
-		$.ajax({
-			url: '/cgi-bin/api.py',
-			method: 'POST',
-			data: {
-				'corpus': $(this).attr('corpus'),
-				'sent_id': $(this).attr('sent_id'),
-				'new_sentid': new_sentid,
-				'action': 'modify_sentid',
-			}
-		})
-		.done(function(){
-			alert("Operação realizada com sucesso. Feche esta janela.")
-			window.close()
-		})
-	}
-})
-
-$('#deleteSentence').click(function(){
-	if (confirm("Tem certeza de que deseja excluir a sentença " + $(this).attr('sent_id') + " do corpus " + $(this).attr('corpus') + "?")) {
-		loadingScreen()
-		$.ajax({
-			url: '/cgi-bin/api.py',
-			method: 'POST',
-			data: {
-				'corpus': $(this).attr('corpus'),
-				'sent_id': $(this).attr('sent_id'),
-				'action': 'delete_sentence',
-			}
-		})
-		.done(function(){
-			alert("Operação realizada com sucesso. Feche esta janela.")
-			window.close()
-		})
-	}
-})
-
 function updateTranslation(){
     $('.translateHtml').each(function(){
         if (translations[$(this).html()]) {
@@ -1489,7 +1449,47 @@ $(document).ready(function(){
             $coluna = $td.attr('id').split("-")[1];
             $('#' + $linha + '-' + $coluna).focus();
         };
-    });
+	});
+	
+	$('#modifySentid').click(function(){
+		new_sentid = prompt("Qual deverá ser o novo sent_id?\nAtenção: esta janela será fechada.", $(this).attr('sent_id'))
+		if (new_sentid) {
+			loadingScreen()
+			$.ajax({
+				url: '/cgi-bin/api.py',
+				method: 'POST',
+				data: {
+					'corpus': $(this).attr('corpus'),
+					'sent_id': $(this).attr('sent_id'),
+					'new_sentid': new_sentid,
+					'action': 'modify_sentid',
+				}
+			})
+			.done(function(){
+				alert("Operação realizada com sucesso. Feche esta janela.")
+				window.close()
+			})
+		}
+	})
+	
+	$('#deleteSentence').click(function(){
+		if (confirm("Tem certeza de que deseja excluir a sentença " + $(this).attr('sent_id') + " do corpus " + $(this).attr('corpus') + "?")) {
+			loadingScreen()
+			$.ajax({
+				url: '/cgi-bin/api.py',
+				method: 'POST',
+				data: {
+					'corpus': $(this).attr('corpus'),
+					'sent_id': $(this).attr('sent_id'),
+					'action': 'delete_sentence',
+				}
+			})
+			.done(function(){
+				alert("Operação realizada com sucesso. Feche esta janela.")
+				window.close()
+			})
+		}
+	})
 
 });
 
