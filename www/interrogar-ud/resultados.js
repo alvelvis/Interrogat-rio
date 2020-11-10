@@ -948,9 +948,11 @@ function endLoadingScreen(){
 };
 
 $(window).on('beforeunload', function() {
-    loadingScreen();
-    $('.indexSentences').val('0');
-    $('.filtrado').val('0');
+	loadingScreen();
+	if ($('.indexSentences').length) {
+    	$('.indexSentences').val('0');
+		$('.filtrado').val('0');
+	};
     setTimeout(waitTooMuch, 20000);
 });
 
