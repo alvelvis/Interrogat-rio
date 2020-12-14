@@ -390,8 +390,8 @@ var translations = {
 	'Realiza uma condição seguindo a sintaxe em Python.': {
 		'en-US': 'Fulfills a condition following Python syntax.'
 	},
-	'Você também pode utilizar o <a href="#interactive">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.': {
-		'en-US': 'You may also use the <a href="#interactive">query expression builder</a> to construct your syntax with criterium 5.'
+	'Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.': {
+		'en-US': 'You may also use the <a title="Go to interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">query expression builder</a> to construct your syntax with criterium 5.'
 	},
 	'Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.': {
 		'en-US': 'One or more conditions that include a token/word annotation, an operator (== or !=), and a value within inverted commas.'
