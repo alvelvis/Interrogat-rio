@@ -427,6 +427,12 @@ var translations = {
 		'pt-BR': 'Apagar busca',
 		'en-US': 'Delete query'
 	},
+	'Deletar sentença': {
+		'en-US': 'Delete sentence',
+	},
+	'Modificar sent_id': {
+		'en-US': 'Modify sent_id',
+	},
 	'Realizar filtro': {
 		'en-US': 'Execute filters'
 	},
