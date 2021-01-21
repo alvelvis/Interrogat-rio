@@ -104,6 +104,10 @@ class Sentence:
 					tok.deprel = coluna[7]
 					tok.deps = coluna[8]
 					tok.misc = coluna[9]
+					if self.recursivo:
+						tok.head_token = self.default_token
+						tok.previous_token = self.default_token
+						tok.next_token = self.default_token
 					if tok.feats != "_":
 						for feat in tok.feats.split("|"):
 							if '=' in feat:
