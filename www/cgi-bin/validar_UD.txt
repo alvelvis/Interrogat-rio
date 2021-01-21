@@ -31,6 +31,12 @@ deprel|erro: 7 - Token apontando na direção errada
 deprel = "(appos|conj|fixed|compound|flat|flat:name)" and dephead > id
 deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != "MWE=.*"
 
+deprel|erro: Adjetivação com gênero diferente
+deprel = "amod|acl" and head_token.gender != gender
+
+deprel|erro: Adjetivação com número diferente
+deprel = "amod|acl" and head_token.number != number
+
 feats|erro: Features incompatíveis com a classe gramatical
 upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Gender=Unsp|Number=Sing|Number=Plur|NumType=Ord"
 upos = "ADV" and feats !== "_|Polarity=Neg"
@@ -40,7 +46,7 @@ upos = "DET" and feats !== "Definite=Def|Gender=Masc|Number=Sing|PronType=Art|De
 upos = "(NOUN|PROPN)" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
 upos = "NUM" and feats !== "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
 upos = "PART" and feats !== "_|Gender=Masc|Number=Sing"
-upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind"
+upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind" and deprel != "expl"
 upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
@@ -48,13 +54,13 @@ upos|erro: UPOS inválido
 upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
 
 upos|erro: Este deprel deve ter upos NOUN, PRON, PROPN, SYM ou NUM
-deprel = "obl" and upos != "(NOUN|PRON|PROPN|SYM|NUM)"
+@head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)"
 
 deprel|erro: DEPREL inválido
 deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl)"
 
 upos|erro: acl:relcl deve ser filha de nome
-@head_token.upos != "NOUN" and deprel = "acl:relcl"
+@head_token.upos != "NOUN|PRON" and deprel = "acl:relcl"
 
 upos|erro: conj deve ser subordinado à mesma POS
 deprel = "conj" and @head_token.upos != upos
@@ -76,10 +82,13 @@ upos|erro: Este upos não pode ter deprel "det"
 upos != "DET" and deprel = "det"
 
 deprel|erro: DET deve ter deprel "det"
-upos = "DET" and deprel != "det|fixed"
+upos = "DET" and deprel != "det|fixed|flat:name"
 
 deprel|erro: ADP deve ter deprel "case"
-upos = "ADP" and deprel != "case|fixed"
+upos = "ADP" and deprel != "case|fixed|flat:name"
+
+deprel|erro: ADP não pode ter filho
+head_token.upos = "ADP" and deprel != "(fixed|compound|flat|flat:name)"
 
 deprel|erro: SCONJ deve ter deprel "mark"
 upos = "SCONJ" and deprel != "mark|fixed"
@@ -107,7 +116,7 @@ feats|erro: VERB deve ter feats VerbForm
 upos = "(AUX|VERB)" and feats != "VerbForm=.*"
 
 feats|erro: DET e PRON devem ter feats PronType e/ou Definite
-upos = "DET|PRON" and feats != "PronType=.*"
+upos = "DET|PRON" and feats != "PronType=.*" and deprel != "expl"
 upos != "DET|PRON" and feats = "PronType=.*"
 upos != "DET|PRON" and feats = "Definite.*"
 feats = "PronType=Art" and feats != "Definite=.*"
@@ -117,3 +126,12 @@ upos|erro: < > seguido de link deve apontar para o link
 word = ">" and previous_token.word = "http.*" and dephead != previous_token.id
 word = "<" and next_token.word = "http.*" and dephead != next_token.id
 
+upos|erro: Quando "algum" é seguido de ADP, "algum" deve ser PRON indefinido
+lemma = "algum" and next_token.upos = "ADP" and upos != "PRON"
+
+upos|erro: "Algum" deve ser PRON ou DET indefinido
+lemma = "algum" and upos != "PRON|DET"
+lemma = "algum" and feats != ".*PronType=Ind.*"
+
+deprel|erro: Possível caso de voz passiva sem obl:agent
+lemma = "por" and @head_token.deprel != "obl:agent" and head_token.head_token.feats = ".*VerbForm=Part.*"

@@ -1,4 +1,4 @@
-<h2 class="translateHtml">Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e revisão de corpora anotados</h2>
+<h2 class="translateHtml">Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e edição de corpora anotados</h2>
 <span class="translateHtml">Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.</span>
 <br><span class="translateHtml">Para começar a interrogar algum corpus, siga um dos caminhos abaixo:</span>
 <ul>

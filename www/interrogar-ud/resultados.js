@@ -9,6 +9,12 @@ var translations = {
 	'Limpar expressão de busca': {
 		'en-US': 'Clear query expression'
 	},
+	'Filtros já aplicados:': {
+		'en-US': 'Filters already applied:',
+	},
+	'Filtros': {
+		'en-US': 'Filters',
+	},
 	'Número do token na sentença': {
 		'en-US': 'Token number in the sentence'
 	},
@@ -144,8 +150,11 @@ var translations = {
 	'Busca rápida': {
 		'en-US': 'Quick query'
 	},
-	'Interrogatório - Ambiente de busca e revisão de corpora anotados': {
-		'en-US': 'Interrogatório - An environment for querying and revising annotated corpora'
+	'Salvar busca': {
+		'en-US': 'Save query',
+	},
+	'Interrogatório - Ambiente de busca e edição de corpora anotados': {
+		'en-US': 'Interrogatório - An environment for querying and editing annotated corpora'
 	},
 	'nova busca': {
 		'en-US': 'new query'
@@ -160,7 +169,7 @@ var translations = {
 		'en-US': 'Query expression:'
 	},
 	'Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.': {
-		'en-US': 'Straightforward queries with a regular expression may be done by typing the words in the query bar. For complex queries, it is necessary to include the criterium and its parameters, according to the instructions on the panel to the right.'
+		'en-US': 'Straightforward queries with a regular expression may be done by typing the words in the query bar. For complex queries, it is necessary to include the criterion and its parameters, according to the instructions on the panel to the right.'
 	},
 	'Voltar à busca normal': {
 		'en-US': 'Return to regular queries'
@@ -205,10 +214,10 @@ var translations = {
 		'en-US': 'View distribution of:'
 	},
 	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
-		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_5" criterio="5" class="toggleCriteria">criterium 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
+		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_5" criterio="5" class="toggleCriteria">criterion 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
 	},
-	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e revisão de corpora anotados': {
-		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and revising annotated corpora'
+	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e edição de corpora anotados': {
+		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and editing annotated corpora'
 	},
 	'Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.': {
 		'en-US': 'Visit the <a href="../cgi-bin/arquivo_ud.cgi">Corpora repository</a> to upload a new corpus or to check for existing ones.'
@@ -217,7 +226,7 @@ var translations = {
 		'en-US': 'To start interrogating a corpus, choose one of the following paths:'
 	},
 	'Buscas simples: Digite as palavras na barra de busca à esquerda.': {
-		'en-US': 'Straightforward queries: Type the words in the query bar to the left.'
+		'en-US': 'Straightforward queries: Type the words in the query bar on the left.'
 	},
 	'Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a>': {
 		'en-US': 'Complex queries: <a title="Go to the interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Build query expressions interactively</a>'
@@ -226,19 +235,19 @@ var translations = {
 		'en-US': 'For the more experienced: Use one of the query criteria'
 	},
 	'Critério 1: Regex': {
-		'en-US': 'Criterium 1: Regex'
+		'en-US': 'Criterion 1: Regex'
 	},
 	'Critério 2: Ausência de B apontando para A': {
-		'en-US': 'Criterium 2: Absence of B child of A'
+		'en-US': 'Criterion 2: Absence of B child of A'
 	},
 	'Critério 3: Regex Independentes': {
-		'en-US': 'Criterium 3: Independent Regex'
+		'en-US': 'Criterion 3: Independent Regex'
 	},
 	'Critério 4: Pais e filhos': {
-		'en-US': 'Criterium 4: Parents and children'
+		'en-US': 'Criterion 4: Parents and children'
 	},
 	'Critério 5: Python': {
-		'en-US': 'Criterium 5: Python'
+		'en-US': 'Criterion 5: Python'
 	},
 	'Para experts: <a title="Abrir interface" style="cursor:pointer;" onclick="$(\'.queryString\').hide(); $(\'.scriptQuery\').show(); $(\'.toggleSalvar\').click(); ">Escreva seu próprio script de busca</a>': {
 		'en-US': 'For experts: <a title="Open interface" style="cursor:pointer;" onclick="$(\'.queryString\').hide(); $(\'.scriptQuery\').show(); $(\'.toggleSalvar\').click(); ">Write your own query script</a>'
@@ -325,7 +334,7 @@ var translations = {
 		'en-US': 'One or more <b>grammatical annotations</b> of this token may be verified, meaning that they must be <b>equivalent</b> or <b>different</b> regarding a certain <b>value</b>. All values may be assigned with <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">regular expressions</a>.'
 	},
 	'Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5">critério 5: Python</a>. Adicione quantas condições julgar necessário.': {
-		'en-US': 'When clicking <b>OK</b> or pressing <b>Return</b>, the condition will be added to the query bar to the left according to <a href="#criterio_5">criterium 5: Python</a>. Add as many conditions as necessary.'
+		'en-US': 'When clicking <b>OK</b> or pressing <b>Return</b>, the condition will be added to the query bar to the left according to <a href="#criterio_5">criterion 5: Python</a>. Add as many conditions as necessary.'
 	},
 	'Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="$(\'.toggleDist\').click()">ver a distribuição</a> de alguma anotação para este token.': {
 		'en-US': 'One may specify which token will appear in bold within the sentence by clicking <b>@</b>. In case you specify none, the last token in the query expression will be selected. The token in bold, in addition to being easily distinguishable, is also the one which will be evaluated in case you wish to <a style="cursor:pointer" onclick="$(\'.toggleDist\').click()">see the distribution</a> of any annotation for this token.'
@@ -391,7 +400,7 @@ var translations = {
 		'en-US': 'Fulfills a condition following Python syntax.'
 	},
 	'Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.': {
-		'en-US': 'You may also use the <a title="Go to interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">query expression builder</a> to construct your syntax with criterium 5.'
+		'en-US': 'You may also use the <a title="Go to interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">query expression builder</a> to construct your syntax with criterion 5.'
 	},
 	'Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.': {
 		'en-US': 'One or more conditions that include a token/word annotation, an operator (== or !=), and a value within inverted commas.'
@@ -412,7 +421,7 @@ var translations = {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
 	},
 	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.': {
-		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterium 5: Python</a>.'
+		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterion 5: Python</a>.'
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to the top'
@@ -449,7 +458,7 @@ var translations = {
 		'en-US': 'Name'
 	},
 	'Critério de busca': {
-		'en-US': 'Query criterium'
+		'en-US': 'Query criterion'
 	},
 	'Expressão de busca': {
 		'en-US': 'Query expression'
@@ -501,6 +510,9 @@ var translations = {
 	},
 	'sentenças': {
 		'en-US': 'sentences'
+	},
+	'arquivos': {
+		'en-US': 'files'
 	},
 	'validar': {
 		'en-US': 'validate'
@@ -563,7 +575,7 @@ var translations = {
 		'en-US': 'Open inquiry'
 	},
 	'Você deseja': {
-		'en-US': 'Do you wish to'
+		'en-US': 'Would you like to'
 	},
 	'Opções': {
 		'en-US': 'Options'
@@ -590,13 +602,16 @@ var translations = {
 		'en-US': 'Batch correction'
 	},
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.cgi">criterium 5: Python</a> syntax.'
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.cgi">criterion 5: Python</a> syntax.'
 	},
 	'Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.': {
 		'en-US': 'Before executing the changes, you will be taken to a correction simulation screen.'
 	},
-	'Baixe o <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
-		'en-US': 'Download the <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python.'
+	'Baixe o modelo de script de correção em Python.': {
+		'en-US': 'Download the correction script model in Python.'
+	},
+	'Clique aqui': {
+		'en-US': 'Click here'
 	},
 	'Edite o script de correção de acordo com o exemplo dentro do arquivo.': {
 		'en-US': 'Edit the script according to the example in the file.'
@@ -629,7 +644,7 @@ var translations = {
 		'en-US': 'Filter with a new query'
 	},
 	'Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.<br><br>Sintaxe: nº do critério + espaço + parâmetros</span>': {
-		'en-US': 'Query expression (?):<span class="tooltiptext">Sentences will be removed from the current page and saved in a separate one. If you so desire, it is possible to return to the original query later.<br><br>Syntax: criterium number + parameters</span>'
+		'en-US': 'Query expression (?):<span class="tooltiptext">Sentences will be removed from the current page and saved in a separate one. If you so desire, it is possible to return to the original query later.<br><br>Syntax: criterion number + parameters</span>'
 	},
 	'Nome do filtro (opcional):': {
 		'en-US': 'Filter name (optional):'
@@ -668,7 +683,7 @@ var translations = {
 		'en-US': 'Deselect all sentences'
 	},
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">criterium 5: Python</a> syntax.'
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">criterion 5: Python</a> syntax.'
 	},
 	'Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
 		'en-US': 'Download the <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
@@ -793,8 +808,8 @@ var translations = {
 	"↑ / ↓: ir para linha acima/abaixo": {
 		"en-US": "↑ / ↓: go to the line above/below"
 	},
-	"↖: Arraste a coluna dephead de um token para a linha do token do qual ele depende": {
-		"en-US": "↖: Drag a token dephead column to the line of which token it is child"
+	"↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende": {
+		"en-US": "↖: Drag a token <b>dephead</b> column to the line of which token it is child"
 	},
 	"Shift + Scroll: Mover tabela para os lados": {
 		"en-US": "Shift + Scroll: Move table horizontally"
@@ -865,7 +880,7 @@ var translations = {
 	"Dica: Utilize vírgula para determinar mais de um sent_id.": {
 		'en-US': "Tip: Use commas to specify more than one sent_id."
 	},
-	'Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior ">" para indicar intervalo de id (por ex., "4>6" para "de 4 até 6")': {
+	'Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior "&gt;" para indicar intervalo de id (por ex., "4&gt;6" para "de 4 até 6")': {
 		'en-US': 'Tips:<br>Use commas to specify more than one token id.<br>Use "greater than" to indicate an id range (i.e. "4>6" to "from 4 to 6")'
 	}
 };
@@ -1091,7 +1106,7 @@ function carregarPosts(){
             $('.filtrado').val(JSON.parse(data).filtrado);
             $('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
             if (JSON.parse(data).pagina_filtros.length) {
-                $('.pagina_filtros').html('<li><h4>Filtros (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
+                $('.pagina_filtros').html('<li><h4><span class="translateHtml">Filtros</span> (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
             } else {
                 $('.pagina_filtros_br').remove();
             };
@@ -1110,6 +1125,9 @@ function carregarPosts(){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
 			});
 			updateTranslation();
+			if ($('.saveQuery').length) {
+				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("../", ""));
+			};
         },
         "text",
     );
@@ -1127,6 +1145,11 @@ function scrollPosts(){
 };
 
 var userLang = navigator.language || navigator.userLanguage;
+if (userLang.match(/pt-.*/)) {
+	userLang = "pt-BR"
+} else {
+	userLang = "en-US"
+}
 
 function updateInterrogarBusca(){
 	if(parseInt($('#pesquisa').css('width'), 10) < 300){
@@ -1164,7 +1187,7 @@ $(document).ready(function(){
 				function(data) {
 					$('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
 					if (JSON.parse(data).pagina_filtros.length) {
-						$('.pagina_filtros').html('<li><h4>Filtros (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
+						$('.pagina_filtros').html('<li><h4><span class="translateHtml">Filtros</span> (' + JSON.parse(data).filtros +  '):</h4></li>' + JSON.parse(data).pagina_filtros);
 					} else {
 						$('.pagina_filtros_br').remove();
 					};
@@ -1283,7 +1306,7 @@ $(document).ready(function(){
     $lastDistribution = "";
 
     $('.toggleSalvar, .toggleRapida').click(function(){
-        $('#enviar').val($(this).attr('label'));
+        $('#enviar').val($(this).attr("label"));
     });
 
     $('.sendInterrogar').on('submit', function(event){

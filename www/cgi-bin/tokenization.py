@@ -8,7 +8,6 @@ import os
 import sys
 import json
 import re
-from credenciar import LOGIN
 
 def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newText, token_id, conllu_completo="", form=False):
 
@@ -72,7 +71,7 @@ def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newT
         os.rename(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization", conllu if not conllu_completo else conllu_completo)
         return new_sentence.sent_id
     else:
-        print(corpus.to_str())
+        return corpus
 
 def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[], mergeSentencesId="", form=False):
 
@@ -176,11 +175,12 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
         os.remove(conllu if not conllu_completo else conllu_completo)
         os.rename(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization", conllu if not conllu_completo else conllu_completo)
     else:
-        print(corpus.to_str())
+        return corpus
 
 form = ""
 if 'REQUEST_METHOD' in os.environ and os.environ['REQUEST_METHOD'] == 'POST':
     form = cgi.FieldStorage()
+    from credenciar import LOGIN
     if LOGIN:
         if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
             html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'

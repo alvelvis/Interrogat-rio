@@ -46,6 +46,7 @@ class Token:
 		self.dephead = coluna[6]
 		self.deprel = coluna[7]
 		self.deps = coluna[8]
+		self.sema = coluna[8]
 		self.misc = coluna[9]
 
 
