@@ -9,6 +9,10 @@
     transition: 0.3s;
 }
 
+.tabcontent .optionsMenu {
+    display:block;
+}
+
 .interrogarFlex {
     overflow-x: hidden;
 }

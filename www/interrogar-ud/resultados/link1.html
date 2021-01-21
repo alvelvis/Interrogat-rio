@@ -36,25 +36,17 @@
       <div class="tabcontent tabOptions" id="ver"> <br>
       <br>
       <br>
-      <div class="tooltip"><a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer" class="translateHtml">Abrir inquérito para múltiplas sentenças</a><div class="tooltiptext translateHtml">Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.</div></div>
+      <div class="tooltip"><a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer" class="optionsMenu translateHtml">Abrir inquérito para múltiplas sentenças</a><div class="tooltiptext translateHtml">Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.</div></div>
       <div class="inqueritoSome" style="display:none"><ul><li><span class="translateHtml">De:</span> <input type="number" style="width:60px;" value="1" class="minInquerito"> <span class="translateHtml">Até:</span> <input type="number" style="width:60px;" value="20" class="maxInquerito"> <input type="button" class="translateVal" value="Abrir inqueritos" onclick="window.alert('Certifique-se de que seu navegador não bloqueará pop-ups'); $('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li></ul></div>
-      <br>
-      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();" class="translateTitle translateHtml">Selecionar múltiplas sentenças</a>
+      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();" class="optionsMenu translateTitle translateHtml">Selecionar múltiplas sentenças</a>
       <div class="selectSome" style="display:none"><ul><li>De: <input type="number" style="width:60px;" value="1" class="minSelect"> Até: <input type="number" style="width:60px;" value="20" class="maxSelect"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(parseInt($('.minSelect').val()) -1, parseInt($('.maxSelect').val())).prop('checked', true);"></li></ul></div>
-      <br>
-      <a style="cursor:pointer" onclick="tudo('marcar')" class="translateHtml">Selecionar todas as sentenças</a>
-      <br>
-      <a style="cursor:pointer" onclick="tudo('desmarcar')" class="translateHtml">Deselecionar todas as sentenças</a>
-      <br>
-      <a class="exportHtml translateHtml" style="cursor:pointer">Exportar resultados para .html</a>
-      <br>
-      <a class="extractSentid translateHtml translateTitle" title="Mostrar lista de sent_id das frases" style="cursor:pointer">Extrair lista de sent_id</a> <span class="extractSentidSpan" style="display:none"></span> <input class="extractSentidInput" value="" style="display:none; width: 300px;">
-      <br>
-      <a onclick="tudo('abrir')" style="cursor:pointer" class="translateHtml">Abrir anotação de todas as sentenças</a>
-      <br>
-      <a style="cursor:pointer" title="" onclick="tudo('fechar')" class="translateHtml">Fechar anotação de todas as sentenças</a>
-      <br>
-      <a style="cursor:pointer" onclick="$('#script').toggle();" class="translateHtml">Correção em lote</a>
+      <a style="cursor:pointer" onclick="tudo('marcar')" class="optionsMenu translateHtml">Selecionar todas as sentenças</a>
+      <a style="cursor:pointer" onclick="tudo('desmarcar')" class="optionsMenu translateHtml">Deselecionar todas as sentenças</a>
+      <a class="optionsMenu exportHtml translateHtml" style="cursor:pointer">Exportar resultados para .html</a>
+      <a class="optionsMenu extractSentid translateHtml translateTitle" title="Mostrar lista de sent_id das frases" style="cursor:pointer">Extrair lista de sent_id</a> <span class="extractSentidSpan" style="display:none"></span> <input class="extractSentidInput" value="" style="display:none; width: 300px;">
+      <a onclick="tudo('abrir')" style="cursor:pointer" class="optionsMenu translateHtml">Abrir anotação de todas as sentenças</a>
+      <a style="cursor:pointer" title="" onclick="tudo('fechar')" class="optionsMenu translateHtml">Fechar anotação de todas as sentenças</a>
+      <a style="cursor:pointer" onclick="$('#script').toggle();" class="optionsMenu translateHtml">Correção em lote</a>
       <div id="script" style="display:none">
         <h3 class="translateHtml">Correção em lote</h3>
         <ul>
@@ -81,8 +73,7 @@
           </form>
         </div>
       </div>
-      <br>
-      <!--DISTa style="cursor:pointer;" class="translateHtml" onclick="$('.viewDist').toggle()">Visualizar distribuição</a>
+      <!--DISTa style="cursor:pointer;" class="optionsMenu translateHtml" onclick="$('.viewDist').toggle()">Visualizar distribuição</a>
         <ul class="viewDist">
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
