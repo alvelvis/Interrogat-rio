@@ -1394,6 +1394,7 @@ $(document).ready(function(){
     $('.toggle:checked').click();
 
     $('.verDist').click(function(){
+		corpus = ""
 		if ($('.conllu').val()) {
 			corpus = $('.conllu').val()
 		} else {
