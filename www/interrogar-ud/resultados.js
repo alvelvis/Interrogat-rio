@@ -1394,11 +1394,11 @@ $(document).ready(function(){
     $('.toggle:checked').click();
 
     $('.verDist').click(function(){
-		corpus = ""
 		if ($('.conllu').val()) {
 			corpus = $('.conllu').val()
 		} else {
-			corpus = $('#corpus').html()
+			corpus = ""
+			//corpus = $('#corpus').html()
 		}
 		if (corpus.length) {
 			if ($('#pesquisa').length){
