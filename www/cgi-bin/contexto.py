@@ -20,7 +20,7 @@ sent_id = form['sent_id'].value if 'sent_id' in form else ""
 id = form['id'].value if 'id' in form else ""
 conllu = form['corpus'].value
 
-numero = re.search(r'^\d+$', sent_id.rsplit('-', 1)[1])[0] if '-' in sent_id else id
+numero = re.search(r'^\d+$', sent_id.rsplit('-', 1)[1])[0] if '-' in sent_id else sent_id
 identificador = sent_id.rsplit("-", 1)[0] + "-" if '-' in sent_id else ""
 
 corpus = estrutura_ud.Corpus(recursivo=False, keywords=[re.escape(identificador)])
