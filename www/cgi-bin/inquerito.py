@@ -526,6 +526,17 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	data = str(datetime.now()).replace(' ','_').split('.')[0]
 	inqueritos_concluidos = list()
 
+	sentnum = int(form['sentnum'].value)
+	if 'sentid' in form:
+		if sentid != [x for x in conlluzao[sentnum] if isinstance(x, str) and x.startswith("# sent_id = ")][0].split("# sent_id = ")[1].split("\n")[0]:
+			for i, sentence in enumerate(conlluzao):
+				if [x for x in sentence if isinstance(x, str) and x.startswith("# sent_id = ")][0].split("# sent_id = ")[1].split("\n")[0] == sentid:
+					sys.stderr.write("\n=== sentnum changed from {} to {}".format(sentnum, i))
+					sentnum = i
+					break
+		else:
+			sys.stderr.write("\b=== sentnum did not change")
+
 	for key in dict(form).keys():
 		value = dict(form)[key]
 		if re.search(r'^\d+-(\d+|meta)$', key) and not '# sent_id = ' in value.value:
@@ -539,13 +550,13 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				#print(value)
 				#print(conlluzao[int(form['sentnum'].value)][token])
 			if coluna != 'meta':
-				antes = '\t'.join(conlluzao[int(form['sentnum'].value)][token])
-				conlluzao[int(form['sentnum'].value)][token][coluna] = value
-				depois = '\t'.join(conlluzao[int(form['sentnum'].value)][token]).replace(value, '<b>' + value + '</b>').replace(conlluzao[int(form['sentnum'].value)][token][7], conlluzao[int(form['sentnum'].value)][token][7] + get_head(conlluzao[int(form['sentnum'].value)], conlluzao[int(form['sentnum'].value)][token]))
+				antes = '\t'.join(conlluzao[sentnum][token])
+				conlluzao[sentnum][token][coluna] = value
+				depois = '\t'.join(conlluzao[sentnum][token]).replace(value, '<b>' + value + '</b>').replace(conlluzao[sentnum][token][7], conlluzao[sentnum][token][7] + get_head(conlluzao[sentnum], conlluzao[sentnum][token]))
 			else:
-				antes = conlluzao[int(form['sentnum'].value)][token]
-				conlluzao[int(form['sentnum'].value)][token] = value
-				depois = conlluzao[int(form['sentnum'].value)][token].replace(value, '<b>' + value + '</b>')
+				antes = conlluzao[sentnum][token]
+				conlluzao[sentnum][token] = value
+				depois = conlluzao[sentnum][token].replace(value, '<b>' + value + '</b>')
 		
 			inquerito_concluido = form['textheader'].value + '!@#' + antes + ' --> ' + depois + '!@#' + form['conllu'].value + '!@#' + data
 			inquerito_concluido += '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')' if 'occ' in form else '!@#NONE'
