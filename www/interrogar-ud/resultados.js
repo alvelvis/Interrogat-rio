@@ -213,8 +213,8 @@ var translations = {
 	'Visualizar distribuição de:': {
 		'en-US': 'View distribution of:'
 	},
-	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
-		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_5" criterio="5" class="toggleCriteria">criterion 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
+	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_1" criterio="1" class="toggleCriteria">critério 1: Regex</a>, o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
+		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_1" criterio="1" class="toggleCriteria">criterion 1: Regex</a>, <a href="#criterio_5" criterio="5" class="toggleCriteria">criterion 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
 	},
 	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e edição de corpora anotados': {
 		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and editing annotated corpora'
