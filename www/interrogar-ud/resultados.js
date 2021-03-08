@@ -790,7 +790,7 @@ var translations = {
 	"Editar sentença": {
 		"en-US": "Edit sentence"
 	},
-	"Edite as colunas desejadas:": {
+	"Edite os valores desejados:": {
 		"en-US": "Edit any cells:"
 	},
 	"Realizar alteração (Ctrl+Enter)": {

@@ -452,7 +452,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						html1 += '<option>' + linha.replace('<', '&lt;').replace('>', '&gt;') + '</option>'
 				html1 += "</datalist> "
 
-			html1 += '<br><b class="translateHtml">Edite os valores desejadas:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
+			html1 += '<br><b class="translateHtml">Edite os valores desejados:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()
 			for a, linha in enumerate(sentence2.splitlines()):
