@@ -168,7 +168,7 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 		if criterio != 5:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
-			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(entrada[0])}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:

@@ -1392,15 +1392,18 @@ $(document).ready(function(){
     });
 
     $('.toggle:checked').click();
-
+	
     $('.verDist').click(function(){
+		
 		if ($('.conllu').val()) {
 			corpus = $('.conllu').val()
 		} else {
-			corpus = ""
-			//corpus = $('#corpus').html()
+			corpus = $('#corpus').html()
+			if (!corpus) {
+				corpus = ""
+			}
 		}
-		if (corpus.length) {
+		if (corpus) {
 			if ($('#pesquisa').length){
 				$('#html_dist').val($('#pesquisa').val());//.replace(/(^(5|1) )/, ""));
 				$('#expressao_dist').val($('#pesquisa').val());
