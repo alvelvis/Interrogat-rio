@@ -145,7 +145,7 @@ def definirVariaveisDePesquisa(form):
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]):
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
-	elif len(pesquisa.split('"')) > 2:
+	elif len(pesquisa.split('"')) > 2 or ' = ' in pesquisa or ' == ' in pesquisa:
 		criterio = '5'
 		parametros = pesquisa
 	else:

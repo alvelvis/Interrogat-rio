@@ -79,7 +79,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 					if token.startswith("# sent_id = "):
 						sent_id = token.split("# sent_id = ")[1]
 				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
-					entrada = re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]])
+					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]].replace("/FONT", "")))
 					dist.append(entrada)
 					if not entrada in lista:
 						lista[entrada] = 0
@@ -415,9 +415,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
 		
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r'any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("ddd") )', pesquisa) #ddd provisório enquanto split na barra em pé não funciona
-		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("ddd") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not any( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("ddd") )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("ddd") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = pesquisa.strip()
 		with open("pesquisa", "w") as f:
 			f.write(pesquisa)

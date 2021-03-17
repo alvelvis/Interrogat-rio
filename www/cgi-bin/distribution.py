@@ -161,7 +161,7 @@ if criterio == 5:
 pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{form['coluna'].value}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
 for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
-	entrada[0] = entrada[0].replace("/FONT", "")
+	#entrada[0] = entrada[0].replace("/FONT", "")
 	entradaEscapada = re.escape(entrada[0])
 	if criterio == 5:
 		pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		

@@ -1,5 +1,5 @@
 dephead|erro: 1 - Token dependente de si próprio
-dephead = id
+token.head_token.id == token.id
 
 dephead|erro: 2 - Ciclo na sentença
 dephead == head_token.id and head_token.dephead == id and dephead != id
@@ -113,14 +113,14 @@ deprel = "advmod" and upos != "ADV"
 deprel != "advmod" and upos = "ADV"
 
 feats|erro: VERB deve ter feats VerbForm
-upos = "(AUX|VERB)" and feats != "VerbForm=.*"
+upos = "(AUX|VERB)" and feats != ".*VerbForm=.*"
 
 feats|erro: DET e PRON devem ter feats PronType e/ou Definite
-upos = "DET|PRON" and feats != "PronType=.*" and deprel != "expl"
-upos != "DET|PRON" and feats = "PronType=.*"
-upos != "DET|PRON" and feats = "Definite.*"
-feats = "PronType=Art" and feats != "Definite=.*"
-feats = "Definite=.*" and feats != "PronType=Art"
+upos = "DET|PRON" and feats != ".*PronType=.*" and deprel != "expl"
+upos != "DET|PRON" and feats = ".*PronType=.*"
+upos != "DET|PRON.*" and feats = ".*Definite=.*"
+feats = ".*PronType=Art.*" and feats != ".*Definite=.*"
+feats = ".*Definite=.*" and feats != ".*PronType=Art.*"
 
 upos|erro: < > seguido de link deve apontar para o link
 word = ">" and previous_token.word = "http.*" and dephead != previous_token.id

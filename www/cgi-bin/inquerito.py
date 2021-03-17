@@ -463,7 +463,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				if not '\t' in linha:
 					html1 += f'''<tr><input class="field" value="{linha.replace('<','&lt;').replace('>','&gt;').replace('"', '&quot;')}" type="hidden" name="''' +str(a)+ '''-''' + '''meta"><td style="cursor:pointer; color:black; max-width: 90vw; word-wrap: break-word;" id="''' +str(a)+ '''-''' + '''meta" contenteditable=True class="annotationValue plaintext" colspan="42">''' + web.escape(linha) + '</td></tr>'
 				else:
-					isBold = "background-color: lightgray;" if 'tokenId' in form and linha.split('\t')[0] == form['tokenId'].value else ""
+					isBold = "background-color: lightgray;" if 'tokenId' in form and linha.split('\t')[0] in form['tokenId'].value.split(",") else ""
 					html1 += f'<tr style="{isBold}">'
 					for b, coluna in enumerate(linha.split('\t')):
 						drag = 'drag ' if b in [6] else ''
