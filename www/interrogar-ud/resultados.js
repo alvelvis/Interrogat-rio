@@ -285,6 +285,9 @@ var translations = {
 	'Tokenização modificada com sucesso': {
 		'en-US': 'Tokenization modified successfuly'
 	},
+	'Alteração realizada com sucesso': {
+		'en-US': 'Modifications applied successfully'
+	},
 	'Atenção: edite também o sent_id desta sentença e/ou a nova sentença:': {
 		'en-US': 'Warning: edit, too, this sent_id and/or the new sentence:'
 	},
@@ -704,7 +707,7 @@ var translations = {
 		'en-US': '[Close window]'
 	},
 	'Busca inicial:': {
-		'en-US': 'Initial query'
+		'en-US': 'Initial query:'
 	},
 	'Fechar': {
 		'en-US': 'Close'
