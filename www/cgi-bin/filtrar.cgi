@@ -127,7 +127,7 @@ elif form['action'].value == 'desfazer':
 	with open("../cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 
-	print(f"<script>window.close();</script>//window.location = '../interrogar-ud/resultados/{nome_html}.html'</script>")
+	print(f"<script>window.close();</script>Filtro desfeito, feche esta janela.")#//window.location = '../interrogar-ud/resultados/{nome_html}.html'
 
 elif form['action'].value == 'view':
 	nome_html = form['html'].value
@@ -170,7 +170,7 @@ elif form['action'].value == 'view':
 	for i, resultado in enumerate(resultados):
 		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.cgi?action=remove&s={sentence}&html={html}&filtro={filtro}\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
 			sentence=cleanEstruturaUD(fromInterrogarToHtml(resultado.sent_id)).strip(),
-			text=fromInterrogarToHtml(resultado.text),
+			text=fromInterrogarToHtml(resultado.metadados['clean_text'] if 'clean_text' in resultado.metadados else resultado.text),
 			html=nome_html,
 			filtro=web.escape(nome_filtro),
 			agora=i+1,
