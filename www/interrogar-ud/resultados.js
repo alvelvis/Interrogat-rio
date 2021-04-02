@@ -941,6 +941,7 @@ function updateTranslation(){
             };
         };
     });
+
 };
 
 function loadCorpora(){
@@ -1127,13 +1128,22 @@ function carregarPosts(){
             $('.metadados_sentence').click(function(){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
 			});
+			$('.sentence-container').unbind('click mouseenter').on('click mouseenter', function(){
+				if ($(this).find('.toolbar').is(':hidden')){
+					$('.toolbar').slideUp();
+					$(this).find('.toolbar').slideDown();
+				};
+			});
+			console.log('alo')
 			updateTranslation();
 			if ($('.saveQuery').length) {
 				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("../", ""));
 			};
+
         },
         "text",
     );
+
 };
 
 function scrollPosts(){
