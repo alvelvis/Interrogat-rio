@@ -719,7 +719,7 @@ var translations = {
 		'en-US': 'Query:'
 	},
 	'Quantidade de ocorrências:': {
-		'en-US': 'Number of occurences:'
+		'en-US': 'Number of occurrences:'
 	},
 	'Quantidade de': {
 		'en-US': 'Number of'

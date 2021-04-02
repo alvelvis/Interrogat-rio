@@ -148,7 +148,12 @@ else:
 	criterio = 1
 
 if criterio == 5:
-	identificador = expressao.split(" ")[1] if not " @" in expressao else expressao.rsplit(" @", 1)[1].split(" ")[0]
+	if " @" in expressao:
+		identificador = expressao.rsplit(" @", 1)[1].split(" ")[0]
+	elif expressao[0] == "@":
+		identificador = expressao.split("@", 1)[1].split(" ")[0]
+	else:
+		identificador = expressao.split(" ")[0]
 	identificador = "token." + identificador
 	identificador = identificador.replace("token.token", "token")
 	identificador = identificador.rsplit(".", 1)[0]
@@ -163,13 +168,13 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
 	#entrada[0] = entrada[0].replace("/FONT", "")
 	entradaEscapada = re.escape(entrada[0])
-	if criterio == 5:
-		pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
+	#if criterio == 5:
+		#pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
 		if criterio != 5:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
-			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(form['expressao'].value.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
