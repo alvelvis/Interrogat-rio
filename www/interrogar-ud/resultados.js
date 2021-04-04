@@ -1128,10 +1128,10 @@ function carregarPosts(){
             $('.metadados_sentence').click(function(){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
 			});
-			$('.sentence-container').unbind('click mouseenter').on('click mouseenter', function(){
+			$('.sentence-container').unbind('click').on('click', function(){
 				if ($(this).find('.toolbar').is(':hidden')){
-					$('.toolbar').slideUp();
-					$(this).find('.toolbar').slideDown();
+					$('.toolbar').slideUp('fast');
+					$(this).find('.toolbar').slideDown('fast');
 				};
 			});
 			console.log('alo')
