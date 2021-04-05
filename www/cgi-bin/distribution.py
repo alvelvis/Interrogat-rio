@@ -148,12 +148,12 @@ else:
 	criterio = 1
 
 if criterio == 5:
-	if " @" in expressao:
-		identificador = expressao.rsplit(" @", 1)[1].split(" ")[0]
-	elif expressao[0] == "@":
-		identificador = expressao.split("@", 1)[1].split(" ")[0]
+	if " @" in parametros:
+		identificador = parametros.rsplit(" @", 1)[1].split(" ")[0]
+	elif parametros[0] == "@":
+		identificador = parametros.split("@", 1)[1].split(" ")[0]
 	else:
-		identificador = expressao.split(" ")[0]
+		identificador = parametros.split(" ")[0]
 	identificador = "token." + identificador
 	identificador = identificador.replace("token.token", "token")
 	identificador = identificador.rsplit(".", 1)[0]
