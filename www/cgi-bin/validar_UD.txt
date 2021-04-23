@@ -57,20 +57,20 @@ upos|erro: Este deprel deve ter upos NOUN, PRON, PROPN, SYM ou NUM
 @head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)"
 
 deprel|erro: DEPREL inválido
-deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl)"
+deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos)"
 
 upos|erro: acl:relcl deve ser filha de nome
 @head_token.upos != "NOUN|PRON" and deprel = "acl:relcl"
 
 upos|erro: conj deve ser subordinado à mesma POS
-deprel = "conj" and @head_token.upos != upos
+@deprel = "conj" and head_token.upos != upos
 
 misc|erro: Falta MWE no misc
 #misc = "MWEPOS=.*" and misc != "MWE=.*"
 #deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
 
 misc|erro: Falta MWEPOS no misc
-misc = "MWE=.*" and misc != "MWEPOS=.*"
+misc = ".*MWE=.*" and misc != ".*MWEPOS=.*"
 
 misc|erro: MISC inválido
 misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_|start_char=.*|end_char=.*"
@@ -85,10 +85,10 @@ deprel|erro: DET deve ter deprel "det"
 upos = "DET" and deprel != "det|fixed|flat:name"
 
 deprel|erro: ADP deve ter deprel "case"
-upos = "ADP" and deprel != "case|fixed|flat:name"
+upos = "ADP" and deprel != "case|fixed|flat:name|compound"
 
 deprel|erro: ADP não pode ter filho
-head_token.upos = "ADP" and deprel != "(fixed|compound|flat|flat:name)"
+head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)"
 
 deprel|erro: SCONJ deve ter deprel "mark"
 upos = "SCONJ" and deprel != "mark|fixed"

@@ -548,8 +548,8 @@ for token_t in available_tokens:
 				output.append(final)
 			
 	except Exception as e:
-		print(str(e))
-		print(token.to_str())
+		sys.stderr.write(\"\\n\" + str(e))
+		sys.stderr.write(token.to_str())
 		pass
 if corresponde and not separate:
 	corresponde = 0
