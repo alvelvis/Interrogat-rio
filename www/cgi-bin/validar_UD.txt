@@ -29,7 +29,7 @@ misc == ""
 
 deprel|erro: 7 - Token apontando na direção errada
 deprel = "(appos|conj|fixed|compound|flat|flat:name)" and dephead > id
-deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != "MWE=.*"
+deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != ".*MWE.*"
 
 deprel|erro: Adjetivação com gênero diferente
 deprel = "amod|acl" and head_token.gender != gender
@@ -65,52 +65,45 @@ upos|erro: acl:relcl deve ser filha de nome
 upos|erro: conj deve ser subordinado à mesma POS
 @deprel = "conj" and head_token.upos != upos
 
-misc|erro: Falta MWE no misc
-#misc = "MWEPOS=.*" and misc != "MWE=.*"
-#deprel = "fixed|compound" and @head_token.misc != "MWE=.*"
-
-misc|erro: Falta MWEPOS no misc
-misc = ".*MWE=.*" and misc != ".*MWEPOS=.*"
-
 misc|erro: MISC inválido
 misc !== "MWE=.*|MWEPOS=.*|Spaces?After=.*|d2d:.*|ChangedBy=.*|_|start_char=.*|end_char=.*"
 
 deprel|erro: O pai deste token não pode ter dependentes
-head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and @deprel != "(fixed|compound|flat|flat:name)"
+head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and @deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter deprel "det"
 upos != "DET" and deprel = "det"
 
 deprel|erro: DET deve ter deprel "det"
-upos = "DET" and deprel != "det|fixed|flat:name"
+upos = "DET" and deprel != "det|fixed|flat:name" and misc != ".*MWE.*"
 
 deprel|erro: ADP deve ter deprel "case"
-upos = "ADP" and deprel != "case|fixed|flat:name|compound"
+upos = "ADP" and deprel != "case|fixed|flat:name|compound" and misc != ".*MWE.*"
 
 deprel|erro: ADP não pode ter filho
 head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)"
 
 deprel|erro: SCONJ deve ter deprel "mark"
-upos = "SCONJ" and deprel != "mark|fixed"
+upos = "SCONJ" and deprel != "mark|fixed" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter deprel "mark"
-upos != "SCONJ" and deprel = "mark"
+upos != "SCONJ" and deprel = "mark" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter deprel "cc"
-upos != "CCONJ" and deprel == "cc"
+upos != "CCONJ" and deprel == "cc" and misc != ".*MWE.*"
 
 deprel|erro: CCONJ deve ter deprel "cc"
-upos = "CCONJ" and deprel != "cc"
+upos = "CCONJ" and deprel != "cc" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter ter deprel "aux"
-upos != "AUX" and deprel == "aux"
+upos != "AUX" and deprel == "aux" and misc != ".*MWE.*"
 
 deprel|erro: AUX deve ter deprel "aux" ou "cop"
-upos = "AUX" and deprel != "(aux|aux:pass|cop)"
+upos = "AUX" and deprel != "(aux|aux:pass|cop)" and misc != ".*MWE.*"
 
 deprel|erro: ADV deve ser advmod
-deprel = "advmod" and upos != "ADV"
-deprel != "advmod" and upos = "ADV"
+deprel = "advmod" and upos != "ADV" and misc != ".*MWE.*"
+deprel != "advmod|fixed|compound" and upos = "ADV"
 
 feats|erro: VERB deve ter feats VerbForm
 upos = "(AUX|VERB)" and feats != ".*VerbForm=.*"

@@ -7,4 +7,4 @@ if [ ! -d .interrogatorio ]; then
 fi
 
 . .interrogatorio/bin/activate
-pip3 install -r requirements.txt
+.interrogatorio/bin/pip3 install -r requirements.txt
