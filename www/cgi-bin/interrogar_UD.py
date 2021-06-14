@@ -408,17 +408,21 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace("token.sent_id", "sentence.sent_id")
 		pesquisa = pesquisa.replace('token.int(', 'int(')
 		#pesquisa = pesquisa.replace("token.and", "and")
-#		pesquisa = pesquisa.replace("== int(", "==int(")
+		#pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
 		indexed_conditions = {x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 'token.' in x and not any(y in x for y in ["head_token", "previous_token", "next_token"])} #["head_token.head", "head_token.next", "head_token.previous", "next_token.head", "next_token.next", "next_token.previous", "previous_token.head", "previous_token.next", "previous_token.previous"])}
 		pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
 		
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r're.search( r"^" + r\2 + r"$", \1 )', pesquisa) #ddd provisório enquanto split na barra em pé não funciona
-		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", \1 ) for x in \1.split("|") )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r're.search( r"^" + r\2 + r"$", \1 )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", \1 ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not re.search( r"^" + r\2 + r"$", \1 )', pesquisa)
+		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^" + r\2 + r"$", x ) for x in \1.split("|") )', pesquisa)
 		pesquisa = pesquisa.strip()
+		#with open("pesquisa", "w") as f:
+			#f.write(pesquisa)
+		#if "upos != \"(" in parametros:
+			#sys.stderr.write("\n{}\n".format(pesquisa))
 
 		if (".__dict__['id']" in pesquisa or ".__dict__['dephead']" in pesquisa) and (not "int(" in pesquisa) and (" < " in pesquisa or " > " in pesquisa):
 			pesquisa = re.sub(r"(\S+\.__dict__\['(id|dephead)'\])", r"int(\1)", pesquisa)

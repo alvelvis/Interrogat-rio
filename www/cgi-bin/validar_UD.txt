@@ -51,7 +51,7 @@ upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=P
 upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
 upos|erro: UPOS inválido
-upos != "ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X"
+upos != "(ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X)"
 
 upos|erro: Este deprel deve ter upos NOUN, PRON, PROPN, SYM ou NUM
 @head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)"
