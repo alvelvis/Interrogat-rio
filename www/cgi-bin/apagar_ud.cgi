@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
 print("Content-type:text/html")

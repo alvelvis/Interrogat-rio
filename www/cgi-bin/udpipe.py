@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!../.interrogatorio/bin/python3
 print('Content-type:text/html\n\n')
 
 import os

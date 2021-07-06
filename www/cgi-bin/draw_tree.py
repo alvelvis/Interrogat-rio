@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!../.interrogatorio/bin/python3
 
 import estrutura_ud
 import os, sys
