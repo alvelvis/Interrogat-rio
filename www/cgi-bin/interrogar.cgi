@@ -1,4 +1,4 @@
-#!../.interrogatorio/bin/python3
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
 fastSearch = ['teste', 'Busca rápida']
