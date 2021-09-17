@@ -78,13 +78,14 @@ with open(srcfile, 'r') as f:
 keywords = []
 for linha in codigo:
 	if 'if ' in linha:
-		keywords.extend(re.findall(r'"([^"]*)"', linha))
+		keywords.extend([x.replace("^(", "").replace(")$", "") for x in re.findall(r'"([^"]*)"', linha) if not x.startswith(")") and not x.endswith("(")])#[x.replace("\\(", "<abreparenteses>").replace("\\)", "<fechaparenteses>").replace("(", "").replace(")", "").replace("<abreparenteses>", "\\(").replace("<fechaparenteses>", "\\)") for x in re.findall(r'"([^"]*)"', linha)])
+
 arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywords=headers)
 arquivo_ud.load('../interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
 for x, linha in enumerate(codigo):
-	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha and not 'for ' in linha:
+	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha and not 'for ' in linha and 'token.' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'

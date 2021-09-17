@@ -127,7 +127,7 @@ elif form['action'].value == 'desfazer':
 	with open("../cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 
-	print(f"Filtro desfeito, <a href='#' onclick='window.close();'>feche esta janela</a>.")#//window.location = '../interrogar-ud/resultados/{nome_html}.html'
+	print(f"Filtro desfeito, feche esta janela.")#//window.location = '../interrogar-ud/resultados/{nome_html}.html'
 
 elif form['action'].value == 'view':
 	nome_html = form['html'].value

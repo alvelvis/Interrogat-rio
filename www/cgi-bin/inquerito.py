@@ -228,7 +228,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 
 	if form['executar'].value == 'sim':
 		with open('../interrogar-ud/scripts/' + estrutura_dados.slugify(form['scriptName'].value), 'wb') as f:
-			f.write(form['fileScript'].file.read())
+			code = form['fileScript'].file.read()
+			f.write(code)
 
 	with open('../interrogar-ud/scripts/headers.txt', 'w') as f:
 		f.write("\n".join(headers))

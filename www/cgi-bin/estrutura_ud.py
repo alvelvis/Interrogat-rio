@@ -12,9 +12,12 @@ def chunkIt(seq, num):
 
     return out
 
+empty_feats = {x.lower(): "_" for x in "PronType Gender VerbForm NumType Animacy Mood Poss NounClass Tense Reflex Number Aspect Foreign Case Voice Abbr Definite Evident Typo Degree Polarity Person Polite Clusivity".split()}
+
 class Token:
 	
 	def __init__(self, separator='\t'):
+		self.__dict__.update(empty_feats)
 		self.id = "0"
 		self.word = "_"
 		self.lemma = "_"

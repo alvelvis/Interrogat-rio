@@ -192,6 +192,9 @@ var translations = {
 	'Corpus:': {
 		'en-US': 'Corpus:'
 	},
+	'Resultados': {
+		'en-US': 'Results'
+	},
 	'A busca não será salva no sistema, mas você poderá salvá-la posteriormente caso julgue que teve bons resultados.': {
 		'en-US': 'The query will not be saved in the system, but you may save it afterwards in case you find there were good results.'
 	},
