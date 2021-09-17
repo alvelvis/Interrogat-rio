@@ -49,14 +49,14 @@ sim = list()
 def append_to(original, s, delimiter="|"):
 	original = original.split(delimiter)
 	novosFeats = s.split(delimiter)
-	novosFeats += [x for x in original if x != "_" and not any(y.split("=")[0] == x.split("=")[0] for y in novosFeats)]
+	novosFeats += sorted([x for x in original if x != "_" and not any(y.split("=")[0] == x.split("=")[0] for y in novosFeats)])
 
 	return delimiter.join(sorted(novosFeats))
 
 def remove_from(original, s, delimiter="|"):
 	original = original.split(delimiter)
 	deletedFeats = s.split(delimiter)
-	original = [x for x in original if x not in deletedFeats and not any(y == x.split("=")[0] for y in deletedFeats)]
+	original = sorted([x for x in original if x not in deletedFeats and not any(y == x.split("=")[0] for y in deletedFeats)])
 	if not original: original = ["_"]
 
 	return delimiter.join(sorted(original))
