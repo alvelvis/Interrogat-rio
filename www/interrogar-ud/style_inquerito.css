@@ -98,7 +98,6 @@ background-color: black;
 table, th, td {
 border: 1px solid #eee;
 border-collapse: collapse;
-//border-bottom: 1px solid #ddd;
 }
 
 table#t01 {
@@ -124,24 +123,17 @@ th, td {
 padding: 4px;
 }
 
-table {
-//border-spacing: 5px;
-}
 
 input[type=text]{
     max-width:400px;
     width: 100%;
 }
 
-html {
-//scroll-behavior: smooth;
-}
 
 [class*='close-'] {
 color: #777;
 font: 14px/100% arial, sans-serif;
 position: relative;
-//right: 105%;
 text-decoration: none;
 text-shadow: 0 1px 0 #fff;
 top: 0px;
@@ -164,14 +156,12 @@ content: '✖'; /* UTF-8 symbol */
         font-weight: bold;
 }
 a {
-        //color: #638C28;
         color: #0069B1;
         text-decoration: none;
 }
 
 a:hover { color: #638C28; }
 
-//tab
 
 /* Style the tab */
 .tab {
@@ -206,7 +196,6 @@ background-color: #ccc;
 display: none;
 padding: 6px 12px;
 border: 1px solid #ccc;
-//border-top: none;
 }
 
 /* Tooltip container */
@@ -223,14 +212,9 @@ width: 400px;
 background-color: black;
 color: #fff;
 margin: auto;
-//text-align: left;
 padding: 20px 20px 20px 20px;
 border-radius: 6px;
 top: 0%;
-//top: 0px;
-//left: auto;
-//right: 10%;
-//bottom: 0%;
 
 /* Position the tooltip text - see examples below! */
 position: fixed;
@@ -242,14 +226,11 @@ visibility: hidden;
 width: 400px;
 background-color: black;
 color: #fff;
-//margin: auto auto;
 text-align: left;
 padding: 20px 20px 20px 20px;
 border-radius: 6px;
-//top: 0%;
 top: -5px;
 left: 105%;
-//right: 10%;
 
 /* Position the tooltip text - see examples below! */
 position: absolute;
@@ -273,7 +254,6 @@ visibility: visible;
 }
 body {
     margin: 0;
-    //background: #eaedf1;
     background: white;
     font-family: 'Lato', sans-serif;
 }
@@ -317,27 +297,17 @@ h2 {
 }
 .content {
   width: 90%;
-  //max-width: 700px;
 }
 .content-3d {
   width: 90%;
   max-width: 300px;
 }
-//pre {
     width: auto;
     max-height: 500px;
     padding: 30px 30px 30px 30px;
-    //background-color: #303030;
     background-color: #080808;
-    //background-color: rgba(0, 0, 0, 0.72);
     color: #f8f8f2;
     border-radius: 0 0 4px 4px;
-    //margin-top: 20px;
-    //white-space: pre-wrap; /* css-3 */
-    //white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-    //white-space: -pre-wrap; /* Opera 4-6 */
-    //white-space: -o-pre-wrap; /* Opera 7 */
-    //word-wrap: break-word; /* Internet Explorer 5.5+ */
     overflow: auto;
 }
 pre .bt  {color: #f8f8f2;} /* <> */

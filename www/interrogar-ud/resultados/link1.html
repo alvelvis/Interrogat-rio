@@ -3,10 +3,10 @@
   <head>
     <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
     <title>link de pesquisa 1 (203): Interrogatório</title>
-    <link href="../../interrogar-ud/style.css?version=6" rel="stylesheet" type="text/css">
+    <link href="../../interrogar-ud/style.css?version=7" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="../../interrogar-ud/jquery-latest.js"></script>
-    <script src="../../interrogar-ud/resultados.js?version=16"></script>
+    <script src="../../interrogar-ud/resultados.js?version=17"></script>
     <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
   </head>
   <body><!--onload="load()"-->
@@ -25,7 +25,7 @@
         <ul style="list-style-type: none; margin: 0; padding: 0;" class="pagina_filtros">
                   
         </ul>
-        <br><br>
+        <br>
       </div>
         <!--em--><!--a href="#" onclick="apagar()">excluir</a--><!--/em--></p>
         <input type="hidden" id="apagar_link" value="link1">
@@ -33,8 +33,7 @@
       <span class="translateHtml">Opções</span> </button> <button class="tablinks" style="border-radius:10px; font-weight:bold;" tab="Filter" tabid="filtrar_tab">
           <span class="translateHtml">Filtrar</span> </button> <!--button class="tablinks" tab="Download" tabid="conllu">
           Baixar </button--></div>
-      <div class="tabcontent tabOptions" id="ver"> <br>
-      <br>
+      <div class="tabcontent tabOptions" id="ver"> 
       <br>
       <div class="tooltip"><a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer" class="optionsMenu translateHtml">Abrir inquérito para múltiplas sentenças</a><div class="tooltiptext translateHtml">Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.</div></div>
       <div class="inqueritoSome" style="display:none"><ul><li><span class="translateHtml">De:</span> <input type="number" style="width:60px;" value="1" class="minInquerito"> <span class="translateHtml">Até:</span> <input type="number" style="width:60px;" value="20" class="maxInquerito"> <input type="button" class="translateVal" value="Abrir inqueritos" onclick="window.alert('Certifique-se de que seu navegador não bloqueará pop-ups'); $('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li></ul></div>
@@ -72,6 +71,7 @@
             <!--script-->
           </form>
         </div>
+        <br>
       </div>
       <!--DISTa style="cursor:pointer;" class="optionsMenu translateHtml" onclick="$('.viewDist').toggle()">Visualizar distribuição</a>
         <ul class="viewDist">
@@ -87,10 +87,8 @@
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Dependentes sintáticos">dependentes</a></li>
       </ulDIST-->
-        <br>
       </div>
-      <div class="tabcontent tabFilter" id="filtrar_tab"> <br>
-        <br>
+      <div class="tabcontent tabFilter" id="filtrar_tab">
         <br>
         <form action="../../cgi-bin/filtrar.cgi" method="POST"> <p><label for="pesquisa">
           <ul>
@@ -116,7 +114,7 @@
                   <br><br>
                   <input type=hidden class="pesquisa_original" name="pesquisa_original" value="">
                   <input id="filtrar"
-      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit"><br><br>
+      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit">
               </div>
               <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
               	<h3 class="translateHtml">Filtrar frases selecionadas</h3>
@@ -138,8 +136,6 @@
             <input id="nomeconllu" name="nomeconllu" type="text" required></label> <input id="conllunizar"
 value="Baixar arquivo" class="translateVal btn-gradient orange mini" type="submit"></p></form>
       </div>
-      <br>
-      <br>
       <br>
         <input type="hidden" name="indexSentences" class="indexSentences" value="0">
         <input type="hidden" name="filtrado" class="filtrado" value="0">

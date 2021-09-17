@@ -1125,16 +1125,15 @@ function carregarPosts(){
                 event.preventDefault;
                 $(this).prop("checked", !$(this).prop("checked"));
             });
-            $('.metadados_sentence').click(function(){
+            $('.metadados_sentence').click(function(e){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
 			});
-			$('.sentence-container').unbind('click').on('click', function(){
-				if ($(this).find('.toolbar').is(':hidden')){
+			$('[id^="text_"]').parents('p').unbind('click').on('click', function(){
+				if ($(this).parents('.sentence-container').find('.toolbar').is(':hidden')){
 					$('.toolbar').slideUp('fast');
-					$(this).find('.toolbar').slideDown('fast');
+					$(this).parents('.sentence-container').find('.toolbar').slideDown('fast');
 				};
 			});
-			console.log('alo')
 			updateTranslation();
 			if ($('.saveQuery').length) {
 				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("../", ""));

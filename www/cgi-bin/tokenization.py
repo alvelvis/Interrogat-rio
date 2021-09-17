@@ -20,8 +20,11 @@ def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newT
         with open("../cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
-    corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
-    corpus.load(conllu if not conllu_completo else conllu_completo)
+    if not isinstance(conllu, estrutura_ud.Corpus):
+        corpus = estrutura_ud.Corpus(recursivo=False, any_of_keywords=[re.escape("# sent_id = " + sent_id + "\n"), re.escape("# sent_id = " + mergeSentencesId + "\n")])
+        corpus.load(conllu if not conllu_completo else conllu_completo)
+    else:
+        corpus = conllu
 
     new_sentence = estrutura_ud.Sentence(recursivo=True)
     new_sentence.build(corpus.sentences[sent_id].to_str())
@@ -84,8 +87,11 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
         with open("../cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
-    corpus = estrutura_ud.Corpus(recursivo=False, any_of_keywords=[re.escape("# sent_id = " + sent_id + "\n"), re.escape("# sent_id = " + mergeSentencesId + "\n")])
-    corpus.load(conllu if not conllu_completo else conllu_completo)
+    if not isinstance(conllu, estrutura_ud.Corpus):
+        corpus = estrutura_ud.Corpus(recursivo=False, any_of_keywords=[re.escape("# sent_id = " + sent_id + "\n"), re.escape("# sent_id = " + mergeSentencesId + "\n")])
+        corpus.load(conllu if not conllu_completo else conllu_completo)
+    else:
+        corpus = conllu
 
     if token_id == "left":
         token_id = corpus.sentences[sent_id].tokens[0].id

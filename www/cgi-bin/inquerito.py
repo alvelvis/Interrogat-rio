@@ -219,7 +219,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	headers = list()
 	for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value, fastSearch=True)['output']:
 		sent_id = re.sub(r"<.*?>", "", sentence['resultado'].split("# sent_id = ")[1].split("\n")[0])
-		headers.append(sent_id)
+		if not sent_id in filtros:
+			headers.append(sent_id)
 	#for sentence in interrogar_UD.main('../interrogar-ud/conllu/' + form['conllu'].value, int(form['criterio'].value), form['parametros'].value)['output']:
 		#if sentence['resultadoEstruturado'].sent_id not in filtros:
 			#headers.append("# text = " + sentence['resultadoEstruturado'].text)
