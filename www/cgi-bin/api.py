@@ -172,6 +172,7 @@ def renderSentences(script=""):
         if "@BOLD" in anotado.to_str():
             arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([functions.cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
         arquivoHtml += "</form>"
+        if nomePesquisa not in fastSearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
         if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
         #arquivoHtml += '<br>'
         arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a>"

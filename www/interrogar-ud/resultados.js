@@ -270,6 +270,9 @@ var translations = {
 	'Repositório dos corpora': {
 		'en-US': 'Corpora repository'
 	},
+	'Selecionar todas as frases acima': {
+		'en-US': 'Select all sentences above'
+	},
 	'Relatório de inquéritos finalizados': {
 		'en-US': 'Finished inquiries report'
 	},
@@ -1760,6 +1763,14 @@ function drawtree(ide) {
         //});
     //}
 //}
+
+function selectAbove(n) {
+    tilN = [... Array(n).keys()]
+    tilN.reverse()
+    for (i of tilN) {
+        $('#checkbox_' + (i+1).toString()).prop('checked', true)
+    }
+}
 
 function paginacao() {
     if (window.location.href.indexOf("?page=hide") != -1){
