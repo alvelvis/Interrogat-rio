@@ -847,9 +847,6 @@ var translations = {
 	"Exportar resultados para .html": {
 		'en-US': "Export results to .html"
 	},
-	"Serão abertos inquéritos para X sentenças. Caso as sentenças não abram, certifique-se de que o seu navegador não está bloqueando pop-up.": {
-		'en-US': "Inquiries will be opened for X sentences. In case the sentences won't open, you must guarantee your web browser is not blocking pop-ups."
-	},
 	"Gerenciar etiquetas": {
 		"en-US": "Manage tags"
 	},

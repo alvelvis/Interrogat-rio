@@ -49,14 +49,14 @@ sim = list()
 def append_to(original, s, delimiter="|"):
 	original = original.split(delimiter)
 	novosFeats = s.split(delimiter)
-	novosFeats += sorted([x for x in original if x != "_" and not any(y.split("=")[0] == x.split("=")[0] for y in novosFeats)])
+	novosFeats += [x for x in original if x != "_" and not any(y.split("=")[0] == x.split("=")[0] for y in novosFeats)]
 
 	return delimiter.join(sorted(novosFeats))
 
 def remove_from(original, s, delimiter="|"):
 	original = original.split(delimiter)
 	deletedFeats = s.split(delimiter)
-	original = sorted([x for x in original if x not in deletedFeats and not any(y == x.split("=")[0] for y in deletedFeats)])
+	original = [x for x in original if x not in deletedFeats and not any(y == x.split("=")[0] for y in deletedFeats)]
 	if not original: original = ["_"]
 
 	return delimiter.join(sorted(original))
@@ -85,11 +85,11 @@ arquivo_ud.load('../interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
 for x, linha in enumerate(codigo):
-	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha and not 'for ' in linha and 'token.' in linha:
+	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'
-		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tnovo_inquerito.append(sentence.text + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", sentence) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sentence.sent_id)\n" + tab + "\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', sentence.text) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", sentence) + ')')))\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))"
+		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tif anterior != " + token_var + ".to_str():\n" + tab + "\t\tnovo_inquerito.append(sentence.text + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", sentence) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sentence.sent_id)\n" + tab + "\t\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', sentence.text) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", sentence) + ')')))\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))"
 
 with open("codigo", "w") as f:
 	f.write("\n".join(codigo))
