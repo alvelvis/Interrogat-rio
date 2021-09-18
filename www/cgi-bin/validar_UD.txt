@@ -56,10 +56,10 @@ upos|erro: UPOS inválido
 upos != "(ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X)"
 
 upos|erro: Este deprel deve ter upos NOUN, PRON, PROPN, SYM ou NUM
-@head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)"
+@head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
 deprel|erro: DEPREL inválido
-deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos)"
+deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos|obl:arg)"
 
 upos|erro: acl:relcl deve ser filha de nome
 @head_token.upos != "NOUN|PRON" and deprel = "acl:relcl"
@@ -83,7 +83,7 @@ deprel|erro: ADP deve ter deprel "case"
 upos = "ADP" and deprel != "case|fixed|flat:name|compound" and misc != ".*MWE.*"
 
 deprel|erro: ADP não pode ter filho
-head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)"
+head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
 deprel|erro: SCONJ deve ter deprel "mark"
 upos = "SCONJ" and deprel != "mark|fixed" and misc != ".*MWE.*"
