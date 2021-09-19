@@ -78,8 +78,6 @@ li{
 input#pesquisa {
     border-style: solid;
     border-radius: 5px;
-    border-color:grey;
-    border-width: 1px;
     padding: 8px;
     outline:none;
 }

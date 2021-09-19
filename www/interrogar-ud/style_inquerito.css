@@ -302,14 +302,7 @@ h2 {
   width: 90%;
   max-width: 300px;
 }
-    width: auto;
-    max-height: 500px;
-    padding: 30px 30px 30px 30px;
-    background-color: #080808;
-    color: #f8f8f2;
-    border-radius: 0 0 4px 4px;
-    overflow: auto;
-}
+
 pre .bt  {color: #f8f8f2;} /* <> */
 pre .anc {color: #f92672;} /* anchor tag */
 pre .att {color: #a6a926;} /* attribute */
