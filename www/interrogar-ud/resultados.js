@@ -387,6 +387,9 @@ var translations = {
 	'Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.': {
 		'en-US': 'Checks if several regular expressions match with a sentence and returns it in case none of the expressions fail.'
 	},
+	'Salve a busca para liberar mais opções': {
+		'en-US': 'Save this query to open new options'
+	},
 	'Parâmetros:': {
 		'en-US': 'Parameters:'
 	},
@@ -1048,11 +1051,6 @@ $(window).ready(function(){
 function pesquisaChange(){
     $('.queryString').hide();
     $('.normalQuery').show();
-    if ($("#pesquisa").val()){
-        $('.clearPesquisa').show();
-    } else {
-        $('.clearPesquisa').hide();
-    };
     if ($('.toggleDist').is(':checked')) {
         if (/(^(5|1) )|(^\D)|( == )|( = )|( != )|( !== )/.test($('#pesquisa').val())) {
             $('.dist').show();
@@ -1062,6 +1060,12 @@ function pesquisaChange(){
             $('.notDist').show();
         };
     };
+	if (!isMobile && $('#pesquisa').val().length > 20) {
+		$('#pesquisa').css({'width': $('.interrogarFlex').width() - 30 + 'px', 'position': 'absolute'});
+		$('.interrogarFlex').css({'margin-top': '-5px'});
+		$('.interrogarNews').css({'margin-top': '115px'});
+		$('.corpusLabel').parents('p').css({'margin-top': '50px'});
+	};
 };
 
 function pesquisa(numero) {
@@ -1166,13 +1170,18 @@ if (userLang.match(/pt-.*/)) {
 	userLang = "en-US"
 }
 
+isMobile = false;
+
 function updateInterrogarBusca(){
 	if(parseInt($('#pesquisa').css('width'), 10) < 300){
 		$('.interrogarBusca').css('width', "auto");
 		$('.interrogarFlex').css('display', 'block');
 		$('.interrogarNews').css('max-width', '100%');
 		$('.interrogarNews').css('max-height', '90vh');
-	};
+		isMobile = true;
+	} else {
+		isMobile = false;
+	}
 };
 
 $(document).ready(function(){
@@ -1356,7 +1365,7 @@ $(document).ready(function(){
         pesquisaChange();
     });
 
-    $('.clearCondition, .clearPesquisa').click(function(){
+    $('.clearCondition').click(function(){
         $('#pesquisa').val('');
         pesquisaChange();
     });

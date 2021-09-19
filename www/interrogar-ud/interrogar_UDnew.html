@@ -28,8 +28,8 @@
     <div style='width: 30%; margin: 30px;' class="interrogar interrogarBusca">
       <form action="../cgi-bin/interrogar.cgi" enctype="multipart/form-data" class="sendInterrogar" method="post">
         <div class="queryString normalQuery">
-          <p><div style="display:inline;"><div class="tooltip"><b class="translateHtml">Expressão de busca:</b><div class="tooltiptext translateHtml">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
-            <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="margin-top: 5px; padding:5px; max-width:100vw; width:95%;" autofocus> <a style="cursor:pointer; color:red; margin-left:5px; display:none;" class="clearPesquisa translateTitle" title="Limpar expressão de busca" >x</a></p>
+          <p><div style="display:inline;" id="normalQueryLabel"><div class="tooltip"><b class="translateHtml">Expressão de busca:</b><div class="tooltiptext translateHtml">Buscas simples com expressão regular podem ser realizadas digitando as palavras na barra de busca. Para buscas complexas, é necessário digitar o critério de busca e seus parâmetros, conforme instruções no quadro à direita.</div></div></div><br>
+            <input name="pesquisa" class="pesquisa" id="pesquisa" required="required" type="text" style="margin-top: 5px; max-width:100vw;" autofocus></p>
         </div>
         <div class="queryString scriptQuery" style="display:none;">
           [<a style="cursor:pointer;" class="translateHtml" onclick="$('.queryString').hide(); $('.normalQuery').show();">Voltar à busca normal</a>]
