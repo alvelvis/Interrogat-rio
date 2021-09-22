@@ -156,7 +156,7 @@ def renderSentences(script=""):
         anotado = ocorrencia['anotado']
         estruturado = ocorrencia['estruturado']
 
-        arquivoHtml += '<div style="cursor:pointer;" class="container sentence-container">\n'
+        arquivoHtml += '<div class="container sentence-container">\n'
         arquivoHtml += f'<p>{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}</p>' + '\n'
         if estruturado.sent_id:
             arquivoHtml += '<p {} class="metadados_sentence">'.format('onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');"' if nomePesquisa not in fastSearch else "")

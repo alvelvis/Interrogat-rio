@@ -224,6 +224,10 @@ position: fixed;
 z-index: 1;
 }
 
+span[id^=text_]  {
+    cursor: pointer;
+}
+
 .tooltip .tooltiptext {
 visibility: hidden;
 width: 400px;
