@@ -304,7 +304,7 @@ var translations = {
 		'en-US': 'Split sentence after the token id '
 	},
 	'Esta sentença terá seu sent_id modificado?': {
-		'en-US': 'This sentence will have it sent_id modified?'
+		'en-US': 'This sentence will have its sent_id modified?'
 	},
 	'A nova sentença receberá qual sent_id?': {
 		'en-US': 'The new sentence will have what sent_id?'
@@ -322,7 +322,7 @@ var translations = {
 		'en-US': 'I want to search for:'
 	},
 	'cujo(a)': {
-		'en-US': 'which'
+		'en-US': 'whose'
 	},
 	'seja': {
 		'en-US': 'is'
@@ -709,6 +709,9 @@ var translations = {
 	'Clique para mostrar a anotação': {
 		'en-US': 'Click to show annotation'
 	},
+	'Clique para adicionar ao mesmo filtro': {
+		'en-US': 'Click to add to the same filter'
+	},
 	'[Desfazer filtro]': {
 		'en-US': '[Undo filter]'
 	},
@@ -829,8 +832,8 @@ var translations = {
 	"Controles:": {
 		"en-US": "Shortcuts:"
 	},
-	"Relatório de inquéritos": {
-		"en-US": "Inquiries report"
+	"Relatório de inquéritos: Interrogatório": {
+		"en-US": "Inquiries report: Interrogatório"
 	},
 	"Visualizar árvore": {
 		"en-US": "Display tree"
@@ -838,8 +841,8 @@ var translations = {
 	"Encerrar inquérito": {
 		"en-US": "End inquiry"
 	},
-	"Novo inquérito": {
-		"en-US": "New inquiry"
+	"Novo inquérito: Interrogatório": {
+		"en-US": "New inquiry: Interrogatório"
 	},
 	"Etiqueta": {
 		"en-US": "Tag"
@@ -1048,6 +1051,8 @@ $(window).ready(function(){
 	endLoadingScreen();
 });
 
+hasPesquisaExpanded = false;
+
 function pesquisaChange(){
     $('.queryString').hide();
     $('.normalQuery').show();
@@ -1061,10 +1066,17 @@ function pesquisaChange(){
         };
     };
 	if (!isMobile && $('#pesquisa').val().length > 20) {
-		$('#pesquisa').css({'width': $('.interrogarFlex').width() - 30 + 'px', 'position': 'absolute'});
 		$('.interrogarFlex').css({'margin-top': '-5px'});
-		$('.interrogarNews').css({'margin-top': '115px'});
+		$('.interrogarNews').animate({'margin-top': '115px'}, 200);
 		$('.corpusLabel').parents('p').css({'margin-top': '50px'});
+		$('#pesquisa').css({'width': $('#pesquisa').width()});
+		$('#pesquisa').css({'position': 'absolute'});
+		if (hasPesquisaExpanded) {
+			$('#pesquisa').css({'width': $('.interrogarFlex').width()-30}, 800);	
+		} else {
+		$('#pesquisa').animate({'width': $('.interrogarFlex').width()-30}, 800);
+		};
+		hasPesquisaExpanded = true;
 	};
 };
 
