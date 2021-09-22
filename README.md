@@ -2,7 +2,7 @@
 
 Interrogatório (Interrogatory) is an enviroment for querying and editing annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is available in Portuguese and English, depending on the user's web browser language, and it's being developed and used by the research group [ComCorHd (Computational Linguistics, Corpus and Digital Humanities)](http://comcorhd.letras.puc-rio.br), from the Linguistics Department of PUC-Rio, in Brazil, for the project Linguistic resources for Portuguese Natural Language Processing.
 
-[Live demo](http://interrogatorio.comcorhd.ga)
+[Live demo](http://interrogatorio.comcorhd.ml)
 
 Interrogatório is part of [ET: a workstation for querying, editing and evaluating annotated corpora](http://comcorhd.letras.puc-rio.br/ET). Consider also installing [Julgamento](https://github.com/alvelvis/Julgamento), an enviroment for evaluating annotated corpora, in the same folder as Interrogatório to integrate both.
 
@@ -14,13 +14,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 # How to run on a Windows machine
 
-1) Download <a href="https://raw.githubusercontent.com/alvelvis/Interrogat-rio/master/Interrogat%C3%B3rio.bat" download>Interrogatório.bat</a> (make sure to save it with the ending ".bat") and run it as administrator (left click on the icon). Warning: in case you haven't already, this first step will enable Windows Subsystem for Linux and your computer will be rebooted after the process is complete.
-
-2) Once you have enabled Windows Subsystem for Linux, double-click `Interrogatório.bat` again and it will guide you on how to install Ubuntu.
-
-3) After Ubuntu is installed, double-click `Interrogatório.bat` and it will configure Ubuntu and install Interrogatório. Please note that while installing Ubuntu it will ask you for a new username and password: take note on the password you choose because you will need it when installing Interrogatório. Tip¹: passwords on Ubuntu are invisible instead of being shown as asterysks \*\*\*. Tip²: When installing Interrogat-rio, it might have to update Ubuntu, process which will ask you to type "Y" (and press Enter) for YES for proceeding.
-
-4) Double-click `Interrogatório.bat` whenever you want to start the software. Reload the page if the browser is open before the software started.
+Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases), download the latest version for Windows, extract the zip file and execute `interrogatorio_for_windows.exe`.
 
 # How to install in a local server: 4-steps Tutorial
 
@@ -43,6 +37,10 @@ If you wish to run Interrogatório in a local server, a Linux computer (or Windo
 	$ sh run_interrogatorio.sh
 
 All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/](http://localhost:8000/). End the server by pressing "Ctrl+C" in the terminal window.
+
+# How to compile the executables on Windows
+
+`pyinstaller interrogatorio_for_windows.spec --noconfirm`
 
 # How to cite
 

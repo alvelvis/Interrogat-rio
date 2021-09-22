@@ -20,6 +20,6 @@ if os.path.isfile(link):
 	else:
 		os.rename(link, '../interrogar-ud/tmp/' + form["ud"].value)
 
-	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.cgi" }</script></body>')
+	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.py" }</script></body>')
 else:
 	print('Arquivo "' + link + '" não existe.')

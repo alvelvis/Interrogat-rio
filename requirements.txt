@@ -3,3 +3,4 @@ simplejson
 regex
 chardet
 dill
+git-python

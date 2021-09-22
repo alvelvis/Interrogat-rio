@@ -222,8 +222,8 @@ var translations = {
 	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e edição de corpora anotados': {
 		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and editing annotated corpora'
 	},
-	'Visite o <a href="../cgi-bin/arquivo_ud.cgi">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.': {
-		'en-US': 'Visit the <a href="../cgi-bin/arquivo_ud.cgi">Corpora repository</a> to upload a new corpus or to check for existing ones.'
+	'Visite o <a href="../cgi-bin/arquivo_ud.py">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.': {
+		'en-US': 'Visit the <a href="../cgi-bin/arquivo_ud.py">Corpora repository</a> to upload a new corpus or to check for existing ones.'
 	},
 	'Para começar a interrogar algum corpus, siga um dos caminhos abaixo:': {
 		'en-US': 'To start interrogating a corpus, choose one of the following paths:'
@@ -432,8 +432,8 @@ var translations = {
 	'1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).': {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
 	},
-	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.cgi">banco de expressões do critério 5: Python</a>.': {
-		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.cgi">expressions bank for criterion 5: Python</a>.'
+	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do critério 5: Python</a>.': {
+		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.py">expressions bank for criterion 5: Python</a>.'
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to the top'
@@ -613,8 +613,8 @@ var translations = {
 	'Correção em lote': {
 		'en-US': 'Batch correction'
 	},
-	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.cgi">criterion 5: Python</a> syntax.'
+	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.py">critério 5: Python</a>.': {
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.py">criterion 5: Python</a> syntax.'
 	},
 	'Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.': {
 		'en-US': 'Before executing the changes, you will be taken to a correction simulation screen.'
@@ -694,8 +694,8 @@ var translations = {
 	'Deselecionar todas as sentenças': {
 		'en-US': 'Deselect all sentences'
 	},
-	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.': {
-		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">criterion 5: Python</a> syntax.'
+	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.py">critério 5: Python</a>.': {
+		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.py">criterion 5: Python</a> syntax.'
 	},
 	'Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
 		'en-US': 'Download the <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
@@ -1033,11 +1033,11 @@ function encodeUrl(s){
 function waitTooMuch(){
     if ($('.toggleSalvar').length){
         if ($('#loading-bg').is(':visible')){
-            if (/interrogar\.cgi/.test(window.location.href)) {
+            if (/interrogar\.py/.test(window.location.href)) {
                 if (!$('.toggleSalvar').is(':checked')) {
-                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.cgi?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
+                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.py?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
                 } else {
-                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.cgi">interrogações recentes</a>.</div>');
+                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.py">interrogações recentes</a>.</div>');
                 }
             }
         }}
@@ -1712,7 +1712,7 @@ function contexto(sent_id, id, corpus) {
 
 function apagar() {
     if (confirm('Apagar interrogação "' + document.getElementById("combination").innerHTML.replace('&lt;', '<').replace('&gt;', '>') + '"?')) {
-        window.location = "../cgi-bin/apagar.cgi?query=" + document.getElementById("apagar_link").value;
+        window.location = "../cgi-bin/apagar.py?query=" + document.getElementById("apagar_link").value;
     }
 }
 

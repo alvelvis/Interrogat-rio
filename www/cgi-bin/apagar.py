@@ -29,7 +29,7 @@ if os.path.isfile(link):
 
 	open('../interrogar-ud/queries.txt','w').write("\n".join(queries))
 
-	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.cgi" }</script></body>')
+	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.py" }</script></body>')
 
 else:
 	queries = open('../interrogar-ud/queries.txt', 'r', encoding="utf-8").read().splitlines()
@@ -40,7 +40,7 @@ else:
 
 	open('../interrogar-ud/queries.txt','w').write("\n".join(queries))
 
-	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.cgi" }</script></body>')
+	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.py" }</script></body>')
 
 
 

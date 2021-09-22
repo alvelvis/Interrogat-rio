@@ -129,7 +129,7 @@ function sortTable(n) {
 pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
 pagina += '<a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
-pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.cgi?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
+pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.py?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
 pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].value
 pagina += "<br><br><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
 if nome_interrogatorio and nome_interrogatorio not in fastSearch:
@@ -174,14 +174,14 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 		if criterio != 5:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
-			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + f"' title='Buscar casos: {entrada[0]}' style='text-decoration: none; color:blue;'>" + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 	elif form["coluna"].value in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
 			sent_ids.append(sent_id)
 		sent_ids = '5 sentence.sent_id == "(' + ')|('.join(sent_ids) + ')" and ' + form['notSaved'].value
 		if criterio == 5:
-			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.cgi?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(re.escape(entrada[0].split('<b>')[1].split('</b>')[0]))}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(re.escape(entrada[0].split('<b>')[1].split('</b>')[0]))}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
 			pagina += f"<tr><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 pagina += "</table>"

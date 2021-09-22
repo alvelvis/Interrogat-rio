@@ -16,7 +16,7 @@
   <div><!--style="display: flex; flex-flow: column; height:100vh;"-->
     <div class="header">
       <!--h1>Interrogatório</h1-->
-      <h2><a href="../cgi-bin/interrogar.cgi" class="translateHtml">nova busca</a> - <span class="translateHtml">buscas salvas</span> - <a class="translateHtml" href="../cgi-bin/arquivo_ud.cgi">gerenciar corpora</a></h2>
+      <h2><a href="../cgi-bin/interrogar.py" class="translateHtml">nova busca</a> - <span class="translateHtml">buscas salvas</span> - <a class="translateHtml" href="../cgi-bin/arquivo_ud.py">gerenciar corpora</a></h2>
     </div>
     <input type=hidden class="apagarinterrogacao translateVal" value="Apagar interrogação">
     <div class="content interrogarSaved" style="max-width:920px;"><!-- style="overflow: auto; flex: 1;-->
@@ -31,7 +31,7 @@ function carregar_version(){
 }
 function apagar(url) {
 if (confirm($('.apagarinterrogacao').val() + ' "' + url + '"?')) {
-window.location = "../cgi-bin/apagar.cgi?query="+url
+window.location = "../cgi-bin/apagar.py?query="+url
 }
 }
 </script>

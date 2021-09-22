@@ -16,7 +16,7 @@
    <button onclick="topFunction()" id="myBtn" class="translateHtml translateTitle" title="Voltar ao topo">Voltar ao topo</button>
    <div class="header">
     <!--h1>Interrogatório</h1-->
-    <h2><a href="../../cgi-bin/interrogar.cgi" class="translateHtml">nova busca</a> - <a class="translateHtml" href="../../cgi-bin/interrogatorio.cgi">buscas salvas</a> - <a class="translateHtml" href="../../cgi-bin/arquivo_ud.cgi">gerenciar corpora</a></h2>
+    <h2><a href="../../cgi-bin/interrogar.py" class="translateHtml">nova busca</a> - <a class="translateHtml" href="../../cgi-bin/interrogatorio.py">buscas salvas</a> - <a class="translateHtml" href="../../cgi-bin/arquivo_ud.py">gerenciar corpora</a></h2>
     </div>
     <div class="content"><h3><span id="combination">link de pesquisa 1</span> (203)</h3>
       <p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;
@@ -51,7 +51,7 @@
       <div id="script" style="display:none">
         <h3 class="translateHtml">Correção em lote</h3>
         <ul>
-          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.cgi">critério 5: Python</a>.</li>
+          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.py">critério 5: Python</a>.</li>
           <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
           <ol type="1">
             <li><span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">Clique aqui</a>.</li>
@@ -92,7 +92,7 @@
       </div>
       <div class="tabcontent tabFilter" id="filtrar_tab">
         <br>
-        <form action="../../cgi-bin/filtrar.cgi" method="POST"> <p><label for="pesquisa">
+        <form action="../../cgi-bin/filtrar.py" method="POST"> <p><label for="pesquisa">
           <ul>
           <li class="translateHtml">A opção de filtrar retira frases dessa página e as coloca em uma página à parte, com um nome que você decidir.</li>
           <!--li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</!--li-->
@@ -134,7 +134,7 @@
       <div class="tabcontent tabDownload" id="conllu"> <br>
         <br>
         <br>
-        <form action="../../cgi-bin/conllu.cgi" method="POST"><p><label for="nomeconllu"><span class="translateHtml">Nome do arquivo (sem <em>.conllu</em>):</span><br>
+        <form action="../../cgi-bin/conllu.py" method="POST"><p><label for="nomeconllu"><span class="translateHtml">Nome do arquivo (sem <em>.conllu</em>):</span><br>
             <input id="nomeconllu" name="nomeconllu" type="text" required></label> <input id="conllunizar"
 value="Baixar arquivo" class="translateVal btn-gradient orange mini" type="submit"></p></form>
       </div>

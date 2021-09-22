@@ -46,4 +46,4 @@ queries = [x for x in queries.splitlines() if not html in x]
 with open("../interrogar-ud/queries.txt", "w") as f:
     f.write("\n".join(queries))
 
-print("<script>window.location = '../cgi-bin/interrogatorio.cgi'</script>")
+print("<script>window.location = '../cgi-bin/interrogatorio.py'</script>")
