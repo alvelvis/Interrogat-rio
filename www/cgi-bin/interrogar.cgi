@@ -225,7 +225,15 @@ class paginaHtml():
 
 	def adicionarExecutarScript(self):
 		arquivoHtml = self.arquivoHtml.split("<!--script-->")
-		arquivoHtml[0] += f"<input type=hidden name=criterio value=\"{self.criterio}\"><input type=hidden name=parametros value=\'{self.parametros}\'><input type=hidden name=nome_interrogatorio value=\"{web.escape(self.nomePesquisa)}\"><input type=hidden name=occ value=\"{self.numeroOcorrencias}\"><input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\"><input type=hidden name=conllu value=\"{self.conllu}\"><input type=hidden name=fullParameters value='{self.fullParameters}'>"
+		arquivoHtml[0] += "<input type=hidden name=criterio value=\"{}\"><input type=hidden name=parametros value=\'{}\'><input type=hidden name=nome_interrogatorio value=\"{}\"><input type=hidden name=occ value=\"{}\"><input type=hidden name=link_interrogatorio value=\"{}\"><input type=hidden name=conllu value=\"{}\"><input type=hidden name=fullParameters value='{}'>".format(
+			self.criterio,
+			self.parametros,
+			web.escape(self.nomePesquisa).replace('"', "&quot;"),
+			self.numeroOcorrencias,
+			self.caminhoCompletoHtml,
+			self.conllu,
+			self.fullParameters,
+		)	
 
 		return "".join(arquivoHtml)
 
