@@ -38,7 +38,9 @@ for dir in dirs:
 os.environ['PYTHONUTF8'] = "1"
 print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\n")
 
+print(os.getcwd())
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "www"))
+print(os.getcwd())
 CGIHTTPRequestHandler.cgi_directories = ['/cgi-bin']
 httpd = HTTPServer(('', 8000), CGIHTTPRequestHandler)
 

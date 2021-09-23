@@ -68,16 +68,15 @@ def sendRequestInterrogar():
 
 
 def sendPOSTInterrogar():
-
 	criterio, parametros, conllu, nomePesquisa, script = definirVariaveisDePesquisa(cgi.FieldStorage())
 
 	caminhoCompletoConllu = "../interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
-	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora + '.html'
+	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora.replace(':', '_') + '.html'
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
-			with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"), 'w') as f:
+			with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"), 'w') as f:
 				f.write("")
 		except:
 			pass
@@ -88,7 +87,7 @@ def sendPOSTInterrogar():
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
-			os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora}"))
+			os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"))
 		except:
 			pass
 
@@ -211,7 +210,7 @@ class paginaHtml():
 
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
 		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><span class="translateHtml">Busca:</span> <a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.py?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao style="word-break: break-all">' + self.criterio + ' ' + web.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br>Corpus: <span id=corpus>' + self.conllu + '</span><br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
-		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '"')
+		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '"')
 
 		return arquivoHtml
 
@@ -233,8 +232,8 @@ class paginaHtml():
 		with open("../interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
 			self.arquivoHtml = self.arquivoHtml.replace("../../cgi-bin/modelo_script.py?crit=&params=", f"../../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
-			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/filtrar.py', '../../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '&udoriginal=' + self.conllu)
-			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.py', '../../cgi-bin/conllu.py?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora + '.html')
+			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/filtrar.py', '../../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '&udoriginal=' + self.conllu)
+			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.py', '../../cgi-bin/conllu.py?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '.html')
 
 		self.arquivoHtml = self.adicionarHeader()
 		if not self.script:
