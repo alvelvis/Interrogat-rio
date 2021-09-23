@@ -168,11 +168,11 @@ elif form['action'].value == 'view':
 	
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
-		html += '<div class="sentence"><a onclick="$(this).parents(\'.sentence\').remove(); $(\'.len_filtros\').html(parseInt($(\'.len_filtros\').html())-1);" href=\'../cgi-bin/filtrar.py?action=remove&s={sentence}&html={html}&filtro={filtro}\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
+		html += '<div class="sentence"><a onclick=\'removeFromFilter($(this), "{sentence}", "{html}", "{filtro}")\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
 			sentence=cleanEstruturaUD(fromInterrogarToHtml(resultado.sent_id)).strip(),
 			text=fromInterrogarToHtml(resultado.metadados['clean_text'] if 'clean_text' in resultado.metadados else resultado.text),
 			html=nome_html,
-			filtro=web.escape(nome_filtro),
+			filtro=web.escape(nome_filtro.replace('"', "&quot;")),
 			agora=i+1,
 			maximo=total,
 			anno=fromInterrogarToHtml(resultado.tokens_to_str()),

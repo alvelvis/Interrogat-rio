@@ -957,7 +957,7 @@ function loadCorpora(){
 	$('.n_sent').each(function(){
 		$ud = $(this).attr('ud');
 		$size = $(this).attr('size');
-		$.post('./cgi-bin/api.py', {
+		$.post('../cgi-bin/api.py', {
 			'ud': $ud,
 			'size': $size
         },
@@ -1238,7 +1238,7 @@ $(document).ready(function(){
 		loadingScreen();
 		$ud = $(this).attr('ud');
 		$size = 0.0;
-		$.post('./cgi-bin/api.py', {
+		$.post('../cgi-bin/api.py', {
 			'ud': $ud,
 			'updateCorpus': true,
 			'size': $size,
@@ -1714,6 +1714,24 @@ function apagar() {
     if (confirm('Apagar interrogação "' + document.getElementById("combination").innerHTML.replace('&lt;', '<').replace('&gt;', '>') + '"?')) {
         window.location = "../cgi-bin/apagar.py?query=" + document.getElementById("apagar_link").value;
     }
+}
+
+function removeFromFilter(a, s, html, filtro) {
+	loadingScreen()
+	$.ajax({
+		url: '../cgi-bin/filtrar.py',
+		data: {
+			'action': 'remove',
+			's': s,
+			'html': html,
+			'filtro': filtro.replace("&quot;", '"'),
+		},
+		success: function() {
+			a.parents('.sentence').remove()
+			$('.len_filtros').html(parseInt($('.len_filtros').html())-1)
+			endLoadingScreen()
+		}
+	})	
 }
 
 function openCity(evt, cityName) {

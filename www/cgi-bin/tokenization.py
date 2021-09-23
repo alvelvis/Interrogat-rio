@@ -233,7 +233,7 @@ if form:
     elif action == "splitSentence":
         new_sent_id = splitSentence(conllu, sent_id, form['sameSentenceId'].value, form['newSentenceId'].value, form['sameText'].value, form['newText'].value, token_id, form=form, conllu_completo=conllu_completo)
 
-    html = f'<form action="./cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
+    html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
     if 'sameSentenceId' in form:
         form['tokenization_sentid'].value = form['sameSentenceId'].value
         form['tokenization_textheader'].value = form['sameSentenceId'].value
