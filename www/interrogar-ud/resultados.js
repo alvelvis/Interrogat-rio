@@ -1599,8 +1599,8 @@ function excluir_selection() {
         $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + escapeRegExp($(this).attr('sent_id')) + '|');
     });
 	$('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + ')"');
-	if($('#expressao').html().split(" ")[0] == "5"){
-		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').html().split(" ").slice(1,$('#expressao').html().split(" ").length).join(" "));
+	if($('#expressao').text().split(" ")[0] == "5"){
+		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').text().split(" ").slice(1,$('#expressao').text().split(" ").length).join(" "));
 	}
     /**for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
@@ -1615,7 +1615,7 @@ function excluir_selection() {
     	var data = new Date().toLocaleString()
         document.getElementById("nome_pesquisa_sel").value = "Seleção " + data;
     };
-
+	
     document.getElementById("nome_pesquisa").value = document.getElementById("nome_pesquisa_sel").value;
     document.getElementById("filtrar").click();
 }

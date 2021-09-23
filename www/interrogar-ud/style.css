@@ -224,7 +224,7 @@ position: fixed;
 z-index: 1;
 }
 
-span[id^=text_]  {
+span[id^=text_], .metadados_sentence {
     cursor: pointer;
 }
 
