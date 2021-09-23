@@ -9,7 +9,6 @@ GitPython==3.1.24
 idna==3.2
 Jinja2==3.0.1
 MarkupSafe==2.0.1
-pynsist==2.7
 regex==2021.8.28
 requests==2.26.0
 requests_download==0.1.2

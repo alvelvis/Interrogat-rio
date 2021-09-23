@@ -14,7 +14,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 # How to run on a Windows machine
 
-Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases), download the latest version for Windows, extract the zip file and execute `interrogatorio_for_windows.exe`.
+Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases), download the latest version .zip file, extract it and run `interrogatorio_for_windows.bat`.
 
 # How to install in a local server: 4-steps Tutorial
 
