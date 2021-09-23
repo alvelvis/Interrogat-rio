@@ -24,7 +24,7 @@ numero = re.search(r'^\d+$', sent_id.rsplit('-', 1)[1])[0] if '-' in sent_id els
 identificador = sent_id.rsplit("-", 1)[0] + "-" if '-' in sent_id else ""
 
 corpus = estrutura_ud.Corpus(recursivo=False, keywords=[re.escape(identificador)])
-corpus.load('../interrogar-ud/conllu/' + form['corpus'].value)
+corpus.load('./interrogar-ud/conllu/' + form['corpus'].value)
 
 contextoEsquerda = []
 contextoDireita = []

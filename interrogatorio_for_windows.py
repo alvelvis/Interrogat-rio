@@ -16,6 +16,7 @@ repo.config_writer().set_value("user", "name", "myusername").release()
 repo.config_writer().set_value("user", "email", "myemail").release()
 repo.git.pull()
 
+'''
 dirs = "interrogar-ud cgi-bin".split()
 
 for dir in dirs:
@@ -34,7 +35,7 @@ for dir in dirs:
                     continue
                 os.remove(dst_file)
             shutil.copy(src_file, dst_dir)
-
+'''
 os.environ['PYTHONUTF8'] = "1"
 print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\n")
 

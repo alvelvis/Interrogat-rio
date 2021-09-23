@@ -26,8 +26,8 @@ form = cgi.FieldStorage()
 def loadCorpus(ud, size="0.0", updateCorpus=False):
     
     conllus = {}
-    if os.path.isfile("../interrogar-ud/conllu.json"):
-        with open("../interrogar-ud/conllu.json") as f:
+    if os.path.isfile("./interrogar-ud/conllu.json"):
+        with open("./interrogar-ud/conllu.json") as f:
             conllus = json.load(f)
 
     n_sent = 0
@@ -39,7 +39,7 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
         try:
             if not ud in conllus or updateCorpus:
                 conllus[ud] = {}
-                with open("../interrogar-ud/conllu/" + ud) as f:
+                with open("./interrogar-ud/conllu/" + ud) as f:
                     for line in f:
                         if line.strip().startswith('# sent_id = '):
                             n_sent += 1
@@ -53,7 +53,7 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
                 conllus[ud]['n_sent'] = n_sent
                 conllus[ud]['n_tokens'] = n_tokens
                 conllus[ud]['n_files'] = n_files
-                with open("../interrogar-ud/conllu.json", "w") as f:
+                with open("./interrogar-ud/conllu.json", "w") as f:
                     json.dump(conllus, f)
             else:
                 n_sent = conllus[ud]['n_sent']
@@ -70,7 +70,7 @@ def renderSentences(script=""):
 
     conllu = form['conllu'].value
     corpus = conllu
-    caminhoCompletoConllu = '../interrogar-ud/conllu/' + conllu
+    caminhoCompletoConllu = './interrogar-ud/conllu/' + conllu
     caminhoCompletoHtml = form['html'].value
 
     parametros = form['parametros'].value.split(" ", 1)[1]
@@ -88,8 +88,8 @@ def renderSentences(script=""):
     pagina_filtros = ""
     if nomePesquisa not in fastSearch:
         pagina_html = caminhoCompletoHtml.rsplit("/", 1)[1].rsplit(".", 1)[0]
-        if os.path.isfile("../cgi-bin/filtros.json"):
-            with open("../cgi-bin/filtros.json") as f:
+        if os.path.isfile("./cgi-bin/filtros.json"):
+            with open("./cgi-bin/filtros.json") as f:
                 filtros_json = json.load(f)
             filtrar_filtros = "<h4 class='translateHtml'>Filtros já aplicados:</h4>" if pagina_html in filtros_json and filtros_json[pagina_html]['filtros'] else ""
             if pagina_html in filtros_json:
@@ -100,18 +100,18 @@ def renderSentences(script=""):
             else:
                 filtros = []
 
-    if os.path.isfile('../cgi-bin/json/' + slugify(conllu + "_" + parametros + ".json")):
-        with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "r") as f:
+    if os.path.isfile('./cgi-bin/json/' + slugify(conllu + "_" + parametros + ".json")):
+        with open("./cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "r") as f:
             resultadosBusca = json.load(f)
     else:
         if not script:
             resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
         else:
-            if os.system("cp ../cgi-bin/scripts/" + script + ' ../cgi-bin/queryScript.py'):
+            if os.system("cp ./cgi-bin/scripts/" + script + ' ./cgi-bin/queryScript.py'):
                 pass
-            with open("../cgi-bin/queryScript.py", 'r') as f:
+            with open("./cgi-bin/queryScript.py", 'r') as f:
                 scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
-            with open("../cgi-bin/queryScript.py", "w") as f:
+            with open("./cgi-bin/queryScript.py", "w") as f:
                 f.write(scriptFile)
             import queryScript
             resultadosBusca = queryScript.getResultadosBusca()
@@ -168,16 +168,16 @@ def renderSentences(script=""):
         else:
             arquivoHtml += f"<p class='toolbar' style='display:none;'><button id=mostrar_{str(startPoint+i+1)} class=\"translateHtml anotacao sentence-control\" onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar anotação</button> <button id=opt_{str(startPoint+i+1)} class=\"translateHtml sentence-control opt\" onclick=\"mostraropt('optdiv_{str(startPoint+i+1)}', 'opt_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar opções</button> <button class='translateHtml abrirInquerito sentence-control' onclick='inquerito(\"form_{str(startPoint+i+1)}\")'>Abrir inquérito</button></p>" + '\n'
         arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(startPoint+i+1)}\">"
-        arquivoHtml += f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{estruturado.text}\">"
+        arquivoHtml += f"<form action=\"../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{estruturado.text}\">"
         if "@BOLD" in anotado.to_str():
             arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([functions.cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
         arquivoHtml += "</form>"
         if nomePesquisa not in fastSearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
         if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
         #arquivoHtml += '<br>'
-        arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a>"
+        arquivoHtml += f"<form action=\"../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a>"
         arquivoHtml += '<br>'
-        arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(startPoint+i+1)}><input type=hidden name=sent_id value=\"{estruturado.sent_id}\"><input type=hidden name=text value=\"{estruturado.text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(startPoint+i+1)}\")' class='translateHtml'>Visualizar árvore de dependências</a>"
+        arquivoHtml += f"<form action=\"../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(startPoint+i+1)}><input type=hidden name=sent_id value=\"{estruturado.sent_id}\"><input type=hidden name=text value=\"{estruturado.text}\"></form><a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(startPoint+i+1)}\")' class='translateHtml'>Visualizar árvore de dependências</a>"
         arquivoHtml += '</p></span>\n'
         arquivoHtml += f"<pre id=div_{str(startPoint+i+1)} style=\"display:none\">{anotado.to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>" + '\n'
         arquivoHtml += '</div>\n'
@@ -197,18 +197,18 @@ def renderSentences(script=""):
 
 def delete_sentence(filename, sent_id):
     corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
-    corpus.load("../interrogar-ud/conllu/" + filename)
+    corpus.load("./interrogar-ud/conllu/" + filename)
     del corpus.sentences[sent_id]
-    corpus.save("../interrogar-ud/conllu/" + filename)
+    corpus.save("./interrogar-ud/conllu/" + filename)
     return True
 
 def modify_sentid(filename, sent_id, new_sentid):
     corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
-    corpus.load("../interrogar-ud/conllu/" + filename)
+    corpus.load("./interrogar-ud/conllu/" + filename)
     corpus.sentences[sent_id].sent_id = new_sentid
     corpus.sentences[sent_id].metadados['sent_id'] = new_sentid
     corpus.sentences[new_sentid] = corpus.sentences.pop(sent_id)
-    corpus.save("../interrogar-ud/conllu/" + filename)
+    corpus.save("./interrogar-ud/conllu/" + filename)
     return True
 
 if os.environ['REQUEST_METHOD'] == "POST":

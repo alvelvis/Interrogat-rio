@@ -40,7 +40,7 @@ conllu = sys.argv[1]
 action = sys.argv[2]
 issue = sys.argv[3]
 
-with open('../interrogar-ud/scripts/headers.txt', 'r') as f:
+with open('./interrogar-ud/scripts/headers.txt', 'r') as f:
 	headers = f.read().splitlines()
 
 novo_inquerito = list()
@@ -64,7 +64,7 @@ def remove_from(original, s, delimiter="|"):
 def get_head(tok, sentence):
 	return sentence.tokens[sentence.map_token_id[tok.dephead]].word if tok.dephead in sentence.map_token_id else "_"
 
-srcfile = '../interrogar-ud/scripts/' + issue
+srcfile = './interrogar-ud/scripts/' + issue
 trgfile = 'codification'
 from_codec = get_encoding_type(srcfile)
 with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
@@ -81,7 +81,7 @@ for linha in codigo:
 		keywords.extend([x.replace("^(", "").replace(")$", "") for x in re.findall(r'"([^"]*)"', linha) if not x.startswith(")") and not x.endswith("(")])#[x.replace("\\(", "<abreparenteses>").replace("\\)", "<fechaparenteses>").replace("(", "").replace(")", "").replace("<abreparenteses>", "\\(").replace("<fechaparenteses>", "\\)") for x in re.findall(r'"([^"]*)"', linha)])
 
 arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywords=headers)
-arquivo_ud.load('../interrogar-ud/conllu/' + conllu)
+arquivo_ud.load('./interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
 for x, linha in enumerate(codigo):
@@ -105,15 +105,15 @@ for head in headers:
 			#sys.stderr.write(codigo)
 			#exit()
 		except Exception as e:
-			with open("../cgi-bin/error.log", "w") as f:
+			with open("./cgi-bin/error.log", "w") as f:
 				f.write(html.escape(str(e)))
 				exit()
 										
 if action == 'sim':
-	with open('../interrogar-ud/scripts/sim.txt', 'w') as f:
+	with open('./interrogar-ud/scripts/sim.txt', 'w') as f:
 		f.write('\n\n'.join(sim))
 if action == 'exec':
-	with open('../interrogar-ud/scripts/novos_inqueritos.txt', 'w') as f:
+	with open('./interrogar-ud/scripts/novos_inqueritos.txt', 'w') as f:
 		f.write('\n'.join(novo_inquerito))
-	with open('../interrogar-ud/conllu/' + conllu + '_script', 'w') as f:
+	with open('./interrogar-ud/conllu/' + conllu + '_script', 'w') as f:
 		f.write(arquivo_ud.to_str())

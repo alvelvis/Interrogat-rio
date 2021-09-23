@@ -1,1 +1,1 @@
-validar_UD = "../cgi-bin/validar_UD.txt"
+validar_UD = "./cgi-bin/validar_UD.txt"

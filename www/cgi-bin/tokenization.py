@@ -12,12 +12,12 @@ import re
 def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newText, token_id, conllu_completo="", form=False):
 
     if form:
-        if not os.path.isfile("../cgi-bin/tokenization.json"):
+        if not os.path.isfile("./cgi-bin/tokenization.json"):
             tokenization = {}
-            with open("../cgi-bin/tokenization.json", "w") as f:
+            with open("./cgi-bin/tokenization.json", "w") as f:
                 json.dump(tokenization, f)
 
-        with open("../cgi-bin/tokenization.json") as f:
+        with open("./cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
     if not isinstance(conllu, estrutura_ud.Corpus):
@@ -67,7 +67,7 @@ def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newT
                 token.dephead = "0"
 
     if form:
-        with open("../cgi-bin/tokenization.json", "w") as f:
+        with open("./cgi-bin/tokenization.json", "w") as f:
             json.dump(tokenization, f)
         corpus.save(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization")
         os.remove(conllu if not conllu_completo else conllu_completo)
@@ -79,12 +79,12 @@ def splitSentence(conllu, sent_id, sameSentenceId, newSentenceId, sameText, newT
 def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[], mergeSentencesId="", form=False):
 
     if form:
-        if not os.path.isfile("../cgi-bin/tokenization.json"):
+        if not os.path.isfile("./cgi-bin/tokenization.json"):
             tokenization = {}
-            with open("../cgi-bin/tokenization.json", "w") as f:
+            with open("./cgi-bin/tokenization.json", "w") as f:
                 json.dump(tokenization, f)
 
-        with open("../cgi-bin/tokenization.json") as f:
+        with open("./cgi-bin/tokenization.json") as f:
             tokenization = json.load(f)
 
     if not isinstance(conllu, estrutura_ud.Corpus):
@@ -175,7 +175,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
             tokenization[conllu][sent_id].append({'option': option, 'token_id': token_id})
 
     if form:
-        with open("../cgi-bin/tokenization.json", "w") as f:
+        with open("./cgi-bin/tokenization.json", "w") as f:
             json.dump(tokenization, f)
         corpus.save(conllu + "_tokenization" if not conllu_completo else conllu_completo + "_tokenization")
         os.remove(conllu if not conllu_completo else conllu_completo)
@@ -199,7 +199,7 @@ if form:
 
     sent_id = form['tokenization_sentid'].value
     conllu = form['tokenization_conllu'].value
-    conllu_completo = "../interrogar-ud/conllu/" + conllu
+    conllu_completo = "./interrogar-ud/conllu/" + conllu
     action = form['action'].value
     option = form['addTokenOption'].value if 'addTokenOption' in form else "add"
     if 'addTokenId' in form:
@@ -233,7 +233,7 @@ if form:
     elif action == "splitSentence":
         new_sent_id = splitSentence(conllu, sent_id, form['sameSentenceId'].value, form['newSentenceId'].value, form['sameText'].value, form['newText'].value, token_id, form=form, conllu_completo=conllu_completo)
 
-    html = f'<form action="../cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
+    html = f'<form action="./cgi-bin/inquerito.py" method="POST" id="inquerito"><input type=hidden name="tokenizado" value="{new_sent_id if new_sent_id else "True"}">'
     if 'sameSentenceId' in form:
         form['tokenization_sentid'].value = form['sameSentenceId'].value
         form['tokenization_textheader'].value = form['sameSentenceId'].value

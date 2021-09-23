@@ -30,10 +30,10 @@ if not 'corpus' in form:
 
 filtros = []
 nome_interrogatorio = ""
-if "link_dist" in form and os.path.isfile("../cgi-bin/filtros.json"):
+if "link_dist" in form and os.path.isfile("./cgi-bin/filtros.json"):
 	link_interrogatorio = form['link_dist'].value.rsplit(".", 1)[0].rsplit("/", 1)[1]
 	nome_interrogatorio = form['combination'].value
-	with open("../cgi-bin/filtros.json") as f:
+	with open("./cgi-bin/filtros.json") as f:
 		filtros = json.load(f)
 	if link_interrogatorio in filtros:
 		filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]
@@ -41,7 +41,7 @@ if "link_dist" in form and os.path.isfile("../cgi-bin/filtros.json"):
 		filtros = []
 
 
-dic_dist = interrogar_UD.getDistribution("../interrogar-ud/conllu/" + form['corpus'].value, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
+dic_dist = interrogar_UD.getDistribution("./interrogar-ud/conllu/" + form['corpus'].value, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
 
 pagina = '''
 	<meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">

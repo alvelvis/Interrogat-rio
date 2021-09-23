@@ -29,12 +29,12 @@ if not 'pesquisa' in form and not 'action' in form:
 	html = '<head><title class="translateHtml">Filtrar: Interrogatório</title></head>'
 	html += '<body><form action="../cgi-bin/filtrar.py" method=POST>'
 	html += '<select name="html">'
-	for arquivo in os.listdir('../interrogar-ud/resultados'):
-		if os.path.isfile('../interrogar-ud/resultados/' + arquivo):
+	for arquivo in os.listdir('./interrogar-ud/resultados'):
+		if os.path.isfile('./interrogar-ud/resultados/' + arquivo):
 			html += '<option value="' + arquivo.rsplit('.', 1)[0] + '">' + arquivo.rsplit('.', 1)[0] + '</option>'
 	html += '</select><br><select name="udoriginal">'
-	for arquivo in os.listdir('../interrogar-ud/conllu'):
-		if os.path.isfile('../interrogar-ud/conllu/' + arquivo):
+	for arquivo in os.listdir('./interrogar-ud/conllu'):
+		if os.path.isfile('./interrogar-ud/conllu/' + arquivo):
 			html += '<option value="' + arquivo + '">' + arquivo + '</option>'
 	html += '</select><br><br><input type="text" name="pesquisa" placeholder="Expressão do filtro"><br><input type="text" placeholder="Nome do filtro" name="nome_pesquisa"><br><br><input type="submit" class="translateVal" value="Filtrar">'
 	html += '</form></body>'
@@ -59,7 +59,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		criterio = '1'
 		parametros = pesquisa
 	
-	if int(criterio) > int(open('../interrogar-ud/max_crit.txt', 'r').read().split()[0]):
+	if int(criterio) > int(open('./interrogar-ud/max_crit.txt', 'r').read().split()[0]):
 		print('em desenvolvimento')
 		exit()
 
@@ -68,11 +68,11 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	pagina_html = form['html'].value
 	pesquisa_original = form['pesquisa_original'].value
 
-	if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")):
-		with open("../cgi-bin/json/" + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")) as f:
+	if os.path.isfile('./cgi-bin/json/' + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")):
+		with open("./cgi-bin/json/" + slugify(ud + "_" + pesquisa_original.split(" ", 1)[1] + ".json")) as f:
 			busca_original = json.load(f)
 	else:
-		busca_original = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1], fastSearch=True)
+		busca_original = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1], fastSearch=True)
 	busca_original = [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in busca_original['output']]
 	
 	if not 'nome_pesquisa' in form:
@@ -80,18 +80,18 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	else:
 		nome_filtro = form['nome_pesquisa'].value.strip()
 
-	resultados = interrogar_UD.main('../interrogar-ud/conllu/' + ud, int(criterio), parametros)
-	if not os.path.isdir('../cgi-bin/json'):
-		os.mkdir('../cgi-bin/json')
+	resultados = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(criterio), parametros)
+	if not os.path.isdir('./cgi-bin/json'):
+		os.mkdir('./cgi-bin/json')
 	try:
-		with open("../cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
+		with open("./cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
 			pickle.dump(resultados, f)
 	except Exception as e:
 		sys.stderr.write("=> " + str(e))
 		pass
 
-	if os.path.isfile("../cgi-bin/filtros.json"):
-		with open("../cgi-bin/filtros.json", "r") as f:
+	if os.path.isfile("./cgi-bin/filtros.json"):
+		with open("./cgi-bin/filtros.json", "r") as f:
 			filtros = json.load(f)
 	else:
 		filtros = {}
@@ -103,7 +103,7 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
 	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append(criterio + ' ' + parametros)
 
-	with open("../cgi-bin/filtros.json", "w") as f:
+	with open("./cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 		
 	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../interrogar-ud/resultados/' + form['html'].value + '.html" }</script></body>')
@@ -119,12 +119,12 @@ elif form['action'].value == 'desfazer':
 	nome_html = form['html'].value
 	nome_filtro = form['filtro'].value
 
-	with open("../cgi-bin/filtros.json") as f:
+	with open("./cgi-bin/filtros.json") as f:
 		filtros = json.load(f)
 
 	filtros[nome_html]['filtros'].pop(nome_filtro)
 
-	with open("../cgi-bin/filtros.json", "w") as f:
+	with open("./cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 
 	print(f"Filtro desfeito, feche esta janela.")#//window.location = '../interrogar-ud/resultados/{nome_html}.html'
@@ -133,7 +133,7 @@ elif form['action'].value == 'view':
 	nome_html = form['html'].value
 	nome_filtro = form['filtro'].value
 
-	with open("../cgi-bin/filtros.json") as f:
+	with open("./cgi-bin/filtros.json") as f:
 		filtros = json.load(f)
 
 	num_filtros = len(filtros[nome_html]['filtros'][nome_filtro]['sentences'])
@@ -156,11 +156,11 @@ elif form['action'].value == 'view':
 	resultados = []
 	sentences_ja_filtrados = []
 	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
-		if os.path.isfile('../cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
-			with open("../cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
+		if os.path.isfile('./cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
+			with open("./cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
 				busca = pickle.load(f)
 		else:
-			busca = interrogar_UD.main(f"../interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
+			busca = interrogar_UD.main(f"./interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
 		for x in busca['sentences']:
 			if x in sentences and x not in sentences_ja_filtrados:
 				resultados.append(busca['output'][busca['sentences'][x]]['resultadoAnotado'])
@@ -193,12 +193,12 @@ elif form['action'].value == 'remove':
 	nome_filtro = form['filtro'].value
 	forbidden_sent_id = form['s'].value
 
-	with open("../cgi-bin/filtros.json") as f:
+	with open("./cgi-bin/filtros.json") as f:
 		filtros = json.load(f)
 
 	filtros[nome_html]['filtros'][nome_filtro]['sentences'] = [x for x in filtros[nome_html]['filtros'][nome_filtro]['sentences'] if x not in [forbidden_sent_id]]
 
-	with open("../cgi-bin/filtros.json", "w") as f:
+	with open("./cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
 
 	print("<script>window.history.back(true);</script>")

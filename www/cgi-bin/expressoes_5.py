@@ -14,13 +14,13 @@ from functions import prettyDate, encodeUrl, fromInterrogarToHtml
 import html as web
 from functions import corpusGenericoExpressoes
 
-with open("../cgi-bin/expressoes_5.txt") as f:
+with open("./cgi-bin/expressoes_5.txt") as f:
     fileExpressions = f.read().splitlines()
     expressions = []
     [expressions.append(x) for x in fileExpressions if not x in expressions]
 
 corpus = estrutura_ud.Corpus(recursivo=True)
-corpus.load('../cgi-bin/' + corpusGenericoExpressoes)
+corpus.load('./cgi-bin/' + corpusGenericoExpressoes)
 
 dictExpressions = [{"expression": x, "example": interrogar_UD.main(corpus, 5, x.split(" ", 1)[1], 1)['output'][0]['resultado']} for x in expressions]
 

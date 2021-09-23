@@ -11,7 +11,7 @@ import re, html, time
 from functions import prettyDate
 import html as web
 
-with open("../interrogar-ud/scripts/modelo_script.txt") as f:
+with open("./interrogar-ud/scripts/modelo_script.txt") as f:
     script = f.read().splitlines()
 
 form = cgi.FieldStorage()
@@ -19,7 +19,7 @@ form = cgi.FieldStorage()
 if form['crit'].value == '5':
     script[5] = 'if ' + form['params'].value + ":"
 
-with open("../interrogar-ud/scripts/interrogar-script.txt", "w") as f:
+with open("./interrogar-ud/scripts/interrogar-script.txt", "w") as f:
     f.write("\n".join(script))
 
 print('''

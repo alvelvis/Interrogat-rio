@@ -10,7 +10,7 @@ import functions
 modelo = functions.modelo
 udpipe = functions.udpipe
 
-html = '<html><head><script src=\"../../interrogar-ud/jquery-latest.js\"></script><script src=\"../../interrogar-ud/resultados.js?version=15\"></script><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title class="translateHtml">UDPipe: Interrogatório</title></head><body>'
+html = '<html><head><script src=\"../interrogar-ud/jquery-latest.js\"></script><script src=\"../interrogar-ud/resultados.js?version=15\"></script><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title class="translateHtml">UDPipe: Interrogatório</title></head><body>'
 
 if os.environ['REQUEST_METHOD'] == 'POST':
 	form = cgi.FieldStorage()
@@ -21,18 +21,18 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	html += '<span class="translateHtml">Modelo:</span> <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
 	html += '<br>Corpus: <a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a>'
 
-	open('../cgi-bin/cru.txt', 'w').write(text.replace('"', '\\"'))
+	open('./cgi-bin/cru.txt', 'w').write(text.replace('"', '\\"'))
 
-	os.system('cat ../cgi-bin/cru.txt | ../cgi-bin/' + udpipe + ' --tokenize --tag --parse ../cgi-bin/' + modelo + ' > ../cgi-bin/anotado.txt')
+	os.system('cat ./cgi-bin/cru.txt | ./cgi-bin/' + udpipe + ' --tokenize --tag --parse ./cgi-bin/' + modelo + ' > ./cgi-bin/anotado.txt')
 
-	with open('../cgi-bin/anotado.txt', 'r') as f:
+	with open('./cgi-bin/anotado.txt', 'r') as f:
 		resultado = f.read()
 
-	os.system('rm ../cgi-bin/cru.txt ../cgi-bin/anotado.txt')
+	os.system('rm ./cgi-bin/cru.txt ./cgi-bin/anotado.txt')
 
 	html += '<pre style="font-size: 14px">' + resultado + '</pre>'
 
-	anotado = estrutura_dados.LerUD('../interrogar-ud/conllu/' + ud)
+	anotado = estrutura_dados.LerUD('./interrogar-ud/conllu/' + ud)
 	for sentence in anotado:
 		if '# text = ' + text in sentence:
 			anotado = sentence
@@ -45,7 +45,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 
 	#html += '''<br><input type=button value="Mostrar anotação original (''' + ud + ''')" onclick="document.getElementById('anotacao').style.display = 'block';"><pre id=anotacao style="display:none"><br>''' + anotado + '''</pre>'''
 
-	#os.remove('../interrogar-ud/anotado.txt')
+	#os.remove('./interrogar-ud/anotado.txt')
 
 html += '</body></html>'
 print(html)

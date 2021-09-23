@@ -697,8 +697,8 @@ var translations = {
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../cgi-bin/expressoes_5.py">critério 5: Python</a>.': {
 		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written according to <a target="_blank" href="../cgi-bin/expressoes_5.py">criterion 5: Python</a> syntax.'
 	},
-	'Baixe o <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
-		'en-US': 'Download the <a href="../../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
+	'Baixe o <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
+		'en-US': 'Download the <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
 	},
 	'Todas as sentenças voltarão para a busca inicial': {
 		'en-US': 'All sentences will return to the initial query'
@@ -957,7 +957,7 @@ function loadCorpora(){
 	$('.n_sent').each(function(){
 		$ud = $(this).attr('ud');
 		$size = $(this).attr('size');
-		$.post('../cgi-bin/api.py', {
+		$.post('./cgi-bin/api.py', {
 			'ud': $ud,
 			'size': $size
         },
@@ -1035,7 +1035,7 @@ function waitTooMuch(){
         if ($('#loading-bg').is(':visible')){
             if (/interrogar\.py/.test(window.location.href)) {
                 if (!$('.toggleSalvar').is(':checked')) {
-                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'../cgi-bin/interrogar.py?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
+                    $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode optar por <a href=\'./cgi-bin/interrogar.py?corpus=' + $('.conllu').val() + '&save=True&go=True&params=' + encodeUrl($('.pesquisa').val()) + '\'>salvar a busca</a> e ela aparecerá na página de interrogações recentes quando concluir, mesmo que você feche esta página.')
                 } else {
                     $('#loading-bg').append('<div style="width: 30vw; font-weight:500; margin:60vh auto;">Caso a busca esteja demorando muito, você pode <a href="javascript:window.close()">fechar esta página</a> ou acompanhar o progresso na página de <a href="../cgi-bin/interrogatorio.py">interrogações recentes</a>.</div>');
                 }
@@ -1155,7 +1155,7 @@ function carregarPosts(){
 			});
 			updateTranslation();
 			if ($('.saveQuery').length) {
-				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("../", ""));
+				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("./", ""));
 			};
 
         },
@@ -1238,7 +1238,7 @@ $(document).ready(function(){
 		loadingScreen();
 		$ud = $(this).attr('ud');
 		$size = 0.0;
-		$.post('../cgi-bin/api.py', {
+		$.post('./cgi-bin/api.py', {
 			'ud': $ud,
 			'updateCorpus': true,
 			'size': $size,
@@ -1293,7 +1293,7 @@ $(document).ready(function(){
         } else {
             url = '../../cgi-bin/export_html.py'
         };
-        window.open(url + "?corpus=" + corpus.innerHTML + "&params=" + encodeURIComponent($('#expressao').text()) + "&html=" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val().replace(/#/%23), "_blank");
+        window.open(url + "?corpus=" + corpus.innerHTML + "&params=" + encodeURIComponent($('#expressao').text()) + "&html=../" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val().replace(/#/%23), "_blank");
     });
 
     if($('#expressao').length){

@@ -24,19 +24,19 @@ nome = form['nome'].value
 link = form['html'].value.rsplit("/", 1)[1].rsplit(".", 1)[0]
 sys.stderr.write(link)
 
-if os.path.isfile("../cgi-bin/filtros.json"):
-    with open("../cgi-bin/filtros.json") as f:
+if os.path.isfile("./cgi-bin/filtros.json"):
+    with open("./cgi-bin/filtros.json") as f:
         filtros = json.load(f)
 else:
     filtros = []
 
-ocorrencias = interrogar_UD.main('../interrogar-ud/conllu/' + corpus, int(criterio), parametros)['output']
+ocorrencias = interrogar_UD.main('./interrogar-ud/conllu/' + corpus, int(criterio), parametros)['output']
 numeroOcorrencias_antes = len(ocorrencias)
 if nome not in fastSearch:
     ocorrencias = [x for x in ocorrencias if link not in filtros or x['resultadoEstruturado'].sent_id not in [x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']]]
 numeroOcorrencias = len(ocorrencias)
 
-html = f"<script src=\"../../interrogar-ud/jquery-latest.js\"></script><script src=\"../../interrogar-ud/resultados.js?version=15\"></script><title>Exportar resultados para .html: Interrogatório</title><h1 class='translateHtml'>Exportar resultados para .html</h1><a class='translateHtml' href='javascript:window.close()'>Fechar</a><hr><span class='translateHtml'>Página gerada dia</span> {prettyDate(datetime.now()).beautifyDateDMAH()}<br><span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{corpus}' download>{corpus}</a><br><span class='translateHtml'>Busca:</span> <a target='_blank' href='../cgi-bin/interrogar.py?corpus={corpus}&params={pesquisa}'>{pesquisa}</a><br><span class='translateHtml'>Resultados</span>: {numeroOcorrencias_antes}"
+html = f"<script src=\"../interrogar-ud/jquery-latest.js\"></script><script src=\"../interrogar-ud/resultados.js?version=15\"></script><title>Exportar resultados para .html: Interrogatório</title><h1 class='translateHtml'>Exportar resultados para .html</h1><a class='translateHtml' href='javascript:window.close()'>Fechar</a><hr><span class='translateHtml'>Página gerada dia</span> {prettyDate(datetime.now()).beautifyDateDMAH()}<br><span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{corpus}' download>{corpus}</a><br><span class='translateHtml'>Busca:</span> <a target='_blank' href='../cgi-bin/interrogar.py?corpus={corpus}&params={pesquisa}'>{pesquisa}</a><br><span class='translateHtml'>Resultados</span>: {numeroOcorrencias_antes}"
 if nome not in fastSearch:
     if filtros and link in filtros:
         html += f"<br><span class='translateHtml'>Filtros</span>: {len([x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']])}"

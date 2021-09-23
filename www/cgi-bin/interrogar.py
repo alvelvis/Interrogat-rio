@@ -23,31 +23,31 @@ from chardet import detect
 import functions
 
 def main():
-	if not os.path.isdir("../interrogar-ud/conllu"):
-		os.mkdir("../interrogar-ud/conllu")
+	if not os.path.isdir("./interrogar-ud/conllu"):
+		os.mkdir("./interrogar-ud/conllu")
 
 	sendRequestInterrogar() if os.environ['REQUEST_METHOD'] != "POST" else sendPOSTInterrogar()
 
 def sendRequestInterrogar():
 	
 	conllu_json = []
-	if os.path.isfile('../interrogar-ud/conllu.json'):
-		with open("../interrogar-ud/conllu.json") as f:
+	if os.path.isfile('./interrogar-ud/conllu.json'):
+		with open("./interrogar-ud/conllu.json") as f:
 			conllu_json = json.load(f)
 
 	
-	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("../interrogar-ud/conllu") if arquivo.endswith(".conllu")])
+	arquivosCONLLU = sorted(["<option value='{0}'>{0}</option>".format(slugify(arquivo)) for arquivo in os.listdir("./interrogar-ud/conllu") if arquivo.endswith(".conllu")])
 	corpora_cloud = ['''<nobr><a title='{2}' style="cursor:pointer;" onclick="$('.conllu').val('{0}'); $('.cloud-corpus').css('font-weight', 'normal'); $(this).css('font-weight', 'bold'); $('.cloud-corpus').css('color', ''); $(this).css('color', 'black'); $('.cloud-corpus').css('cursor', 'pointer'); $(this).css('cursor', 'text');" class="cloud-corpus" value='{0}'>{1}</a></nobr>'''.format(
 		slugify(arquivo), 
 		slugify(arquivo).rsplit(".conllu", 1)[0],
 		str(conllu_json[slugify(arquivo)]['n_sent']) + ' sentenças' if slugify(arquivo) in conllu_json else "",
-		) for arquivo in sorted(os.listdir("../interrogar-ud/conllu")) if arquivo.endswith(".conllu")]
+		) for arquivo in sorted(os.listdir("./interrogar-ud/conllu")) if arquivo.endswith(".conllu")]
 
 	
-	with open("../interrogar-ud/interrogar_UDnew.html", "r") as f:
+	with open("./interrogar-ud/interrogar_UDnew.html", "r") as f:
 		paginaHTML = f.read().split("<!--SPLIT-->")
 
-	with open("../interrogar-ud/criterios.txt", "r") as f:
+	with open("./interrogar-ud/criterios.txt", "r") as f:
 		criteriosBusca = f.read().split("!@#")
 		criteriosBusca = [("[<a href='#' class='toggleCriteria translateHtml' criterio='-1'>Voltar</a>]<br>" if i != 0 else "") + x for i, x in enumerate(criteriosBusca) if x.strip()]
 
@@ -70,13 +70,13 @@ def sendRequestInterrogar():
 def sendPOSTInterrogar():
 	criterio, parametros, conllu, nomePesquisa, script = definirVariaveisDePesquisa(cgi.FieldStorage())
 
-	caminhoCompletoConllu = "../interrogar-ud/conllu/" + conllu
+	caminhoCompletoConllu = "./interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_').split('.')[0]
-	caminhoCompletoHtml = '../interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora.replace(':', '_') + '.html'
+	caminhoCompletoHtml = './interrogar-ud/resultados/' + slugify(nomePesquisa) + '_' + dataAgora.replace(':', '_') + '.html'
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
-			with open("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"), 'w') as f:
+			with open("./interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"), 'w') as f:
 				f.write("")
 		except:
 			pass
@@ -87,7 +87,7 @@ def sendPOSTInterrogar():
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
-			os.remove("../interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"))
+			os.remove("./interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"))
 		except:
 			pass
 
@@ -106,16 +106,16 @@ def sendPOSTInterrogar():
 
 	queries = ["\t".join([caminhoCompletoHtml, nomePesquisa, numeroOcorrencias, criterio, parametros, conllu, dataAgora])]
 
-	if not os.path.isfile("../interrogar-ud/queries.txt"):
-		with open("../interrogar-ud/queries.txt", "w") as f:
+	if not os.path.isfile("./interrogar-ud/queries.txt"):
+		with open("./interrogar-ud/queries.txt", "w") as f:
 			f.write("")
-	with open('../interrogar-ud/queries.txt', 'r') as f:
+	with open('./interrogar-ud/queries.txt', 'r') as f:
 		queries.extend(f.read().splitlines())
 
-	with open('../interrogar-ud/queries.txt', 'w')as f:
+	with open('./interrogar-ud/queries.txt', 'w')as f:
 		f.write("\n".join(queries))
 
-	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "'+caminhoCompletoHtml+'" }</script></body>')
+	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../'+caminhoCompletoHtml+'" }</script></body>')
 
 
 # get file encoding type
@@ -126,14 +126,14 @@ def get_encoding_type(file):
 
 def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
-		if not os.path.isdir('../cgi-bin/scripts'):
-			os.mkdir('../cgi-bin/scripts')
-		with open("../interrogar-ud/modelo_query.py") as f:
+		if not os.path.isdir('./cgi-bin/scripts'):
+			os.mkdir('./cgi-bin/scripts')
+		with open("./interrogar-ud/modelo_query.py") as f:
 			modelo_query = f.read()
-		with open('../cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
+		with open('./cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		with open("../cgi-bin/scripts/" + form['scriptQueryFile'].filename, encoding=get_encoding_type("../cgi-bin/scripts/" + form['scriptQueryFile'].filename)) as f:
-			with open("../cgi-bin/queryScript.py", "w") as w:
+		with open("./cgi-bin/scripts/" + form['scriptQueryFile'].filename, encoding=get_encoding_type("./cgi-bin/scripts/" + form['scriptQueryFile'].filename)) as f:
+			with open("./cgi-bin/queryScript.py", "w") as w:
 				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().splitlines())))
 		script = form['scriptQueryFile'].filename
 		parametros = form['scriptQueryFile'].filename
@@ -162,17 +162,17 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
-		with open("../cgi-bin/queryScript.py", 'r') as f:
+		with open("./cgi-bin/queryScript.py", 'r') as f:
 			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
-		with open("../cgi-bin/queryScript.py", "w") as f:
+		with open("./cgi-bin/queryScript.py", "w") as f:
 			f.write(scriptFile)
 		import queryScript
 		resultadosBusca = queryScript.getResultadosBusca()
 
-	if not os.path.isdir('../cgi-bin/json'):
-		os.mkdir('../cgi-bin/json')
+	if not os.path.isdir('./cgi-bin/json'):
+		os.mkdir('./cgi-bin/json')
 	try:
-		with open("../cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
+		with open("./cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
 			json.dump(resultadosBusca, f)
 	except:
 		pass
@@ -204,12 +204,12 @@ class paginaHtml():
 		casos = f"<span class='translateHtml'>Casos</span>: {str(self.casosOcorrencias)}" if self.casosOcorrencias else ""
 		arquivoHtml = arquivoHtml.replace('<h3><span id="combination">link de pesquisa 1</span> (203)</h3>', '<h3><a style="color:black; max-width: 40vw; word-wrap: break-word;" id=titulo><span id=combination>' + web.escape(self.nomePesquisa) + '</span> (' + self.numeroOcorrencias + ')</a></h3>' + casos)
 
-		with open ('../interrogar-ud/criterios.txt', 'r') as f:
+		with open ('./interrogar-ud/criterios.txt', 'r') as f:
 			criterios = f.read().split('!@#')
 		criterios = [x for x in criterios if x.strip()]
 
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><span class="translateHtml">Busca:</span> <a class="refazerPesquisa translateTitle" title="Refazer busca" href="../../cgi-bin/interrogar.py?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao style="word-break: break-all">' + self.criterio + ' ' + web.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br>Corpus: <span id=corpus>' + self.conllu + '</span><br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<p><!--div class=tooltip style="max-width: 60vw; word-wrap: break-word;"--><span class="translateHtml">Busca:</span> <a class="refazerPesquisa translateTitle" title="Refazer busca" href="../cgi-bin/interrogar.py?corpus=' + self.conllu + '&params=' + self.criterio + ' ' + encodeUrl(self.parametros.replace('"', "'")) + '"><span id=expressao style="word-break: break-all">' + self.criterio + ' ' + web.escape(self.parametros) + '</span></a><!--span class=tooltiptext>' + criterios[int(self.criterio)+1].split('<h4>')[0] + '</span></div-->' + f'<br>Corpus: <span id=corpus>' + self.conllu + '</span><br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '"')
 
 		return arquivoHtml
@@ -218,7 +218,7 @@ class paginaHtml():
 		if self.criterio in ["5", "1"]:
 			if self.nomePesquisa not in fastSearch:
 				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml))
-			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"')))
+			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"')))
 			#return self.arquivoHtml.replace("DIST-->", 'DIST--><span class="translateHtml"><a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';">Salve a busca</a> para visualizar a distribuição das palavras em negrito.</span>')
 		return self.arquivoHtml
 
@@ -229,11 +229,11 @@ class paginaHtml():
 		return "".join(arquivoHtml)
 
 	def montarHtml(self):
-		with open("../interrogar-ud/resultados/link1.html", "r") as f:
+		with open("./interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
-			self.arquivoHtml = self.arquivoHtml.replace("../../cgi-bin/modelo_script.py?crit=&params=", f"../../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
-			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/filtrar.py', '../../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '&udoriginal=' + self.conllu)
-			self.arquivoHtml = self.arquivoHtml.replace('../../cgi-bin/conllu.py', '../../cgi-bin/conllu.py?html=../interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '.html')
+			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/modelo_script.py?crit=&params=", f"../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
+			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/filtrar.py', '../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '&udoriginal=' + self.conllu)
+			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/conllu.py', '../cgi-bin/conllu.py?html=./interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '.html')
 
 		self.arquivoHtml = self.adicionarHeader()
 		if not self.script:
