@@ -1211,6 +1211,7 @@ $(document).ready(function(){
 		})
 		$('.extractSentidInput').val(sent_ids.join("|")).toggle()
 		$('.extractSentidSpan').html('(' + sent_ids.length  + ')').toggle()
+		$('.extractSentidInput').select()
 	})
 
 	/*window.addEventListener('resize', updateInterrogarBusca);*/
@@ -1294,6 +1295,7 @@ $(document).ready(function(){
 				$('.extractSentidInput').val(data.sent_id_list).toggle();
 				$('.extractSentidSpan').html('(' + data.sent_id_count + ')').toggle();
 				endLoadingScreen();
+				$('.extractSentidInput').select();
 			}
 		);
 
