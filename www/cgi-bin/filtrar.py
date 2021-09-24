@@ -143,7 +143,14 @@ elif form['action'].value == 'view':
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
 	html += '<script src="../interrogar-ud/resultados.js"></script>'
-	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1><a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' style='cursor:pointer; color:blue; text-decoration: underline;' onclick='if(window.confirm(\"Deseja desfazer o filtro?\")) {{ window.location.href = \"../cgi-bin/filtrar.py?action=desfazer&html={nome_html}&filtro={nome_filtro_encoded}\"; }}'>[Desfazer filtro]</a> <a href='#' class='translateHtml' onclick='window.close()'>[Fechar página]</a><br><br>{parametros}<br><br><span class='translateHtml'>Busca inicial:</span> <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br><span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
+	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1>\
+		<a title='Mostrar lista de sent_id das frases' class='translateTitle translateHtml extractSentidFilter' style='cursor:pointer; color:blue; text-decoration: underline;'>[Lista de sent_id]</a> \
+		<a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' style='cursor:pointer; color:blue; text-decoration: underline;' onclick='if(window.confirm(\"Deseja desfazer o filtro?\")) {{ window.location.href = \"../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro_encoded}\"; }}'>[Desfazer filtro]</a> \
+		<a href='#' class='translateHtml' onclick='window.close()'>[Fechar página]</a>\
+		<br><span class='extractSentidSpan' style='display:none'></span><input class='extractSentidInput' style='width: 300px; display:none; margin:5px;'>\
+		<br>{parametros}<br><br>\
+		<span class='translateHtml'>Busca inicial:</span> <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>\
+		<span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
 		nome_filtro=web.escape(nome_filtro),
 		nome_filtro_encoded = functions.encodeUrl(nome_filtro),
@@ -168,7 +175,7 @@ elif form['action'].value == 'view':
 	
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
-		html += '<div class="sentence"><a onclick=\'removeFromFilter($(this), "{sentence}", "{html}", "{filtro}")\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - {sentence}</b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
+		html += '<div class="sentence"><a onclick=\'removeFromFilter($(this), "{sentence}", "{html}", "{filtro}")\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - <span class="sent_id">{sentence}</span></b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
 			sentence=cleanEstruturaUD(fromInterrogarToHtml(resultado.sent_id)).strip(),
 			text=fromInterrogarToHtml(resultado.metadados['clean_text'] if 'clean_text' in resultado.metadados else resultado.text),
 			html=nome_html,

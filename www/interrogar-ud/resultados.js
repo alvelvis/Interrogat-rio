@@ -715,6 +715,9 @@ var translations = {
 	'[Desfazer filtro]': {
 		'en-US': '[Undo filter]'
 	},
+	'[Lista de sent_id]': {
+		'en-US': '[sent_id list]'
+	},
 	'[Fechar página]': {
 		'en-US': '[Close window]'
 	},
@@ -1072,9 +1075,9 @@ function pesquisaChange(){
 		$('#pesquisa').css({'width': $('#pesquisa').width()});
 		$('#pesquisa').css({'position': 'absolute'});
 		if (hasPesquisaExpanded) {
-			$('#pesquisa').css({'width': $('.interrogarFlex').width()-30}, 800);	
+			$('#pesquisa').css({'width': $('.interrogarFlex').width()-30});	
 		} else {
-		$('#pesquisa').animate({'width': $('.interrogarFlex').width()-30}, 800);
+			$('#pesquisa').animate({'width': $('.interrogarFlex').width()-30}, 500);
 		};
 		hasPesquisaExpanded = true;
 	};
@@ -1201,6 +1204,16 @@ $(document).ready(function(){
 	updateTranslation();
 	updateInterrogarBusca();
 
+	$('.extractSentidFilter').click(function(){ 
+		sent_ids = []
+		$('.sent_id').each(function(e){
+			sent_ids.push($(this).text())
+		})
+		$('.extractSentidInput').val(sent_ids.join("|")).toggle()
+		$('.extractSentidSpan').html('(' + sent_ids.length  + ')').toggle()
+		$('.extractSentidInput').select()
+	})
+
 	/*window.addEventListener('resize', updateInterrogarBusca);*/
 
 	if ($('.indexSentences').length){
@@ -1282,6 +1295,7 @@ $(document).ready(function(){
 				$('.extractSentidInput').val(data.sent_id_list).toggle();
 				$('.extractSentidSpan').html('(' + data.sent_id_count + ')').toggle();
 				endLoadingScreen();
+				$('.extractSentidInput').select();
 			}
 		);
 
@@ -1599,8 +1613,8 @@ function excluir_selection() {
         $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + escapeRegExp($(this).attr('sent_id')) + '|');
     });
 	$('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0] + ')"');
-	if($('#expressao').html().split(" ")[0] == "5"){
-		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').html().split(" ").slice(1,$('#expressao').html().split(" ").length).join(" "));
+	if($('#expressao').text().split(" ")[0] == "5"){
+		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').text().split(" ").slice(1,$('#expressao').text().split(" ").length).join(" "));
 	}
     /**for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
@@ -1615,7 +1629,7 @@ function excluir_selection() {
     	var data = new Date().toLocaleString()
         document.getElementById("nome_pesquisa_sel").value = "Seleção " + data;
     };
-
+	
     document.getElementById("nome_pesquisa").value = document.getElementById("nome_pesquisa_sel").value;
     document.getElementById("filtrar").click();
 }
@@ -1818,3 +1832,4 @@ function paginacao() {
         window.location = "?page=hide";
     }
 }
+				
