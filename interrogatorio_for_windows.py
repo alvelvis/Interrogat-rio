@@ -15,6 +15,7 @@ def main():
 
     os.environ['PYTHONUTF8'] = "1"
     path = os.path.dirname(os.path.abspath(__file__))
+    print(path)
     repo = Repo('{}'.format(path))
     repo.config_writer().set_value("user", "name", "myusername").release()
     repo.config_writer().set_value("user", "email", "myemail").release()
