@@ -8,19 +8,23 @@ import subprocess
 import webbrowser
 import shutil
 import socket
-from git import Repo
 from http.server import HTTPServer, CGIHTTPRequestHandler
 
 def main():
 
     os.environ['PYTHONUTF8'] = "1"
     path = os.path.dirname(os.path.abspath(__file__))
-    repo = Repo('{}'.format(path))
-    repo.config_writer().set_value("user", "name", "myusername").release()
-    repo.config_writer().set_value("user", "email", "myemail").release()
-    repo.config_writer().set_value("core", "fileMode", "false").release()
-    repo.config_writer().set_value("core", "autocrlf", "true").release()
-    repo.git.pull()
+
+    try:
+        from git import Repo
+        repo = Repo('{}'.format(path))
+        repo.config_writer().set_value("user", "name", "myusername").release()
+        repo.config_writer().set_value("user", "email", "myemail").release()
+        repo.config_writer().set_value("core", "fileMode", "false").release()
+        repo.config_writer().set_value("core", "autocrlf", "true").release()
+        repo.git.pull()
+    except Exception as e:
+        print("Warning (Git): {}".format(e))
     
     print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\n")
     if not 'www' in os.getcwd():
