@@ -145,7 +145,7 @@ elif form['action'].value == 'view':
 	html += '<script src="../interrogar-ud/resultados.js"></script>'
 	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1>\
 		<a title='Mostrar lista de sent_id das frases' class='translateTitle translateHtml extractSentidFilter' style='cursor:pointer; color:blue; text-decoration: underline;'>[Lista de sent_id]</a> \
-		<a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' style='cursor:pointer; color:blue; text-decoration: underline;' onclick='if(window.confirm(\"Deseja desfazer o filtro?\")) {{ window.location.href = \"../cgi-bin/filtrar.cgi?action=desfazer&html={nome_html}&filtro={nome_filtro_encoded}\"; }}'>[Desfazer filtro]</a> \
+		<a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' style='cursor:pointer; color:blue; text-decoration: underline;' onclick='if(window.confirm(\"Deseja desfazer o filtro?\")) {{ window.location.href = \"../cgi-bin/filtrar.py?action=desfazer&html={nome_html}&filtro={nome_filtro_encoded}\"; }}'>[Desfazer filtro]</a> \
 		<a href='#' class='translateHtml' onclick='window.close()'>[Fechar página]</a>\
 		<br><span class='extractSentidSpan' style='display:none'></span><input class='extractSentidInput' style='width: 300px; display:none; margin:5px;'>\
 		<br>{parametros}<br><br>\

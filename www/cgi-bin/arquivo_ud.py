@@ -45,6 +45,13 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     if JULGAMENTO:
         html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
 
+    udpipe_models = []
+    for file in os.listdir("./cgi-bin"):
+        if file.endswith(".udpipe"):
+            udpipe_models.append(file)
+    udpipe_models = "\n".join(["<option>{}</option>".format(x) for x in udpipe_models])
+    html = html.replace("<!--chooseLanguage-->", udpipe_models)
+
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
 
@@ -54,7 +61,7 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     uds = [x for x in os.listdir('./interrogar-ud/conllu') if os.path.isfile('./interrogar-ud/conllu/' + x) if x != "README.md" and x.endswith(".conllu")]
 
     for ud in sorted(uds):
-        html1 += '<div class="container-lr"><a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + f'</a> &nbsp;&nbsp; <span ud="{ud}" size="{str(file_size("./interrogar-ud/conllu/" + ud)).split(" ")[0]}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; <span ud="{ud}" class="n_files">carregando...</span> <span class="translateHtml">arquivos</span> &nbsp;&nbsp; ' + str(file_size('./interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('./interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + f''' &nbsp;&nbsp;&nbsp; [ <a class="translateHtml updateCorpus" ud="{ud}" href="#" >atualizar</a> | <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> | <a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.py?validate=''' + ud + '''">validar</a> ]</div>\n'''
+        html1 += f'<div class="container-lr"><b>{ud}</b> &nbsp;&nbsp; <span ud="{ud}" size="{str(file_size("./interrogar-ud/conllu/" + ud)).split(" ")[0]}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; <span ud="{ud}" class="n_files">carregando...</span> <span class="translateHtml">arquivos</span> &nbsp;&nbsp; ' + str(file_size('./interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('./interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + f''' &nbsp;&nbsp;&nbsp; [ <a href="../interrogar-ud/conllu/{ud}" download>download</a> | <a class="translateHtml updateCorpus" ud="{ud}" href="#" >atualizar</a><!--a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.py?validate=''' + ud + '''">| validar</a--> | <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> ]</div>\n'''
 
     novo_html = html1 + "<script>loadCorpora()</script>" + html2
 
@@ -113,7 +120,7 @@ elif not 'validate' in form:
                     e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
-                os.system('cat ./interrogar-ud/conllu/' + slugify(f) + ' | ./cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ./cgi-bin/' + functions.modelo + ' > ./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu")
+                os.system('cat ./interrogar-ud/conllu/' + slugify(f) + ' | ./cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ./cgi-bin/' + form['chooseLanguage'].value + ' > ./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu")
                 os.system('rm ./interrogar-ud/conllu/' + slugify(f))
                 if JULGAMENTO:
                     with open('./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu") as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w') as e:

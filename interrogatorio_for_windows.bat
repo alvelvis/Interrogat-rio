@@ -1,3 +1,3 @@
 @ECHO OFF
-Python39\Python.exe interrogatorio_for_windows.py
+Python39\Python.exe for_windows.py
 pause

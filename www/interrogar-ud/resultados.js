@@ -514,8 +514,14 @@ var translations = {
 	'Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.': {
 		'en-US': 'Submit an annotated file in the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> format to start interrogating it.'
 	},
-	'Você também pode enviar um arquivo em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">língua portuguesa</a>.': {
-		'en-US': 'You may also submit a plain text file to be processed by an <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">automatic annotator</a> trained in <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">Portuguese</a>. '
+	'Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v1.2.0</a>.': {
+		'en-US': 'You may also submit a plain text file to be processed by <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v.1.2.0</a>.'
+	},
+	'Corpora no repositório': {
+		'en-US': 'Corpora in the repository'
+	},
+	'Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.': {
+		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.'
 	},
 	'Selecione o arquivo ou arraste-o para o botão abaixo:': {
 		'en-US': 'Select the file or drag it to the button below:'
@@ -837,6 +843,9 @@ var translations = {
 	},
 	"Relatório de inquéritos: Interrogatório": {
 		"en-US": "Inquiries report: Interrogatório"
+	},
+	"Relatório de inquéritos": {
+		'en-US': 'Inquiries report'
 	},
 	"Visualizar árvore": {
 		"en-US": "Display tree"

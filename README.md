@@ -10,11 +10,15 @@ If you wish to deploy Interrogatório to a web server, using Ubuntu/Apache2, che
 
 Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader understanding of Interrogatório tools.
 
-<!---You can also use Interrogatório at the website [http://comcorhd.letras.puc-rio.br/interrogatorio/](http://comcorhd.letras.puc-rio.br/interrogatorio/), where you are able to query the already available corpora, or upload your own, be it in the UD format or in plain text to be annotated (in Portuguese).-->
-
 # How to run on a Windows machine
 
-Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases), download the latest version .zip file, extract it and run `interrogatorio_for_windows.bat`.
+1) Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases)
+
+2) Download the latest version .zip file
+
+3) Extract the folder `Interrogat-rio`
+
+4) Run `interrogatorio_for_windows.bat`
 
 # How to install in a local server: 4-steps Tutorial
 
@@ -22,7 +26,7 @@ If you wish to run Interrogatório in a local server, a Linux computer (or Windo
 
 1) The recommended way to download the repository is by cloning it. In a terminal, execute the following command:
 
-	$ git clone https://github.com/alvelvis/Interrogat-rio.git
+	$ git clone https://github.com/alvelvis/Interrogat-rio.git --recursive
 
 2) Change to the newly created directory:
 
@@ -37,10 +41,6 @@ If you wish to run Interrogatório in a local server, a Linux computer (or Windo
 	$ sh run_interrogatorio.sh
 
 All set, you'll be able to access Interrogatório by the local page [http://localhost:8000/](http://localhost:8000/). End the server by pressing "Ctrl+C" in the terminal window.
-
-# How to compile the executables on Windows
-
-`pyinstaller interrogatorio_for_windows.spec --noconfirm`
 
 # How to cite
 

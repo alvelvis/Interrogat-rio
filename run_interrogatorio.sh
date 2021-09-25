@@ -1,9 +1,10 @@
 sudo chmod -R a+rwx www
-. .interrogatorio/bin/activate
 
 if [ ! -d .interrogatorio ]; then
   sh install_interrogatorio.sh
 fi
+
+. .interrogatorio/bin/activate
 
 if ! python3 -c "import chardet"; then
   if ! pip3 install -r requirements.txt; then

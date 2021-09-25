@@ -25,15 +25,21 @@
       <h3 class="translateHtml">Para alimentar o repositório:</h3>
       <ul>
         <li class="translateHtml">Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
-        <li class="translateHtml">Você também pode enviar um arquivo em formato de texto plano para ser processado por um <a title="UDPipe" href="http://ufal.mff.cuni.cz/udpipe" target="_blank">anotador automático</a> treinado em <a title="Bosque-UD" href="https://github.com/UniversalDependencies/UD_Portuguese-Bosque" target="_blank">língua portuguesa</a>.</li>
+        <li><div class="tooltip"><span class="tooltiptext translateHtml">Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.</span><span class="translateHtml">Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v1.2.0</a>.</span></div></li>
       </ul>
-      <form action="../cgi-bin/arquivo_ud.py" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
+      <form action="../cgi-bin/arquivo_ud.py" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml chooseFileLabel">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
         <input type=hidden class="anotaresubmeter translateVal" value="Anotar e submeter">
         <input type=hidden class="submetercorpusanotado translateVal" value="Submeter corpus anotado">
         <input type=hidden class="apagararquivo translateVal" value="Apagar arquivo">
-          <input name="file" onchange="if(/\.txt$/.test($(this).val())) { $('#submeter').val($('.anotaresubmeter').val()); $('#submeter').show(); } else {if(/\.conllu$/.test($(this).val())) { $('#submeter').val($('.submetercorpusanotado').val()); $('#submeter').show(); } else { $('#submeter').hide(); }} " value="Escolher arquivo" class="translateVal uploadFile" required="required" type="file"> </label><br><br><input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit"></form>
-      <br>
-      <br>
+          <input name="file" value="Escolher arquivo" class="translateVal uploadFile" required="required" type="file"> </label>
+          <br>
+          <select id="chooseLanguage" name="chooseLanguage" style="margin-top: 10px; margin-bottom: 10px; display:none">
+            <!--chooseLanguage-->
+          </select>
+          <br>
+          <input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit">
+        </form>
+      <h2 class="translateHtml">Corpora no repositório</h2>
       <form action="../cgi-bin/inquerito.py" method="POST" class="apagarCorpus">
         <input type=hidden name="action" value="apagarCorpus">
         <input type=hidden class='fieldUd' name="ud" value="">
@@ -46,6 +52,25 @@
           $('.apagarCorpus').submit();
       	};
       };
+      $('.uploadFile').change(function(){
+        if (/\.txt$/.test($(this).val())) { 
+          $('#submeter').val($('.anotaresubmeter').val()); 
+          $('#submeter').show();
+          $('#chooseLanguage').show();
+          $('.chooseFileLabel').css({'color': ''});
+        } else {
+          if(/\.conllu$/.test($(this).val())) { 
+            $('#submeter').val($('.submetercorpusanotado').val()); 
+            $('#submeter').show(); 
+            $('#chooseLanguage').hide();
+            $('.chooseFileLabel').css({'color': ''});
+          } else { 
+            $('#submeter').hide();
+            $('#chooseLanguage').hide();
+            $('.chooseFileLabel').css({'color': 'red'});
+          }
+        }
+      })
       </script>
   </body>
 </html>
