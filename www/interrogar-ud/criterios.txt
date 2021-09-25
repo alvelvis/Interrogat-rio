@@ -35,9 +35,9 @@
 <span class="translateHtml">Quero procurar por:</span><br><br>
 <select title="Token/palavra que será avaliado nesta condição" class="translateTitle token">
     <option class="translateTitle" title="Token principal">token</option>
-    <option class="translateTitle" title="Pai do token">head_token</option>
-    <option class="translateTitle" title="Token à direita">next_token</option>
-    <option class="translateTitle" title="Token à esquerda">previous_token</option>
+    <option class="translateTitle" title="Pai do token">token.head_token</option>
+    <option class="translateTitle" title="Token à direita">token.next_token</option>
+    <option class="translateTitle" title="Token à esquerda">token.previous_token</option>
 </select>
 <span class="translateHtml">cujo(a)</span> 
 <select title="Anotação que será avaliada" class="translateTitle atribute">
