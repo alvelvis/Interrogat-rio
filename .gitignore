@@ -1,7 +1,3 @@
 *.pyc
-inqueritos.txt
-queries.txt
-relatorio.txt
 .interrogatorio
-dist.log
 Python39
