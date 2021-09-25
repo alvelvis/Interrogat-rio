@@ -19,6 +19,8 @@ def main():
     repo = Repo('{}'.format(path))
     repo.config_writer().set_value("user", "name", "myusername").release()
     repo.config_writer().set_value("user", "email", "myemail").release()
+    repo.config_writer().set_value("core", "fileMode", "false").release()
+    repo.config_writer().set_value("core", "autocrlf", "true").release()
     repo.git.pull()
     
     print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\n")
