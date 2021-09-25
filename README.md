@@ -14,7 +14,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 1) Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases)
 
-2) Download the latest version .zip file
+2) Download the latest version `Interrogat-rio.zip`
 
 3) Extract the folder `Interrogat-rio`
 
