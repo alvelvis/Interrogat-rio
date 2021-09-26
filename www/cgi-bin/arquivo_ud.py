@@ -15,6 +15,7 @@ from functions import prettyDate
 import functions
 from chardet import detect
 from max_upload import max_filesize
+from ufal.udpipe import Model, Pipeline
 
 JULGAMENTO = False
 if os.path.isdir("../Julgamento"):
@@ -120,8 +121,16 @@ elif not 'validate' in form:
                     e.write(text)
                 os.remove(srcfile) # remove old encoding file
                 os.rename(trgfile, srcfile) # rename new encoding
-                os.system('cat ./interrogar-ud/conllu/' + slugify(f) + ' | ./cgi-bin/' + functions.udpipe + ' --tokenize --tag --parse ./cgi-bin/' + form['chooseLanguage'].value + ' > ./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu")
-                os.system('rm ./interrogar-ud/conllu/' + slugify(f))
+
+                model = Model.load("./cgi-bin/{}".format(form['chooseLanguage'].value))
+                pipeline = Pipeline(model, "tokenize", Pipeline.DEFAULT, Pipeline.DEFAULT, "conllu")
+
+                with open('./interrogar-ud/conllu/' + slugify(f)) as filename:
+                    processed = pipeline.process(filename.read())
+                os.remove('./interrogar-ud/conllu/' + slugify(f))
+                with open('./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu", "w") as filename:
+                    filename.write(processed)
+
                 if JULGAMENTO:
                     with open('./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu") as ff, open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w') as e:
                         text = ff.read() # for small files, for big use chunks

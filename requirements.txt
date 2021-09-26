@@ -11,9 +11,10 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 regex==2021.8.28
 requests==2.26.0
-requests_download==0.1.2
+requests-download==0.1.2
 simplejson==3.17.5
 smmap==4.0.0
 typing-extensions==3.10.0.2
+ufal.udpipe==1.2.0.3
 urllib3==1.26.7
 yarg==0.1.9

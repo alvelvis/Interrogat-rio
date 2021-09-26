@@ -12,6 +12,7 @@ from http.server import HTTPServer, CGIHTTPRequestHandler
 
 def main():
 
+    os.environ['GIT_PYTHON_GIT_EXECUTABLE'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "PortableGit", "bin", "git.exe")
     os.environ['PYTHONUTF8'] = "1"
     path = os.path.dirname(os.path.abspath(__file__))
 
