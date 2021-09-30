@@ -13,7 +13,7 @@ from http.server import HTTPServer, CGIHTTPRequestHandler
 def main():
 
     try:
-        import GitPython
+        import git
     except:
         os.system("\"{}\\python.exe\" -m pip install -r requirements.txt".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39")))
 
