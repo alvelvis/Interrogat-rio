@@ -15,7 +15,8 @@ from functions import prettyDate
 import functions
 from chardet import detect
 from max_upload import max_filesize
-from ufal.udpipe import Model, Pipeline
+if 'win' in sys.platform:
+    from ufal.udpipe import Model, Pipeline
 
 JULGAMENTO = False
 if os.path.isdir("../Julgamento"):

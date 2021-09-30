@@ -520,8 +520,8 @@ var translations = {
 	'Corpora no repositório': {
 		'en-US': 'Corpora in the repository'
 	},
-	'Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.': {
-		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.'
+	'Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.<br><br>APENAS DISPONÍVEL PARA DISTRIBUIÇÕES LINUX': {
+		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.<br><br>ONLY AVAILABLE FOR LINUX DISTRIBUTIONS'
 	},
 	'Selecione o arquivo ou arraste-o para o botão abaixo:': {
 		'en-US': 'Select the file or drag it to the button below:'
