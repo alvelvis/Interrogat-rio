@@ -15,7 +15,7 @@ from functions import prettyDate
 import functions
 from chardet import detect
 from max_upload import max_filesize
-if 'win' in sys.platform:
+if not 'win' in sys.platform:
     from ufal.udpipe import Model, Pipeline
 
 JULGAMENTO = False
