@@ -62,7 +62,7 @@ deprel|erro: DEPREL inválido
 deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos|obl:arg)"
 
 upos|erro: acl:relcl deve ser filha de nome
-@head_token.upos != "NOUN|PRON" and deprel = "acl:relcl"
+@head_token.upos != "NOUN|PRON|PROPN|SYM" and deprel = "acl:relcl"
 
 upos|erro: conj deve ser subordinado à mesma POS
 @deprel = "conj" and head_token.upos != upos
@@ -95,7 +95,7 @@ upos|erro: Este upos não pode ter deprel "cc"
 upos != "CCONJ" and deprel == "cc" and misc != ".*MWE.*"
 
 deprel|erro: CCONJ deve ter deprel "cc"
-upos = "CCONJ" and deprel != "cc" and misc != ".*MWE.*"
+upos = "CCONJ" and deprel != "cc|fixed|flat:name" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter ter deprel "aux"
 upos != "AUX" and deprel == "aux" and misc != ".*MWE.*"
@@ -105,7 +105,7 @@ upos = "AUX" and deprel != "(aux|aux:pass|cop)" and misc != ".*MWE.*"
 
 deprel|erro: ADV deve ser advmod
 deprel = "advmod" and upos != "ADV" and misc != ".*MWE.*"
-deprel != "advmod|fixed|compound" and upos = "ADV"
+deprel != "advmod|fixed|compound" and upos = "ADV" and misc != ".*MWE.*"
 
 feats|erro: VERB deve ter feats VerbForm
 upos = "(AUX|VERB)" and feats != ".*VerbForm=.*"
@@ -130,3 +130,6 @@ lemma = "algum" and feats != ".*PronType=Ind.*"
 
 deprel|erro: Possível caso de voz passiva sem obl:agent
 lemma = "por" and @head_token.deprel != "obl:agent" and head_token.head_token.feats = ".*VerbForm=Part.*"
+
+upos|erro: ADP e DET devem depender do substantivo à direita
+@upos = "DET|ADP" and next_token.upos = "NOUN" and token.deprel != "fixed" and next_token.deprel != "fixed" and head_token.id != next_token.id

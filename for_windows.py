@@ -12,10 +12,13 @@ from http.server import HTTPServer, CGIHTTPRequestHandler
 
 def main():
 
+    # to make a new update that requires new packages: append the name of the package in the list and try to import it
+    new_packages = ["GitPython"]
     try:
         import git
     except:
-        os.system("\"{}\\python.exe\" -m pip install -r requirements.txt".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39")))
+        for package in new_packages:
+            os.system("\"{}\\python.exe\" -m pip install {}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"), package))
 
     os.environ['GIT_PYTHON_GIT_EXECUTABLE'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "PortableGit", "bin", "git.exe")
     os.environ['PYTHONUTF8'] = "1"
