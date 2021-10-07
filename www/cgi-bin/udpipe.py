@@ -28,7 +28,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	with open('./cgi-bin/anotado.txt', 'r') as f:
 		resultado = f.read()
 
-	os.system('rm ./cgi-bin/cru.txt ./cgi-bin/anotado.txt')
+	os.remove("./cgi-bin/cru.txt")
+	os.remove("./cgi-bin/anotado.txt")
 
 	html += '<pre style="font-size: 14px">' + resultado + '</pre>'
 

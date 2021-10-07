@@ -8,6 +8,7 @@ print('\n\n')
 
 import os
 import cgi, cgitb
+import shutil
 cgitb.enable()
 import re
 import estrutura_ud
@@ -107,8 +108,7 @@ def renderSentences(script=""):
         if not script:
             resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
         else:
-            if os.system("cp ./cgi-bin/scripts/" + script + ' ./cgi-bin/queryScript.py'):
-                pass
+            shutil.copy("./cgi-bin/scripts/" + script, './cgi-bin/queryScript.py')
             with open("./cgi-bin/queryScript.py", 'r') as f:
                 scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
             with open("./cgi-bin/queryScript.py", "w") as f:
