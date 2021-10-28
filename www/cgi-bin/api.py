@@ -20,6 +20,7 @@ import time
 import sys
 import functions
 import json
+import shutil
 
 form = cgi.FieldStorage()
 
@@ -107,8 +108,7 @@ def renderSentences(script=""):
         if not script:
             resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
         else:
-            if os.system("cp ./cgi-bin/scripts/" + script + ' ./cgi-bin/queryScript.py'):
-                pass
+            shutil.copy("cp ./cgi-bin/scripts/" + script, './cgi-bin/queryScript.py')
             with open("./cgi-bin/queryScript.py", 'r') as f:
                 scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
             with open("./cgi-bin/queryScript.py", "w") as f:
