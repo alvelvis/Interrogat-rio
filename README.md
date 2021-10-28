@@ -10,7 +10,7 @@ If you wish to deploy Interrogatório to a web server, using Ubuntu/Apache2, che
 
 Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader understanding of Interrogatório tools.
 
-# How to run on a Windows machine
+<!--# How to run on a Windows machine
 
 1) Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases)
 
@@ -18,7 +18,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 3) Extract the folder `Interrogat-rio` from the zip file
 
-4) Double click `interrogatorio_for_windows.bat`
+4) Double click `interrogatorio_for_windows.bat`-->
 
 # How to install in a local server: 4-steps Tutorial
 
