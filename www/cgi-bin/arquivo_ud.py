@@ -43,7 +43,8 @@ def file_size(file_path):
         return convert_bytes(file_info.st_size)
 
 if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
-    html = open('./interrogar-ud/arquivo_ud.html', 'r').read()
+    with open('./interrogar-ud/arquivo_ud.html', 'r') as f:
+        html = f.read()
     if JULGAMENTO:
         html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
 
@@ -83,7 +84,8 @@ elif not 'validate' in form:
             if os.path.isfile('./interrogar-ud/conllu/' + slugify(f)):
                 print("Arquivo \"" + slugify(f) + "\" já existe no repositório.")
             else:
-                open('./interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                with open('./interrogar-ud/conllu/' + slugify(f), 'wb') as filename:
+                    filename.write(form['file'].file.read())
                 srcfile = './interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'
                 from_codec = get_encoding_type(srcfile)
@@ -113,7 +115,8 @@ elif not 'validate' in form:
             if os.path.isfile('./interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu"):
                 print("Arquivo \"" + slugify(f).rsplit(".txt", 1)[0] + ".conllu" + "\" já existe no repositório.")
             else:
-                open('./interrogar-ud/conllu/' + slugify(f), 'wb').write(form['file'].file.read())
+                with open('./interrogar-ud/conllu/' + slugify(f), 'wb') as filename:
+                    filename.write(form['file'].file.read())
                 srcfile = './interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'
                 from_codec = get_encoding_type(srcfile)

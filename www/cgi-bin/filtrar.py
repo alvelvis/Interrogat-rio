@@ -59,7 +59,9 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		criterio = '1'
 		parametros = pesquisa
 	
-	if int(criterio) > int(open('./interrogar-ud/max_crit.txt', 'r').read().split()[0]):
+	with open('./interrogar-ud/max_crit.txt', 'r') as f:
+		max_crit = f.read().split()[0]
+	if int(criterio) > int(max_crit):
 		print('em desenvolvimento')
 		exit()
 
