@@ -21,7 +21,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	html += '<span class="translateHtml">Modelo:</span> <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
 	html += '<br>Corpus: <a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a>'
 
-	open('./cgi-bin/cru.txt', 'w').write(text.replace('"', '\\"'))
+	with open('./cgi-bin/cru.txt', 'w') as f:
+		f.write(text.replace('"', '\\"'))
 
 	os.system('cat ./cgi-bin/cru.txt | ./cgi-bin/' + udpipe + ' --tokenize --tag --parse ./cgi-bin/' + modelo + ' > ./cgi-bin/anotado.txt')
 

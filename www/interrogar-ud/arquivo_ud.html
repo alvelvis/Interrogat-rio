@@ -27,7 +27,7 @@
         <li class="translateHtml">Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
         <li><div class="tooltip"><span class="tooltiptext translateHtml">Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.<br><br>APENAS DISPONÍVEL PARA DISTRIBUIÇÕES LINUX</span><span class="translateHtml">Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v1.2.0</a>.</span></div></li>
       </ul>
-      <form action="../cgi-bin/arquivo_ud.py" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml chooseFileLabel">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
+      <form action="../cgi-bin/arquivo_ud.py" id="uploadCorpusForm" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml chooseFileLabel">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
         <input type=hidden class="anotaresubmeter translateVal" value="Anotar e submeter">
         <input type=hidden class="submetercorpusanotado translateVal" value="Submeter corpus anotado">
         <input type=hidden class="apagararquivo translateVal" value="Apagar arquivo">

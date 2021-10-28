@@ -1210,6 +1210,10 @@ function updateInterrogarBusca(){
 
 $(document).ready(function(){
 
+	$('#uploadCorpusForm').on('submit', function(e){
+		console.log($('[name=file]').get(0).files[0].size)
+	})	
+
 	updateTranslation();
 	updateInterrogarBusca();
 
@@ -1841,4 +1845,3 @@ function paginacao() {
         window.location = "?page=hide";
     }
 }
-				

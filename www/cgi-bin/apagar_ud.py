@@ -6,6 +6,7 @@ print('\n\n')
 
 import os
 import cgi
+import shutil
 
 form = cgi.FieldStorage()
 link = './interrogar-ud/conllu/' + form["ud"].value
@@ -16,9 +17,9 @@ print('''<head>
 
 if os.path.isfile(link):
 	if os.path.isdir('/home/elvis_desouza99/Dropbox/tronco/comcorhd.tronco.me/julgamento/'):
-		os.rename(link, '/home/elvis_desouza99/Dropbox/tronco/comcorhd.tronco.me/julgamento/static/uploads/' + form["ud"].value)
+		shutil.move(link, '/home/elvis_desouza99/Dropbox/tronco/comcorhd.tronco.me/julgamento/static/uploads/' + form["ud"].value)
 	else:
-		os.rename(link, './interrogar-ud/tmp/' + form["ud"].value)
+		shutil.move(link, './interrogar-ud/tmp/' + form["ud"].value)
 
 	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/arquivo_ud.py" }</script></body>')
 else:

@@ -21,6 +21,7 @@ import time
 import sys
 import functions
 import json
+import shutil
 
 form = cgi.FieldStorage()
 

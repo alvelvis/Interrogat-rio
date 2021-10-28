@@ -20,25 +20,29 @@ if os.path.isfile(link):
 	import shutil
 	os.rename(link, './interrogar-ud/tmp/' + form['query'].value + '.html')
 	if os.path.isdir('./interrogar-ud/resultados/' + form["query"].value):
-		shutil.move('./interrogar-ud/resultados/' + form["query"].value, './interrogar-ud/tmp/')
-	queries = open('./interrogar-ud/queries.txt', 'r', encoding="utf-8").read().splitlines()
+		os.rename('./interrogar-ud/resultados/' + form["query"].value, './interrogar-ud/tmp/' + form["query"].value)
+	with open('./interrogar-ud/queries.txt', 'r', encoding="utf-8") as f:
+		queries = f.read().splitlines()
 	for i, query in enumerate(queries):
 		if slugify(query.split('\t')[1]) + '_' + query.split('\t')[6] == form["query"].value:
 			queries.pop(i)
 			break
 
-	open('./interrogar-ud/queries.txt','w').write("\n".join(queries))
+	with open('./interrogar-ud/queries.txt','w') as f:
+		f.write("\n".join(queries))
 
 	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.py" }</script></body>')
 
 else:
-	queries = open('./interrogar-ud/queries.txt', 'r', encoding="utf-8").read().splitlines()
+	with open('./interrogar-ud/queries.txt', 'r', encoding="utf-8") as f:
+		queries = f.read().splitlines()
 	for i, query in enumerate(queries):
 		if slugify(query.split('\t')[1]) + '_' + query.split('\t')[6] == form["query"].value:
 			queries.pop(i)
 			break
 
-	open('./interrogar-ud/queries.txt','w').write("\n".join(queries))
+	with open('./interrogar-ud/queries.txt','w') as f:
+		f.write("\n".join(queries))
 
 	print('<body onload="redirect()"><script>function redirect() { window.location = "../cgi-bin/interrogatorio.py" }</script></body>')
 
