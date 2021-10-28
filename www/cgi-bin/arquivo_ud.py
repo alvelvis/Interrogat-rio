@@ -84,7 +84,7 @@ elif not 'validate' in form:
             if os.path.isfile('./interrogar-ud/conllu/' + slugify(f)):
                 print("Arquivo \"" + slugify(f) + "\" já existe no repositório.")
             else:
-                with open('./interrogar-ud/conllu/' + slugify(f), 'wb') as filename:
+                with open('./interrogar-ud/conllu/' + slugify(f), 'wb+') as filename:
                     filename.write(form['file'].file.read())
                 srcfile = './interrogar-ud/conllu/' + slugify(f)
                 trgfile = 'codification'

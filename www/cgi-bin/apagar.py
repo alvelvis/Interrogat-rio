@@ -20,7 +20,7 @@ if os.path.isfile(link):
 	import shutil
 	os.rename(link, './interrogar-ud/tmp/' + form['query'].value + '.html')
 	if os.path.isdir('./interrogar-ud/resultados/' + form["query"].value):
-		shutil.move('./interrogar-ud/resultados/' + form["query"].value, './interrogar-ud/tmp/')
+		os.rename('./interrogar-ud/resultados/' + form["query"].value, './interrogar-ud/tmp/' + form["query"].value)
 	with open('./interrogar-ud/queries.txt', 'r', encoding="utf-8") as f:
 		queries = f.read().splitlines()
 	for i, query in enumerate(queries):
