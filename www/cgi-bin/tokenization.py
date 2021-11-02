@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
 import cgi, cgitb

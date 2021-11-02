@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
 print('Content-type:text/html; charset=utf-8')
@@ -163,7 +163,7 @@ if (os.environ['REQUEST_METHOD'] == "POST") or ('textheader' in cgi.FieldStorage
 
 if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
 	shutil.move('./interrogar-ud/conllu/' + form['ud'].value, './interrogar-ud/tmp/' + form['ud'].value)
-	if JULGAMENTO:
+	if JULGAMENTO and os.path.isfile(f'{JULGAMENTO}/static/uploads/' + form['ud'].value.rsplit(".", 1)[0] + "_original.conllu"):
 		os.remove(f'{JULGAMENTO}/static/uploads/' + form['ud'].value.rsplit(".", 1)[0] + "_original.conllu")
 	print('<script>window.location = "../cgi-bin/arquivo_ud.py"</script>')
 	exit()
