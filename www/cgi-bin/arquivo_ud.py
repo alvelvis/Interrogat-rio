@@ -55,6 +55,8 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     udpipe_models = "\n".join(["<option>{}</option>".format(x) for x in udpipe_models])
     html = html.replace("<!--chooseLanguage-->", udpipe_models)
 
+    html = html.replace('<div id="feed-{0}">'.format('windows' if not 'win' in sys.platform else 'linux'), '<div style="display:none">')
+
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
 

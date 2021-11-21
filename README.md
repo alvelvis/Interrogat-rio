@@ -10,7 +10,7 @@ If you wish to deploy Interrogatório to a web server, using Ubuntu/Apache2, che
 
 Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader understanding of Interrogatório tools.
 
-<!--# How to run on a Windows machine
+# How to run on a Windows machine
 
 1) Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases)
 
@@ -18,7 +18,7 @@ Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader 
 
 3) Extract the folder `Interrogat-rio` from the zip file
 
-4) Double click `interrogatorio_for_windows.bat`-->
+4) Double click `interrogatorio_for_windows.bat`
 
 # How to install in a local server: 4-steps Tutorial
 
@@ -45,12 +45,18 @@ All set, you'll be able to access Interrogatório by the local page [http://loca
 # How to cite
 
 ```
-@inproceedings{ETtilic,
-  title={ET: uma Estação de Trabalho para revisão, edição e avaliação de corpora anotados morfossintaticamente},
-  author={de Souza, Elvis and Freitas, Cl{\'a}udia},
-  booktitle={VI Workshop de Iniciação Científica em Tecnologia da Informação e da Linguagem Humana (TILic 2019)},
-  place={Salvador, BA, Brazil, Outubro, 15-18, 2019},
-  year={2019}
+@inproceedings{de-souza-freitas-2021-et,
+    title = "{ET}: A Workstation for Querying, Editing and Evaluating Annotated Corpora",
+    author = "de Souza, Elvis  and
+      Freitas, Cl{\'a}udia",
+    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = nov,
+    year = "2021",
+    address = "Online and Punta Cana, Dominican Republic",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.emnlp-demo.5",
+    pages = "35--41",
+    abstract = "In this paper we explore the functionalities of ET, a suite designed to support linguistic research and natural language processing tasks using corpora annotated in the CoNLL-U format. These goals are achieved by two integrated environments {--} Interrogat{\'o}rio, an environment for querying and editing annotated corpora, and Julgamento, an environment for assessing their quality. ET is open-source, built on different Python Web technologies and has Web demonstrations available on-line. ET has been intensively used in our research group for over two years, being the chosen framework for several linguistic and NLP-related studies conducted by its researchers.",
 }
 ```
 

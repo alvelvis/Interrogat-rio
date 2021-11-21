@@ -520,8 +520,8 @@ var translations = {
 	'Corpora no repositório': {
 		'en-US': 'Corpora in the repository'
 	},
-	'Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.<br><br>APENAS DISPONÍVEL PARA DISTRIBUIÇÕES LINUX': {
-		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.<br><br>ONLY AVAILABLE FOR LINUX DISTRIBUTIONS'
+	'Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.': {
+		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.'
 	},
 	'Selecione o arquivo ou arraste-o para o botão abaixo:': {
 		'en-US': 'Select the file or drag it to the button below:'
@@ -906,6 +906,12 @@ var translations = {
 	},
 	'Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior "&gt;" para indicar intervalo de id (por ex., "4&gt;6" para "de 4 até 6")': {
 		'en-US': 'Tips:<br>Use commas to specify more than one token id.<br>Use "greater than" to indicate an id range (i.e. "4>6" to "from 4 to 6")'
+	},
+	'Em um sistema Windows:': {
+		'en-US': 'On a Windows:'
+	},
+	'<a href="../cgi-bin/open-repo.py">Clique aqui</a> para selecionar o arquivo <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> que deseja enviar.': {
+		'en-US': '<a href="../cgi-bin/open-repo.py">Click here</a> to select the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> file you want to upload.'
 	}
 };
 
