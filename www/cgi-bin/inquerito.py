@@ -256,7 +256,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 
 		with open('./interrogar-ud/inqueritos.txt', 'w') as f:
 			f.write('\n'.join(inqueritos))
-		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + form['scriptName'].value.replace('"', '&quot;') + '"></form>'
+		html = '''<form id="submeter" action="../cgi-bin/inquerito.py?action=filtrar" method="POST"><input type=hidden name=coluna value=6><input type=hidden name=valor value="''' + re.escape(form['scriptName'].value.replace('"', '&quot;')) + '"></form>'
 		html += '<script>document.getElementById("submeter").submit();</script>'
 
 		os.remove('./interrogar-ud/conllu/' + form['conllu'].value)
