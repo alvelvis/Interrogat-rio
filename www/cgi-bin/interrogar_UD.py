@@ -411,7 +411,11 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		#pesquisa = pesquisa.replace("== int(", "==int(")
 		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)							
 
-		indexed_conditions = {x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 'token.' in x and not any(y in x for y in ["head_token", "previous_token", "next_token"])} #["head_token.head", "head_token.next", "head_token.previous", "next_token.head", "next_token.next", "next_token.previous", "previous_token.head", "previous_token.next", "previous_token.previous"])}
+		indexed_conditions = {
+			x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 
+			'token.' in x and 
+			not any(y in x for y in ["head_token", "previous_token", "next_token"])
+			}
 		pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
 		
 		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r're.search( r"^(" + r\2 + r")$", \1 )', pesquisa)
@@ -441,9 +445,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
 			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
-				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar)
+				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
 			else:
-				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar)
+				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
 			start = time.time()
 			corpus.load(arquivoUD)
 			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
