@@ -32,11 +32,11 @@ deprel = "(appos|conj|fixed|compound|flat|flat:name)" and dephead > id
 deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != ".*MWE.*"
 
 deprel|erro: Adjetivação com gênero diferente
-deprel = "amod" and head_token.gender != gender
+deprel = "amod" and head_token.gender != gender and misc != ".*MWE.*"
 deprel = "acl" and feats = ".*VerbForm=Part.*" and head_token.gender != gender
 
 deprel|erro: Adjetivação com número diferente
-deprel = "amod" and head_token.number != number
+deprel = "amod" and head_token.number != number and misc != ".*MWE.*"
 deprel = "acl" and feats = ".*VerbForm=Part.*" and head_token.number != number
 
 feats|erro: Features incompatíveis com a classe gramatical
@@ -80,7 +80,7 @@ deprel|erro: DET deve ter deprel "det"
 upos = "DET" and deprel != "det|fixed|flat:name" and misc != ".*MWE.*"
 
 deprel|erro: ADP deve ter deprel "case"
-upos = "ADP" and deprel != "case|fixed|flat:name|compound" and misc != ".*MWE.*"
+upos = "ADP" and deprel != "case|fixed|flat:name|compound|mark" and misc != ".*MWE.*"
 
 deprel|erro: ADP não pode ter filho
 head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
@@ -89,7 +89,7 @@ deprel|erro: SCONJ deve ter deprel "mark"
 upos = "SCONJ" and deprel != "mark|fixed" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter deprel "mark"
-upos != "SCONJ" and deprel = "mark" and misc != ".*MWE.*"
+upos != "SCONJ|ADP" and deprel = "mark" and misc != ".*MWE.*"
 
 upos|erro: Este upos não pode ter deprel "cc"
 upos != "CCONJ" and deprel == "cc" and misc != ".*MWE.*"
@@ -101,7 +101,7 @@ upos|erro: Este upos não pode ter ter deprel "aux"
 upos != "AUX" and deprel == "aux" and misc != ".*MWE.*"
 
 deprel|erro: AUX deve ter deprel "aux" ou "cop"
-upos = "AUX" and deprel != "(aux|aux:pass|cop)" and misc != ".*MWE.*"
+upos = "AUX" and deprel != "(aux|aux:pass|cop|fixed|compound|flat:name)" and misc != ".*MWE.*"
 
 deprel|erro: ADV deve ser advmod
 deprel = "advmod" and upos != "ADV" and misc != ".*MWE.*"
