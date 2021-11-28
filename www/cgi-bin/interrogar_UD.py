@@ -409,7 +409,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.int(', 'int(')
 		#pesquisa = pesquisa.replace("token.and", "and")
 		#pesquisa = pesquisa.replace("== int(", "==int(")
-		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
+		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)							
 
 		indexed_conditions = {x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 'token.' in x and not any(y in x for y in ["head_token", "previous_token", "next_token"])} #["head_token.head", "head_token.next", "head_token.previous", "next_token.head", "next_token.next", "next_token.previous", "previous_token.head", "previous_token.next", "previous_token.previous"])}
 		pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
@@ -492,7 +492,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		else:
 			sentences = corpus.sentences
 		sys.stderr.write(f"\nindexing: {time.time() - t1}")
-
+		
 		t1 = time.time()
 		for sent_id in sentences:
 			sentence = corpus.sentences[sent_id]
@@ -598,32 +598,37 @@ if __name__ == '__main__':
 	else:
 		arquivoUD = sys.argv[1]
 	
-	criterio=int(input('qual criterio de procura? '))
-	while criterio > 5:
-	    print('em desenvolvimento')
-	    criterio=int(input('qual criterio de procura? '))
+	if len(sys.argv) == 3:
+		criterio = int(sys.argv[2].split(" ", 1)[0])
+		parametros = sys.argv[2].split(" ", 1)[1]
+	else:
+		criterio=int(input('qual criterio de procura? '))
+		while criterio > 5:
+			print('em desenvolvimento')
+			criterio=int(input('qual criterio de procura? '))
 
-	if criterio == 1 or criterio == 3:
-		parametros = input('Expressão regular:\n')
+		if criterio == 1 or criterio == 3:
+			parametros = input('Expressão regular:\n')
 
-	if criterio == 2:
-		y=input('Se um token X marcado como: ')
-		z=int(input('Na coluna: '))
-		k=input('e nenhum outro token com valor: ')
-		w=int(input('na coluna: '))
-		nome=input('nomeie sua criação:\n')
-		parametros  = y + '#' + str(z) + '#' + k + '#' + str(w)
-		
-	if criterio == 4:
-		filho = input('Filho: ')
-		pai = input('Pai: ')
-		parametros = filho + ' :: ' + pai
+		if criterio == 2:
+			y=input('Se um token X marcado como: ')
+			z=int(input('Na coluna: '))
+			k=input('e nenhum outro token com valor: ')
+			w=int(input('na coluna: '))
+			nome=input('nomeie sua criação:\n')
+			parametros  = y + '#' + str(z) + '#' + k + '#' + str(w)
+			
+		if criterio == 4:
+			filho = input('Filho: ')
+			pai = input('Pai: ')
+			parametros = filho + ' :: ' + pai
 
-	if criterio == 5:
-		parametros = input("Expressão de busca:\n")
+		if criterio == 5:
+			parametros = input("Expressão de busca:\n")
 
 	#Chama a função principal e printo o resultado, dando a ela os parâmetros dos inputs
-	printar = main(arquivoUD, criterio, parametros)['output']
+	principal = main(arquivoUD, criterio, parametros)
+	printar = principal['output']
 	
 	if criterio in [1, 2, 3, 4]:
 		for a, sentence in enumerate(printar):
@@ -635,7 +640,8 @@ if __name__ == '__main__':
 		printar = '\n\n'.join(printar)
 	elif criterio in [5]:
 		printar = "\n\n".join([x['resultado'] for x in printar])
-		print(getDistribution(arquivoUD, criterio, parametros))
+		#print(getDistribution(arquivoUD, parametros, criterio=criterio))
 	
 	print(printar)
+	print("results: {}".format(principal['casos']))
 	
