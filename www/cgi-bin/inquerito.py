@@ -235,7 +235,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		f.write("\n".join(headers))
 	
 	start = time.time()
-	if call('python3 "./interrogar-ud/scripts/MODELO-UD.py" ' + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True):
+	call_python = "python3" if not 'win' in sys.platform else "\"{}\\python.exe\"".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"))
+	if call('{} "./interrogar-ud/scripts/MODELO-UD.py" '.format(call_python) + form['conllu'].value + ' ' + form['executar'].value + ' "' + estrutura_dados.slugify(form['scriptName'].value) + '"', shell=True):
 		pass
 	sys.stderr.write('\nMODELO-UD: {}'.format(time.time() - start))
 	
