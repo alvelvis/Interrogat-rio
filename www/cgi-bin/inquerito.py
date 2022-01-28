@@ -22,6 +22,8 @@ import validar_UD
 from credenciar import LOGIN
 import interrogar_UD
 import variables
+from udapi.core.document import Document
+from io import StringIO
 import json
 
 JULGAMENTO = False
@@ -29,6 +31,34 @@ if os.path.isdir("../Julgamento"):
     JULGAMENTO = "../Julgamento"
 if os.path.isdir("../../Julgamento"):
     JULGAMENTO = "../../Julgamento"
+
+def draw_tree(conllu):
+    """Test the draw() method, which uses udapi.block.write.textmodetrees."""
+    with RedirectedStdout() as out:
+        doc = Document()
+        data_filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), conllu)
+        doc.load_conllu([data_filename])
+        root = doc.bundles[0].get_tree()
+        root.draw(indent=4, color=False, attributes='form,upos,deprel',
+                    print_sent_id=False, print_text=False, print_doc_meta=False)
+        s = str(out)
+    return s
+
+class RedirectedStdout:
+    def __init__(self):
+        self._stdout = None
+        self._string_io = None
+
+    def __enter__(self):
+        self._stdout = sys.stdout
+        sys.stdout = self._string_io = StringIO()
+        return self
+
+    def __exit__(self, type, value, traceback):
+        sys.stdout = self._stdout
+
+    def __str__(self):
+        return self._string_io.getvalue()
 
 form = cgi.FieldStorage()
 
@@ -336,7 +366,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 		if ('# text = ' + form['textheader'].value + '\n' in sentence2) or ('# sent_id = ' + form['textheader'].value + '\n' in sentence2) or ('sentid' in form and '# sent_id = ' + form['sentid'].value + '\n' in sentence2):
 			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
 			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="enviar()" class="translateVal btn-gradient blue small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"> '
-			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient green small" id="changeTokenization" value="Modificar tokenização"><br><br>'
+			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient green small" id="changeTokenization" value="Modificar tokenização"> '
+			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient orange small" id="viewTree" value="Ver árvore"><br><br>'
 			html1 += '<!--br><br><br-->'
 
 			html1 += '''<div class="divTokenization" style="display:none">
@@ -455,6 +486,15 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 						html1 += '<option>' + linha.replace('<', '&lt;').replace('>', '&gt;') + '</option>'
 				html1 += "</datalist> "
 
+			with open("./cgi-bin/tree.conllu", "w") as f:
+				f.write(sentence2)
+			try:
+				tree = "\n".join(draw_tree("tree.conllu").splitlines()[1:])
+			except Exception as e:
+				tree = str(e)
+			os.remove("./cgi-bin/tree.conllu")
+
+			html1 += '<div class="treeDiv" style="display:none"><b class="translateHtml">Árvore de dependências</b><pre style="overflow: auto; max-height: 90vh;">{}</pre></div>'.format(tree)
 			html1 += '<br><b class="translateHtml">Edite os valores desejados:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
 
 			dicionario = dict()

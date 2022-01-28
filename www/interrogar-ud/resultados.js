@@ -912,8 +912,17 @@ var translations = {
 	},
 	'<a href="../cgi-bin/open-repo.py">Clique aqui</a> para selecionar o arquivo <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> que deseja enviar.': {
 		'en-US': '<a href="../cgi-bin/open-repo.py">Click here</a> to select the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> file you want to upload.'
+	},
+	'Limpar': {
+		'en-US': 'Clear'
+	},
+	'Ver árvore': {
+		'en-US': 'View tree'
+	},
+	'Árvore de dependências': {
+		'en-US': 'Dependencies tree'
 	}
-};
+}
 
 function updateTranslation(){
     $('.translateHtml').each(function(){
@@ -1593,6 +1602,15 @@ $(document).ready(function(){
 				window.close()
 			})
 		}
+	})
+
+	$('#clearBatch').click(function(){
+		$('#fileScript').val('')
+		$('#nomeScript').val('')
+	})
+
+	$('#viewTree').click(function(){
+		$('.treeDiv').slideToggle()
 	})
 
 });
