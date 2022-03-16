@@ -15,7 +15,7 @@ def main():
     # to make a new update that requires new packages: append the name of the package in the list and try to import it
     new_packages = ["GitPython", 'udapi']
     try:
-        import git
+        exec("import {}".format(new_packages[-1]))
     except:
         for package in new_packages:
             os.system("\"{}\\python.exe\" -m pip install {}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"), package))

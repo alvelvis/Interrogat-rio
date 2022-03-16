@@ -685,7 +685,7 @@ var translations = {
 	'Sintagmas': {
 		'en-US': 'Phrases'
 	},
-	'acabaram as sentenças': {
+	'acabaram as frases': {
 		'en-US': 'there are no more sentences'
 	},
 	'Selecionar sentença para filtragem': {
@@ -1163,7 +1163,7 @@ function carregarPosts(){
             if (JSON.parse(data).noMore == true){
                 $('#loadingGif').attr("src", "");
                 $('#statusLoading').html(':(');
-                $('#loadingText').html('acabaram as sentenças');
+                $('#loadingText').html('acabaram as frases');
             } else { scrollPosts(); };
             $('.cb').unbind('click');
             $('.metadados_sentence').unbind('click');
