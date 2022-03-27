@@ -85,7 +85,7 @@ arquivo_ud.load('./interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
 for x, linha in enumerate(codigo):
-	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
+	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'
