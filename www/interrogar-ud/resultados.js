@@ -289,10 +289,10 @@ var translations = {
 		'en-US': 'Query expressions builder'
 	},
 	'Tokenização modificada com sucesso': {
-		'en-US': 'Tokenization modified successfuly'
+		'en-US': 'Tokenization successfully modified'
 	},
 	'Alteração realizada com sucesso': {
-		'en-US': 'Modifications applied successfully'
+		'en-US': 'Modifications successfully applied'
 	},
 	'Atenção: edite também o sent_id desta sentença e/ou a nova sentença:': {
 		'en-US': 'Warning: edit, too, this sent_id and/or the new sentence:'
@@ -690,6 +690,9 @@ var translations = {
 	},
 	'Selecionar sentença para filtragem': {
 		'en-US': 'Select sentence to be filtered'
+	},
+	'Modifique a anotação da frase com um determinado sent_id.': {
+		'en-US': 'Modify the annotation of a sentence with a given sent_id.'
 	},
 	'Selecionar múltiplas sentenças': {
 		'en-US': 'Select multiple sentences'
@@ -1395,6 +1398,9 @@ $(document).ready(function(){
                     $lastDistribution.click();
                 };
             };
+			if ($('.toggleInquerito').prop('checked')) {
+				$('.toggleInquerito').click()
+			}
         };
     });
 
@@ -1495,6 +1501,23 @@ $(document).ready(function(){
 			$('.corpusLabel').css('color', 'red');
 		};
     });
+
+	$('.toggleInquerito').click(function(){
+
+		if ($('.conllu').val()) {
+			if ($('#pesquisa').val().length) {
+				sent_id = $('#pesquisa').val()
+				if (/^\d+\s.+/.test(sent_id)) {
+					sent_id = sent_id.replace(/^\d+\s/g, '')
+				}
+				var win = window.open('/cgi-bin/inquerito.py?conllu=' + encodeURIComponent($('.conllu').val()) + '&textheader=any&sentid=' + encodeURIComponent(sent_id), '_blank')
+				win.focus()
+			}
+		} else {
+			$('.corpusLabel').css('color', 'red')
+		}
+
+	})
 
     if($('.drag').length){
 
