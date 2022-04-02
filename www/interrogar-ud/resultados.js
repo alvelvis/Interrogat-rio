@@ -595,6 +595,9 @@ var translations = {
 	'Você deseja': {
 		'en-US': 'Would you like to'
 	},
+	'Inquérito realizado com sucesso: Interrogatório': {
+		'en-US': 'Modifications successfully applied: Interrogatório'
+	},
 	'Opções': {
 		'en-US': 'Options'
 	},
