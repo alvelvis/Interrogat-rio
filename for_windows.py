@@ -39,7 +39,7 @@ def main():
     except Exception as e:
         print("Warning (Git): {}".format(e))
     
-    print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\nDo not close this window until you are finished using Interrogatório.\n")
+    print("\n=== INTERROGATÓRIO ===\n\n>>> Open 'http://localhost:8000' on your browser to access Interrogatório locally.\nDo not close this window until you have finished using Interrogatório.\n")
     if not 'www' in os.getcwd():
         os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "www"))
         server_object = HTTPServer(('', 8000), CGIHTTPRequestHandler)

@@ -24,7 +24,7 @@ def reload():
 
 if filename:
     if not os.path.basename(filename) in os.listdir("./interrogar-ud/conllu"):
-        shutil.copy(filename, "./interrogar-ud/conllu/{}".format(slugify(filename)))
+        shutil.copy(filename, "./interrogar-ud/conllu/{}".format(slugify(os.path.basename(filename))))
         reload()
     else:
         print("Arquivo já existe no repositório.")
