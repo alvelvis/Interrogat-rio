@@ -300,6 +300,18 @@ var translations = {
 	'Separar sentença em duas': {
 		'en-US': 'Split sentence in two'
 	},
+	'Transformar texto em tokens': {
+		'en-US': 'Transform text into tokens'
+	},
+	'Insira palavras separadas por espaço para transformar o texto em estrutura de tokens.': {
+		'en-US': 'Enter space-separated words to turn the text into a token structure.'
+	},
+	'apenas busca': {
+		'en-US': 'only query'
+	},
+	'correção': {
+		'en-US': 'correction'
+	},
 	'Separar sentença após o token de id ': {
 		'en-US': 'Split sentence after the token id '
 	},
@@ -1230,6 +1242,35 @@ function updateInterrogarBusca(){
 };
 
 $(document).ready(function(){
+
+	$('#stringToTokenInput').on('keydown', function(e){
+		if (e.keyCode === 13) {
+			e.preventDefault()
+			$('#stringToTokenOk').click()
+		}
+	})
+
+	$('#stringToTokenOk').click(function(e){
+		if ($('#stringToTokenInput').val().length) {
+			input = $('#stringToTokenInput').val().split(" ")
+			output = ""
+			i = 0			
+			for (word of input) {
+				i = i + 1		
+				output = output + "token." + "next_token.".repeat(i-1) + $('#stringToTokenCol2').val() + " == \"" + word + "\" and "
+			}
+			output = output.slice(0, output.length-5)
+			if ($('[name=query]:checked').val() == "assignment") {
+				output = "if " + output + ":"
+				i = 0
+				for (word of input) {
+					i = i + 1
+					output = output + "\n\ttoken." + "next_token.".repeat(i-1) + $('#stringToTokenCol').val() + " = \"\""
+				}
+			}
+			$('#stringToTokenOutput').html(output).show()
+		}
+	})
 
 	$('#uploadCorpusForm').on('submit', function(e){
 		console.log($('[name=file]').get(0).files[0].size)

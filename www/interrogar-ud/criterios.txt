@@ -118,7 +118,9 @@
 <a class="addCondition translateTitle" style="cursor:pointer;" title="Adicionar esta condição à barra de busca (Atalho: Enter)" >[ OK ]</a> <a style="cursor:pointer;" class="addBoldCondition translateTitle" title="Adicionar condição com o token em negrito" >[ @ ]</a> <a style="color:red; cursor:pointer;" class="clearCondition translateTitle" title="Limpar expressão de busca" >[ X ]</a>
 <br>
 
-<br><hr><b><div onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer" class="translateHtml">Como funciona?</a></div></b>
+<br>
+
+<hr><b><div onclick="$('.construtorHelp').slideToggle();"><a style="cursor:pointer" class="translateHtml">Como funciona?</a></div></b>
 <ol type="1" class="construtorHelp" style="display:none">
     <li class="translateHtml">Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
     <li class="translateHtml">Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
@@ -126,6 +128,39 @@
     <li class="translateHtml">Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="pesquisaChange(); $('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
     <li class="translateHtml">Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 </ol>
+
+<hr><b><div onclick="$('.stringToToken').slideToggle();"><a style="cursor:pointer" class="translateHtml">Transformar texto em tokens</a></div></b>
+<ul class="stringToToken" style="display:none">
+    <li class="translateHtml">Insira palavras separadas por espaço para transformar o texto em estrutura de tokens.</li>
+    <li>
+        <input type="radio" name="query" value="query" id="queryToStringQuery" checked><label class="translateHtml" for="queryToStringQuery">apenas busca</label>
+        <select id="stringToTokenCol2">
+            <option>word</option>
+            <option>lemma</option>
+            <option>upos</option>
+            <option>xpos</option>
+            <option>feats</option>
+            <option>dephead</option>
+            <option>deprel</option>
+            <option>deps</option>
+            <option>misc</option>
+        </select>
+        <input type="radio" name="query" value="assignment" id="queryToStringAssignment"><label class="translateHtml" for="queryToStringAssignment">correção</label> 
+        <select id="stringToTokenCol">
+            <option>word</option>
+            <option>lemma</option>
+            <option>upos</option>
+            <option>xpos</option>
+            <option>feats</option>
+            <option>dephead</option>
+            <option>deprel</option>
+            <option>deps</option>
+            <option>misc</option>
+        </select>
+    </li>
+    <li><input id="stringToTokenInput" style="width:300px;"> <a href="#" id="stringToTokenOk">[OK]</a></li>
+    <pre style="display:none" id="stringToTokenOutput"></pre>
+</ul>
 
 !@#<h3 class="translateHtml">Critério 1: Regex</h3>
 <span class="translateHtml">Se a expressão regular for encontrada em alguma sentença, retorná-la.</span>
