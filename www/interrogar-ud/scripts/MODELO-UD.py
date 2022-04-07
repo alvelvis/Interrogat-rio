@@ -64,6 +64,9 @@ def remove_from(original, s, delimiter="|"):
 def get_head(tok, sentence):
 	return sentence.tokens[sentence.map_token_id[tok.dephead]].word if tok.dephead in sentence.map_token_id else "_"
 
+def regex(exp, col):
+    return re.search(r'^(' + exp + r")$", col)
+
 srcfile = './interrogar-ud/scripts/' + issue
 trgfile = 'codification'
 from_codec = get_encoding_type(srcfile)

@@ -1254,20 +1254,30 @@ $(document).ready(function(){
 		if ($('#stringToTokenInput').val().length) {
 			input = $('#stringToTokenInput').val().split(" ")
 			output = ""
-			i = 0			
-			for (word of input) {
-				i = i + 1		
-				output = output + "token." + "next_token.".repeat(i-1) + $('#stringToTokenCol2').val() + " == \"" + word + "\" and "
+			if ($('[name=query]:checked').val() == "query") {
+				i = 0			
+				for (word of input) {
+					i = i + 1		
+					output = output + "token." + "next_token.".repeat(i-1) + $('#stringToTokenCol2').val() + " == \"" + word + "\" and "
+				}
+				output = output.slice(0, output.length-5)
 			}
-			output = output.slice(0, output.length-5)
 			if ($('[name=query]:checked').val() == "assignment") {
+				
+				i = 0
+				for (word of input) {
+					i = i + 1
+					output = output + 'regex("' + word + '", ' + 'token.' + "next_token.".repeat(i-1) + $('#stringToTokenCol2').val() + ') and '
+				}
+				output = output.slice(0, output.length-5)
 				output = "if " + output + ":"
 				i = 0
 				for (word of input) {
 					i = i + 1
 					output = output + "\n\ttoken." + "next_token.".repeat(i-1) + $('#stringToTokenCol').val() + " = \"\""
 				}
-			}
+
+			}//re.search( r"^(" + r"água" + r")$", token.__dict__['lemma'] )
 			$('#stringToTokenOutput').html(output).show()
 		}
 	})

@@ -17,7 +17,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 	ud = form['conllu'].value
 	text = form['textheader'].value
 
-	html += '<style>body { width: 90%; margin: 20px auto; }</style><h1>UDPipe</h1><hr><a href="#" class="translateHtml" onclick="window.close();">Fechar</a><br><br>'
+	html += '<style>body { width: 90%; margin: 20px auto; }</style><h1>UDPipe</h1><hr><!--a href="#" class="translateHtml" onclick="window.close();">Fechar</a><br><br-->'
 	html += '<span class="translateHtml">Modelo:</span> <a href="../cgi-bin/' + modelo + '" download>' + modelo + '</a>'
 	html += '<br>Corpus: <a href="../interrogar-ud/conllu/' + ud + '" download>' + ud + '</a>'
 

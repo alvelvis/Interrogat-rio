@@ -16,8 +16,10 @@ with open("./interrogar-ud/scripts/modelo_script.txt") as f:
 
 form = cgi.FieldStorage()
 
+empty_line = script.index('') + 1
+
 if form['crit'].value == '5':
-    script[5] = 'if ' + form['params'].value + ":"
+    script[empty_line] = 'if ' + form['params'].value.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
 
 with open("./interrogar-ud/scripts/interrogar-script.txt", "w") as f:
     f.write("\n".join(script))

@@ -1,8 +1,11 @@
-#Escreva seu script abaixo, seguindo a sintaxe das classes em estrutura_ud.py
-#"token" é o nome do primeiro token sendo procurado, e "tokens" é a lista de tokens na sentença atual
-#Também existe a variável "sentence", para a sentença atual, e "n", para o número do token atual
-#Para adicionar novos valores a colunas com múltiplos valores (features, misc), utilize as funções append_to() e remove_from(), como no exemplo abaixo
+# Escreva seu script abaixo, seguindo a sintaxe das classes em estrutura_ud.py
+# "token" é o nome do primeiro token sendo procurado, e "tokens" é a lista de tokens na sentença atual
+# Também existe a variável "sentence", para a sentença atual, e "n", para o número do token atual
+# Para adicionar novos valores a colunas com múltiplos valores (features, misc), utilize as funções append_to() e remove_from(), como no exemplo abaixo
+# Ex: append_to(token.feats, "Gender=Masc|Number=Sing)
+# Para buscar utilizando expressão regular, utilize a função regex(), como no exemplo abaixo
+# Ex: regex(".*mod", token.deprel)
 
-if token.upos == "NUM" and token.deprel == "nmod":
+if token.upos == "NUM" and regex("[na]mod", token.deprel):
 	token.deprel = "editar aqui!"
 	token.feats = append_to(token.feats, "Adicionar|Várias|Features")

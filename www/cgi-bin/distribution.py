@@ -128,7 +128,7 @@ function sortTable(n) {
 '''
 pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
 pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
-pagina += '<a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
+pagina += '<!--a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br--><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
 pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.py?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
 pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].value
 pagina += "<br><br><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
