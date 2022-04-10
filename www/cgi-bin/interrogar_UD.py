@@ -44,7 +44,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 		if re.search(r"^\d+\s", parametros):
 			criterio = int(parametros.split(" ", 1)[0])
 			parametros = parametros.split(" ", 1)[1]
-		elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = "]):
+		elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
 			criterio = 5
 		else:
 			criterio = 1

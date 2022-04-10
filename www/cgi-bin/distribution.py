@@ -142,7 +142,7 @@ parametros = expressao
 if re.search(r"^\d+\s", parametros):
 	criterio = int(parametros.split(" ", 1)[0])
 	parametros = parametros.split(" ", 1)[1]
-elif any(x in parametros for x in [' = ', ' == ', ' != ', ' !== ']) and len(parametros.split('"')) > 2:
+elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
 	criterio = 5
 else:
 	criterio = 1
