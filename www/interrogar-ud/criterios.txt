@@ -80,7 +80,7 @@
     <option value='acl'>
     <option value='advcl'>
     <option value='advmod'>
-    <option value='amod	'>
+    <option value='amod'>
     <option value='appos'>
     <option value='aux'>
     <option value='case'>
@@ -158,7 +158,7 @@
             <option>misc</option>
         </select>
     </li>
-    <li><input id="stringToTokenInput" style="width:300px;"> <a href="#" id="stringToTokenOk">[OK]</a></li>
+    <li><input placeholder="Texto separado por espaços..." id="stringToTokenInput" style="width:300px;"> <a href="#" id="stringToTokenOk">[ OK ]</a></li>
     <pre style="display:none" id="stringToTokenOutput"></pre>
 </ul>
 

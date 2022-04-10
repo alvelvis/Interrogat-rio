@@ -1110,7 +1110,7 @@ function pesquisaChange(){
             $('.notDist').show();
         };
     };
-	if (!isMobile && $('#pesquisa').val().length > 20) {
+	if (!isMobile && $('#pesquisa').val().length > 50) {
 		$('.interrogarFlex').css({'margin-top': '-5px'});
 		$('.interrogarNews').animate({'margin-top': '115px'}, 200);
 		$('.corpusLabel').parents('p').css({'margin-top': '50px'});
