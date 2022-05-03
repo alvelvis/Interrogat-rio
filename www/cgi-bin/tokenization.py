@@ -118,6 +118,7 @@ def addToken(conllu, sent_id, option, token_id, conllu_completo="", new_tokens=[
                 novo_token.id = token_id if not '-' in novo_token.id else str(int(token_id)) + "-" + str(int(token_id)+int(novo_token.id.split("-")[1])-int(novo_token.id.split("-")[0]))
             elif option == "addContraction":
                 novo_token.id = token_id + "-" + token_id
+                novo_token.dephead = "_"
             if mergeSentencesId:
                 if not last_id:
                     last_id = corpus.sentences[sent_id].tokens[-1].id
