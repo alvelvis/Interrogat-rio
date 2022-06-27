@@ -14,8 +14,6 @@ from datetime import datetime
 
 form = cgi.FieldStorage()
 
-contextoEsquerda = ["", ""]
-contextoDireita = ["", ""]
 sent_id = form['sent_id'].value if 'sent_id' in form else ""
 id = form['id'].value if 'id' in form else ""
 conllu = form['corpus'].value
@@ -33,9 +31,9 @@ for i in range(int(numero)-1):
     if identificador + str(i + 1) in corpus.sentences:
         contextoEsquerda.append([identificador + str(i+1), corpus.sentences[identificador + str(i+1)].text])
 
-all_sentences = [x for x in corpus.sentences if x.rsplit("-", 1)[0] + "-" == identificador]
+all_sentences = [x for x in corpus.sentences if not identificador or x.rsplit("-", 1)[0] + "-" == identificador]
 for sentence in all_sentences:
-    if int(sentence.rsplit("-", 1)[1]) > int(numero):
+    if (int(sentence.rsplit("-", 1)[1]) if identificador else int(sentence)) > int(numero):
         contextoDireita.append([sentence, corpus.sentences[sentence].text])
 
 html = [f'<script src="../interrogar-ud/jquery.min.js"></script><script src="../interrogar-ud/resultados.js?version=12"></script><title class="translateHtml">Contexto: Interrogatório</title><h1 class="translateHtml">Contexto</h1><!--a href="javascript:window.close()" class="translateHtml">Fechar</a--><hr><span class="translateHtml">Página gerada dia</span> {prettyDate(datetime.now()).beautifyDateDMAH()}<br><span class="translateHtml">Corpus:</span> <a href="../interrogar-ud/conllu/{conllu}" download>{conllu}</a><h4><a href="#negrito" style="color:blue"><span class="translateHtml">Pular para</span> {sent_id or id}</a></h4>']
