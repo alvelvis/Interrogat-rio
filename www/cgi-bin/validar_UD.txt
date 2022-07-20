@@ -7,7 +7,7 @@ dephead == head_token.id and head_token.dephead == id and dephead != id
 
 deprel|erro: 3 - Dephead 0 must be "root"
 dephead == "0" and deprel != "root"
-deprel != "0" and deprel == "root"
+dephead != "0" and deprel == "root"
 
 dephead|erro: 4 - Invalid dephead
 dephead != "\d+"
