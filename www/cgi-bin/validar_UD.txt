@@ -63,7 +63,7 @@ feats|erro: VERB should have the "VerbForm" feature
 upos = "(AUX|VERB)" and feats != ".*VerbForm=.*"
 
 # LINGUISTIC REVISION
-deprel| Determiners can not be dependent of adjectives
+deprel|erro: Determiners can not be dependent of adjectives
 deprel = "det" and head_token.upos == "ADJ"
 
 deprel|erro: Adjective has wrong gender
