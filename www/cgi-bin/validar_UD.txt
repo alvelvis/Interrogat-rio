@@ -30,7 +30,7 @@ upos|erro: 7 - Invalid UPOS
 upos != "(ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X)"
 
 deprel|erro: 8 - Invalid deprel
-deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos|obl:arg)"
+deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|expl:pass|expl:pv|expl:impers|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos|obl:arg)"
 
 misc|erro: 9 - Invalid misc
 misc !== ".*MWE=.*|.*MWEPOS=.*|.*Spaces?After=.*|.*d2d:.*|.*ChangedBy=.*|_|.*start_char=.*|.*end_char=.*|.*Se=.*"
@@ -44,7 +44,7 @@ upos = "DET" and feats !== "Definite=Def|Gender=Masc|Number=Sing|PronType=Art|De
 upos = "(NOUN|PROPN)" and feats !== "Gender=Masc|Number=Sing|Gender=Fem|Number=Plur|Gender=Unsp|Foreign=Yes|Number=Unsp"
 upos = "NUM" and feats !== "NumType=Card|Gender=Masc|Gender=Fem|Number=Sing|NumType=Mult|Number=Plur|NumType=Ord|NumType=Frac|Definite=Ind|PronType=Art|NumType=Sets|NumType=Range"
 upos = "PART" and feats !== "_|Gender=Masc|Number=Sing"
-upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind" and deprel != "expl"
+upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|Case=Acc|Person=3|PronType=Prs|Case=Nom|Number=Plur|PronType=Int|Gender=Fem|PronType=Ind|Gender=Unsp|Person=1|Definite=Def|PronType=Art|Case=Dat|PronType=Tot|PronType=Neg|Number=Unsp|VerbForm=Ger|Person=2|Definite=Ind" and deprel != "expl.*"
 upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
@@ -87,8 +87,8 @@ lemma = "algum" and feats != ".*PronType=Ind.*"
 deprel|erro: Possibly a passive voice without an "obl:agent"
 lemma = "por" and @head_token.deprel != "obl:agent" and head_token.head_token.feats = ".*VerbForm=Part.*"
 
-feats|erro: DET and PRON ahould have the "PronType" and/or "Definite" features
-upos = "DET|PRON" and feats != ".*PronType=.*" and deprel != "expl"
+feats|erro: DET and PRON should have the "PronType" and/or "Definite" features
+upos = "DET|PRON" and feats != ".*PronType=.*" and deprel != "expl.*"
 upos != "DET|PRON" and feats = ".*PronType=.*"
 upos != "DET|PRON.*" and feats = ".*Definite=.*"
 feats = ".*PronType=Art.*" and feats != ".*Definite=.*"
