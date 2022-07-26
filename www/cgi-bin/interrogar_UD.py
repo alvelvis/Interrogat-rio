@@ -39,6 +39,7 @@ coluna_tab = {
 
 def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="", criterio=0):
 	import estrutura_ud
+	parametros = parametros.strip()
 
 	if not criterio:
 		if re.search(r"^\d+\s", parametros):
