@@ -16,6 +16,7 @@
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
+    <li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação" target="_blank">No critério 5 de busca, utilize "nt", "pt" e "ht" como abreviações</a></li>
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li>
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
@@ -219,6 +220,7 @@
 <br><br><span class="translateHtml">São anotações de um token:</span> <pre style="color:black" class="translateHtml">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
 <span class="translateHtml">Opcional: Utilize um "@" para indicar qual token deve ser negritado.</span>
 <br><span class="translateHtml">Dica: Todos os valores de uma condição são uma expressão regular (regex).</span>
+<br><span class="translateHtml">Dica 2: Use "nt" como abreviação para next_token, "pt" para previous_token e "ht" para head_token.</span>
 <h4 class="translateHtml">Exemplos:</h4>
 <span class="translateHtml">1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).</span>
 <ul><li>

@@ -367,7 +367,7 @@ var translations = {
 		'en-US': 'If the regular expression is found in a sentence, return it.'
 	},
 	'Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.': {
-		'en-US': 'Tip: Each group from the regular expression (within brackets) will be shown using a different color.'
+		'en-US': 'Hint: Each group from the regular expression (within brackets) will be shown using a different color.'
 	},
 	'Dica 2: Em um arquivo no formato CoNLL-U, "\\t" separa as colunas, e "\\n", as palavras.': {
 		'en-US': 'In a CoNLL-U file, "\\t" marks the columns, and "\\n", the words.'
@@ -440,6 +440,9 @@ var translations = {
 	},
 	'Dica: Todos os valores de uma condição são uma expressão regular (regex).': {
 		'en-US': 'All the values to a condition are a regular expression (regex).'
+	},
+	'Dica 2: Use "nt" como abreviação para next_token, "pt" para previous_token e "ht" para head_token.': {
+		'en-US': 'Use "nt" as a shortcut for next_token, "pt" for previous_token and "ht" for head_token.'
 	},
 	'1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).': {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
@@ -784,6 +787,9 @@ var translations = {
 	'Nova função: visualizar dispersão': {
 		'en-US': 'New feature: view dispersion'
 	},
+	'No critério 5 de busca, utilize "nt", "pt" e "ht" como abreviações': {
+		'en-US': 'In criterion 5, "nt", "pt" and "ht" are new abbreviations'
+	},
 	" antes do token de id ": {
 		"en-US": " before the token (id number) "
 	},
@@ -920,7 +926,7 @@ var translations = {
 		"en-US": "Context: Interrogatório"
 	},
 	"Dica: Utilize vírgula para determinar mais de um sent_id.": {
-		'en-US': "Tip: Use commas to specify more than one sent_id."
+		'en-US': "Hint: Use commas to specify more than one sent_id."
 	},
 	'Dicas:<br>Utilize vírgula para determinar mais de um id de token.<br>Utilize o sinal de maior "&gt;" para indicar intervalo de id (por ex., "4&gt;6" para "de 4 até 6")': {
 		'en-US': 'Tips:<br>Use commas to specify more than one token id.<br>Use "greater than" to indicate an id range (i.e. "4>6" to "from 4 to 6")'

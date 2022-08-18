@@ -39,7 +39,7 @@ coluna_tab = {
 
 def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="", criterio=0):
 	import estrutura_ud
-	parametros = parametros.strip()
+	parametros = parametros.strip().replace('“', '"').replace('”', '"')
 
 	if not criterio:
 		if re.search(r"^\d+\s", parametros):
@@ -150,7 +150,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
 def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
-	parametros = parametros.strip()
+	parametros = parametros.strip().replace('“', '"').replace('”', '"')
 	pesquisa = ""
 
 	if criterio in [1]:
@@ -402,6 +402,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
 		
+		pesquisa = pesquisa.replace("pt.", "previous_token").replace("ht.", "head_token").replace("nt.", "next_token")
+
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
 		pesquisa = pesquisa.replace('token.sentence.', 'sentence.')
