@@ -402,7 +402,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
 		
-		pesquisa = pesquisa.replace("pt.", "previous_token.").replace("ht.", "head_token.").replace("nt.", "next_token.")
+		pesquisa = pesquisa.replace(".pt.", ".previous_token.").replace(".ht.", ".head_token.").replace(".nt.", ".next_token.")
 
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
@@ -447,7 +447,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
-			if "head_token" in parametros or "next_token" in parametros or "previous_token" in parametros:
+			if any(x in pesquisa for x in ["head_token", "next_token", "previous_token"]):
 				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
 			else:
 				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
