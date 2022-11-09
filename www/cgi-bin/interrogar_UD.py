@@ -402,7 +402,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
 		
-		pesquisa = pesquisa.replace(".pt.", ".previous_token.").replace(".ht.", ".head_token.").replace(".nt.", ".next_token.")
+		pesquisa = pesquisa.replace(".pt", ".previous_token").replace(".ht", ".head_token").replace(".nt", ".next_token")
 
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')

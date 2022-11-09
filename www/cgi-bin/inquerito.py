@@ -492,7 +492,8 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 				tree = "\n".join(draw_tree("tree.conllu").splitlines()[1:])
 			except Exception as e:
 				tree = str(e)
-			os.remove("./cgi-bin/tree.conllu")
+			if os.path.isfile("./cgi-bin/tree.conllu"):
+				os.remove("./cgi-bin/tree.conllu")
 
 			html1 += '<div class="treeDiv" style="display:none"><b class="translateHtml">Árvore de dependências</b><pre style="overflow: auto; max-height: 90vh;">{}</pre></div>'.format(tree)
 			html1 += '<br><b class="translateHtml">Edite os valores desejados:</b></div><div class="div01" style="max-width:100%; overflow-x:auto;"><table id="t01">'
