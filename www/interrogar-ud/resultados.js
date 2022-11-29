@@ -707,7 +707,7 @@ var translations = {
 		'en-US': 'Phrases'
 	},
 	'acabaram as frases': {
-		'en-US': 'there are no more sentences'
+		'en-US': 'no more sentences'
 	},
 	'Selecionar sentença para filtragem': {
 		'en-US': 'Select sentence to be filtered'
