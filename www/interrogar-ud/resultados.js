@@ -1201,12 +1201,12 @@ function carregarPosts(){
             $('.metadados_sentence').click(function(e){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
 			});
-			$('[id^="text_"]').parents('p').unbind('click').on('click', function(){
+			/*$('[id^="text_"]').parents('p').unbind('click').on('click', function(){
 				if ($(this).parents('.sentence-container').find('.toolbar').is(':hidden')){
 					$('.toolbar').slideUp('fast');
 					$(this).parents('.sentence-container').find('.toolbar').slideDown('fast');
 				};
-			});
+			});*/
 			updateTranslation();
 			if ($('.saveQuery').length) {
 				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("./", ""));
