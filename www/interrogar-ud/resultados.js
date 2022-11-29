@@ -568,6 +568,9 @@ var translations = {
 	'Refazer busca': {
 		'en-US': 'Redo search'
 	},
+	'Voltar': {
+		'en-US': "Return"
+	},
 	'Baixar corpus': {
 		'en-US': 'Download corpus'
 	},
@@ -1694,6 +1697,22 @@ $(document).ready(function(){
 
 	$('#viewTree').click(function(){
 		$('.treeDiv').slideToggle()
+	})
+
+	$('.newQueryFromResults').click(function(){
+		let txt = expressao.innerText
+		let element = expressao
+		if ($(element).find('input').length) {
+			$(element).find('input').select()
+			return
+		}
+		element.innerHTML = `<input value='${txt}' style="min-width: 300px;" />`
+		element.children[0].select()
+		$(element).find('input').on('keydown', function(e){
+			if (e.key == "Enter") {
+				window.location = '../../cgi-bin/interrogar.py?corpus=' + $('#corpus').text() + '&params=' + encodeUrl($('#expressao').find('input').val()) + '&go=True'
+			}
+		})
 	})
 
 });
