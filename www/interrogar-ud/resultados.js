@@ -451,7 +451,7 @@ var translations = {
 		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.py">expressions bank for criterion 5: Python</a>.'
 	},
 	'Voltar ao topo': {
-		'en-US': 'Back to the top'
+		'en-US': 'Back to top'
 	},
 	'Atenção: modificações em vermelho serão descartadas caso deseje modificar a tokenização.': {
 		'en-US': 'Warning: changes in red will be discarded if you proceed tokenization.'
@@ -565,11 +565,11 @@ var translations = {
 	'Casos': {
 		'en-US': 'Occurrences'
 	},
-	'Refazer busca': {
-		'en-US': 'Redo search'
+	'Tentar outra busca': {
+		'en-US': 'Try another query'
 	},
 	'Voltar': {
-		'en-US': "Return"
+		'en-US': "Back"
 	},
 	'Baixar corpus': {
 		'en-US': 'Download corpus'
@@ -1706,7 +1706,7 @@ $(document).ready(function(){
 			$(element).find('input').select()
 			return
 		}
-		element.innerHTML = `<input value='${txt}' style="min-width: 300px;" /><span style="display:none">${txt}</span>`
+		element.innerHTML = `<input value='${txt}' style="min-width: 300px; width: 60%; margin-top:5px;" /><span style="display:none">${txt}</span>`
 		element.children[0].select()
 		$(element).find('input').on('keydown', function(e){
 			if (e.key == "Enter") {
