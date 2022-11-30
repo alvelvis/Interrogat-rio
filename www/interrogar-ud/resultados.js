@@ -1401,7 +1401,7 @@ $(document).ready(function(){
         } else {
             url = '../../cgi-bin/export_html.py'
         };
-        window.open(url + "?corpus=" + corpus.innerHTML + "&params=" + encodeURIComponent($('#expressao').text()) + "&html=" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val().replace(/#/%23), "_blank");
+        window.open(url + "?corpus=" + encodeURIComponent($("#corpus").text()) + "&params=" + encodeURIComponent($('#expressao').text()) + "&html=" + $('[name=link_interrogatorio]').val() + "&nome=" + $('[name=nome_interrogatorio]').val().replace(/#/%23), "_blank");
     });
 
     if($('#expressao').length){

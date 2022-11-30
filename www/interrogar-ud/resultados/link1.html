@@ -49,6 +49,7 @@
       <a style="cursor:pointer" title="" onclick="tudo('fechar')" class="optionsMenu translateHtml">Fechar anotação de todas as sentenças</a>
       <a style="cursor:pointer" onclick="$('#script').toggle();" class="optionsMenu translateHtml">Correção em lote</a>
       <div id="script" style="display:none">
+        <hr>
         <h3 class="translateHtml">Correção em lote</h3>
         <ul>
           <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.py">critério 5: Python</a>.</li>
@@ -75,10 +76,12 @@
             <!--script-->
           </form>
         </div>
-        <br>
+        <hr>
       </div>
       <!--DISTa style="cursor:pointer;" class="optionsMenu translateHtml" onclick="$('.viewDist').toggle()">Visualizar distribuição</a>
-        <ul class="viewDist">
+        <div class="viewDist">
+          <hr>
+        <ul>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Lema da palavra">lemma</a></li>
@@ -90,7 +93,8 @@
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência específica">deps</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Dependentes sintáticos">dependentes</a></li>
-      </ulDIST-->
+      </ul>
+    <hr></divDIST-->
       </div>
       <div class="tabcontent tabFilter" id="filtrar_tab">
         <br>
