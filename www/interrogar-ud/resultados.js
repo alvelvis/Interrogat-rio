@@ -1706,7 +1706,7 @@ $(document).ready(function(){
 			$(element).find('input').select()
 			return
 		}
-		element.innerHTML = `<input value='${txt}' style="min-width: 300px;" />`
+		element.innerHTML = `<input value='${txt}' style="min-width: 300px;" /><span style="display:none">${txt}</span>`
 		element.children[0].select()
 		$(element).find('input').on('keydown', function(e){
 			if (e.key == "Enter") {
