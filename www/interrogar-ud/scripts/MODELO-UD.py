@@ -92,9 +92,25 @@ for x, linha in enumerate(codigo):
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
 		tab = (len(linha.split('\t')) -1) * '\t'
-		codigo[x] = tab + "try:\n" + tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))\n" + codigo[x] + "\n" + tab + "try:\n" + tab + "\tif anterior != " + token_var + ".to_str():\n" + tab + "\t\tnovo_inquerito.append(sentence.text + '!@#' + anterior + ' --> ' + " + token_var + ".to_str().replace(" + token_var + "." + token_col + ", '<b>' + " + token_var + "." + token_col + " + '</b> (' + get_head(" + token_var + ", sentence) + ')') + '!@#' + conllu + '!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + '!@#' + sentence.sent_id)\n" + tab + "\t\tsim.append(re.sub(r'\\b' + " + token_var + ".word + r'\\b', '<b>' + " + token_var + ".word + '</b>', sentence.text) + '''\n''' + 'ANTES: ' + html.escape(anterior) + '''\n''' + 'DEPOIS: ' + html.escape(" + token_var + ".to_str().replace(" + token_var + "." + token_col + ", " + token_var + "." + token_col + " + ' (' + get_head(" + token_var + ", sentence) + ')')))\n" + tab + "except Exception as e:\n" + tab + "\tsys.stderr.write(str(e))"
+		codigo[x] = tab + "try:\n" + \
+					tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
+					tab + "except Exception as e:\n" + \
+					tab + "\tsys.stderr.write(str(e))\n" + \
+					codigo[x] + "\n" + \
+					tab + "try:\n" + \
+					tab + "\tif anterior != " + token_var + ".to_str():\n" + \
+					tab + "\t\tnovo_inquerito.append(' '.join([(x.word if x.id != " + token_var + ".id else '<b>{}</b>'.format(x.word)) for x in sentence.tokens if not '-' in x.id]) + \
+													'!@#' + anterior + ' --> ' + " + token_var + ".to_str() + ' (head: ' + get_head(" + token_var + ", sentence) + ')' + \
+													'!@#' + conllu + \
+													'!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + \
+													'!@#' + sentence.sent_id)\n" + \
+					tab + "\t\tsim.append(' '.join([(html.escape(x.word) if x.id != " + token_var + ".id else '<b>{}</b>'.format(html.escape(x.word))) for x in sentence.tokens if not '-' in x.id]) + '''\n''' + \
+											'ANTES: ' + html.escape(anterior) + '''\n''' + \
+											'DEPOIS: ' + html.escape(" + token_var + ".to_str() + ' (head: ' + get_head(" + token_var + ", sentence) + ')'))\n" + \
+					tab + "except Exception as e:\n" + \
+					tab + "\tsys.stderr.write(str(e))"
 
-with open("codigo", "w") as f:
+with open("./cgi-bin/codigo.txt", "w") as f:
 	f.write("\n".join(codigo))
 
 codigo = "\n".join(codigo)
