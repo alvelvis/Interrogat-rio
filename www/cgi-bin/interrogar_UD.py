@@ -14,8 +14,12 @@ tabelaf = {      'yellow': 'green',
                         'cyan': 'cyan',
 }
 
+
+def shortcuts(s):
+	return s.replace(".pt", ".previous_token").replace(".ht", ".head_token").replace(".nt", ".next_token")
+
 def slugify(value):
-        return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
+    return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 
 def cleanEstruturaUD(s):
     return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
@@ -402,8 +406,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.[', '[')
 		pesquisa = pesquisa.replace('token.(', '(')
 		
-		pesquisa = pesquisa.replace(".pt", ".previous_token").replace(".ht", ".head_token").replace(".nt", ".next_token")
-
 		pesquisa = pesquisa.replace('token.not', 'not')
 		pesquisa = pesquisa.replace('token.token.', 'token.')
 		pesquisa = pesquisa.replace('token.sentence.', 'sentence.')
@@ -412,7 +414,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		pesquisa = pesquisa.replace('token.int(', 'int(')
 		#pesquisa = pesquisa.replace("token.and", "and")
 		#pesquisa = pesquisa.replace("== int(", "==int(")
-		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)							
+		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
+
+		pesquisa = shortcuts(pesquisa)
 
 		indexed_conditions = {
 			x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 
@@ -442,6 +446,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		arroba = "token." + arroba
 		arroba = arroba.replace("token.token", "token")
 		arroba = arroba.rsplit(".", 1)[0]
+		arroba = shortcuts(arroba)
 
 		agilizar = re.findall(r'"([^"]*)"', parametros)
 
