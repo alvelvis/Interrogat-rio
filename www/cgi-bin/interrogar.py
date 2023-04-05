@@ -57,9 +57,9 @@ def sendRequestInterrogar():
 	paginaHTML = paginaHTML.split("<!--corpora-cloud-->")[0] + " ".join(corpora_cloud) + paginaHTML.split("<!--corpora-cloud-->")[1]
 	paginaHTML = paginaHTML.split("<!--selectpicker-->")[0] + "<option style='display:none' class='translateHtml' disabled selected value> -- escolha um corpus -- </option>" + "\n".join(arquivosCONLLU) + paginaHTML.split("<!--selectpicker-->")[1]
 
-	refazerPesquisa = cgi.FieldStorage()['params'].value.replace("'", '"') if 'params' in cgi.FieldStorage() else ""
+	refazerPesquisa = cgi.FieldStorage()['params'].value if 'params' in cgi.FieldStorage() else "" #.replace("'", '"')
 	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
-	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{refazerPesquisa}\'''').replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")
+	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{web.escape(refazerPesquisa)}\'''').replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")
 	if 'save' in cgi.FieldStorage():
 		paginaHTML = paginaHTML.replace('checked><div onclick="$(\'.toggleRapida\')', '><div onclick="$(\'.toggleRapida\')').replace('><div onclick="$(\'.toggleSalvar\')', 'checked><div onclick="$(\'.toggleSalvar\')"')
 	if 'go' in cgi.FieldStorage():
