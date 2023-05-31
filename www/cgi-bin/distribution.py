@@ -67,8 +67,8 @@ pagina = '''
 			background-color: #555; /* Add a dark-grey background on hover */
 		}
 	</style>
-	<script src="../interrogar-ud/jquery.min.js"></script>
-	<script src="../interrogar-ud/resultados.js?version=12"></script>
+	<!--script src="../interrogar-ud/jquery.min.js"></script>
+	<script src="../interrogar-ud/resultados.js?version=12"></script-->
 	<script>
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
