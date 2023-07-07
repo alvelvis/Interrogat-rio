@@ -163,7 +163,7 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
 		with open("./cgi-bin/queryScript.py", 'r') as f:
-			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
+			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu).replace("\t", "    ") # resolver problema de indentação
 		with open("./cgi-bin/queryScript.py", "w") as f:
 			f.write(scriptFile)
 		import queryScript
