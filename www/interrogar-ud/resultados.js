@@ -1690,10 +1690,11 @@ $(document).ready(function(){
 		}
 	})
 
-	$('#clearBatch').click(function(){
-		$('#fileScript').val('')
-		$('#nomeScript').val('')
+	$('#scriptQueryFile,#fileScript').click(function(){
+		$(this).val('')
 	})
+
+	$('#scriptQueryFile,#fileScript').val('')
 
 	$('#viewTree').click(function(){
 		$('.treeDiv').slideToggle()

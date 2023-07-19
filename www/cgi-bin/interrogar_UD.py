@@ -49,7 +49,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 		if re.search(r"^\d+\s", parametros):
 			criterio = int(parametros.split(" ", 1)[0])
 			parametros = parametros.split(" ", 1)[1]
-		elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
+		elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]) or "tokens=" in parametros:
 			criterio = 5
 		else:
 			criterio = 1
@@ -372,90 +372,101 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				output.append(qualquercoisa[a])
 
 	#Python
-
 	if criterio == 5:
-		
-		parametros = parametros.split(" and ")
-		for t, parametro in enumerate(parametros):
-			if not any(x in parametros[t] for x in [' = ', '==', '!=', ' < ', ' > ']):
-				parametros[t] = re.findall(r'@?"[^"]+?"', parametros[t].replace(" ", ""))
-				parametros[t] = [("@" if "@" in x else "") + ("next_token."*i) + "word = " + x.replace("@", "") for i, x in enumerate(parametros[t]) if x]
-				parametros[t] = " and ".join(parametros[t])
-		parametros = " and ".join(parametros)
-		pesquisa = parametros
 
-		pesquisa = pesquisa.replace(" = ", " == ")
-		pesquisa = pesquisa.replace(" @", " ")
-		if pesquisa[0] == "@": pesquisa = pesquisa[1:]
-		pesquisa = pesquisa.replace("  ", " ").strip()
-		pesquisa = pesquisa.replace(" == ", " == token.")
-		pesquisa = pesquisa.replace(" === ", " === token.")
-		pesquisa = pesquisa.replace(" != ", " != token.")
-		pesquisa = pesquisa.replace(" !== ", " !== token.")
-		pesquisa = pesquisa.replace(" > ", " > token.")
-		pesquisa = pesquisa.replace(" < ", " < token.")
-		pesquisa = pesquisa.replace(" >= ", " >= token.")
-		pesquisa = pesquisa.replace(" <= ", " <= token.")
-		pesquisa = "token." + pesquisa
-		pesquisa = pesquisa.replace(" and ", " and token.")
-		pesquisa = pesquisa.replace(" or ", " or token.")
-		pesquisa = pesquisa.replace(" in ", " in token.")
-		pesquisa = pesquisa.replace(" text ", " sentence.text ")
-		pesquisa = pesquisa.replace(" sent_id ", " sentence.sent_id ")
-		pesquisa = pesquisa.replace('token."', '"')
-		pesquisa = pesquisa.replace('token.[', '[')
-		pesquisa = pesquisa.replace('token.(', '(')
-		
-		pesquisa = pesquisa.replace('token.not', 'not')
-		pesquisa = pesquisa.replace('token.token.', 'token.')
-		pesquisa = pesquisa.replace('token.sentence.', 'sentence.')
-		pesquisa = pesquisa.replace("token.text", "sentence.text")
-		pesquisa = pesquisa.replace("token.sent_id", "sentence.sent_id")
-		pesquisa = pesquisa.replace('token.int(', 'int(')
-		#pesquisa = pesquisa.replace("token.and", "and")
-		#pesquisa = pesquisa.replace("== int(", "==int(")
-		pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
+		indexed_conditions = None
+		agilizar = None
+		if "tokens=" in parametros:
+			parametros = parametros.replace(" ", "")
+			query = parametros.split("tokens=")[1]
+			tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|")}
+			agilizar = list(tokens.keys())
+			pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sent_id, "|".join(tokens[sent_id]))
+			   for sent_id in tokens])
+			arroba = "token"
+			sys.stderr.write("\nquery: %s\n" % pesquisa)
+		else:
+			parametros = parametros.split(" and ")
+			for t, parametro in enumerate(parametros):
+				if not any(x in parametros[t] for x in [' = ', '==', '!=', ' < ', ' > ']):
+					parametros[t] = re.findall(r'@?"[^"]+?"', parametros[t].replace(" ", ""))
+					parametros[t] = [("@" if "@" in x else "") + ("next_token."*i) + "word = " + x.replace("@", "") for i, x in enumerate(parametros[t]) if x]
+					parametros[t] = " and ".join(parametros[t])
+			parametros = " and ".join(parametros)
+			pesquisa = parametros
 
-		pesquisa = shortcuts(pesquisa)
+			pesquisa = pesquisa.replace(" = ", " == ")
+			pesquisa = pesquisa.replace(" @", " ")
+			if pesquisa[0] == "@": pesquisa = pesquisa[1:]
+			pesquisa = pesquisa.replace("  ", " ").strip()
+			pesquisa = pesquisa.replace(" == ", " == token.")
+			pesquisa = pesquisa.replace(" === ", " === token.")
+			pesquisa = pesquisa.replace(" != ", " != token.")
+			pesquisa = pesquisa.replace(" !== ", " !== token.")
+			pesquisa = pesquisa.replace(" > ", " > token.")
+			pesquisa = pesquisa.replace(" < ", " < token.")
+			pesquisa = pesquisa.replace(" >= ", " >= token.")
+			pesquisa = pesquisa.replace(" <= ", " <= token.")
+			pesquisa = "token." + pesquisa
+			pesquisa = pesquisa.replace(" and ", " and token.")
+			pesquisa = pesquisa.replace(" or ", " or token.")
+			pesquisa = pesquisa.replace(" in ", " in token.")
+			pesquisa = pesquisa.replace(" text ", " sentence.text ")
+			pesquisa = pesquisa.replace(" sent_id ", " sentence.sent_id ")
+			pesquisa = pesquisa.replace('token."', '"')
+			pesquisa = pesquisa.replace('token.[', '[')
+			pesquisa = pesquisa.replace('token.(', '(')
+			
+			pesquisa = pesquisa.replace('token.not', 'not')
+			pesquisa = pesquisa.replace('token.token.', 'token.')
+			pesquisa = pesquisa.replace('token.sentence.', 'sentence.')
+			pesquisa = pesquisa.replace("token.text", "sentence.text")
+			pesquisa = pesquisa.replace("token.sent_id", "sentence.sent_id")
+			pesquisa = pesquisa.replace('token.int(', 'int(')
+			#pesquisa = pesquisa.replace("token.and", "and")
+			#pesquisa = pesquisa.replace("== int(", "==int(")
+			pesquisa = re.sub(r'token\.([1234567890])', r'\1', pesquisa)
 
-		indexed_conditions = {
-			x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 
-			'token.' in x and 
-			not any(y in x for y in ["head_token", "previous_token", "next_token"])
-			}
-		pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
-		
-		pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r're.search( r"^(" + r\2 + r")$", \1 )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^(" + r\2 + r")$", x ) for x in \1.split("|") )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not re.search( r"^(" + r\2 + r")$", \1 )', pesquisa)
-		pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^(" + r\2 + r")$", x ) for x in \1.split("|") )', pesquisa)
-		pesquisa = pesquisa.strip()
-		sys.stderr.write("\nquery: " + pesquisa + "\n")
-		if "upos != \"(" in parametros:
-			sys.stderr.write("\n{}\n".format(pesquisa))
+			pesquisa = shortcuts(pesquisa)
 
-		if (".__dict__['id']" in pesquisa or ".__dict__['dephead']" in pesquisa) and (not "int(" in pesquisa) and (" < " in pesquisa or " > " in pesquisa):
-			pesquisa = re.sub(r"(\S+\.__dict__\['(id|dephead)'\])", r"int(\1)", pesquisa)
+			indexed_conditions = {
+				x.split(" == ")[0].strip().split("token.", 1)[1]: x.split(" == ")[1].strip().replace('"', '') for x in pesquisa.split(" and ") if ' == ' in x and 
+				'token.' in x and 
+				not any(y in x for y in ["head_token", "previous_token", "next_token"])
+				}
+			pesquisa = re.sub(r"token\.([^. ]+?)(\s|$)", r"token.__dict__['\1']\2", pesquisa)
+			
+			pesquisa = re.sub(r'(\S+)\s==\s(\".*?\")', r're.search( r"^(" + r\2 + r")$", \1 )', pesquisa)
+			pesquisa = re.sub(r'(\S+)\s===\s(\".*?\")', r'all( re.search( r"^(" + r\2 + r")$", x ) for x in \1.split("|") )', pesquisa)
+			pesquisa = re.sub(r'(\S+)\s!=\s(\".*?\")', r'not re.search( r"^(" + r\2 + r")$", \1 )', pesquisa)
+			pesquisa = re.sub(r'(\S+)\s!==\s(\".*?\")', r'not all( re.search( r"^(" + r\2 + r")$", x ) for x in \1.split("|") )', pesquisa)
+			pesquisa = pesquisa.strip()
+			sys.stderr.write("\nquery: " + pesquisa + "\n")
+			if "upos != \"(" in parametros:
+				sys.stderr.write("\n{}\n".format(pesquisa))
 
-		identificador = "token"
+			if (".__dict__['id']" in pesquisa or ".__dict__['dephead']" in pesquisa) and (not "int(" in pesquisa) and (" < " in pesquisa or " > " in pesquisa):
+				pesquisa = re.sub(r"(\S+\.__dict__\['(id|dephead)'\])", r"int(\1)", pesquisa)
 
-		if parametros[0] == "@":
-			parametros = parametros[1:]
-		
-		arroba = parametros.split(" ")[0] if not ' @' in parametros else parametros.rsplit(" @", 1)[1].replace("int(", "").split(")")[0].split(" ")[0].replace("(", "")
-		arroba = "token." + arroba
-		arroba = arroba.replace("token.token", "token")
-		arroba = arroba.rsplit(".", 1)[0]
-		arroba = shortcuts(arroba)
+			identificador = "token"
 
-		agilizar = re.findall(r'"([^"]*)"', parametros)
+			if parametros[0] == "@":
+				parametros = parametros[1:]
+			
+			arroba = parametros.split(" ")[0] if not ' @' in parametros else parametros.rsplit(" @", 1)[1].replace("int(", "").split(")")[0].split(" ")[0].replace("(", "")
+			arroba = "token." + arroba
+			arroba = arroba.replace("token.token", "token")
+			arroba = arroba.rsplit(".", 1)[0]
+			arroba = shortcuts(arroba)
+
+			agilizar = re.findall(r'"([^"]*)"', parametros)
 
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
 			if any(x in pesquisa for x in ["head_token", "next_token", "previous_token"]):
-				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
+				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar if not '!=' in parametros and agilizar else "")
 			else:
-				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar if not '!=' in parametros else "")
+				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar if not '!=' in parametros and agilizar else "")
 			start = time.time()
 			corpus.load(arquivoUD)
 			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
@@ -484,19 +495,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 			tokens_filtered = []
 			if tokens.values():
 				tokens_filtered = set.intersection(*list(tokens.values()))
-			'''
-			priority = ['lemma', 'word', 'deprel', 'upos']
-			priority_possible = []
-			for col in indexed_conditions:
-				if col in priority:
-					priority_possible.append(priority.index(col))
-			if priority_possible:
-				col = priority[min(priority_possible)]
-			else:
-				col = list(indexed_conditions)[0]
-			cols = list(indexed_conditions)
-			cols.remove(col)
-			'''
 			for token in tokens_filtered:
 				sent_id = token.split("<tok>")[0]
 				t = int(token.split("<tok>")[1])
@@ -504,49 +502,36 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		else:
 			sentences = corpus.sentences
 		sys.stderr.write(f"\nindexing: {time.time() - t1}")
-		
-		t1 = time.time()
-		for sent_id in sentences:
-			sentence = corpus.sentences[sent_id]
-			sentence2 = sentence
-			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			corresponde = 0
-			tokens = sentence2.tokens_to_str()
-			map_id = {x: t for t, x in enumerate(clean_id)}
-			if limit and limit == len(output):
-				break
-			condition = "global sim; sim = 0"
-			
-			condition += '''
+
+		condition = "global sim; sim = 0"
+		condition += '''
 if not indexed_conditions:
 	available_tokens = list(range(len(sentence.tokens)))
 else:
 	available_tokens = sentences[sent_id]
 for token_t in available_tokens:
 	token = sentence.tokens[token_t]
-	try:
-		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')) :
+	if True:
+		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')):
 			corresponde = 1
 			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
 	'''#try por causa de não ter um next_token no fim de sentença, por ex.
-			if "token.head_token" in pesquisa:
-				condition += '''
+		if "token.head_token" in pesquisa:
+			condition += '''
 			clean_text[map_id[token.head_token.id]] = "@RED/" + clean_text[map_id[token.head_token.id]] + "/FONT"
 			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
-			if "token.next_token" in pesquisa:
-				condition += '''
+		if "token.next_token" in pesquisa:
+			condition += '''
 			clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
 			tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
-			if "token.previous_token" in pesquisa:
-				condition += '''
+		if "token.previous_token" in pesquisa:
+			condition += '''
 			clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
 			tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
-			condition += '''
-			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"'''		
-			
-			exec(condition + '''
+		condition += '''
+			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"
+
 			casos.append(1)
 			arroba_id = '''+arroba+'''.id
 			tokens = tokens.splitlines()
@@ -560,14 +545,29 @@ for token_t in available_tokens:
 				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 			
-	except Exception as e:
-		sys.stderr.write(\"\\n\" + str(e))
+	if False:#except Exception as e:
+		sys.stderr.write(\"\\n\" + str(e) + '\\n')
 		sys.stderr.write(token.to_str())
 		pass
 if corresponde and not separate:
 	corresponde = 0
 	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
-	output.append(final)''')
+	output.append(final)'''
+		with open("condition.txt", "w") as f:
+			f.write(condition)
+
+		t1 = time.time()
+		for sent_id in sentences:
+			sentence = corpus.sentences[sent_id]
+			sentence2 = sentence
+			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+			corresponde = 0
+			tokens = sentence2.tokens_to_str()
+			map_id = {x: t for t, x in enumerate(clean_id)}
+			if limit and limit == len(output):
+				break
+			exec(condition)
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
 		sys.stderr.write(f"\nfor each sentence: {time.time() - t1}")

@@ -81,9 +81,14 @@ def sendPOSTInterrogar():
 		except:
 			pass
 
-	numeroOcorrencias, casosOcorrencias, fullParameters = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
+	numeroOcorrencias, casosOcorrencias, fullParameters, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
+	
+	#parametros_antigos = None
+	#if script:
+		#parametros_antigos = parametros
+		#parametros = fullParameters
 
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script, fullParameters).montarHtml()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros if not script else scriptParams, numeroOcorrencias, casosOcorrencias, script, fullParameters).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
@@ -104,7 +109,7 @@ def sendPOSTInterrogar():
 	with open(caminhoCompletoHtml, "w") as f:
 		f.write(arquivoHtml)
 
-	queries = ["\t".join([caminhoCompletoHtml, nomePesquisa, numeroOcorrencias, criterio, parametros, conllu, dataAgora])]
+	queries = ["\t".join([caminhoCompletoHtml, nomePesquisa, numeroOcorrencias, criterio, parametros if not script else scriptParams, conllu, dataAgora])]
 
 	if not os.path.isfile("./interrogar-ud/queries.txt"):
 		with open("./interrogar-ud/queries.txt", "w") as f:
@@ -136,7 +141,6 @@ def definirVariaveisDePesquisa(form):
 			with open("./cgi-bin/queryScript.py", "w") as w:
 				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().splitlines())))
 		script = form['scriptQueryFile'].filename
-		parametros = form['scriptQueryFile'].filename
 	else:
 		script = False
 
@@ -144,7 +148,7 @@ def definirVariaveisDePesquisa(form):
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]) and ' ' in pesquisa:
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
-	elif len(pesquisa.split('"')) > 2 or any(x in pesquisa for x in ["==", " = ", " != "]):
+	elif len(pesquisa.split('"')) > 2 or any(x in pesquisa for x in ["==", " = ", " != "]) or "tokens=" in pesquisa or script:
 		criterio = '5'
 		parametros = pesquisa
 	else:
@@ -163,16 +167,21 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
 		with open("./cgi-bin/queryScript.py", 'r') as f:
-			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu).replace("\t", "    ") # resolver problema de indentação
+			scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
 		with open("./cgi-bin/queryScript.py", "w") as f:
 			f.write(scriptFile)
-		import queryScript
+		try:
+			import queryScript
+		except IndentationError:
+			print("Erro: verifique a indentação do arquivo de script.")
+			exit()
 		resultadosBusca = queryScript.getResultadosBusca()
+		scriptParams = resultadosBusca['scriptParams']
 
 	if not os.path.isdir('./cgi-bin/json'):
 		os.mkdir('./cgi-bin/json')
 	try:
-		with open("./cgi-bin/json/" + slugify(conllu + "_" + parametros + ".json"), "w") as f:
+		with open("./cgi-bin/json/" + slugify(conllu + "_" + (parametros if not script else scriptParams) + ".json"), "w") as f:
 			json.dump(resultadosBusca, f)
 	except:
 		pass
@@ -181,7 +190,7 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 	casosOcorrencias = resultadosBusca['casos']
 	fullParameters = resultadosBusca['parameters']
 
-	return numeroOcorrencias, casosOcorrencias, fullParameters
+	return numeroOcorrencias, casosOcorrencias, fullParameters, scriptParams if script else ""
 
 
 class paginaHtml():
@@ -244,12 +253,12 @@ class paginaHtml():
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/conllu.py', '../cgi-bin/conllu.py?html=./interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '.html')
 
 		self.arquivoHtml = self.adicionarHeader()
-		if not self.script:
-			self.arquivoHtml = self.adicionarDistribution()
-			self.arquivoHtml = self.adicionarExecutarScript()
-		if self.script:
-			self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{slugify(self.script)}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{web.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
-			self.arquivoHtml = self.arquivoHtml.replace("Correção em lote", "")
+		#if not self.script:
+		self.arquivoHtml = self.adicionarDistribution()
+		self.arquivoHtml = self.adicionarExecutarScript()
+		#if self.script:
+			#self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{slugify(self.script)}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{web.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
+			#self.arquivoHtml = self.arquivoHtml.replace("Correção em lote", "")
 
 		return self.arquivoHtml
 

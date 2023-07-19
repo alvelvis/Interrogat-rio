@@ -163,6 +163,7 @@ if criterio == 5:
 	with open("dist.log", 'w') as f:
 		f.write("\n".join([identificador, expressao]))
 
+script = "tokens=" in parametros
 pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{form['coluna'].value}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
 for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
@@ -171,7 +172,7 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 	#if criterio == 5:
 		#pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
-		if criterio != 5:
+		if criterio != 5 or script:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
 			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + "' title='Buscar casos: {}' style='text-decoration: none; color:blue;'>".format(web.escape(entrada[0])) + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
@@ -180,7 +181,7 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 		for sent_id in dic_dist["all_children"][entrada[0]]:
 			sent_ids.append(sent_id)
 		sent_ids = '5 sentence.sent_id == "(' + ')|('.join(sent_ids) + ')" and ' + form['notSaved'].value
-		if criterio == 5:
+		if criterio == 5 and not script:
 			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params={encodeUrl(sent_ids.replace(' @', ' '))} and @{identificador}.word == \"{encodeUrl(re.escape(entrada[0].split('<b>')[1].split('</b>')[0]))}\"' title='Buscar frases: {'|'.join(dic_dist['all_children'][entrada[0]])}' style='text-decoration: none; color:blue;'>" + entrada[0] + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
 			pagina += f"<tr><td>" + entrada[0] + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"

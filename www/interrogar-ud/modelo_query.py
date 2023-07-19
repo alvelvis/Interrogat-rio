@@ -1,14 +1,9 @@
 import estrutura_ud
+import interrogar_UD
 import re
 import cgi
 import html as web
 from functions import tabela as tabelaf
-
-def bold_tokenize(bold_tokens, sentence):
-    retorno = sentence.to_str()
-    for token in bold_tokens:
-        retorno = retorno.replace(token.to_str(), "<b>" + token.to_str() + "</b>").replace(sentence.text, re.sub(r"\b" + re.escape(token.word) + r"\b", "<b>" + token.word + "</b>", sentence.text))
-    return retorno
 
 def getResultadosBusca():
     corpus = estrutura_ud.Corpus(recursivo=True)
@@ -16,14 +11,18 @@ def getResultadosBusca():
 
     resultadosBusca = {'output': [], 'casos': 0, 'parameters': ""}
 
-    for sentence in corpus.sentences.values():
+    returned_tokens = {}
+    for sent_id, sentence in corpus.sentences.items():
         bold_tokens = []
         <!--pesquisa-->
 
-        resultadosBusca['casos'] += len(bold_tokens)
-
-        if 'corresponde' in sentence.metadados and sentence.metadados['corresponde']:
-            sentence.metadados['corresponde'] = ""
-            resultadosBusca['output'].append({'resultado': bold_tokenize(bold_tokens, sentence)})
-
+        if bold_tokens:
+            sentence.metadados['corresponde'] = "" # retrocompatibilidade, pois não é mais necessário
+            returned_tokens[sent_id] = bold_tokens
+    
+    for sent_id in returned_tokens:
+        returned_tokens[sent_id] = ",".join([x.id for x in returned_tokens[sent_id]])
+    parameters = 'tokens=' + "|".join(["%s:%s" % (x, returned_tokens[x]) for x in returned_tokens])
+    resultadosBusca = interrogar_UD.main(corpus, 5, parameters, sent_id=list(returned_tokens.keys()), fastSearch=True)
+    resultadosBusca['scriptParams'] = parameters
     return resultadosBusca
