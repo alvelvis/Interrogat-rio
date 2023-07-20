@@ -18,8 +18,9 @@ form = cgi.FieldStorage()
 
 empty_line = script.index('') + 1
 
-if form['crit'].value == '5':
-    script[empty_line] = 'if ' + form['params'].value.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
+parametros = form['params'].value
+if len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
+    script[empty_line] = 'if ' + parametros.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
 
 with open("./interrogar-ud/scripts/interrogar-script.txt", "w") as f:
     f.write("\n".join(script))

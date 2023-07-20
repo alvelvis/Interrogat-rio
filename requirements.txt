@@ -19,3 +19,5 @@ ufal.udpipe==1.2.0.3
 urllib3==1.26.7
 yarg==0.1.9
 udapi
+langchain[llms]
+openai

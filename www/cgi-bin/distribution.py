@@ -40,8 +40,12 @@ if "link_dist" in form and os.path.isfile("./cgi-bin/filtros.json"):
 	else:
 		filtros = []
 
-
-dic_dist = interrogar_UD.getDistribution("./interrogar-ud/conllu/" + form['corpus'].value, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value)
+json_id = form['jsonId'].value
+path = "./cgi-bin/json/" + json_id + ".json"
+if os.path.isfile(path):
+	with open(path) as f:
+		json_query = json.load(f)
+dic_dist = interrogar_UD.getDistribution(json_query, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value) # "./interrogar-ud/conllu/" + form['corpus'].value
 
 pagina = '''
 	<meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">

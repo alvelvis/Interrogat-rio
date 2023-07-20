@@ -52,7 +52,7 @@
         <hr>
         <h3 class="translateHtml">Correção em lote</h3>
         <ul>
-          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.py">critério 5: Python</a>.</li>
+          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito em Python.</li>
           <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
           <ol type="1">
             <li><span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">Clique aqui</a>.</li>
@@ -111,7 +111,7 @@
           </ul>
             <div class="filterDiv newSearchFilter" style="display:none; margin-left:40px;">
                 <h3 class="translateHtml">Filtrar com nova busca</h3>
-                <div class="tooltip translateHtml">Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.<br><br>Sintaxe: nº do critério + espaço + parâmetros</span></div><br>
+                <div class="tooltip translateHtml">Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.</span></div><br>
                   <input id="pesquisa_filtro" name="pesquisa" type="text" required></label>
                   <br><br> <label for="nome_pesquisa"><span class="translateHtml">Nome do filtro (opcional):</span><br>
       <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label>
@@ -121,6 +121,7 @@
                   </ul>
                   <br><br>
                   <input type=hidden class="pesquisa_original" name="pesquisa_original" value="">
+                  <input type="hidden" id="jsonId" value="0">
                   <input id="filtrar"
       value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit">
               </div>
@@ -146,6 +147,7 @@ value="Baixar arquivo" class="translateVal btn-gradient orange mini" type="submi
       </div>
       <br>
         <input type="hidden" name="indexSentences" class="indexSentences" value="0">
+        <input type="hidden" id="jsonId" value="0">
         <input type="hidden" name="filtrado" class="filtrado" value="0">
         <div class="loadSentences">
         <!--SPLIT-->

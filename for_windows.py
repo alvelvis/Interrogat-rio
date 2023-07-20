@@ -10,11 +10,13 @@ def main():
         branch = "master" if sys.argv[1] == "stable" else sys.argv[1]
 
     # to make a new update that requires new packages: append the name of the package in the list and try to import it
-    new_packages = ["GitPython", 'udapi']
+    new_packages = "GitPython udapi langchain openai".split(" ")
     try:
         exec("import {}".format(new_packages[-1]))
     except:
         for package in new_packages:
+            if package == "langchain":
+                package = "langchain[all]"
             os.system("\"{}\\python.exe\" -m pip install {}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"), package))
 
     os.environ['GIT_PYTHON_GIT_EXECUTABLE'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "PortableGit", "bin", "git.exe")

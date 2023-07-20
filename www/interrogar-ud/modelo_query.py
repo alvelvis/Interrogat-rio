@@ -17,12 +17,11 @@ def getResultadosBusca():
         <!--pesquisa-->
 
         if bold_tokens:
-            sentence.metadados['corresponde'] = "" # retrocompatibilidade, pois não é mais necessário
             returned_tokens[sent_id] = bold_tokens
     
     for sent_id in returned_tokens:
         returned_tokens[sent_id] = ",".join([x.id for x in returned_tokens[sent_id]])
     parameters = 'tokens=' + "|".join(["%s:%s" % (x, returned_tokens[x]) for x in returned_tokens])
-    resultadosBusca = interrogar_UD.main(corpus, 5, parameters, sent_id=list(returned_tokens.keys()), fastSearch=True)
+    resultadosBusca = interrogar_UD.main(corpus, 5, parameters, fastSearch=True)
     resultadosBusca['scriptParams'] = parameters
     return resultadosBusca

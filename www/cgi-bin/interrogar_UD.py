@@ -157,6 +157,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	parametros = parametros.strip().replace('“', '"').replace('”', '"')
 	pesquisa = ""
 
+	if not criterio:
+		if len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]) or "tokens=" in parametros:
+			criterio = 5
+		else:
+			criterio = 1
+
 	if criterio in [1]:
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
@@ -376,13 +382,14 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 		indexed_conditions = None
 		agilizar = None
+		any_of_keywords = None
 		if "tokens=" in parametros:
 			parametros = parametros.replace(" ", "")
 			query = parametros.split("tokens=")[1]
-			tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|")}
-			agilizar = list(tokens.keys())
-			pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sent_id, "|".join(tokens[sent_id]))
-			   for sent_id in tokens])
+			tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
+			any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
+			pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
+			   for sentid in tokens])
 			arroba = "token"
 			sys.stderr.write("\nquery: %s\n" % pesquisa)
 		else:
@@ -464,9 +471,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		import estrutura_ud
 		if isinstance(arquivoUD, str):
 			if any(x in pesquisa for x in ["head_token", "next_token", "previous_token"]):
-				corpus = estrutura_ud.Corpus(recursivo=True, sent_id=sent_id, keywords=agilizar if not '!=' in parametros and agilizar else "")
+				corpus = estrutura_ud.Corpus(recursivo=True, keywords=agilizar if not '!=' in parametros and agilizar else "", any_of_keywords=any_of_keywords if any_of_keywords else "")
 			else:
-				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id, keywords=agilizar if not '!=' in parametros and agilizar else "")
+				corpus = estrutura_ud.Corpus(recursivo=False, keywords=agilizar if not '!=' in parametros and agilizar else "", any_of_keywords=any_of_keywords if any_of_keywords else "")
 			start = time.time()
 			corpus.load(arquivoUD)
 			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
@@ -571,6 +578,7 @@ if corresponde and not separate:
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
 		sys.stderr.write(f"\nfor each sentence: {time.time() - t1}")
+	
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	if criterio not in [5, 2, 1]:
 		for a, sentence in enumerate(output):
