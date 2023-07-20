@@ -2,3 +2,6 @@
 .interrogatorio
 Python39
 PortableGit
+*.html
+*.inProgress
+*.conllu
