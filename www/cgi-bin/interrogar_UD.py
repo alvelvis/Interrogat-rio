@@ -560,7 +560,7 @@ if corresponde and not separate:
 	corresponde = 0
 	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)'''
-		with open("condition.txt", "w") as f:
+		with open("./cgi-bin/condition.txt", "w") as f:
 			f.write(condition)
 
 		t1 = time.time()

@@ -164,7 +164,7 @@ if criterio == 5:
 	if expressao[0] == "@": expressao = expressao[1:]
 
 if criterio == 5:
-	with open("dist.log", 'w') as f:
+	with open("./cgi-bin/dist.log", 'w') as f:
 		f.write("\n".join([identificador, expressao]))
 
 script = "tokens=" in parametros

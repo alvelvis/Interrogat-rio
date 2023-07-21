@@ -88,7 +88,7 @@ def sendPOSTInterrogar():
 		#parametros_antigos = parametros
 		#parametros = fullParameters
 
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros if not script else fullParameters, numeroOcorrencias, casosOcorrencias, script, fullParameters, json_id).montarHtml()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script, fullParameters, json_id).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
