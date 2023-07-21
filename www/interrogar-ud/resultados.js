@@ -190,7 +190,8 @@ var translations = {
 		'en-US': '(a) Using ChatGPT:'
 	},
 	'Escreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.': {
-		'en-US': 'Write, in Portuguese or English, what you want to look for clicking here.'
+		'pt-BR': 'Descreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.',
+		'en-US': 'Describe, in Portuguese or English, what you want to look for clicking here.'
 	},
 	'Caso ainda não tenha uma chave de API do ChatGPT, <a href="https://platform.openai.com/account/api-keys" target="_blank">clique aqui</a> para criá-la.': {
 		'en-US': 'In case you still don\'t have a ChatGPT API key, <a href="https://platform.openai.com/account/api-keys" target="_blank">click here</a> to create it.'
@@ -554,17 +555,17 @@ var translations = {
 	'Repositório': {
 		'en-US': 'Repository'
 	},
-	'Atenção: O Interrogatório está integrado ao <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, ou seja, os corpora aqui listados também estarão disponívels por lá.': {
-		'en-US': 'Warning: Interrogatório is integrated to <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, which means every corpus listed here is also available there.'
+	'Atenção: O Interrogatório está integrado ao <a style="color:green" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, portanto os corpora listados são compartilhados entre as duas ferramentas.': {
+		'en-US': 'Warning: Interrogatório is integrated to <a style="color:green" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, which means every corpus listed here is also available there.'
 	},
 	'Para alimentar o repositório:': {
 		'en-US': 'To feed the repository:'
 	},
-	'Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.': {
-		'en-US': 'Submit an annotated file in the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> format to start interrogating it.'
+	'(a) Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.': {
+		'en-US': '(a) Submit an annotated file in the <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> format to start interrogating it.'
 	},
-	'Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v1.2.0</a>.': {
-		'en-US': 'You may also submit a plain text file to be processed by <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v.1.2.0</a>.'
+	'(b) Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="https://lindat.mff.cuni.cz/services/udpipe/api-reference.php" target="_blank">UDPipe</a>.': {
+		'en-US': '(b) You may also submit a plain text file to be processed by <a href="https://lindat.mff.cuni.cz/services/udpipe/api-reference.php" target="_blank">UDPipe</a>.'
 	},
 	'Corpora no repositório': {
 		'en-US': 'Corpora in the repository'
@@ -993,6 +994,9 @@ var translations = {
 	},
 	'Navegue até o arquivo de busca ou arraste-o até o botão abaixo:': {
 		'en-US': "Browse to the query script file or drag it to the button below:"
+	},
+	'Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online': {
+		'en-US': 'New feature: TXT files can be submitted to Interrogatório to be annotated using UDPipe Online'
 	}
 }
 

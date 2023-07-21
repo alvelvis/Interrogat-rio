@@ -16,12 +16,13 @@
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
+    <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online</a></li>
     <li><a href="#queryScriptTab" class="translateHtml" onclick="$('#openQueryScript').click()">Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT</a></li>
     <li><a href="#" class="translateHtml">Simplificação: os padrões de busca agora são Regex, Python Simplificado e código de busca em Python</a></li>
     <li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li-->
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
@@ -242,7 +243,7 @@
 <li class="translateHtml">Depois, <a href="#" onclick="saveOpenAIKey()">clique aqui</a> para salvar a sua chave de API no Interrogatório.</li>
 <li class="translateHtml" style="color:green; display:none; font-weight: bold;" id="savedOpenAIKey">Chave API salva com sucesso.</li>
 </ul>
-<li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo antes de submeter.</li>
+<li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo se necessário.</li>
 <li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
 </ol>
 <h3 class="translateHtml">(b) Editando o código manualmente:</h3>
