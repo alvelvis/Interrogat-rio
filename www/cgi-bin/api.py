@@ -248,8 +248,7 @@ def generate_query_script(query="", save_openai_key=False):
                                 has_subject = True
                                 break
                         if not has_subject:
-                        bold_tokens.append(token)
-                    
+                            bold_tokens.append(token)
                 '''},
                 {"role": "system", "content": "Sure, tell me what token you want to look for in a sentence and I will generate a Python code (with comments in each line written in your language) that performs this query. I will not write anything besides the code block itself."},
             ]
