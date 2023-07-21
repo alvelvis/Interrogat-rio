@@ -6,7 +6,7 @@ fi
 
 . .interrogatorio/bin/activate
 
-if ! python3 -c "import langchain"; then
+if ! python3 -c "import openai"; then
   if ! pip3 install -r requirements.txt; then
     sudo apt install python3-pip
     pip3 install -r requirements.txt
