@@ -81,14 +81,14 @@ def sendPOSTInterrogar():
 		except:
 			pass
 
-	numeroOcorrencias, casosOcorrencias, fullParameters, json_id = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
+	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
 	
 	#parametros_antigos = None
 	#if script:
 		#parametros_antigos = parametros
 		#parametros = fullParameters
 
-	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros, numeroOcorrencias, casosOcorrencias, script, fullParameters, json_id).montarHtml()
+	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros if not script else scriptParams, numeroOcorrencias, casosOcorrencias, script, fullParameters, json_id).montarHtml()
 
 	if nomePesquisa and nomePesquisa not in fastSearch:
 		try:
@@ -189,8 +189,9 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
 	fullParameters = resultadosBusca['parameters']
+	scriptParams = resultadosBusca['scriptParams'] if script else ""
 
-	return numeroOcorrencias, casosOcorrencias, fullParameters, json_id
+	return numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams
 
 
 class paginaHtml():
