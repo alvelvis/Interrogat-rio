@@ -240,8 +240,8 @@ var translations = {
 	'Visualizar distribuição de:': {
 		'en-US': 'View distribution of:'
 	},
-	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_1" criterio="1" class="toggleCriteria">critério 1: Regex</a>, o <a href="#criterio_5" criterio="5" class="toggleCriteria">critério 5: Python</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
-		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_1" criterio="1" class="toggleCriteria">criterion 1: Regex</a>, <a href="#criterio_5" criterio="5" class="toggleCriteria">criterion 5: Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
+	'Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_1" criterio="1" class="toggleCriteria">Regex</a>, o <a href="#criterio_5" criterio="5" class="toggleCriteria">Python Simplificado</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.': {
+		'en-US': 'In order to enable the display of annotation distribution, use <a href="#criterio_1" criterio="1" class="toggleCriteria">Regex</a>, <a href="#criterio_5" criterio="5" class="toggleCriteria">Simplified Python</a> or the <a href="#interactive" criterio="0" class="toggleCriteria">query builder</a>.'
 	},
 	'Bem-vindo(a) ao Interrogatório,<br>ambiente de busca e edição de corpora anotados': {
 		'en-US': 'Welcome to Interrogatório,<br>an environment for querying and editing annotated corpora'
@@ -252,8 +252,11 @@ var translations = {
 	'Para começar a interrogar algum corpus, siga um dos caminhos abaixo:': {
 		'en-US': 'To start interrogating a corpus, choose one of the following paths:'
 	},
-	'Buscas simples: Digite as palavras na barra de busca à esquerda.': {
-		'en-US': 'Straightforward queries: Type the words in the query bar on the left.'
+	'(a) Digite as palavras na barra de busca à esquerda (buscas simples)': {
+		'en-US': '(a) Type the words in the query bar on the left (simple queries)'
+	},
+	'(b) Use padrões de busca (buscas complexas)': {
+		'en-US': '(b) Use search patterns (complex queries)'
 	},
 	'Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a>': {
 		'en-US': 'Complex queries: <a title="Go to the interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Build query expressions interactively</a>'
@@ -276,8 +279,12 @@ var translations = {
 	'Python Simplificado': {
 		'en-US': 'Simplified Python'
 	},
-	'Para experts: <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$(\'.normalQuery\').hide(); $(\'.toggleSalvar\').click();" href="#queryScriptTab" criterio="6">Escreva seu próprio script de busca em Python</a>': {
-		'en-US': 'For experts: <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$(\'.normalQuery\').hide(); $(\'.toggleSalvar\').click();" href="#queryScriptTab" criterio="6">Write your own query script in Python</a>'
+	'Regex': {
+		'pt-BR': 'Expressões regulares (RegEx)',
+		'en-US': 'Regular expressions (RegEx)'
+	},
+	'Escreva seu próprio script de busca em Python (para experts)': {
+		'en-US': 'Write your own query script in Python (for experts)'
 	},
 	'Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT': {
 		'en-US': 'New feature: Users can create query scripts in Python with the assistance of ChatGPT'
@@ -381,8 +388,8 @@ var translations = {
 	'Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.': {
 		'en-US': 'One or more <b>grammatical annotations</b> of this token may be verified, meaning that they must be <b>equivalent</b> or <b>different</b> regarding a certain <b>value</b>. All values may be assigned with <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">regular expressions</a>.'
 	},
-	'Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5" class="toggleCriteria" criterio="5">critério 5: Python</a>. Adicione quantas condições julgar necessário.': {
-		'en-US': 'When clicking <b>OK</b> or pressing <b>Return</b>, the condition will be added to the query bar to the left according to <a href="#criterio_5" class="toggleCriteria" criterio="5">criterion 5: Python</a>. Add as many conditions as necessary.'
+	'Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5" class="toggleCriteria" criterio="5">modelo Python Simplificado</a>. Adicione quantas condições julgar necessário.': {
+		'en-US': 'When clicking <b>OK</b> or pressing <b>Return</b>, the condition will be added to the query bar to the left according to <a href="#criterio_5" class="toggleCriteria" criterio="5">Simplified Python pattern</a>. Add as many conditions as necessary.'
 	},
 	'Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="pesquisaChange(); $(\'.toggleDist\').click()">ver a distribuição</a> de alguma anotação para este token.': {
 		'en-US': 'One may specify which token will appear in bold within the sentence by clicking <b>@</b>. In case you specify none, the last token in the query expression will be selected. The token in bold, in addition to being easily distinguishable, is also the one which will be evaluated in case you wish to <a style="cursor:pointer" onclick="pesquisaChange(); $(\'.toggleDist\').click()">see the distribution</a> of any annotation for this token.'
@@ -450,8 +457,8 @@ var translations = {
 	'Realiza uma condição seguindo a sintaxe em Python.': {
 		'en-US': 'Fulfills a condition following Python syntax.'
 	},
-	'Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.': {
-		'en-US': 'You may also use the <a title="Go to interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">query expression builder</a> to construct your syntax with criterion 5.'
+	'Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o padrão Python Simplificado.': {
+		'en-US': 'You may also use the <a title="Go to interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">query expression builder</a> to construct your syntax with Simplified Python.'
 	},
 	'Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.': {
 		'en-US': 'One or more conditions that include a token/word annotation, an operator (== or !=), and a value within inverted commas.'
@@ -474,8 +481,8 @@ var translations = {
 	'1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).': {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
 	},
-	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do critério 5: Python</a>.': {
-		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.py">expressions bank for criterion 5: Python</a>.'
+	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do padrão Python Simplificado</a>.': {
+		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.py">expressions bank for the Simplified Python pattern</a>.'
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to top'

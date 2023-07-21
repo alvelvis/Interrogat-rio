@@ -15,8 +15,6 @@ def main():
         exec("import {}".format(new_packages[-1]))
     except:
         for package in new_packages:
-            if package == "langchain":
-                package = "langchain[all]"
             os.system("\"{}\\python.exe\" -m pip install {}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"), package))
 
     os.environ['GIT_PYTHON_GIT_EXECUTABLE'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "PortableGit", "bin", "git.exe")
