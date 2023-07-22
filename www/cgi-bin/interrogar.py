@@ -139,9 +139,9 @@ def definirVariaveisDePesquisa(form):
 			modelo_query = f.read()
 		with open('./cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
-		with open("./cgi-bin/scripts/" + form['scriptQueryFile'].filename, encoding=get_encoding_type("./cgi-bin/scripts/" + form['scriptQueryFile'].filename)) as f:
+		with open("./cgi-bin/scripts/" + form['scriptQueryFile'].filename) as f:
 			with open("./cgi-bin/queryScript.py", "w") as w:
-				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().splitlines())))
+				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().replace("\t", "    ").splitlines())))
 		script = form['scriptQueryFile'].filename
 	else:
 		script = False

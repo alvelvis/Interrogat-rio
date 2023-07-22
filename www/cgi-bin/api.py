@@ -101,7 +101,7 @@ def renderSentences(script=""):
             if pagina_html in filtros_json:
                 filtros = [x for nome in filtros_json[pagina_html]['filtros'] for x in filtros_json[pagina_html]['filtros'][nome]['sentences']]
                 for pagina in [[x, len(filtros_json[pagina_html]['filtros'][x]['sentences'])] for x in filtros_json[pagina_html]['filtros']]:
-                    filtrar_filtros += f'<li><a style="cursor:pointer;" class="translateTitle" title="Clique para adicionar ao mesmo filtro" onclick="$(\'#nome_pesquisa,#nome_pesquisa_sel\').val($(this).children(nome).text());"><span id="nome">{pagina[0]}</a> ({pagina[1]})</li>'
+                    filtrar_filtros += f'<li><a style="cursor:pointer;" class="translateTitle" title="Clique para adicionar ao mesmo filtro" onclick="$(\'#nome_pesquisa,#nome_pesquisa_sel\').val($(this).children(nome).text()); $(\'#filtrarsel:visible,#filtrar:visible\').click();"><span id="nome">{pagina[0]}</a> ({pagina[1]})</li>'
                     pagina_filtros += f'<li><a style="cursor:pointer;" target="_blank" href=\'../../cgi-bin/filtrar.py?action=view&html={pagina_html}&filtro=' + encodeUrl(pagina[0]) + f'\'>{pagina[0]} ({pagina[1]})</li>'
             else:
                 filtros = []
@@ -132,6 +132,7 @@ def renderSentences(script=""):
         estruturado = estrutura_ud.Sentence(recursivo=False)
         anotado.build(web.escape(ocorrencia['resultado'].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))	
         estruturado.build(web.unescape(ocorrencia['resultado']).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
+        estruturado.tokens = [functions.cleanEstruturaUD(x.split("\t")[0]) for x in ocorrencia['resultado'].splitlines() if "<b>" in x and x.count("\t") >= 9]
 
         if not estruturado.sent_id in filtros and not estruturado.text in filtros:
             resultados.append({'anotado': anotado, 'estruturado': estruturado})
@@ -153,7 +154,7 @@ def renderSentences(script=""):
         arquivoHtml += f'<p>{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}</p>' + '\n'
         if estruturado.sent_id:
             arquivoHtml += '<p {} class="metadados_sentence">'.format('onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');"' if nomePesquisa not in fastSearch else "")
-            arquivoHtml += f'''<input class="cb translateTitle" id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" type=checkbox>''' if nomePesquisa not in fastSearch else ""
+            arquivoHtml += f'''<input class="cb translateTitle" id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" tokens="{','.join(estruturado.tokens)}" type=checkbox>''' if nomePesquisa not in fastSearch else ""
             arquivoHtml += f'''{estruturado.sent_id}</p>''' + '\n'
         arquivoHtml += f"<p><span id=text_{str(startPoint+i+1)}>{(anotado.metadados['clean_text'] if 'clean_text' in anotado.metadados else anotado.text).replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
         if ((estruturado.sent_id and ('-' in estruturado.sent_id or re.search(r'^\d+$', estruturado.sent_id))) or estruturado.id) and estruturado.text:

@@ -105,8 +105,8 @@
           <li class="translateHtml">Para adicionar frases a um filtro já existente, basta escolher o mesmo nome para o filtro.</li>
           <li class="translateHtml">Você pode realizar filtros de duas formas:</li>
             <ul>
-              <li><a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor translateHtml">Filtrar com uma nova expressão de busca</a></li>
-              <li><a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor translateHtml">Filtrar as frases que foram selecionadas manualmente</a></li>
+              <li>(a) <a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor translateHtml">Filtrar com uma nova expressão de busca</a></li>
+              <li>(b) <a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor translateHtml">Filtrar as frases que foram selecionadas manualmente</a></li>
             </ul>
           </ul>
             <div class="filterDiv newSearchFilter" style="display:none; margin-left:40px;">
@@ -114,27 +114,22 @@
                 <div class="tooltip translateHtml">Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.</span></div><br>
                   <input id="pesquisa_filtro" name="pesquisa" type="text" required></label>
                   <br><br> <label for="nome_pesquisa"><span class="translateHtml">Nome do filtro (opcional):</span><br>
-      <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label>
-                  <br><br>
+      <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label> <input id="filtrar"
+      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:10px; margin-top:0px;" type="submit">
                   <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
                           
                   </ul>
-                  <br>
                   <input type=hidden class="pesquisa_original" name="pesquisa_original" value="">
                   <input type="hidden" id="jsonId" value="0">
-                  <input id="filtrar"
-      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit">
               </div>
               <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
               	<h3 class="translateHtml">Filtrar frases selecionadas</h3>
                   <label for="nome_pesquisa_sel"><span class="translateHtml">Nome do filtro (opcional):</span><br>
-                  <input id="nome_pesquisa_sel" type="text" ></label>
-                  <br><br>
+                  <input id="nome_pesquisa_sel" type="text" ></label> <input id="filtrarsel" style="margin-left:10px; margin-top:0px;" value="Filtrar" class="translateVal btn-gradient orange small" type="button" onclick="excluir_selection()">
                   <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
                     
                   </ul>
-                  <br>
-                  <input id="filtrarsel" style="margin-left:0px; margin-top:0px;" value="Filtrar" class="translateVal btn-gradient orange small" type="button" onclick="excluir_selection()"></p>
+                  </p>
                 </form>
                 </div>
       </div>
