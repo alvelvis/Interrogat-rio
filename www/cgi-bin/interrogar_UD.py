@@ -604,9 +604,7 @@ if corresponde and not separate:
 		}
 	#sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
 	
-	sentences = {}
-	if not fastSearch:
-		sentences = {x['resultadoEstruturado'].sent_id: i for i, x in enumerate(output)}
+	sentences = {x['resultado'].split("# sent_id = ")[1].split("\n")[0]: i for i, x in enumerate(output)}
 
 	return {'output': output, 'casos': casos, 'sentences': sentences, 'parameters': pesquisa if pesquisa else parametros}
 

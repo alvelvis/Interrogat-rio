@@ -40,12 +40,14 @@ if "link_dist" in form and os.path.isfile("./cgi-bin/filtros.json"):
 	else:
 		filtros = []
 
-json_id = form['jsonId'].value
-path = "./cgi-bin/json/" + json_id + ".json"
-if os.path.isfile(path):
+# verifica se a busca já foi salva em um json ou se é nova (e não precisa ser salva)
+json_id = form['jsonId'].value if 'jsonId' in form else None
+if json_id:
+	path = "./cgi-bin/json/" + json_id + ".json"
 	with open(path) as f:
 		json_query = json.load(f)
-dic_dist = interrogar_UD.getDistribution(json_query, form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value) # "./interrogar-ud/conllu/" + form['corpus'].value
+
+dic_dist = interrogar_UD.getDistribution(json_query if json_id else ("./interrogar-ud/conllu/" + form['corpus'].value), form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value) # "./interrogar-ud/conllu/" + form['corpus'].value
 
 pagina = '''
 	<meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">

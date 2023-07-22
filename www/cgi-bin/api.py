@@ -106,20 +106,8 @@ def renderSentences(script=""):
             else:
                 filtros = []
 
-    #if os.path.isfile('./cgi-bin/json/' + json_id + ".json"):
     with open("./cgi-bin/json/" + json_id + ".json", "r") as f:
         resultadosBusca = json.load(f)
-    #else:
-        #if not script:
-        #resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros)
-        #else:
-            #shutil.copy("./cgi-bin/scripts/" + script, './cgi-bin/queryScript.py')
-            #with open("./cgi-bin/queryScript.py", 'r') as f:
-                #scriptFile = f.read().replace("<!--corpus-->", caminhoCompletoConllu)
-            #with open("./cgi-bin/queryScript.py", "w") as f:
-                #f.write(scriptFile)
-            #import queryScript
-            #resultadosBusca = queryScript.getResultadosBusca()
 
     sent_id_list = []
     if 'sent_id_list' in form and form['sent_id_list'].value:

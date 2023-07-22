@@ -71,9 +71,9 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	pesquisa_original = form['pesquisa_original'].value
 	json_id = form['jsonId'].value
 
-	if os.path.isfile('./cgi-bin/json/' + json_id + ".json"):
-		with open("./cgi-bin/json/" + json_id + ".json") as f:
-			busca_original = json.load(f)
+	#if os.path.isfile('./cgi-bin/json/' + json_id + ".json"):
+	with open("./cgi-bin/json/" + json_id + ".json") as f:
+		busca_original = json.load(f)
 	#else:
 		#busca_original = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(pesquisa_original.split(" ", 1)[0]), pesquisa_original.split(" ", 1)[1], fastSearch=True)
 	busca_original = [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in busca_original['output']]
@@ -83,15 +83,8 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 	else:
 		nome_filtro = form['nome_pesquisa'].value.strip()
 
-	resultados = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(criterio), parametros)
-	#if not os.path.isdir('./cgi-bin/json'):
-		#os.mkdir('./cgi-bin/json')
-	#try:
-		#with open("./cgi-bin/json/" + slugify(ud + "_" + parametros + ".p"), "wb") as f:
-			#pickle.dump(resultados, f)
-	#except Exception as e:
-		#sys.stderr.write("=> " + str(e))
-		#pass
+	resultados = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(criterio), parametros, fastSearch=True)
+	json_id = functions.save_query_json(resultados, persistent=True)
 
 	if os.path.isfile("./cgi-bin/filtros.json"):
 		with open("./cgi-bin/filtros.json", "r") as f:
@@ -103,8 +96,8 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 		filtros[pagina_html] = {'ud': ud, 'filtros': {}}
 	if not nome_filtro in filtros[pagina_html]['filtros']:
 		filtros[pagina_html]['filtros'][nome_filtro] = {'parametros': [], 'sentences': []}
-	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [x['resultadoEstruturado'].sent_id for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
-	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append(criterio + ' ' + parametros)
+	filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
+	filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append({'parametro': parametros, 'json_id': json_id})
 
 	with open("./cgi-bin/filtros.json", "w") as f:
 		json.dump(filtros, f)
@@ -125,6 +118,13 @@ elif form['action'].value == 'desfazer':
 	with open("./cgi-bin/filtros.json") as f:
 		filtros = json.load(f)
 
+	with open("./cgi-bin/json/query_records.json") as f:
+		query_records = json.loads(f.read())
+	for parametro in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
+		query_records[parametro['json_id']]['persistent'] = False
+	with open("./cgi-bin/json/query_records.json", "w") as f:
+		f.write(json.dumps(query_records))
+
 	filtros[nome_html]['filtros'].pop(nome_filtro)
 
 	with open("./cgi-bin/filtros.json", "w") as f:
@@ -141,7 +141,7 @@ elif form['action'].value == 'view':
 
 	num_filtros = len(filtros[nome_html]['filtros'][nome_filtro]['sentences'])
 	ud = filtros[nome_html]['ud']
-	parametros = "\n<br>".join(filtros[nome_html]['filtros'][nome_filtro]['parametros'])
+	parametros = "\n<br>".join([x['parametro'] for x in filtros[nome_html]['filtros'][nome_filtro]['parametros']])
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
@@ -165,27 +165,28 @@ elif form['action'].value == 'view':
 
 	resultados = []
 	sentences_ja_filtrados = []
-	for parametros in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
-		#if os.path.isfile('./cgi-bin/json/' + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p")):
-			#with open("./cgi-bin/json/" + slugify(ud + "_" + parametros.split(" ", 1)[1] + ".p"), "rb") as f:
-				#busca = pickle.load(f)
-		#else:
-		busca = interrogar_UD.main(f"./interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
+	for parametro in filtros[nome_html]['filtros'][nome_filtro]['parametros']:
+		json_id = parametro['json_id']
+		with open("./cgi-bin/json/%s.json" % json_id) as f:
+			busca = json.load(f)
+		#busca = interrogar_UD.main(f"./interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
 		for x in busca['sentences']:
 			if x in sentences and x not in sentences_ja_filtrados:
-				resultados.append(busca['output'][busca['sentences'][x]]['resultadoAnotado'])
+				resultados.append(busca['output'][busca['sentences'][x]]['resultado'])
 				sentences_ja_filtrados.append(x)
 	
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
+		sent_id = resultado.split("# sent_id = ")[1].split("\n")[0]
+		text = resultado.split("# %s = " % ("clean_text" if "# clean_text = " in resultado else "text"))[1].split("\n")[0]
 		html += '<div class="sentence"><a onclick=\'removeFromFilter($(this), "{sentence}", "{html}", "{filtro}")\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - <span class="sent_id">{sentence}</span></b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
-			sentence=cleanEstruturaUD(fromInterrogarToHtml(resultado.sent_id)).strip(),
-			text=fromInterrogarToHtml(resultado.metadados['clean_text'] if 'clean_text' in resultado.metadados else resultado.text),
+			sentence=cleanEstruturaUD(fromInterrogarToHtml(sent_id)).strip(),
+			text=fromInterrogarToHtml(text),
 			html=nome_html,
 			filtro=web.escape(nome_filtro.replace('"', "&quot;")),
 			agora=i+1,
 			maximo=total,
-			anno=fromInterrogarToHtml(resultado.tokens_to_str()),
+			anno=fromInterrogarToHtml(resultado),
 			)
 		html += "<hr></div>"
 

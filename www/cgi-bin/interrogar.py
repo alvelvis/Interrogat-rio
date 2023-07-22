@@ -14,13 +14,12 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl
+from functions import tabela, prettyDate, encodeUrl, save_query_json
 import html as web
 import time
 import sys
 import json
 from chardet import detect
-import functions
 
 def main():
 	if not os.path.isdir("./interrogar-ud/conllu"):
@@ -80,8 +79,11 @@ def sendPOSTInterrogar():
 				f.write("")
 		except:
 			pass
+		fast = False
+	else:
+		fast = True
 
-	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script)
+	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script, fast)
 	
 	#parametros_antigos = None
 	#if script:
@@ -162,7 +164,7 @@ def definirVariaveisDePesquisa(form):
 	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""):
+def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script="", fast=False):
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
@@ -176,15 +178,8 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 			print("Erro: verifique a indentação do arquivo de script.")
 			exit()
 		resultadosBusca = queryScript.getResultadosBusca()
-
-	if not os.path.isdir('./cgi-bin/json'):
-		os.mkdir('./cgi-bin/json')
-	#try:
-	json_id = str(datetime.now()).replace(" ", "-").replace(":", "_")
-	with open("./cgi-bin/json/" + json_id + ".json", "w") as f:
-		json.dump(resultadosBusca, f)
-	#except:
-		#pass
+	
+	json_id = save_query_json(resultadosBusca, persistent=not fast)
 
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']

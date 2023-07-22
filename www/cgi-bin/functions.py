@@ -13,6 +13,52 @@ tabela = {	'yellow': 'green',
 			'cyan': 'cyan',
 }
 
+def save_query_json(query_json, persistent=False):
+    '''JSON should be a interrogar_UD dictionary'''
+    from datetime import datetime
+    import os
+    import json
+
+    path = "./cgi-bin/json/"
+    if not os.path.isdir(path):
+        os.mkdir(path)
+
+    # create query_records
+    query_records_path = os.path.join(path, "query_records.json")
+    if not os.path.isfile(query_records_path):
+        with open(query_records_path, "w") as f:
+            f.write("{}")
+
+    # load query_records
+    with open(query_records_path) as f:
+        query_records = json.loads(f.read())
+
+    # save query json
+    now_datetime = datetime.now()
+    json_id = str(now_datetime).replace(" ", "-").replace(":", "_")
+    with open(os.path.join(path, json_id + ".json"), "w") as f:
+        json.dump(query_json, f)
+
+    # save query_records
+    query_records[json_id] = {'datetime': now_datetime.isoformat(), 'persistent': persistent}
+    with open(query_records_path, "w") as f:
+        f.write(json.dumps(query_records))
+
+    # delete old queries    
+    for filename in os.listdir(path):
+        if filename == "query_records.json":
+            continue
+        filename_json_id = filename.split(".json")[0]
+        if not filename_json_id in query_records:
+            os.remove(os.path.join(path, filename))
+        else:
+            date = datetime.fromisoformat(query_records[filename_json_id]['datetime'])
+            time_passed = now_datetime - date
+            if time_passed.days >= 2:
+                os.remove(os.path.join(path, filename))
+
+    return json_id
+
 def slugify(value):
 	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 

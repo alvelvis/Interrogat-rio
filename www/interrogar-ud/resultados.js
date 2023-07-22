@@ -10,7 +10,8 @@ var translations = {
 		'en-US': 'Clear query expression'
 	},
 	'Filtros já aplicados:': {
-		'en-US': 'Filters already applied:',
+		'pt-BR': 'Salve dentro de um filtro já aplicado:',
+		'en-US': 'Save to a Filter already applied:',
 	},
 	'Filtros': {
 		'en-US': 'Filters',
