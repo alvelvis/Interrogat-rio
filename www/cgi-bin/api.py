@@ -15,7 +15,7 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl
+from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD
 import html as web
 import time
 import sys
@@ -94,8 +94,8 @@ def renderSentences(script=""):
     pagina_filtros = ""
     if nomePesquisa not in fastSearch:
         pagina_html = caminhoCompletoHtml.rsplit("/", 1)[1].rsplit(".", 1)[0]
-        if os.path.isfile("./cgi-bin/filtros.json"):
-            with open("./cgi-bin/filtros.json") as f:
+        if os.path.isfile("./cgi-bin/json/filtros.json"):
+            with open("./cgi-bin/json/filtros.json") as f:
                 filtros_json = json.load(f)
             filtrar_filtros = "<h4 class='translateHtml'>Filtros já aplicados:</h4>" if pagina_html in filtros_json and filtros_json[pagina_html]['filtros'] else ""
             if pagina_html in filtros_json:
@@ -130,7 +130,7 @@ def renderSentences(script=""):
     for ocorrencia in resultadosBusca['output'][startPoint:]:
         anotado = estrutura_ud.Sentence(recursivo=False)
         estruturado = estrutura_ud.Sentence(recursivo=False)
-        anotado.build(web.escape(ocorrencia['resultado'].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))	
+        anotado.build(web.escape(ocorrencia['resultado'].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))    
         estruturado.build(web.unescape(ocorrencia['resultado']).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
         estruturado.tokens = [functions.cleanEstruturaUD(x.split("\t")[0]) for x in ocorrencia['resultado'].splitlines() if "<b>" in x and x.count("\t") >= 9]
 
@@ -151,16 +151,22 @@ def renderSentences(script=""):
         estruturado = ocorrencia['estruturado']
 
         arquivoHtml += '<div class="container sentence-container">\n'
-        arquivoHtml += f'<p>{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}</p>' + '\n'
+        arquivoHtml += '<p class="metadados_sentence">'
         if estruturado.sent_id:
-            arquivoHtml += '<p {} class="metadados_sentence">'.format('onmouseover="$(this).css(\'text-decoration\', \'underline\');" onmouseleave="$(this).css(\'text-decoration\', \'none\');"' if nomePesquisa not in fastSearch else "")
-            arquivoHtml += f'''<input class="cb translateTitle" id=checkbox_{str(startPoint+i+1)} style="margin-left:0px;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" tokens="{','.join(estruturado.tokens)}" type=checkbox>''' if nomePesquisa not in fastSearch else ""
-            arquivoHtml += f'''{estruturado.sent_id}</p>''' + '\n'
-        arquivoHtml += f"<p><span id=text_{str(startPoint+i+1)}>{(anotado.metadados['clean_text'] if 'clean_text' in anotado.metadados else anotado.text).replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
+            arquivoHtml += '<span style="display:block;">'
+            arquivoHtml += f'''<input class="sentenceTokens" type="hidden" sent_id="{estruturado.sent_id}" tokens="{','.join(estruturado.tokens)}">'''
+            for group in range(5):
+                arquivoHtml += f'''<input class="cb translateTitle" style="margin-bottom: 10px; cursor:pointer; margin-left:2px; display:none;" title="Selecionar sentença para filtragem" sent_id="{estruturado.sent_id}" group="{group+1}" type=checkbox>'''
+                arquivoHtml += f'''<span class="cblabel" sent_id="{estruturado.sent_id}" group="{group+1}" style="user-select: none; margin-right:10px;"></span>'''
+            arquivoHtml += f'''</span>''' + '\n'
+        arquivoHtml += f'''{str(startPoint+i+1-filtradoPrevious)}/{numeroOcorrencias}{" - " + estruturado.sent_id if estruturado.sent_id else ""}''' + '\n'
+        arquivoHtml += "</p>"
+        arquivoHtml += f"<p style='margin-top:5px;'><span id=text_{str(startPoint+i+1)}>{(anotado.metadados['clean_text'] if 'clean_text' in anotado.metadados else anotado.text).replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</span></p>" + '\n'
+        arquivoHtml += "<p class='toolbar' style='margin-top:5px;' <!--style='display:none;'-->"
         if ((estruturado.sent_id and ('-' in estruturado.sent_id or re.search(r'^\d+$', estruturado.sent_id))) or estruturado.id) and estruturado.text:
-            arquivoHtml += f"<p class='toolbar' <!--style='display:none;'--><button class='translateHtml sentence-control' id=contexto_{str(startPoint+i+1)} onclick=\"contexto('{estruturado.sent_id}', '{estruturado.id}', '{corpus}')\" style=\"margin-left:0px\">Mostrar contexto</button> <button class='translateHtml anotacao sentence-control' id=mostrar_{str(startPoint+i+1)} onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar anotação</button> <button class='translateHtml opt sentence-control' id=opt_{str(startPoint+i+1)} onclick=\"mostraropt('optdiv_{str(startPoint+i+1)}', 'opt_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar opções</button> <button class=\"abrirInquerito translateHtml sentence-control\" onclick='inquerito(\"form_{str(startPoint+i+1)}\");'>Abrir inquérito</button></p>" + "\n"
-        else:
-            arquivoHtml += f"<p class='toolbar' <!--style='display:none;'--><button id=mostrar_{str(startPoint+i+1)} class=\"translateHtml anotacao sentence-control\" onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar anotação</button> <button id=opt_{str(startPoint+i+1)} class=\"translateHtml sentence-control opt\" onclick=\"mostraropt('optdiv_{str(startPoint+i+1)}', 'opt_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar opções</button> <button class='translateHtml abrirInquerito sentence-control' onclick='inquerito(\"form_{str(startPoint+i+1)}\")'>Abrir inquérito</button></p>" + '\n'
+            arquivoHtml += f"[<a href=\"javascript:void(0)\" class='translateHtml sentence-control' id=contexto_{str(startPoint+i+1)} onclick=\"contexto('{estruturado.sent_id}', '{estruturado.id}', '{corpus}')\" style=\"margin-left:0px\">Mostrar contexto</a>] "
+        arquivoHtml += f"[<a href=\"javascript:void(0)\" id=mostrar_{str(startPoint+i+1)} class=\"translateHtml anotacao sentence-control\" onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar anotação</a>] [<a href=\"javascript:void(0)\" class='translateHtml abrirInquerito sentence-control' onclick='inquerito(\"form_{str(startPoint+i+1)}\")'>Abrir inquérito</a>]" + '\n'
+        arquivoHtml += "</p>"
         arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(startPoint+i+1)}\">"
         arquivoHtml += f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{estruturado.text}\">"
         if "@BOLD" in anotado.to_str():
@@ -239,7 +245,7 @@ def generate_query_script(query="", save_openai_key=False):
                         if not has_subject:
                             bold_tokens.append(token)
                 '''},
-                {"role": "system", "content": "Sure, tell me what token you want to look for in a sentence and I will generate a Python code (with comments in each line written in your language) that performs this query. I will not write anything besides the code block itself."},
+                {"role": "system", "content": "Sure, tell me what token you want to look for in a sentence and I will generate a Python code (with comments in each line written in your language) that performs this query. I will make sure to not write anything outside of the code block itself."},
             ]
             
             prompt.append({'role': 'user', 'content': query})
@@ -265,8 +271,70 @@ def generate_query_script(query="", save_openai_key=False):
         with open(openai_key_file, "w") as f:
             f.write(save_openai_key.strip())
 
+def filtrar(form):
+    pesquisa = form['pesquisa'].value.strip()
+    if re.search(r'^\d+$', pesquisa.split(' ')[0]):
+        criterio = pesquisa.split(' ')[0]
+        parametros = pesquisa.split(' ', 1)[1]
+    elif len(pesquisa.split('"')) > 2 or any(x in pesquisa for x in ["==", " = ", " != "]) or 'tokens=' in pesquisa:
+        criterio = '5'
+        parametros = pesquisa
+    else:
+        criterio = '1'
+        parametros = pesquisa
+    
+    with open('./interrogar-ud/max_crit.txt', 'r') as f:
+        max_crit = f.read().split()[0]
+    if int(criterio) > int(max_crit):
+        print('em desenvolvimento')
+        exit()
+
+    ud = form['udoriginal'].value
+    pagina_html = form['html'].value
+    json_id = form['jsonId'].value
+
+    selections = {"1": {}} if not 'selections' in form else json.loads(form['selections'].value)
+
+    with open("./cgi-bin/json/" + json_id + ".json") as f:
+        busca_original = json.load(f)
+    busca_original = [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in busca_original['output']]
+
+    if os.path.isfile("./cgi-bin/json/filtros.json"):
+        with open("./cgi-bin/json/filtros.json", "r") as f:
+            filtros = json.load(f)
+    else:
+        filtros = {}
+
+    for selection in selections.values():
+        if 'queryname' in selection:
+            nome_filtro = selection['queryname']
+            parametros = "tokens=" + "|".join(selection['parameters'])
+            criterio = "5"
+        elif not 'nome_pesquisa' in form or not form['nome_pesquisa'].value:
+            nome_filtro = form['pesquisa'].value.replace('<b>', '').replace('</b>', '').replace('<font color=' + tabela['yellow'] + '>', '').replace('<font color=' + tabela['red'] + '>', '').replace('<font color=' + tabela['cyan'] + '>', '').replace('<font color=' + tabela['blue'] + '>', '').replace('<font color=' + tabela['purple'] + '>', '').replace('</font>', '').strip()
+        else:
+            nome_filtro = form['nome_pesquisa'].value.strip()
+
+        resultados = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(criterio), parametros, fastSearch=True)    
+        json_id = functions.save_query_json(resultados, persistent=True)
+   
+        if not pagina_html in filtros:
+            filtros[pagina_html] = {'ud': ud, 'filtros': {}}
+        if not nome_filtro in filtros[pagina_html]['filtros']:
+            filtros[pagina_html]['filtros'][nome_filtro] = {'parametros': [], 'sentences': []}
+        filtros[pagina_html]['filtros'][nome_filtro]['sentences'].extend([y for y in [cleanEstruturaUD(x['resultado'].split("# sent_id = ")[1].split("\n")[0]) for x in resultados['output']] if y in busca_original and y not in [k for filtro in filtros[pagina_html]['filtros'] for k in filtros[pagina_html]['filtros'][filtro]['sentences']]])
+        filtros[pagina_html]['filtros'][nome_filtro]['parametros'].append({'parametro': parametros, 'json_id': json_id})
+
+    with open("./cgi-bin/json/filtros.json", "w") as f:
+        f.write(json.dumps(filtros))
+    
+    #print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../interrogar-ud/resultados/' + form['html'].value + '.html" }</script></body>')
+
 if os.environ.get('REQUEST_METHOD') == "POST":
-    if 'action' in form and form['action'].value == "generate_query_script":
+    if 'action' in form and form['action'].value == "filtrar":
+        filtrar(form)
+        print(json.JSONEncoder().encode({'success': True, 'data': "anything"}))
+    elif 'action' in form and form['action'].value == "generate_query_script":
         code = generate_query_script(query=form['query'].value)
         with open("./interrogar-ud/chatGPTQueryScript.txt", "w") as f:
             f.write(code)

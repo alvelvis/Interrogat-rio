@@ -28,6 +28,24 @@ def main():
 	sendRequestInterrogar() if os.environ['REQUEST_METHOD'] != "POST" else sendPOSTInterrogar()
 
 def sendRequestInterrogar():
+
+	# delete old queries
+	json_path = "./cgi-bin/json"
+	json_query_path = os.path.join(json_path, "query_records.json")
+	if os.path.isdir(json_path):
+		with open(json_query_path) as f:
+			query_records = json.loads(f.read())
+		for filename in os.listdir(json_path):
+			if filename in ["query_records.json", "filtros.json"]:
+				continue
+			filename_json_id = filename.split(".json")[0]
+			if not filename_json_id in query_records:
+				os.remove(os.path.join(json_path, filename))
+			else:
+				date = datetime.fromisoformat(query_records[filename_json_id]['datetime'])
+				time_passed = datetime.now() - date
+				if time_passed.days >= 2:
+					os.remove(os.path.join(json_path, filename))
 	
 	conllu_json = []
 	if os.path.isfile('./interrogar-ud/conllu.json'):
@@ -100,7 +118,7 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastSearch:
-		print(re.sub(r'<button.*?filtrar.*?\n.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '').replace('<!--savequery', '').replace('savequery-->', ''))
+		print(re.sub(r'<button.*?filtrar.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '').replace('<!--savequery', '').replace('savequery-->', ''))
 		exit()
 	if script:
 		arquivoHtml = arquivoHtml.replace('Exportar resultados para .html', '')

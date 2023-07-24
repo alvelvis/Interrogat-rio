@@ -58,8 +58,8 @@ def printar(coluna = '', valor = ''):
 		novo_html += "<h2 class='translateHtml'>Buscas em progresso:</h2><small><a href='javascript:location.reload()' class='translateHtml'>Atualizar</a></small><div class=\"container-lr\"><table>{0}</table></div>".format(''.join(inProgress)) + "<br>"
 
 	filtros_json = []
-	if os.path.isfile("./cgi-bin/filtros.json"):
-		with open("./cgi-bin/filtros.json") as f:
+	if os.path.isfile("./cgi-bin/json/filtros.json"):
+		with open("./cgi-bin/json/filtros.json") as f:
 			filtros_json = json.load(f)
 
 	html_query = ''

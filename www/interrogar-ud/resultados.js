@@ -436,7 +436,8 @@ var translations = {
 		'en-US': 'Checks if several regular expressions match with a sentence and returns it in case none of the expressions fail.'
 	},
 	'Salve a busca para liberar mais opções': {
-		'en-US': 'Save this query to open new options'
+		'pt-BR': 'Filtrar (salve a busca para liberar)',
+		'en-US': 'Filter (save this query to unlock)'
 	},
 	'Parâmetros:': {
 		'en-US': 'Parameters:'
@@ -713,7 +714,8 @@ var translations = {
 		'en-US': 'Filter with a new query expression'
 	},
 	'Filtrar as frases que foram selecionadas manualmente': {
-		'en-US': 'Filter the sentences that have been selected manually'
+		'pt-BR': 'Filtrar frases manualmente',
+		'en-US': 'Filter sentences manually'
 	},
 	'Filtrar com nova busca': {
 		'en-US': 'Filter with a new query'
@@ -998,6 +1000,28 @@ var translations = {
 	},
 	'Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online': {
 		'en-US': 'New feature: TXT files can be submitted to Interrogatório to be annotated using UDPipe Online'
+	},
+	'Grupo 1:': {
+		'en-US': 'Group 1:'
+	},
+	'Grupo 2 (opcional):': {
+		'pt-BR': "Grupo 2:",
+		'en-US': 'Group 2:'
+	},
+	'Grupo 3 (opcional):': {
+		'pt-BR': "Grupo 3:",
+		'en-US': 'Group 3:'
+	},
+	'Grupo 4 (opcional):': {
+		'pt-BR': "Grupo 4:",
+		'en-US': 'Group 4:'
+	},
+	'Grupo 5 (opcional):': {
+		"pt-BR": "Grupo 5:",
+		'en-US': 'Group 5:'
+	},
+	'Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez': {
+		'en-US': 'New feature: Sentences returned in a query can now be manually filtered to up to 5 groups at once'
 	}
 }
 
@@ -1277,7 +1301,7 @@ function carregarPosts(){
                 $('#statusLoading').html(':(');
                 $('#loadingText').html('acabaram as frases');
             } else { scrollPosts(); };
-            $('.cb').unbind('click');
+            /*$('.cb').unbind('click');
             $('.metadados_sentence').unbind('click');
             $('.cb').click(function(event){
                 event.preventDefault;
@@ -1285,7 +1309,7 @@ function carregarPosts(){
             });
             $('.metadados_sentence').click(function(e){
                 $(this).find('.cb').prop("checked", !$(this).find('.cb').prop("checked"));
-			});
+			});*/
 			/*$('[id^="text_"]').parents('p').unbind('click').on('click', function(){
 				if ($(this).parents('.sentence-container').find('.toolbar').is(':hidden')){
 					$('.toolbar').slideUp('fast');
@@ -1296,6 +1320,8 @@ function carregarPosts(){
 			if ($('.saveQuery').length) {
 				history.replaceState('', '', window.location.href.rsplit("/", 1)[0] + "/" + $('.refazerPesquisa').attr('href').rsplit("/", 1)[1].replace("./", ""));
 			};
+
+			atualizar_pesquisa_sel_label()
 
         },
         "text",
@@ -1335,13 +1361,40 @@ function updateInterrogarBusca(){
 	}
 };
 
+function atualizar_pesquisa_sel_label(){
+	for (g of Array(5).keys()) {
+		group = (g+1).toString()
+		group_text = $('.nome_pesquisa_sel[group="' + group + '"]').val() 
+		if (group_text && group_text.trim().length > 0) {
+			$('.cblabel[group="' + group + '"]').text(group_text)
+			$('.cblabel[group="' + group + '"],.cb[group="' + group + '"]').show();
+		} else {
+			$('.cblabel[group="' + group + '"],.cb[group="' + group + '"]').hide();
+		}
+	}
+
+	$('.cb').unbind('click')
+	$('.cblabel').unbind('click')
+	$('.cb').on('click', function() {
+		group = $(this).attr('group')
+		sent_id = $(this).attr('sent_id')
+		$('.cb[sent_id="' + sent_id + '"]').not(this).prop('checked', false)
+	});
+
+	$('.cblabel').click(function(){
+		group = $(this).attr('group')
+		sent_id = $(this).attr('sent_id')
+		checkbox = $('.cb[group="' + group + '"][sent_id="' + sent_id + '"]')
+		checkbox.click()	
+	})
+}
+
+
 $(document).ready(function(){
 
-	$('#nome_pesquisa_sel').on('keypress',function(e) {
-		if(e.which == 13) {
-			$('#filtrarsel:visible').click();
-		};
-	});
+	$('.nome_pesquisa_sel').on('keyup', function(){
+		atualizar_pesquisa_sel_label()
+	})
 
 	$('#stringToTokenInput').on('keydown', function(e){
 		if (e.keyCode === 13) {
@@ -1417,6 +1470,7 @@ $(document).ready(function(){
 					'conllu': $('[name=conllu]').val(),
 					'parametros': $('#expressao').text(),
 					'script': $('[name=queryScript]').val(),
+					'jsonId': $('#jsonId').val(),
 				},
 				function(data) {
 					$('.filtrar_filtros').html(JSON.parse(data).filtrar_filtros);
@@ -1475,6 +1529,7 @@ $(document).ready(function(){
 				'parametros': $('#expressao').text(),
 				'script': $('[name=queryScript]').val(),
 				'sent_id_list': true,
+				'jsonId': $('#jsonId').val()
 			},
 			function(data) {
 				$('.extractSentidInput').val(data.sent_id_list).toggle();
@@ -1535,7 +1590,7 @@ $(document).ready(function(){
     });
 
     $('[tab=selectionFilter]').click(function(){
-        $('#nome_pesquisa_sel').focus();
+        $('.nome_pesquisa_sel[group="1"]').focus();
     });
 
     $lastDistribution = "";
@@ -1837,24 +1892,95 @@ function topFunction() {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
+/*async function filter(form) { 
+	const res = await 
+	const data = await res.json() 
+	return data
+} */
+
+function filtrar(){
+	loadingScreen()
+	let data = new FormData()
+	data.append("action", "filtrar")	
+	data.append("pesquisa", $('#pesquisa_filtro').val())
+	data.append("nome_pesquisa", $("#nome_pesquisa").val())
+	data.append("udoriginal", $('#corpus').text())
+	data.append("pesquisa_original", $("#expressao").text())
+	data.append("jsonId", $('#jsonId').val())
+	data.append("html", $('#apagar_link').val())
+	fetch('../../cgi-bin/api.py', {
+		method: "POST",
+		body: data
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			location.reload()
+		}
+	})
+}
+
 function excluir_selection() {
+	queries = {}
+	applied = 0
+	for (g of Array(5).keys()){
+		group = (g+1).toString()
+		queryName = $('.nome_pesquisa_sel[group="' + group + '"]').val()
+		if (queryName.length > 0){
+			checkboxes = $('.cb[group=' + group + ']:visible')
+			checkboxes.each(function(index){
+				if ($(checkboxes[index]).prop('checked') == true) {
+					if (!(group in queries)) {
+						queries[group] = {'parameters': [], 'queryname': queryName}
+					}
+					sent_id = $(checkboxes[index]).attr('sent_id')
+					tokens = $('.sentenceTokens[sent_id="' + sent_id + '"]').attr('tokens')
+					queries[group]['parameters'].push(sent_id + ":" + tokens)
+				}
+			})
+		}
+	}
+
+	n_queries = Object.keys(queries).length
+	if (n_queries) {
+		loadingScreen()
+		let data = new FormData()
+		data.append("action", "filtrar")
+		data.append("pesquisa", "")
+		data.append("selections", JSON.stringify(queries))
+		data.append("udoriginal", $('#corpus').text())
+		data.append("pesquisa_original", $('#expressao').text())
+		data.append("jsonId", $('#jsonId').val())
+		data.append("html", $('#apagar_link').val())
+		fetch("../../cgi-bin/api.py", {
+			method: "POST",
+			body: data
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				location.reload()
+			}
+		})
+	}
     
+	/*
     $('#pesquisa_filtro').val('tokens=');
     $(".cb:checked").each(function(){
         $('#pesquisa_filtro').val($('#pesquisa_filtro').val() + escapeRegExp($(this).attr('sent_id')) + ":" + escapeRegExp($(this).attr('tokens')) + '|');
     });
 	$('#pesquisa_filtro').val($('#pesquisa_filtro').val().rsplit('|', 1)[0]);
-	/**if($('#expressao').text().split(" ")[0] == "5"){
+	if($('#expressao').text().split(" ")[0] == "5"){
 		$('#pesquisa_filtro').val($('#pesquisa_filtro').val() + ' and ' + $('#expressao').text().split(" ").slice(1,$('#expressao').text().split(" ").length).join(" "));
-	}**/
-    /**for (i = 0; i < checkboxes.length; i++) {
+	}
+    for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked == true) {
             if (document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf("<b>") !== -1){
                 negrito = document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.substring(document.getElementById("text_" + checkboxes[i].id.split(/_/)[1]).innerHTML.indexOf('<b>')).split(/<\/b>/)[0].replace(/<.*?>/g, '');
             } else { negrito = ""; };
             document.getElementById("pesquisa_filtro").value = document.getElementById("pesquisa_filtro").value + "^# text = " + escapeRegExp(document.getElementById("text_" + checkboxes[i].id.split('_')[1]).innerHTML.replace(/<.*?>/g, '')) + "$|";
         };
-    };**/
+    };
 
     if (document.getElementById("nome_pesquisa_sel").value == "") {
     	var data = new Date().toLocaleString()
@@ -1863,6 +1989,7 @@ function excluir_selection() {
 	
     document.getElementById("nome_pesquisa").value = document.getElementById("nome_pesquisa_sel").value;
     document.getElementById("filtrar").click();
+	*/
 }
 
 function escapeRegExp(string) {
@@ -1872,18 +1999,6 @@ function escapeRegExp(string) {
 String.prototype.rsplit = function(sep, maxsplit) {
     var split = this.split(sep);
     return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
-}
-
-function filtraragora(n) {
-    var checkboxes, i;
-    checkboxes = document.getElementsByClassName("cb");
-
-    for (i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].checked = false;
-    }
-
-    document.getElementById("checkbox_" + n).checked = true;
-    document.getElementById("filtrarsel").click();
 }
 
 function tudo(event) {
@@ -2047,14 +2162,6 @@ function drawtree(ide) {
         //});
     //}
 //}
-
-function selectAbove(n) {
-    tilN = [... Array(n).keys()]
-    tilN.reverse()
-    for (i of tilN) {
-        $('#checkbox_' + (i+1).toString()).prop('checked', true)
-    }
-}
 
 function paginacao() {
     if (window.location.href.indexOf("?page=hide") != -1){

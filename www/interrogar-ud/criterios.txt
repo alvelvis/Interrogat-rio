@@ -16,10 +16,11 @@
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
+    <li><a href="#" class="translateHtml">Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez</a></li>
     <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online</a></li>
     <li><a href="#queryScriptTab" class="translateHtml" onclick="$('#openQueryScript').click()">Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT</a></li>
     <li><a href="#" class="translateHtml">Simplificação: os padrões de busca agora são Regex, Python Simplificado e código de busca em Python</a></li>
-    <li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li>
+    <!--li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li-->
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li-->
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li-->
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li-->

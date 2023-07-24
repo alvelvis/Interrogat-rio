@@ -385,13 +385,13 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		any_of_keywords = None
 		if "tokens=" in parametros:
 			parametros = parametros.replace(" ", "")
-			query = parametros.split("tokens=")[1]
-			tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
-			any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
-			pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
-			   for sentid in tokens])
+			#query = parametros.split("tokens=")[1]
+			#tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
+			#any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
+			#pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
+			   #for sentid in tokens])
 			arroba = "token"
-			sys.stderr.write("\nquery: %s\n" % pesquisa)
+			#sys.stderr.write("\nquery: %s\n" % pesquisa)
 		else:
 			parametros = parametros.split(" and ")
 			for t, parametro in enumerate(parametros):
@@ -564,17 +564,35 @@ if corresponde and not separate:
 			f.write(condition)
 
 		t1 = time.time()
-		for sent_id in sentences:
-			sentence = corpus.sentences[sent_id]
-			sentence2 = sentence
-			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			corresponde = 0
-			tokens = sentence2.tokens_to_str()
-			map_id = {x: t for t, x in enumerate(clean_id)}
-			if limit and limit == len(output):
-				break
-			exec(condition)
+		if not 'tokens=' in parametros:
+			for sent_id in sentences:
+				sentence = corpus.sentences[sent_id]
+				sentence2 = sentence
+				clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+				clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+				corresponde = 0
+				tokens = sentence2.tokens_to_str()
+				map_id = {x: t for t, x in enumerate(clean_id)}
+				if limit and limit == len(output):
+					break
+				exec(condition)
+		else:
+			query = parametros.split("tokens=")[1]
+			sent_ids = query.split("|")
+			for part in sent_ids:
+				sent_id = part.split(":")[0]
+				token_ids = part.split(":")[1].split(",")
+				sentence = corpus.sentences[sent_id]
+				clean_text = [x.word for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+				clean_id = [x.id for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+				map_id = {x: t for t, x in enumerate(clean_id)}
+				tokens = sentence.tokens_to_str()
+				for token_id in token_ids:
+					token = sentence.tokens[sentence.map_token_id[token_id]]
+					clean_text[map_id[token.id]] = "<b>" + clean_text[map_id[token.id]] + "</b>"
+					tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
+				final = "# clean_text = " + " ".join(clean_text) + "\n" + sentence.metadados_to_str() + "\n" + tokens
+				output.append(final)
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
 		sys.stderr.write(f"\nfor each sentence: {time.time() - t1}")

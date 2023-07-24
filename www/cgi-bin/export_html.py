@@ -25,8 +25,8 @@ nome = form['nome'].value
 link = form['html'].value.rsplit("/", 1)[1].rsplit(".", 1)[0]
 sys.stderr.write(link)
 
-if os.path.isfile("./cgi-bin/filtros.json"):
-    with open("./cgi-bin/filtros.json") as f:
+if os.path.isfile("./cgi-bin/json/filtros.json"):
+    with open("./cgi-bin/json/filtros.json") as f:
         filtros = json.load(f)
 else:
     filtros = []
