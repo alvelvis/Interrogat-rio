@@ -43,7 +43,6 @@ elif not 'action' in form: #or form['action'].value not in ['desfazer', 'view', 
 			html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'
 			print(html)
 			exit()
-	sys.stderr.write(">>>>>>> CHEGOU AQUI")
 	filtrar(form)
 
 elif form['action'].value == 'desfazer':

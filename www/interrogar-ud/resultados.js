@@ -765,8 +765,8 @@ var translations = {
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito em Python.': {
 		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written in Python.'
 	},
-	'Baixe o <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">modelo de script de correção</a> em Python.': {
-		'en-US': 'Download the <a href="../interrogar-ud/scripts/modelo_script.txt" target="_blank" download="">correction script model</a> in Python'
+	'Baixe o modelo de script de busca em Python clicando aqui.': {
+		'en-US': 'Download the query script model in Python clicking here.'
 	},
 	'Todas as sentenças voltarão para a busca inicial': {
 		'en-US': 'All sentences will return to the initial query'

@@ -29,14 +29,21 @@ if LOGIN:
         exit()
 
 html = form['html'].value
-if os.path.isfile(f"./interrogar-ud/resultados/{html}.html"):
-    os.remove(f"./interrogar-ud/resultados/{html}.html")
-else:
-    print(f"{html} não encontrado")
+json_id = form['json_id'].value
+
+query_records_path = "./cgi-bin/json/query_records.json"
+with open(query_records_path) as f:
+    query_records = json.loads(f.read())
+query_records[json_id]['persistent'] = False
+
 if os.path.isfile("./cgi-bin/json/filtros.json"):
     with open("./cgi-bin/json/filtros.json") as f:
         filtros = json.load(f)
     if html in filtros:
+        for filter_name in filtros[html]['filtros']:
+            for parameter in filtros[html]['filtros'][filter_name]['parametros']:
+                filter_json_id = parameter['json_id']
+                query_records[filter_json_id]['persistent'] = False
         filtros.pop(html)
         with open("./cgi-bin/json/filtros.json", "w") as f:
             json.dump(filtros, f)
@@ -45,5 +52,8 @@ with open("./interrogar-ud/queries.txt") as f:
 queries = [x for x in queries.splitlines() if not html in x]
 with open("./interrogar-ud/queries.txt", "w") as f:
     f.write("\n".join(queries))
+with open(query_records_path, "w") as f:
+    f.write(json.dumps(query_records))
+os.remove(f"./interrogar-ud/resultados/{html}.html")
 
 print("<script>window.location = '../cgi-bin/interrogatorio.py'</script>")

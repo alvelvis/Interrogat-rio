@@ -18,7 +18,7 @@ form = cgi.FieldStorage()
 
 empty_line = script.index('') + 1
 
-parametros = form['params'].value
+parametros = form['params'].value if 'params' in form else ""
 if len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
     script[empty_line] = 'if ' + parametros.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
 

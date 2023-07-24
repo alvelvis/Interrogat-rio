@@ -305,6 +305,9 @@ def filtrar(form):
     else:
         filtros = {}
 
+    corpus = estrutura_ud.Corpus()
+    corpus.load('./interrogar-ud/conllu/' + ud)
+
     for selection in selections.values():
         if 'queryname' in selection:
             nome_filtro = selection['queryname']
@@ -315,7 +318,7 @@ def filtrar(form):
         else:
             nome_filtro = form['nome_pesquisa'].value.strip()
 
-        resultados = interrogar_UD.main('./interrogar-ud/conllu/' + ud, int(criterio), parametros, fastSearch=True)    
+        resultados = interrogar_UD.main(corpus, int(criterio), parametros, fastSearch=True)    
         json_id = functions.save_query_json(resultados, persistent=True)
    
         if not pagina_html in filtros:
