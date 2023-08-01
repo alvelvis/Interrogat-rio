@@ -32,7 +32,7 @@ def sendRequestInterrogar():
 	# delete old queries
 	json_path = "./cgi-bin/json"
 	json_query_path = os.path.join(json_path, "query_records.json")
-	if os.path.isdir(json_path):
+	if os.path.isfile(json_query_path):
 		with open(json_query_path) as f:
 			query_records = json.loads(f.read())
 		for filename in os.listdir(json_path):
