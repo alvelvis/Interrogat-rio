@@ -88,13 +88,13 @@ elif form['action'].value == 'view':
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
 	html += '<script src="../interrogar-ud/resultados.js"></script>'
 	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1>\
+		<a title='Colocar as frases deste filtro em uma nova busca' class='translateTitle translateHtml fromFilterToQuery' style='cursor:pointer; color:blue; text-decoration: underline;'>[Transformar em busca]</a> \
 		<a title='Mostrar lista de sent_id das frases' class='translateTitle translateHtml extractSentidFilter' style='cursor:pointer; color:blue; text-decoration: underline;'>[Lista de sent_id]</a> \
 		<a title='Todas as sentenças voltarão para a busca inicial' class='translateTitle translateHtml' style='cursor:pointer; color:blue; text-decoration: underline;' onclick='if(window.confirm(\"Deseja desfazer o filtro?\")) {{ window.location.href = \"../cgi-bin/filtrar.py?action=desfazer&html={nome_html}&filtro={nome_filtro_encoded}\"; }}'>[Desfazer filtro]</a> \
-		<!--a href='#' class='translateHtml' onclick='window.close()'>[Fechar página]</a>\
-		<br--><span class='extractSentidSpan' style='display:none'></span><input class='extractSentidInput' style='width: 300px; display:none; margin:5px;'>\
+		<br><span class='extractSentidSpan' style='display:none'></span><input class='extractSentidInput' style='width: 500px; display:none; margin:5px;'>\
 		<br>{parametros}<br><br>\
 		<span class='translateHtml'>Busca inicial:</span> <a href='../interrogar-ud/resultados/{nome_html}.html'>{nome_html}</a><br>\
-		<span class='translateHtml'>Corpus:</span> <a href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
+		<span class='translateHtml'>Corpus:</span> <a id='corpus' href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
 		nome_filtro=web.escape(nome_filtro),
 		nome_filtro_encoded = functions.encodeUrl(nome_filtro),
@@ -127,7 +127,7 @@ elif form['action'].value == 'view':
 			filtro=web.escape(nome_filtro.replace('"', "&quot;")),
 			agora=i+1,
 			maximo=total,
-			anno=fromInterrogarToHtml(resultado),
+			anno=web.escape(fromInterrogarToHtml(resultado).replace("<b>", "@BOLD").replace("</b>", "/BOLD")).replace("@BOLD", "<b>").replace("/BOLD", "</b>"),
 			)
 		html += "<hr></div>"
 

@@ -72,17 +72,7 @@ def renderSentences(script=""):
 
     conllu = form['conllu'].value
     corpus = conllu
-    caminhoCompletoConllu = './interrogar-ud/conllu/' + conllu
     caminhoCompletoHtml = form['html'].value
-
-    parametros = form['parametros'].value
-    #if len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]) or "tokens=" in parametros:
-        #criterio = '5'
-    #else:
-        #criterio = '1'
-
-    #if "script" in form:
-        #script = form['script'].value
 
     startPoint = int(form['indexSentences'].value)
     filtradoPrevious = int(form['filtrado'].value) if 'filtrado' in form else 0
@@ -111,11 +101,13 @@ def renderSentences(script=""):
 
     sent_id_list = []
     if 'sent_id_list' in form and form['sent_id_list'].value:
-        sent_id_list = [re.sub(r'<.*?>', '', re.findall(r'# sent_id = (.*?)\n', x['resultado'])[0]) for x in resultadosBusca['output']]
-        sent_id_list = [x for x in sent_id_list if x not in filtros]
+        for sentence in resultadosBusca['output']:
+            sentence = sentence['resultado']
+            sent_id = re.sub(r'<.*?>', '', cleanEstruturaUD(sentence).split("# sent_id = ")[1].split("\n")[0])
+            tokens = [re.sub(r'<.*?>', '', cleanEstruturaUD(token.split("\t")[0])) for token in sentence.splitlines() if token.count("\t") >= 9 and ("<b>" in token or "@BOLD" in token)]
+            sent_id_list.append("%s:%s" % (sent_id, ",".join(tokens)))
 
     numeroOcorrencias = len(resultadosBusca['output']) - len(filtros)
-    #numeroOcorrenciasMenosFiltro = numeroOcorrencias - len(filtros)
     if numeroOcorrencias > startPoint + 21 and numeroOcorrencias >= 1:
         finalPoint = startPoint + 20
         noMore = False
@@ -174,7 +166,6 @@ def renderSentences(script=""):
         arquivoHtml += "</form><br>"
         if nomePesquisa not in fastSearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
         if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
-        #arquivoHtml += '<br>'
         if nomePesquisa in fastSearch: arquivoHtml += "<span class='translateHtml'>Salve a busca para liberar mais opções</span>"
         arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a!-->"
         arquivoHtml += ''
@@ -192,7 +183,7 @@ def renderSentences(script=""):
             'filtrar_filtros': filtrar_filtros,
             'pagina_filtros': pagina_filtros,
             'filtros': len(filtros),
-            'sent_id_list': "|".join(sent_id_list),
+            'sent_id_list': "tokens=" + "|".join(sent_id_list),
             'sent_id_count': str(len(sent_id_list))
         }))
 

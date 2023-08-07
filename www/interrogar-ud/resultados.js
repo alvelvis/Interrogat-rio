@@ -786,6 +786,12 @@ var translations = {
 	'[Lista de sent_id]': {
 		'en-US': '[sent_id list]'
 	},
+	'[Transformar em busca]': {
+		'en-US': '[Convert to query]'
+	},
+	'Colocar as frases deste filtro em uma nova página de busca': {
+		'en-US': "Put the sentences in this filter inside a new query page"
+	},
 	'[Fechar página]': {
 		'en-US': '[Close window]'
 	},
@@ -1442,14 +1448,33 @@ $(document).ready(function(){
 	updateTranslation();
 	updateInterrogarBusca();
 
-	$('.extractSentidFilter').click(function(){ 
+	function extractSentidFilter(){
 		sent_ids = []
-		$('.sent_id').each(function(e){
-			sent_ids.push($(this).text())
+		clean_html = RegExp("<.*?>")
+		$('.anno').each(function(e){
+			sentence = $(this).html()
+			sent_id = sentence.split("# sent_id = ")[1].split("\n")[0].replace(clean_html, "")
+			tokens = []
+			for (token of sentence.split("\n")) {
+				if (token.split("\t").length >= 10 && token.indexOf("<b>") != -1) {
+					tokens.push(token.replace(clean_html, "").split("\t")[0])
+				}
+			}
+			sent_ids.push(sent_id + ":" + tokens.join(","))
 		})
-		$('.extractSentidInput').val(sent_ids.join("|")).toggle()
+		return "tokens=" + sent_ids.join("|")
+	}
+
+	$('.extractSentidFilter').click(function(){ 
+		sent_ids = extractSentidFilter()
+		$('.extractSentidInput').val(sent_ids).toggle()
 		$('.extractSentidSpan').html('(' + sent_ids.length  + ')').toggle()
 		$('.extractSentidInput').select()
+	})
+
+	$('.fromFilterToQuery').click(function(){
+		sent_ids = extractSentidFilter()
+		location.href = "../cgi-bin/interrogar.py?corpus=" + $('#corpus').text() + "&params=" + sent_ids + "&go=True"
 	})
 
 	/*window.addEventListener('resize', updateInterrogarBusca);*/
