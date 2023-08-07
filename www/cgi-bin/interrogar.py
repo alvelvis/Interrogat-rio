@@ -264,7 +264,7 @@ class paginaHtml():
 	def montarHtml(self):
 		with open("./interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
-			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/modelo_script.py?crit=&params=", f"../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters) if not 'tokens=' in self.fullParameters else ''}")
+			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/modelo_script.py?crit=&params=", f"../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/filtrar.py', '../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '&udoriginal=' + self.conllu)
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/conllu.py', '../cgi-bin/conllu.py?html=./interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.dataAgora.replace(':', '_') + '.html')
 
