@@ -90,7 +90,7 @@ elif not 'validate' in form:
                 try:
                     with open(srcfile, 'r', encoding=from_codec) as ff:
                         with open(trgfile, 'w', encoding='utf-8') as e:
-                            text = ff.read() # for small files, for big use chunks
+                            text = ff.read().strip() + "\n\n" # for small files, for big use chunks
                             e.write(text)
                 except Exception as e:
                     sys.stderr.write("Could not convert to utf-8: " + str(e))
@@ -100,7 +100,7 @@ elif not 'validate' in form:
                     try:
                         with open(srcfile, 'r', encoding=from_codec) as ff:
                             with open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w', encoding='utf-8') as e:
-                                text = ff.read() # for small files, for big use chunks
+                                text = ff.read().strip() + "\n\n" # for small files, for big use chunks
                                 e.write(text)
                     except Exception as e:
                         sys.stderr.write("Could not convert to utf-8 to Julgamento: " + str(e))
