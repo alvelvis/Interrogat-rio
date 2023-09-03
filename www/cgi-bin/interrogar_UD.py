@@ -518,24 +518,24 @@ else:
 	available_tokens = sentences[sent_id]
 for token_t in available_tokens:
 	token = sentence.tokens[token_t]
-	if True:
+	try:
 		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')):
-			corresponde = 1
+			corresponde = True
 			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
-	'''#try por causa de não ter um next_token no fim de sentença, por ex.
-		if "token.head_token" in pesquisa:
+	'''
+		if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
 			condition += '''
 			clean_text[map_id[token.head_token.id]] = "@RED/" + clean_text[map_id[token.head_token.id]] + "/FONT"
 			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
-		if "token.next_token" in pesquisa:
+		if "token.next_token" in pesquisa and not "_token.next_token" in pesquisa:
 			condition += '''
-			clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
-			tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
-		if "token.previous_token" in pesquisa:
+			#clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
+			#tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
+		if "token.previous_token" in pesquisa and not '_token.previous_token' in pesquisa:
 			condition += '''
-			clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
-			tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
+			#clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
+			#tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
 		condition += '''
 			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"
 
@@ -548,16 +548,15 @@ for token_t in available_tokens:
 			tokens = "\\n".join(tokens)
 
 			if separate:
-				corresponde = 0
+				corresponde = False
 				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 			
-	if False:#except Exception as e:
-		sys.stderr.write(\"\\n\" + str(e) + '\\n')
-		sys.stderr.write(token.to_str())
+	except Exception as e:
+		sys.stderr.write(\"\\n\" + str(e) + ': ' + token.to_str())
 		pass
 if corresponde and not separate:
-	corresponde = 0
+	corresponde = False
 	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)'''
 		with open("./cgi-bin/condition.txt", "w") as f:
@@ -570,7 +569,7 @@ if corresponde and not separate:
 				sentence2 = sentence
 				clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
 				clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-				corresponde = 0
+				corresponde = False
 				tokens = sentence2.tokens_to_str()
 				map_id = {x: t for t, x in enumerate(clean_id)}
 				if limit and limit == len(output):
