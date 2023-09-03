@@ -13,6 +13,41 @@ tabela = {	'yellow': 'green',
 			'cyan': 'cyan',
 }
 
+def save_query_json(query_json, persistent=False):
+    '''JSON should be a interrogar_UD dictionary
+    Returns json_id, which is the name of the json file (with transformed datetime)
+    '''
+    from datetime import datetime
+    import os
+    import json
+
+    path = "./cgi-bin/json/"
+    if not os.path.isdir(path):
+        os.mkdir(path)
+
+    # create query_records
+    query_records_path = os.path.join(path, "query_records.json")
+    if not os.path.isfile(query_records_path):
+        with open(query_records_path, "w") as f:
+            f.write("{}")
+
+    # load query_records
+    with open(query_records_path) as f:
+        query_records = json.loads(f.read())
+
+    # save query json
+    now_datetime = datetime.now()
+    json_id = str(now_datetime).replace(" ", "-").replace(":", "_")
+    with open(os.path.join(path, json_id + ".json"), "w") as f:
+        f.write(json.dumps(query_json))
+
+    # save query_records
+    query_records[json_id] = {'datetime': now_datetime.isoformat(), 'persistent': persistent}
+    with open(query_records_path, "w") as f:
+        f.write(json.dumps(query_records))
+
+    return json_id
+
 def slugify(value):
 	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 

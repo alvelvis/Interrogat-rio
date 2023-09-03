@@ -18,19 +18,20 @@ import json
 form = cgi.FieldStorage()
 corpus = form['corpus'].value
 pesquisa = form['params'].value
-criterio = pesquisa.split(' ')[0]
-parametros = pesquisa.split(' ', 1)[1]
+#criterio = pesquisa.split(' ')[0]
+#parametros = pesquisa.split(' ', 1)[1]
+parametros = pesquisa
 nome = form['nome'].value
 link = form['html'].value.rsplit("/", 1)[1].rsplit(".", 1)[0]
 sys.stderr.write(link)
 
-if os.path.isfile("./cgi-bin/filtros.json"):
-    with open("./cgi-bin/filtros.json") as f:
+if os.path.isfile("./cgi-bin/json/filtros.json"):
+    with open("./cgi-bin/json/filtros.json") as f:
         filtros = json.load(f)
 else:
     filtros = []
 
-ocorrencias = interrogar_UD.main('./interrogar-ud/conllu/' + corpus, int(criterio), parametros)['output']
+ocorrencias = interrogar_UD.main('./interrogar-ud/conllu/' + corpus, "", parametros)['output']
 numeroOcorrencias_antes = len(ocorrencias)
 if nome not in fastSearch:
     ocorrencias = [x for x in ocorrencias if link not in filtros or x['resultadoEstruturado'].sent_id not in [x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']]]

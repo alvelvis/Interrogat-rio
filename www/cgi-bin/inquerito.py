@@ -236,8 +236,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	link_interrogatorio = form['link_interrogatorio'].value.rsplit(".", 1)[0].rsplit("/", 1)[1]
 
 	filtros = []
-	if os.path.isfile("./cgi-bin/filtros.json"):
-		with open("./cgi-bin/filtros.json") as f:
+	if os.path.isfile("./cgi-bin/json/filtros.json"):
+		with open("./cgi-bin/json/filtros.json") as f:
 			filtros = json.load(f)
 		if link_interrogatorio in filtros:
 			filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]

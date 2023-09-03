@@ -1,13 +1,15 @@
 .sentence-control {
     /*background-color: lightgoldenrodyellow;*/
-    border-radius:10px;
+    border-radius:5px;
     /*float: left;*/
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 6px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 5px;
     transition: 0.3s;
-    margin-top:5px;
 }
 
 .tabcontent .optionsMenu {
@@ -23,10 +25,6 @@
     overflow-y: hidden;
 }
 
-
-.sentence-control:hover {
-    background-color: lightgray;
-}
 
 li{
     padding-bottom:2px;
@@ -87,10 +85,6 @@ input#pesquisa {
 }
 
 #nome_pesquisa {
-    width: 400px;
-}
-
-#nome_pesquisa_sel {
     width: 400px;
 }
 
@@ -649,3 +643,11 @@ button[class*="btn"] {border: 0;}
 .btn-gradient.purple:active {background: #BD8EB7;}
 .btn-gradient.yellow:active {background: #DBC05B;}
 .btn-gradient.green:active  {background: #72B08E;}
+
+.nome_pesquisa_sel {
+    width: 50px;
+}
+
+#script, .viewDist, .newSearchFilter, .selectionFilter {
+    margin: 30px;
+}

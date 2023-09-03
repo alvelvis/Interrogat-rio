@@ -1,86 +1,47 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
-    <title>link de pesquisa 1 (203): Interrogatório</title>
-    <link href="../../interrogar-ud/style.css?version=7" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-    <script src="../../interrogar-ud/jquery-latest.js"></script>
-    <script src="../../interrogar-ud/resultados.js?version=21"></script>
-    <!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
-  </head>
-  <body><!--onload="load()"-->
-    <div id="loading-bg"></div>
-    <img id="loading-image" src="../../interrogar-ud/loading4.gif" alt="Carregando">
-    <img id="loading-image-nobg" src="../../interrogar-ud/loading4.gif" alt="Carregando">
-   <button onclick="topFunction()" id="myBtn" class="translateHtml translateTitle" title="Voltar ao topo">Voltar ao topo</button>
-   <div class="header">
+<head>
+  <meta name="viewport" http-equiv="content-type" content="text/html; charset=us-ascii; width=device-width, initial-scale=1.0">
+  <title>link de pesquisa 1 (203): Interrogatório</title>
+  <link href="../../interrogar-ud/style.css?version=7" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="../../interrogar-ud/jquery-latest.js"></script>
+  <script src="../../interrogar-ud/resultados.js?version=21"></script><!--<script src="../../interrogar-ud/jquery.easyPaginate.js"></script>-->
+</head>
+<body>
+  <!--onload="load()"-->
+  <div id="loading-bg"></div><img id="loading-image" src="../../interrogar-ud/loading4.gif" alt="Carregando"> <img id="loading-image-nobg" src="../../interrogar-ud/loading4.gif" alt="Carregando"> <button onclick="topFunction()" id="myBtn" class="translateHtml translateTitle" title="Voltar ao topo">Voltar ao topo</button>
+  <div class="header">
     <!--h1>Interrogatório</h1-->
     <h2><a href="../../cgi-bin/interrogar.py" class="translateHtml">nova busca</a> - <a class="translateHtml" href="../../cgi-bin/interrogatorio.py">buscas salvas</a> - <a class="translateHtml" href="../../cgi-bin/arquivo_ud.py">gerenciar corpora</a></h2>
-    </div>
-    <div class="content"><h3><span id="combination">link de pesquisa 1</span> (203)</h3>
-      <p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;
-        <br>
-        <div class="pagina_filtros_br">
-        <ul style="list-style-type: none; margin: 0; padding: 0;" class="pagina_filtros">
-                  
-        </ul>
-        <br>
-      </div>
-        <!--em--><!--a href="#" onclick="apagar()">excluir</a--><!--/em--></p>
-        <input type="hidden" id="apagar_link" value="link1">
-      <div class="tab"><button class="tablinks" style="border-radius:10px; font-weight:bold;" tabid="ver" tab="Options">
-      <span class="translateHtml">Opções</span> </button> <button class="tablinks" style="border-radius:10px; font-weight:bold;" tab="Filter" tabid="filtrar_tab">
-          <span class="translateHtml">Filtrar</span> </button> <!--button class="tablinks" tab="Download" tabid="conllu">
+  </div>
+  <div class="content">
+    <h3><span id="combination">link de pesquisa 1</span> (203)</h3>
+    <p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;</p>
+    <div class="pagina_filtros_br">
+      <ul style="list-style-type: none; margin: 0; padding: 0;" class="pagina_filtros"></ul><br>
+    </div><!--em--><!--a href="#" onclick="apagar()">excluir</a--><!--/em--><input type="hidden" id="apagar_link" value="link1">
+    <div class="tab">
+      <button class="tablinks" style="border-radius:10px; font-weight:bold;" tabid="ver" tab="Options"><span class="translateHtml">Opções</span></button> 
+      <button class="tablinks" style="border-radius:10px; font-weight:bold;" tab="Filter" tabid="filtrar_tab"><span class="translateHtml">Filtrar</span></button> 
+      <!--button class="tablinks" tab="Download" tabid="conllu">
           Baixar </button-->
-      <!--savequery<div class="saveQuery"><button style="border-radius:10px; font-weight: bold;"><span class="translateHtml">Salve a busca para liberar mais opções</span></div>savequery-->
-      </div>
-      <div class="tabcontent tabOptions" id="ver"> 
+       <!--savequery<div class="saveQuery"><button style="border-radius:10px; font-weight: bold;"><span class="translateHtml">Salve a busca para liberar mais opções</span></div>savequery-->
+    </div>
+    <div class="tabcontent tabOptions" id="ver">
       <br>
       <a onclick="$('.inqueritoSome').toggle();" style="cursor:pointer" class="optionsMenu translateHtml">Abrir inquérito para múltiplas sentenças</a>
-      <div class="inqueritoSome" style="display:none"><ul><li><span class="translateHtml">De:</span> <input type="number" style="width:60px;" value="1" class="minInquerito"> <span class="translateHtml">Até:</span> <input type="number" style="width:60px;" value="5" class="maxInquerito"> <input type="button" class="translateVal" value="Abrir inqueritos" onclick="window.alert('Certifique-se de que seu navegador não bloqueará pop-ups'); $('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li></ul></div>
-      <a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();" class="optionsMenu translateTitle translateHtml">Selecionar múltiplas sentenças</a>
-      <div class="selectSome" style="display:none"><ul><li>De:<input type="number" style="width:60px;" value="1" class="minSelect">Até:<input type="number" style="width:60px;" value="20" class="maxSelect"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(parseInt($('.minSelect').val()) -1, parseInt($('.maxSelect').val())).prop('checked', true);"></li></ul></div>
-      <a style="cursor:pointer" onclick="tudo('marcar')" class="optionsMenu translateHtml">Selecionar todas as sentenças</a>
-      <a style="cursor:pointer" onclick="tudo('desmarcar')" class="optionsMenu translateHtml">Deselecionar todas as sentenças</a>
-      <a class="optionsMenu exportHtml translateHtml" style="cursor:pointer">Exportar resultados para .html</a>
-      <a class="optionsMenu extractSentid translateHtml translateTitle" title="Mostrar lista de sent_id das frases" style="cursor:pointer">Extrair lista de sent_id</a> <span class="extractSentidSpan" style="display:none"></span> <input class="extractSentidInput" value="" style="display:none; width: 300px;">
-      <a onclick="tudo('abrir')" style="cursor:pointer" class="optionsMenu translateHtml">Abrir anotação de todas as sentenças</a>
-      <a style="cursor:pointer" title="" onclick="tudo('fechar')" class="optionsMenu translateHtml">Fechar anotação de todas as sentenças</a>
-      <a style="cursor:pointer" onclick="$('#script').toggle();" class="optionsMenu translateHtml">Correção em lote</a>
-      <div id="script" style="display:none">
-        <hr>
-        <h3 class="translateHtml">Correção em lote</h3>
+      <div class="inqueritoSome" style="display:none">
         <ul>
-          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito na sintaxe do <a target="_blank" href="../../cgi-bin/expressoes_5.py">critério 5: Python</a>.</li>
-          <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
-          <ol type="1">
-            <li><span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">Clique aqui</a>.</li>
-            <li class="translateHtml">Edite o script de correção de acordo com o exemplo dentro do arquivo.</li>
-            <li class="translateHtml">Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.</li>
-          </ol>
+          <li><span class="translateHtml">De:</span> <input type="number" style="width:60px;" value="1" class="minInquerito"> <span class="translateHtml">Até:</span> <input type="number" style="width:60px;" value="5" class="maxInquerito"> <input type="button" class="translateVal" value="Abrir inqueritos" onclick="window.alert('Certifique-se de que seu navegador não bloqueará pop-ups'); $('.abrirInquerito').slice(parseInt($('.minInquerito').val()) -1, parseInt($('.maxInquerito').val())).click();"></li>
         </ul>
-        <div style="margin-left:40px;">
-          <form class='scriptForm' method=POST action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
-            <label for="fileScript"><b class="translateHtml">Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
-            <br>
-            <input type="file" onchange="if (! $('#nomeScript').val()) { $('#nomeScript').val($('#fileScript').val().split(/(\\|\/)/g).pop().split('.txt')[0]) }" name="fileScript" id="fileScript" required>
-            <br><br>
-            <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>
-            <input name="scriptName" id="nomeScript" required>
-            <br><br>
-            <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="translateVal buscaOption btn-gradient orange small"
-  type="submit" onclick="">
-  <input id="clearBatch" value="Limpar" type="button" style="margin-left:0px;" class="translateVal buscaOption btn-gradient red small"
-  onclick="">
-            <!--script-->
-          </form>
-        </div>
-        <hr>
-      </div>
-      <!--DISTa style="cursor:pointer;" class="optionsMenu translateHtml" onclick="$('.viewDist').toggle()">Visualizar distribuição</a>
+      </div><a style="cursor:pointer" title="Escolha quantas sentenças deseja selecionar" onclick="$('.selectSome').toggle();" class="optionsMenu translateTitle translateHtml">Selecionar múltiplas sentenças</a>
+      <div class="selectSome" style="display:none">
+        <ul>
+          <li>De:<input type="number" style="width:60px;" value="1" class="minSelect">Até:<input type="number" style="width:60px;" value="20" class="maxSelect"> <input type="button" value="Selecionar sentenças" onclick="$('.cb').prop('checked', false); $('.cb').slice(parseInt($('.minSelect').val()) -1, parseInt($('.maxSelect').val())).prop('checked', true);"></li>
+        </ul>
+      </div><a style="cursor:pointer" onclick="tudo('marcar')" class="optionsMenu translateHtml">Selecionar todas as sentenças</a> <a style="cursor:pointer" onclick="tudo('desmarcar')" class="optionsMenu translateHtml">Deselecionar todas as sentenças</a> <a class="optionsMenu exportHtml translateHtml" style="cursor:pointer">Exportar resultados para .html</a> <a class="optionsMenu extractSentid translateHtml translateTitle" title="Mostrar lista de sent_id das frases" style="cursor:pointer">Extrair lista de sent_id</a> <input class="extractSentidInput" value="" style="display:none; width: 500px;"> <a onclick="tudo('abrir')" style="cursor:pointer" class="optionsMenu translateHtml">Abrir anotação de todas as sentenças</a> <a style="cursor:pointer" title="" onclick="tudo('fechar')" class="optionsMenu translateHtml">Fechar anotação de todas as sentenças</a> <a style="cursor:pointer" onclick="$('#script').toggle(); $('.viewDist').toggle(false);" class="optionsMenu translateHtml">Correção em lote</a> <!--DISTa style="cursor:pointer;" class="optionsMenu translateHtml" onclick="$('.viewDist').toggle(); $('#script').toggle(false);">Visualizar distribuição</a>
         <div class="viewDist">
-          <hr>
         <ul>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
@@ -94,67 +55,105 @@
           <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
           <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Dependentes sintáticos">dependentes</a></li>
       </ul>
-    <hr></divDIST-->
-      </div>
-      <div class="tabcontent tabFilter" id="filtrar_tab">
-        <br>
-        <form action="../../cgi-bin/filtrar.py" method="POST"> <p><label for="pesquisa">
-          <ul>
-          <li class="translateHtml">A opção de filtrar retira frases dessa página e as coloca em uma página à parte, com um nome que você decidir.</li>
-          <!--li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</!--li-->
-          <li class="translateHtml">Para adicionar frases a um filtro já existente, basta escolher o mesmo nome para o filtro.</li>
-          <li class="translateHtml">Você pode realizar filtros de duas formas:</li>
-            <ul>
-              <li><a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor translateHtml">Filtrar com uma nova expressão de busca</a></li>
-              <li><a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor translateHtml">Filtrar as frases que foram selecionadas manualmente</a></li>
-            </ul>
-          </ul>
-            <div class="filterDiv newSearchFilter" style="display:none; margin-left:40px;">
-                <h3 class="translateHtml">Filtrar com nova busca</h3>
-                <div class="tooltip translateHtml">Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.<br><br>Sintaxe: nº do critério + espaço + parâmetros</span></div><br>
-                  <input id="pesquisa_filtro" name="pesquisa" type="text" required></label>
-                  <br><br> <label for="nome_pesquisa"><span class="translateHtml">Nome do filtro (opcional):</span><br>
-      <input id="nome_pesquisa" name="nome_pesquisa" type="text" ></label>
-                  <br><br>
-                  <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
-                          
-                  </ul>
-                  <br><br>
-                  <input type=hidden class="pesquisa_original" name="pesquisa_original" value="">
-                  <input id="filtrar"
-      value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:0px; margin-top:0px;" type="submit">
-              </div>
-              <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
-              	<h3 class="translateHtml">Filtrar frases selecionadas</h3>
-                  <label for="nome_pesquisa_sel"><span class="translateHtml">Nome do filtro (opcional):</span><br>
-                  <input id="nome_pesquisa_sel" type="text" ></label>
-                  <br><br>
-                  <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros">
-                    
-                  </ul>
-                  <br><br>
-                  <input id="filtrarsel" style="margin-left:0px; margin-top:0px;" value="Filtrar" class="translateVal btn-gradient orange small" type="button" onclick="excluir_selection()"></p>
-                </form>
-                </div>
-      </div>
-      <div class="tabcontent tabDownload" id="conllu"> <br>
-        <br>
-        <br>
-        <form action="../../cgi-bin/conllu.py" method="POST"><p><label for="nomeconllu"><span class="translateHtml">Nome do arquivo (sem <em>.conllu</em>):</span><br>
-            <input id="nomeconllu" name="nomeconllu" type="text" required></label> <input id="conllunizar"
-value="Baixar arquivo" class="translateVal btn-gradient orange mini" type="submit"></p></form>
-      </div>
-      <br>
-        <input type="hidden" name="indexSentences" class="indexSentences" value="0">
-        <input type="hidden" name="filtrado" class="filtrado" value="0">
-        <div class="loadSentences">
-        <!--SPLIT-->
-        </div><br>
-      <div style="position:relative">
-        <div class="container-lr" style="width:100%;">
-            <h1 id="statusLoading"><img id="loadingGif" style="max-width:64px; max-height: 64px; margin-left:10px;" src="../../interrogar-ud/loading4.gif"></h1><p id="loadingText" class="lead translateHtml">Carregando...</p>
+    </divDIST-->
+      <div id="script" style="display:none">
+        <h3 class="translateHtml">Correção em lote</h3>
+        <ul>
+          <li class="translateHtml">A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito em Python.</li>
+          <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
+          <ol type="1">
+            <li>
+              <span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">Clique aqui</a>.
+            </li>
+            <li class="translateHtml">Edite o script de correção de acordo com o exemplo dentro do arquivo.</li>
+            <li class="translateHtml">Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.</li>
+          </ol>
+        </ul>
+        <div style="margin-left:40px;">
+          <form class='scriptForm' method="post" action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
+            <label for="fileScript"><b class="translateHtml">Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
+            <br>
+            <input type="file" onchange="if (! $('#nomeScript').val()) { $('#nomeScript').val($('#fileScript').val().split(/(\\|\/)/g).pop().split('.txt')[0]) }" name="fileScript" id="fileScript" required=""><br>
+            <br>
+            <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>
+            <input name="scriptName" id="nomeScript" required=""><br>
+            <br>
+            <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="translateVal buscaOption btn-gradient orange small" type="submit" onclick=""> <!--input id="clearBatch" value="Limpar" type="button" style="margin-left:0px;" class="translateVal buscaOption btn-gradient red small"
+onclick=""-->
+             <!--script-->
+          </form>
         </div>
       </div>
+    </div>
+    <div class="tabcontent tabFilter" id="filtrar_tab">
+      <br>
+      <form action="javascript:filtrar()" id="filtrar_form" method="post">
+        <ul>
+          <li class="translateHtml">A opção de filtrar retira frases dessa página e as coloca em uma página à parte, com um nome que você decidir.</li><!--li>Caso você não tenha percebido nenhuma mudança após a aplicação de um filtro, experimente <a href="javascript:location.reload()">recarregar a página</a>.</!==li-->
+          <li class="translateHtml">Para adicionar frases a um filtro já existente, basta escolher o mesmo nome para o filtro.</li>
+          <li class="translateHtml">Você pode realizar filtros de duas formas:</li>
+          <ul>
+            <li>(a) <a style="cursor:pointer;" tab="newSearchFilter" class="filterAnchor translateHtml">Filtrar com uma nova expressão de busca</a></li>
+            <li>(b) <a style="cursor:pointer;" tab="selectionFilter" class="filterAnchor translateHtml">Filtrar as frases que foram selecionadas manualmente</a></li>
+          </ul>
+        </ul>
+        <div class="filterDiv newSearchFilter" style="display:none; margin-left:40px;">
+          <h3 class="translateHtml">Filtrar com nova busca</h3>
+          <div class="tooltip translateHtml">
+            Expressão de busca (?):<span class="tooltiptext">As sentenças serão removidas da página atual e salvas em uma página separada. Se for do desejo, é possível retornar à busca original posteriormente.</span>
+          </div><br>
+          <input id="pesquisa_filtro" name="pesquisa" type="text" required=""><br>
+          <br>
+          <label for="nome_pesquisa"><span class="translateHtml">Nome do filtro (opcional):</span><br>
+          <input id="nome_pesquisa" name="nome_pesquisa" type="text"></label> <input id="filtrar" value="Filtrar" onclick="$('.pesquisa_original').val($('#expressao').text());" class="translateVal btn-gradient orange small" style="margin-left:10px; margin-top:0px;" type="submit">
+          <ul style="list-style-type: none; margin: 0; padding: 0;" class="filtrar_filtros"></ul>
+          <input type="hidden" class="pesquisa_original" name="pesquisa_original" value=""> 
+          <input type="hidden" id="jsonId" value="0">
+          <input type="hidden" id="action" value="filtrar">
+        </div>
+      </form>
+      <form action="javascript:excluir_selection()" method="post">
+        <div class="filterDiv selectionFilter" style="display:none; margin-left:40px;">
+          <h3 class="translateHtml">Filtrar frases selecionadas</h3>
+          <table style="border: 1px solid transparent">
+            <tr>
+              <td><label><span class="translateHtml">Grupo 1:</span><br>
+              <input class="nome_pesquisa_sel" group="1" type="text"></label></td>
+              <td><label><span class="translateHtml">Grupo 2 (opcional):</span><br>
+              <input class="nome_pesquisa_sel" group="2" type="text"></label></td>
+              <td><label><span class="translateHtml">Grupo 3 (opcional):</span><br>
+              <input class="nome_pesquisa_sel" group="3" type="text"></label></td>
+              <td><label><span class="translateHtml">Grupo 4 (opcional):</span><br>
+              <input class="nome_pesquisa_sel" group="4" type="text"></label></td>
+              <td><label><span class="translateHtml">Grupo 5 (opcional):</span><br>
+              <input class="nome_pesquisa_sel" group="5" type="text"></label></td>
+            </tr>
+            <tr>
+              <td><input id="filtrarsel" style="margin-left:0px; margin-top:0px;" value="Filtrar" class="translateVal btn-gradient orange small" type="submit"></td>
+            </tr>
+          </table>
+        </div>
+      </form>
+    </div>
+    <div class="tabcontent tabDownload" id="conllu">
+      <br>
+      <br>
+      <br>
+      <form action="../../cgi-bin/conllu.py" method="post">
+        <p><label for="nomeconllu"><span class="translateHtml">Nome do arquivo (sem <em>.conllu</em>):</span><br>
+        <input id="nomeconllu" name="nomeconllu" type="text" required=""></label> <input id="conllunizar" value="Baixar arquivo" class="translateVal btn-gradient orange mini" type="submit"></p>
+      </form>
+    </div><br>
+    <input type="hidden" name="indexSentences" class="indexSentences" value="0"> <input type="hidden" id="jsonId" value="0"> <input type="hidden" name="filtrado" class="filtrado" value="0">
+    <div class="loadSentences">
+      <!--SPLIT-->
+    </div><br>
+    <div style="position:relative">
+      <div class="container-lr" style="width:100%;">
+        <h1 id="statusLoading"><img id="loadingGif" style="max-width:64px; max-height: 64px; margin-left:10px;" src="../../interrogar-ud/loading4.gif" alt="loading4"></h1>
+        <p id="loadingText" class="lead translateHtml"></p>
       </div>
-  </body>
+    </div>
+  </div>  
+</body>
 </html>

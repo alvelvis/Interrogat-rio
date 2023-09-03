@@ -2,24 +2,28 @@
 <span class="translateHtml">Visite o <a href="../cgi-bin/arquivo_ud.py">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.</span>
 <br><span class="translateHtml">Para começar a interrogar algum corpus, siga um dos caminhos abaixo:</span>
 <ul>
-    <li class="translateHtml">Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
-    <li class="translateHtml">Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a></li>
-    <li class="translateHtml">Para experientes: Utilize algum dos critérios de busca</li>
+    <li class="translateHtml">(a) Digite as palavras na barra de busca à esquerda (buscas simples)</li>
+    <li class="translateHtml">(b) Use padrões de busca (buscas complexas)</li>
     <ul>
-        <li><a href="#criterio_1" class="toggleCriteria translateHtml" criterio="1">Critério 1: Regex</a></li>
-        <li><a href="#criterio_2" class="toggleCriteria translateHtml" criterio="2">Critério 2: Ausência de B apontando para A</a></li>
-        <li><a href="#criterio_3" class="toggleCriteria translateHtml" criterio="3">Critério 3: Regex Independentes</a></li>
-        <li><a href="#criterio_4" class="toggleCriteria translateHtml" criterio="4">Critério 4: Pais e filhos</a></li>
-        <li><a href="#criterio_5" class="toggleCriteria translateHtml" criterio="5">Critério 5: Python</a></li>
+        <li><a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle translateHtml toggleCriteria">Construtor de expressões de busca</a></li>
+        <li><a href="#criterio_1" class="toggleCriteria translateHtml" criterio="1">Regex</a></li>
+        <!--li><a href="#criterio_2" class="toggleCriteria translateHtml" criterio="2">Critério 2: Ausência de B apontando para A</a></li-->
+        <!--li><a href="#criterio_3" class="toggleCriteria translateHtml" criterio="3">Critério 3: Regex Independentes</a></li-->
+        <!--li><a href="#criterio_4" class="toggleCriteria translateHtml" criterio="4">Critério 4: Pais e filhos</a></li-->
+        <li><a href="#criterio_5" class="toggleCriteria translateHtml" criterio="5">Python Simplificado</a></li>
     </ul>
-    <li class="translateHtml">Para experts:</u> <a title="Abrir interface" style="cursor:pointer;" onclick="$('.queryString').hide(); $('.scriptQuery').show(); $('.toggleSalvar').click(); ">Escreva seu próprio script de busca</a></li>
+    <li class="translateHtml">(c) <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$('.normalQuery').hide(); $('.toggleSalvar').click();" href="#queryScriptTab" criterio="6">Escreva seu próprio script de busca em Python (para experts)</a></li>
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
-    <li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">No critério 5 de busca, utilize "nt", "pt" e "ht" como abreviações</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
+    <li><a href="#" class="translateHtml">Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez</a></li>
+    <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online</a></li>
+    <li><a href="#queryScriptTab" class="translateHtml" onclick="$('#openQueryScript').click()">Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT</a></li>
+    <li><a href="#" class="translateHtml">Simplificação: os padrões de busca agora são Regex, Python Simplificado e código de busca em Python</a></li>
+    <!--li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li-->
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
@@ -27,7 +31,6 @@
     <li><a href="http://github.com/alvelvis/Interrogat-rio/wiki" target="_blank" class="translateHtml">Wiki - documentação das ferramentas</a></li>
     <li><a href="http://github.com/alvelvis/Julgamento" target="_blank" class="translateHtml">Julgamento - avaliação de corpora anotados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank" class="translateHtml">Código fonte do Interrogatório no GitHub</a></li>
-    <li><a target="_blank" href="http://comcorhd.letras.puc-rio.br/" class="translateHtml">Grupo de pesquisa ComCorHd/PUC-Rio</a></li>
 </ul>
 
 !@#<a id="interactive"></a>
@@ -125,7 +128,7 @@
 <ol type="1" class="construtorHelp" style="display:none">
     <li class="translateHtml">Você pode adicionar uma ou mais <b>condições</b> para a sua busca. As condições são feitas envolvendo um <b>token</b> (ou palavra) principal, seu "pai" sintático (palavra do qual o token depende sintaticamente), um token à direita, e/ou um token à esquerda do token principal.</li>
     <li class="translateHtml">Uma ou mais <b>anotações</b> gramaticais podem ser verificadas desse(s) token(s), de modo que devem ser <b>iguais</b> ou <b>diferentes</b> de um <b>valor</b>. Todos os valores podem ser preenchidos com <a target="_blank" href="http://aprenda.vidageek.net/aprenda/regex">expressão regular</a>.</li>
-    <li class="translateHtml">Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5" class="toggleCriteria" criterio="5">critério 5: Python</a>. Adicione quantas condições julgar necessário.</li>
+    <li class="translateHtml">Ao clicar no botão <b>OK</b> ou pressionar <b>Enter</b>, a condição será adicionada à barra de busca à esquerda adaptada para o <a href="#criterio_5" class="toggleCriteria" criterio="5">modelo Python Simplificado</a>. Adicione quantas condições julgar necessário.</li>
     <li class="translateHtml">Você pode especificar qual token será negritado nas frases clicando no ícone de arroba (<b>@</b>). Caso não especifique nenhum token, o último da expressão de busca será o escolhido. O token negritado, além de se destacar na leitura de uma frase, é o que será avaliado caso deseje <a style="cursor:pointer" onclick="pesquisaChange(); $('.toggleDist').click()">ver a distribuição</a> de alguma anotação para este token.</li>
     <li class="translateHtml">Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 </ol>
@@ -163,25 +166,25 @@
     <pre style="display:none" id="stringToTokenOutput"></pre>
 </ul>
 
-!@#<h3 class="translateHtml">Critério 1: Regex</h3>
+!@#<h3 class="translateHtml">Regex</h3>
 <span class="translateHtml">Se a expressão regular for encontrada em alguma sentença, retorná-la.</span>
 <br><br><span class="translateHtml">Dica: Cada grupo da expressão regular (conjunto entre parênteses) será mostrado com uma cor diferente.</span>
 <br><span class="translateHtml">Dica 2: Em um arquivo no formato CoNLL-U, "\t" separa as colunas, e "\n", as palavras.</span>
 <h4 class="translateHtml">Exemplos:</h4>
 <span class="translateHtml">1) Retornar sentenças com o lema "dizer" seguido de um "PROPN".</span>
 <ul><li>
-<a id="1" style="cursor:pointer" onclick="pesquisa('1')">1 (.*dizer.*)\n(.*PROPN)</a>
+<a id="1" style="cursor:pointer" onclick="pesquisa('1')">(.*dizer.*)\n(.*PROPN)</a>
 </li></ul>
 <span class="translateHtml">2) Retornar sentenças com substantivos seguidos ou não de adjetivos, além de um nome próprio que seja aposto.</span>
 <ul><li>
-<a id="2" style="cursor:pointer" onclick="pesquisa('2')">1 (.*NOUN.*)(\n.*ADJ.*)*\n(.*PROPN.*appos)</a>
+<a id="2" style="cursor:pointer" onclick="pesquisa('2')">(.*NOUN.*)(\n.*ADJ.*)*\n(.*PROPN.*appos)</a>
 </li></ul>
 <span class="translateHtml">3) Retornar sentenças com tokens cujo POS seja "NUM" e o DEPREL, diferente de "nummod".</span>
 <ul><li>
-<a id="nummod" style="cursor:pointer" onclick="pesquisa('nummod')">1 .*\t.*\t.*\tNUM\t(?!.*nummod)</a>
+<a id="nummod" style="cursor:pointer" onclick="pesquisa('nummod')">.*\t.*\t.*\tNUM\t(?!.*nummod)</a>
 </li></ul>
 
-!@#<h3 class="translateHtml">Critério 2: Ausência de B apontando para A</h3>
+!@#<h3 class="translateHtml">Ausência de B apontando para A</h3>
 <span class="translateHtml">Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.</span>
 <br><br><span class="translateHtml">Parâmetros: A#X#B#Y</span>
 <br><br><span class="translateHtml">Dica: O parâmetro B aceita o operador lógico '|' (ou).</span>
@@ -191,7 +194,7 @@
 <a id="3" style="cursor:pointer" onclick="pesquisa('3')">2 root#8#nsubj|csubj#8</a>
 </li></ul>
 
-!@#<h3 class="translateHtml">Critério 3: Regex Independentes</h3>
+!@#<h3 class="translateHtml">Regex Independentes</h3>
 <span class="translateHtml">Verifica se várias expressões regulares dão match em uma sentença e a retorna caso nenhuma das expressões falhe.</span>
 <br><br><span class="translateHtml">Parâmetros:</span><br>Regex 1 :: Regex 2 :: . . . :: Regex N
 <br><br><span class="translateHtml">Dica: Utilize '!' para negar uma expressão regular.</span>
@@ -201,7 +204,7 @@
 <a id="4" style="cursor:pointer" onclick="pesquisa('4')">3 VERB.*root::!nsubj::!csubj</a>
 </li></ul>
 
-!@#<h3 class="translateHtml">Critério 4: Pais e filhos</h3>
+!@#<h3 class="translateHtml">Pais e filhos</h3>
 <span class="translateHtml">Busca relações sintáticas entre filhos (regex 1) e pais (regex 2).</span>
 <br><br><span class="translateHtml">Parâmetros:</span><br>Regex 1 :: Regex 2
 <br><br><span class="translateHtml">Dica: Utilize '!' para negar a presença de um filho ou de um pai.</span>
@@ -211,10 +214,10 @@
 <a id="5" style="cursor:pointer" onclick="pesquisa('5')">4 \tNOUN\t.*nsubj :: \tADV\t</a>
 </li></ul>
 
-!@#<h3 class="translateHtml">Critério 5: Python</h3>
+!@#<h3 class="translateHtml">Python Simplificado</h3>
 <span class="translateHtml">Realiza uma condição seguindo a sintaxe em Python.</span>
 <br>
-<span class="translateHtml">Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o critério 5.</span>
+<span class="translateHtml">Você também pode utilizar o <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">construtor de expressões de busca</a> para montar a sua sintaxe com o padrão Python Simplificado.</span>
 <br><br><span class="translateHtml">Parâmetros:</span>
 <br><span class="translateHtml">Uma ou mais condições que conta com anotações de um token/palavra, um operador (== ou !=), e um valor entre aspas.</span>
 <br><br><span class="translateHtml">São anotações de um token:</span> <pre style="color:black" class="translateHtml">id, word, lemma, upos, xpos, feats, dephead, deprel, deps, misc, head_token, next_token, previous_token, sent_id e text</pre>
@@ -224,7 +227,33 @@
 <h4 class="translateHtml">Exemplos:</h4>
 <span class="translateHtml">1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).</span>
 <ul><li>
-<a id="6" style="cursor:pointer" onclick="pesquisa('6')">5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
+<a id="6" style="cursor:pointer" onclick="pesquisa('6')">word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
-<span class="translateHtml">Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do critério 5: Python</a>.</span>
+<span class="translateHtml">Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do padrão Python Simplificado</a>.</span>
 <br>
+
+!@#<a id="queryScriptTab"></a>
+<div class="scriptQuery">
+<h3 class="translateHtml">Escreva seu código de busca Python</h3>
+<h3 class="translateHtml">(a) Usando o ChatGPT:</h3>
+<a href="../interrogar-ud/chatGPTQueryScript.txt" style="display:none" id="downloadChatGPTQueryScript" download>Initiate download from link</a>
+<ol type="1">
+<li><a class="translateHtml" href="#" onclick="generateQueryScript()">Escreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.</a></li>
+<ul>
+<li class="translateHtml">Caso ainda não tenha uma chave de API do ChatGPT, <a href="https://platform.openai.com/account/api-keys" target="_blank">clique aqui</a> para criá-la.</li>
+<li class="translateHtml">Depois, <a href="#" onclick="saveOpenAIKey()">clique aqui</a> para salvar a sua chave de API no Interrogatório.</li>
+<li class="translateHtml" style="color:green; display:none; font-weight: bold;" id="savedOpenAIKey">Chave API salva com sucesso.</li>
+</ul>
+<li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo se necessário.</li>
+<li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
+</ol>
+<h3 class="translateHtml">(b) Editando o código manualmente:</h3>
+<ol type="1">
+<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
+<li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
+<li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
+</ol>
+<h3 class="translateHtml scriptQueryLabel">Script de busca:</h3>
+<h4 style="font-weight:normal;" class="translateHtml">Navegue até o arquivo de busca ou arraste-o até o botão abaixo:</h4>
+<input id="scriptQueryFile" name="scriptQueryFile" class="scriptQueryFile" form="interrogar" type="file" style="max-width:100vw; width:95%;" ></p>
+</div>

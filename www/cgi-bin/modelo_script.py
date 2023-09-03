@@ -4,12 +4,8 @@
 print("Content-type:text/html; charset=utf-8")
 print('\n\n')
 
-import sys
 import cgi,cgitb
 cgitb.enable()
-import re, html, time
-from functions import prettyDate
-import html as web
 
 with open("./interrogar-ud/scripts/modelo_script.txt") as f:
     script = f.read().splitlines()
@@ -18,8 +14,15 @@ form = cgi.FieldStorage()
 
 empty_line = script.index('') + 1
 
-if form['crit'].value == '5':
-    script[empty_line] = 'if ' + form['params'].value.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
+parametros = form['params'].value if 'params' in form else ""
+if 'tokens=' in parametros:
+    script[empty_line] = 'bold_tokens = %s' % parametros.split("tokens=")[1].split("|")
+    script[empty_line] += "\n"
+    script[empty_line] += 'bold_tokens = [{"sent_id": x.split(":")[0], "token_ids": x.split(":")[1].split(",")} for x in bold_tokens]'
+    script[empty_line] += "\n\n"
+    script[empty_line] += "if any(sentence.sent_id == x['sent_id'] and token.id in x['token_ids'] for x in bold_tokens):"
+elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
+    script[empty_line] = 'if ' + parametros.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
 
 with open("./interrogar-ud/scripts/interrogar-script.txt", "w") as f:
     f.write("\n".join(script))
