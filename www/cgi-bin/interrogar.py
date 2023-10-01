@@ -100,7 +100,7 @@ def sendPOSTInterrogar():
 	else:
 		fast = True
 
-	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script, fast)
+	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script, fast, name=nomePesquisa)
 	
 	caminhoCompletoHtml = './interrogar-ud/resultados/' + slugify(nomePesquisa) + '-' + json_id + '.html'
 
@@ -178,7 +178,7 @@ def definirVariaveisDePesquisa(form):
 	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script="", fast=False):
+def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script="", fast=False, name=""):
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
@@ -193,7 +193,7 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 			exit()
 		resultadosBusca = queryScript.getResultadosBusca()
 	
-	json_id = save_query_json(resultadosBusca, persistent=not fast)
+	json_id = save_query_json(resultadosBusca, persistent=not fast, name=name)
 
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']

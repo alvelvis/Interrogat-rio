@@ -310,7 +310,7 @@ def filtrar(form):
             nome_filtro = form['nome_pesquisa'].value.strip()
 
         resultados = interrogar_UD.main(corpus, int(criterio), parametros, fastSearch=True)    
-        json_id = functions.save_query_json(resultados, persistent=True)
+        json_id = functions.save_query_json(resultados, persistent=True, name="%s (filter: %s)" % (nome_filtro, pagina_html))
    
         if not pagina_html in filtros:
             filtros[pagina_html] = {'ud': ud, 'filtros': {}}
