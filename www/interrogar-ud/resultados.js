@@ -1395,8 +1395,14 @@ function atualizar_pesquisa_sel_label(){
 	})
 }
 
-
 $(document).ready(function(){
+
+	$('#salvarBusca').click(function(){
+		nomePesquisa = prompt("Qual o nome da busca?")
+		if (nomePesquisa.trim().length > 0) {
+			document.location.href = $('.refazerPesquisa').attr('href') + '&nome=' + encodeURIComponent(nomePesquisa) + '&save=True&go=True'
+		}
+	})
 
 	$('.nome_pesquisa_sel').on('keyup', function(){
 		atualizar_pesquisa_sel_label()
@@ -1468,13 +1474,13 @@ $(document).ready(function(){
 	$('.extractSentidFilter').click(function(){ 
 		sent_ids = extractSentidFilter()
 		$('.extractSentidInput').val(sent_ids).toggle()
-		$('.extractSentidSpan').html('(' + sent_ids.length  + ')').toggle()
+		$('.extractSentidSpan').html('(' + sent_ids.split("|").length  + ')').toggle()
 		$('.extractSentidInput').select()
 	})
 
 	$('.fromFilterToQuery').click(function(){
 		sent_ids = extractSentidFilter()
-		location.href = "../cgi-bin/interrogar.py?corpus=" + $('#corpus').text() + "&params=" + sent_ids + "&go=True"
+		location.href = "../cgi-bin/interrogar.py?corpus=" + encodeURIComponent($('#corpus').text()) + "&params=" + encodeURIComponent(sent_ids) + "&go=True"
 	})
 
 	/*window.addEventListener('resize', updateInterrogarBusca);*/

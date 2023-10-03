@@ -86,7 +86,7 @@ elif form['action'].value == 'view':
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
-	html += '<script src="../interrogar-ud/resultados.js"></script>'
+	html += '<script src="../interrogar-ud/resultados.js?version=1"></script>'
 	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1>\
 		<a title='Colocar as frases deste filtro em uma nova busca' class='translateTitle translateHtml fromFilterToQuery' style='cursor:pointer; color:blue; text-decoration: underline;'>[Transformar em busca]</a> \
 		<a title='Mostrar lista de sent_id das frases' class='translateTitle translateHtml extractSentidFilter' style='cursor:pointer; color:blue; text-decoration: underline;'>[Lista de sent_id]</a> \
