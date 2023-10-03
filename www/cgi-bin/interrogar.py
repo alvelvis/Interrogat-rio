@@ -76,7 +76,10 @@ def sendRequestInterrogar():
 
 	refazerPesquisa = cgi.FieldStorage()['params'].value if 'params' in cgi.FieldStorage() else "" #.replace("'", '"')
 	refazerCorpus = cgi.FieldStorage()['corpus'].value if 'corpus' in cgi.FieldStorage() else ""
-	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{web.escape(refazerPesquisa)}\'''').replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")
+	refazerNome = cgi.FieldStorage()['nome'].value if 'nome' in cgi.FieldStorage() else "Busca salva"
+	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{web.escape(refazerPesquisa)}\'''')\
+						.replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")\
+						.replace('name="nome" value="Busca salva"', f'name="nome" value=\'{web.escape(refazerNome)}\'')
 	if 'save' in cgi.FieldStorage():
 		paginaHTML = paginaHTML.replace('checked><div onclick="$(\'.toggleRapida\')', '><div onclick="$(\'.toggleRapida\')').replace('><div onclick="$(\'.toggleSalvar\')', 'checked><div onclick="$(\'.toggleSalvar\')"')
 	if 'go' in cgi.FieldStorage():
@@ -100,7 +103,7 @@ def sendPOSTInterrogar():
 	else:
 		fast = True
 
-	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script, fast)
+	numeroOcorrencias, casosOcorrencias, fullParameters, json_id, scriptParams = realizarBusca(conllu, caminhoCompletoConllu, int(criterio), parametros, script, fast, name=nomePesquisa)
 	
 	caminhoCompletoHtml = './interrogar-ud/resultados/' + slugify(nomePesquisa) + '-' + json_id + '.html'
 
@@ -178,7 +181,7 @@ def definirVariaveisDePesquisa(form):
 	return criterio, parametros, conllu, nomePesquisa, script
 
 
-def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script="", fast=False):
+def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script="", fast=False, name=""):
 	if not script:
 		resultadosBusca = interrogar_UD.main(caminhoCompletoConllu, criterio, parametros, fastSearch=True)
 	else:
@@ -193,7 +196,7 @@ def realizarBusca(conllu, caminhoCompletoConllu, criterio, parametros, script=""
 			exit()
 		resultadosBusca = queryScript.getResultadosBusca()
 	
-	json_id = save_query_json(resultadosBusca, persistent=not fast)
+	json_id = save_query_json(resultadosBusca, persistent=not fast, name=name)
 
 	numeroOcorrencias = str(len(resultadosBusca['output']))
 	casosOcorrencias = resultadosBusca['casos']
@@ -229,7 +232,7 @@ class paginaHtml():
 		criterios = [x for x in criterios if x.strip()]
 
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<div><div style="margin-top:2px; margin-bottom:2px;"><span class="translateHtml" style="font-weight:bold">Busca:</span> <span id=expressao style="word-break: break-all">' + web.escape(self.parametros) + '</span>' + f'</div><span style="font-weight:bold">Corpus:</span> <span id=corpus>' + self.conllu + '</span><br><br>[<a href="#" class="newQueryFromResults translateHtml">Tentar outra busca</a>]' + (' [<a href="#" onclick="document.location.href = $(\'.refazerPesquisa\').attr(\'href\') + \'&save=True\';" class="translateHtml">Salvar busca</a>]' if self.nomePesquisa in fastSearch else "") + ' [<a class="refazerPesquisa translateHtml" href="../../cgi-bin/interrogar.py?corpus=' + self.conllu + '&params=' + encodeUrl(self.parametros) + '">Voltar</a>]<br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span></div>')
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<div><div style="margin-top:2px; margin-bottom:2px;"><span class="translateHtml" style="font-weight:bold">Busca:</span> <span id=expressao style="word-break: break-all">' + web.escape(self.parametros) + '</span>' + f'</div><span style="font-weight:bold">Corpus:</span> <span id=corpus>' + self.conllu + '</span><br><br>[<a href="#" class="newQueryFromResults translateHtml">Tentar outra busca</a>]' + (' [<a href="#" id="salvarBusca" class="translateHtml">Salvar busca</a>]' if self.nomePesquisa in fastSearch else "") + ' [<a class="refazerPesquisa translateHtml" href="../../cgi-bin/interrogar.py?corpus=' + encodeUrl(self.conllu) + '&params=' + encodeUrl(self.parametros) + '">Voltar</a>]<br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span></div>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '-' + self.json_id + '"')
 		arquivoHtml = arquivoHtml.replace('<input type="hidden" id="jsonId" value="0">', '<input type="hidden" id="jsonId" name="jsonId" value="%s">' % self.json_id)
 

@@ -13,7 +13,7 @@ tabela = {	'yellow': 'green',
 			'cyan': 'cyan',
 }
 
-def save_query_json(query_json, persistent=False):
+def save_query_json(query_json, persistent=False, name=""):
     '''JSON should be a interrogar_UD dictionary
     Returns json_id, which is the name of the json file (with transformed datetime)
     '''
@@ -42,7 +42,7 @@ def save_query_json(query_json, persistent=False):
         f.write(json.dumps(query_json))
 
     # save query_records
-    query_records[json_id] = {'datetime': now_datetime.isoformat(), 'persistent': persistent}
+    query_records[json_id] = {'datetime': now_datetime.isoformat(), 'persistent': persistent, 'name': name}
     with open(query_records_path, "w") as f:
         f.write(json.dumps(query_records))
 
