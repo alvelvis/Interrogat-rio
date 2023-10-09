@@ -5,6 +5,9 @@ import cgi
 import html as web
 from functions import tabela as tabelaf
 
+def regex(exp, col):
+    return re.search(r'^(' + exp + r")$", col)
+
 def getResultadosBusca():
     corpus = estrutura_ud.Corpus(recursivo=True)
     corpus.load("<!--corpus-->")
