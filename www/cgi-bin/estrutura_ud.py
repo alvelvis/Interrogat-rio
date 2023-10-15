@@ -77,31 +77,15 @@ class Sentence:
 		self.separator = separator
 		self.map_token_id = {}
 
-	def build(self, txt, sent_id=""):
-		if '# text =' in txt:
-			self.text = txt.split('# text =')[1].split('\n')[0].strip()
-			self.metadados['text'] = self.text
-		if sent_id:
-			self.sent_id = sent_id
-		elif '# sent_id =' in txt:
-			self.sent_id = txt.split('# sent_id =')[1].split('\n')[0].strip()
-		self.metadados['sent_id'] = self.sent_id
-		if '# source =' in txt:
-			self.source = txt.split('# source =')[1].split('\n')[0].strip()
-			self.metadados['source'] = self.source
-		if '# id =' in txt:
-			self.id = txt.split('# id =')[1].split('\n')[0].strip()
-			self.metadados["id"] = self.id
-		
+	def build(self, txt, sent_id=""):		
 		n_token = 0
 		for linha in txt.split(self.separator):
 			try:
-				if linha and linha.startswith('# ') and " = " in linha:
-					identificador = linha.split("#", 1)[1].split('=', 1)[0].strip()
-					if identificador not in ["text", "sent_id", "source", "id"]:
-						valor = linha.split('=', 1)[1].strip()
-						self.metadados[identificador] = valor
-				if not linha.startswith("# ") and "\t" in linha:
+				if linha.strip() and linha.startswith('# ') and ' = ' in linha:
+					key = linha.split("# ", 1)[1].split(" = ", 1)[0]
+					value = linha.split(" = ", 1)[1]
+					self.metadados[key] = value
+				elif not linha.startswith("# ") and "\t" in linha:
 					tok = Token()
 					tok.string = linha
 					tok.build(linha)
@@ -116,6 +100,17 @@ class Sentence:
 				sys.stderr.write(str(e) + "\n")
 				sys.stderr.write(str(linha + "\n"))
 				sys.exit()
+
+		if 'text' in self.metadados:
+			self.text = self.metadados['text']
+		if sent_id:
+			self.sent_id = sent_id
+		elif 'sent_id' in self.metadados:
+			self.sent_id = self.metadados['sent_id']
+		if 'source' in self.metadados:
+			self.source = self.metadados['source']
+		if 'id' in self.metadados:
+			self.id = self.metadados['id']
 		
 		for t, token in enumerate(self.tokens):
 			if not '-' in token.id and not '.' in token.id:
@@ -159,6 +154,7 @@ class Corpus:
 		self.any_of_keywords = any_of_keywords
 		self.time = time.time()
 		self.loading = False
+		self.sentence_order = []
 
 	def build(self, txt):
 		if self.sent_id:
@@ -176,6 +172,8 @@ class Corpus:
 				sent.build(sentence)
 				if sent.sent_id:
 					self.sentences[sent.sent_id] = sent
+					if not sent.sent_id in self.sentence_order:
+						self.sentence_order.append(sent.sent_id)
 				elif sent.id:
 					self.sentences[sent.id] = sent
 				elif sent.text:
@@ -185,7 +183,8 @@ class Corpus:
 
 	def to_str(self):
 		self.sentences_not_built.update(self.sentences)
-		retorno = [x.to_str() if isinstance(x, Sentence) else x for x in self.sentences_not_built.values()]
+		count = self.sentence_order if self.sentence_order else self.sentences_not_built
+		retorno = [self.sentences_not_built[x].to_str() if isinstance(self.sentences_not_built[x], Sentence) else self.sentences_not_built[x] for x in count]
 		return "\n\n".join(retorno) + '\n\n'
 
 	def load(self, path):
@@ -196,6 +195,8 @@ class Corpus:
 				for line in f:
 					if line.strip():
 						sentence += line
+						if '# sent_id = ' in line:
+							self.sentence_order.append(line.split("# sent_id = ")[1].strip())
 					else:
 						if self.keywords:
 							if (self.any_of_keywords and any(y in sentence for y in self.any_of_keywords)) or (all(re.search(x, sentence) for x in self.keywords)):

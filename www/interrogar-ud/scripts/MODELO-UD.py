@@ -21,8 +21,9 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 		...
 '''
 
-import estrutura_ud
 import sys, os, re
+sys.path.append("./cgi-bin")
+import estrutura_ud
 from datetime import datetime
 import copy
 from chardet import detect
