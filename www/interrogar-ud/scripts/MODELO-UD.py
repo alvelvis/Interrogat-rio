@@ -123,10 +123,13 @@ for head in headers:
 			exec(codigo)
 			#sys.stderr.write(codigo)
 			#exit()
+		except AttributeError as e:
+			sys.stderr.write("\n%s" % str(e))
+			pass
 		except Exception as e:
 			with open("./cgi-bin/error.log", "w") as f:
 				f.write(html.escape(str(e)))
-				exit()
+			exit()
 										
 if action == 'sim':
 	with open('./interrogar-ud/scripts/sim.txt', 'w') as f:
