@@ -1,10 +1,10 @@
 # Interrogatório
 
-Interrogatório (Interrogatory) is an enviroment for querying and editing annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is available in Portuguese and English, depending on the user's web browser language, and it's being developed and used by the research group [ComCorHd (Computational Linguistics, Corpus and Digital Humanities)](http://comcorhd.letras.puc-rio.br), from the Linguistics Department of PUC-Rio, in Brazil, for the project Linguistic resources for Portuguese Natural Language Processing.
+Interrogatório is an enviroment for querying and editing annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is available in Portuguese and English, depending on the user's web browser language, and it's been used in several research projects at PUC-Rio, including **Linguistic resources for Portuguese Natural Language Processing** from the Linguistics Department of PUC-Rio, in Brazil, under the supervision of Prof. Cláudia Freitas, and project [**Petrolês**](https://petroles.puc-rio.ai), at the Applied Computational Intelligence Laboratory from PUC-Rio.
 
 [Live demo](https://interrogatorio.souelvis.dev)
 
-Interrogatório is part of [ET: a workstation for querying, editing and evaluating annotated corpora](http://comcorhd.letras.puc-rio.br/ET). Consider also installing [Julgamento](https://github.com/alvelvis/Julgamento), an enviroment for evaluating annotated corpora, in the same folder as Interrogatório to integrate both.
+Interrogatório is part of ET: a workstation for querying, editing and evaluating annotated corpora. Consider also installing [Julgamento](https://github.com/alvelvis/Julgamento), an enviroment for evaluating annotated corpora, in the same folder as Interrogatório to integrate both.
 
 If you wish to deploy Interrogatório to a web server, using Ubuntu/Apache2, check [Deploying with Ubuntu/Apache2](https://github.com/alvelvis/Interrogat-rio/wiki/Deploying-with-Ubuntu-Apache2).
 
