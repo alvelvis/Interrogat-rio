@@ -15,8 +15,7 @@ from functions import prettyDate
 import functions
 from chardet import detect
 from max_upload import max_filesize
-if not 'win' in sys.platform:
-    from ufal.udpipe import Model, Pipeline
+import requests
 
 JULGAMENTO = False
 if os.path.isdir("../Julgamento"):
@@ -48,14 +47,11 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     if JULGAMENTO:
         html = html.replace("<!--JULGAMENTO", "<").replace("JULGAMENTO-->", ">")
 
-    udpipe_models = []
-    for file in os.listdir("./cgi-bin"):
-        if file.endswith(".udpipe"):
-            udpipe_models.append(file)
-    udpipe_models = "\n".join(["<option>{}</option>".format(x) for x in udpipe_models])
-    html = html.replace("<!--chooseLanguage-->", udpipe_models)
+    response = requests.get("http://lindat.mff.cuni.cz/services/udpipe/api/models")
+    json_data = [name for name, values in response.json()['models'].items() if all(x in values for x in "tokenizer,tagger,parser".split(","))]
+    udpipe_models = "\n".join(["<option {}>{}</option>".format('selected="selected"' if 'bosque-ud-2.10' in x else '', x) for x in json_data])
 
-    html = html.replace('<div id="feed-{0}">'.format('windows' if not 'win' in sys.platform else 'linux'), '<div style="display:none">')
+    html = html.replace("<!--chooseLanguage-->", udpipe_models)
 
     html1 = html.split('<!--SPLIT-->')[0]
     html2 = html.split('<!--SPLIT-->')[1]
@@ -94,7 +90,7 @@ elif not 'validate' in form:
                 try:
                     with open(srcfile, 'r', encoding=from_codec) as ff:
                         with open(trgfile, 'w', encoding='utf-8') as e:
-                            text = ff.read() # for small files, for big use chunks
+                            text = ff.read().strip() + "\n\n" # for small files, for big use chunks
                             e.write(text)
                 except Exception as e:
                     sys.stderr.write("Could not convert to utf-8: " + str(e))
@@ -104,7 +100,7 @@ elif not 'validate' in form:
                     try:
                         with open(srcfile, 'r', encoding=from_codec) as ff:
                             with open(JULGAMENTO + "/static/uploads/" + slugify(f).rsplit(".", 1)[0] + "_original.conllu", 'w', encoding='utf-8') as e:
-                                text = ff.read() # for small files, for big use chunks
+                                text = ff.read().strip() + "\n\n" # for small files, for big use chunks
                                 e.write(text)
                     except Exception as e:
                         sys.stderr.write("Could not convert to utf-8 to Julgamento: " + str(e))
@@ -117,23 +113,18 @@ elif not 'validate' in form:
             if os.path.isfile('./interrogar-ud/conllu/' + slugify(f).rsplit(".txt", 1)[0] + ".conllu"):
                 print("Arquivo \"" + slugify(f).rsplit(".txt", 1)[0] + ".conllu" + "\" já existe no repositório.")
             else:
-                with open('./interrogar-ud/conllu/' + slugify(f), 'wb') as filename:
-                    filename.write(form['file'].file.read())
-                srcfile = './interrogar-ud/conllu/' + slugify(f)
-                trgfile = 'codification'
-                from_codec = get_encoding_type(srcfile)
-                with open(srcfile, 'r', encoding=from_codec) as ff, open(trgfile, 'w', encoding='utf-8') as e:
-                    text = ff.read() # for small files, for big use chunks
-                    e.write(text)
-                os.remove(srcfile) # remove old encoding file
-                os.rename(trgfile, srcfile) # rename new encoding
+                url = "http://lindat.mff.cuni.cz/services/udpipe/api/process"
+                files = {'data': form['file'].file.read()}
+                data = {
+                    'tokenizer': '',
+                    'tagger': '',
+                    'parser': '',
+                    'model': form['chooseLanguage'].value
+                }
+                response = requests.post(url, files=files, data=data)
+                processed = response.json()['result']
+                #processed = processed.encode('utf-8') #.decode(detect(processed)['encoding'])
 
-                model = Model.load("./cgi-bin/{}".format(form['chooseLanguage'].value))
-                pipeline = Pipeline(model, "tokenize", Pipeline.DEFAULT, Pipeline.DEFAULT, "conllu")
-
-                with open('./interrogar-ud/conllu/' + slugify(f)) as filename:
-                    processed = pipeline.process(filename.read())
-                os.remove('./interrogar-ud/conllu/' + slugify(f))
                 with open('./interrogar-ud/conllu/' + slugify(f).rsplit(".", 1)[0] + ".conllu", "w") as filename:
                     filename.write(processed)
 

@@ -2,26 +2,28 @@
 <span class="translateHtml">Visite o <a href="../cgi-bin/arquivo_ud.py">Repositório dos corpora</a> para subir um novo corpus ou consultar os existentes.</span>
 <br><span class="translateHtml">Para começar a interrogar algum corpus, siga um dos caminhos abaixo:</span>
 <ul>
-    <li class="translateHtml">Buscas simples: Digite as palavras na barra de busca à esquerda.</li>
-    <li class="translateHtml">Buscas complexas: <a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle toggleCriteria">Construa expressões de busca interativamente</a></li>
-    <li class="translateHtml">Para experientes: Utilize algum dos padrões de busca abaixo</li>
+    <li class="translateHtml">(a) Digite as palavras na barra de busca à esquerda (buscas simples)</li>
+    <li class="translateHtml">(b) Use padrões de busca (buscas complexas)</li>
     <ul>
+        <li><a title="Ir para interface" href="#interactive" criterio="0" class="translateTitle translateHtml toggleCriteria">Construtor de expressões de busca</a></li>
         <li><a href="#criterio_1" class="toggleCriteria translateHtml" criterio="1">Regex</a></li>
         <!--li><a href="#criterio_2" class="toggleCriteria translateHtml" criterio="2">Critério 2: Ausência de B apontando para A</a></li-->
         <!--li><a href="#criterio_3" class="toggleCriteria translateHtml" criterio="3">Critério 3: Regex Independentes</a></li-->
         <!--li><a href="#criterio_4" class="toggleCriteria translateHtml" criterio="4">Critério 4: Pais e filhos</a></li-->
         <li><a href="#criterio_5" class="toggleCriteria translateHtml" criterio="5">Python Simplificado</a></li>
     </ul>
-    <li class="translateHtml">Para experts:</u> <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$('.normalQuery').hide(); $('.toggleSalvar').click();" href="#queryScriptTab" criterio="6">Escreva seu próprio script de busca em Python</a></li>
+    <li class="translateHtml">(c) <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$('.normalQuery').hide(); $('.toggleSalvar').click();" href="#queryScriptTab" criterio="6">Escreva seu próprio script de busca em Python (para experts)</a></li>
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
+    <li><a href="#" class="translateHtml">Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez</a></li>
+    <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online</a></li>
     <li><a href="#queryScriptTab" class="translateHtml" onclick="$('#openQueryScript').click()">Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT</a></li>
     <li><a href="#" class="translateHtml">Simplificação: os padrões de busca agora são Regex, Python Simplificado e código de busca em Python</a></li>
-    <li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li>
-    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li>
+    <!--li><a href="#criterio_5" class="toggleCriteria translateHtml translateTitle" criterio="5" title="Ver documentação">Utilize "nt", "pt" e "ht" como abreviações para next_token, previous_token e head_token</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li-->
+    <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li-->
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
@@ -236,20 +238,20 @@
 <h3 class="translateHtml">(a) Usando o ChatGPT:</h3>
 <a href="../interrogar-ud/chatGPTQueryScript.txt" style="display:none" id="downloadChatGPTQueryScript" download>Initiate download from link</a>
 <ol type="1">
-<li class="translateHtml">Escreva, em português ou em inglês, qual a busca que deseja fazer <a href="#" onclick="generateQueryScript()">clicando aqui</a>.</li>
+<li><a class="translateHtml" href="#" onclick="generateQueryScript()">Escreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.</a></li>
 <ul>
 <li class="translateHtml">Caso ainda não tenha uma chave de API do ChatGPT, <a href="https://platform.openai.com/account/api-keys" target="_blank">clique aqui</a> para criá-la.</li>
 <li class="translateHtml">Depois, <a href="#" onclick="saveOpenAIKey()">clique aqui</a> para salvar a sua chave de API no Interrogatório.</li>
 <li class="translateHtml" style="color:green; display:none; font-weight: bold;" id="savedOpenAIKey">Chave API salva com sucesso.</li>
 </ul>
-<li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo antes de submeter.</li>
-<li class="translateHtml">Submeta o script de busca abaixo.</li>
+<li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo se necessário.</li>
+<li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
 </ol>
 <h3 class="translateHtml">(b) Editando o código manualmente:</h3>
 <ol type="1">
-<li class="translateHtml">Baixe o <a target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.</li>
+<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
 <li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
-<li class="translateHtml">Submeta o script de busca abaixo.</li>
+<li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
 </ol>
 <h3 class="translateHtml scriptQueryLabel">Script de busca:</h3>
 <h4 style="font-weight:normal;" class="translateHtml">Navegue até o arquivo de busca ou arraste-o até o botão abaixo:</h4>

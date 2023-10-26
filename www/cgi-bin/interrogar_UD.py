@@ -385,13 +385,13 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 		any_of_keywords = None
 		if "tokens=" in parametros:
 			parametros = parametros.replace(" ", "")
-			query = parametros.split("tokens=")[1]
-			tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
-			any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
-			pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
-			   for sentid in tokens])
+			#query = parametros.split("tokens=")[1]
+			#tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
+			#any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
+			#pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
+			   #for sentid in tokens])
 			arroba = "token"
-			sys.stderr.write("\nquery: %s\n" % pesquisa)
+			#sys.stderr.write("\nquery: %s\n" % pesquisa)
 		else:
 			parametros = parametros.split(" and ")
 			for t, parametro in enumerate(parametros):
@@ -518,24 +518,24 @@ else:
 	available_tokens = sentences[sent_id]
 for token_t in available_tokens:
 	token = sentence.tokens[token_t]
-	if True:
+	try:
 		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')):
-			corresponde = 1
+			corresponde = True
 			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
-	'''#try por causa de não ter um next_token no fim de sentença, por ex.
-		if "token.head_token" in pesquisa:
+	'''
+		if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
 			condition += '''
 			clean_text[map_id[token.head_token.id]] = "@RED/" + clean_text[map_id[token.head_token.id]] + "/FONT"
 			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
-		if "token.next_token" in pesquisa:
+		if "token.next_token" in pesquisa and not "_token.next_token" in pesquisa:
 			condition += '''
-			clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
-			tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
-		if "token.previous_token" in pesquisa:
+			#clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
+			#tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
+		if "token.previous_token" in pesquisa and not '_token.previous_token' in pesquisa:
 			condition += '''
-			clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
-			tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
+			#clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
+			#tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
 		condition += '''
 			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"
 
@@ -548,33 +548,52 @@ for token_t in available_tokens:
 			tokens = "\\n".join(tokens)
 
 			if separate:
-				corresponde = 0
+				corresponde = False
 				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 			
-	if False:#except Exception as e:
-		sys.stderr.write(\"\\n\" + str(e) + '\\n')
-		sys.stderr.write(token.to_str())
+	except Exception as e:
+		sys.stderr.write(\"\\n\" + str(e) + ': ' + token.to_str())
 		pass
 if corresponde and not separate:
-	corresponde = 0
+	corresponde = False
 	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)'''
-		with open("condition.txt", "w") as f:
+		with open("./cgi-bin/condition.txt", "w") as f:
 			f.write(condition)
 
 		t1 = time.time()
-		for sent_id in sentences:
-			sentence = corpus.sentences[sent_id]
-			sentence2 = sentence
-			clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-			corresponde = 0
-			tokens = sentence2.tokens_to_str()
-			map_id = {x: t for t, x in enumerate(clean_id)}
-			if limit and limit == len(output):
-				break
-			exec(condition)
+		if not 'tokens=' in parametros:
+			for sent_id in sentences:
+				sentence = corpus.sentences[sent_id]
+				sentence2 = sentence
+				clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+				clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+				corresponde = False
+				tokens = sentence2.tokens_to_str()
+				map_id = {x: t for t, x in enumerate(clean_id)}
+				if limit and limit == len(output):
+					break
+				exec(condition)
+		else:
+			if parametros != "tokens=":
+				query = parametros.split("tokens=")[1]
+				sent_ids = query.split("|")
+				for part in sent_ids:
+					sent_id = part.split(":")[0]
+					token_ids = part.split(":")[1].split(",")
+					sentence = corpus.sentences[sent_id]
+					clean_text = [x.word for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+					clean_id = [x.id for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+					map_id = {x: t for t, x in enumerate(clean_id)}
+					tokens = sentence.tokens_to_str()
+					for token_id in token_ids:
+						token = sentence.tokens[sentence.map_token_id[token_id]]
+						casos.append(token)
+						clean_text[map_id[token.id]] = "<b>" + clean_text[map_id[token.id]] + "</b>"
+						tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
+					final = "# clean_text = " + " ".join(clean_text) + "\n" + sentence.metadados_to_str() + "\n" + tokens
+					output.append(final)
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
 		sys.stderr.write(f"\nfor each sentence: {time.time() - t1}")
@@ -593,7 +612,7 @@ if corresponde and not separate:
 			anotado = estrutura_ud.Sentence(recursivo=False)
 			estruturado = estrutura_ud.Sentence(recursivo=False)
 			anotado.build(web.escape(final.replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '>', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))		
-			estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))			
+			estruturado.build(web.unescape(final).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabelaf['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabelaf['red'] + '>', '@RED/').replace('<font color=' + tabelaf['cyan'] + '">', '@CYAN/').replace('<font color=' + tabelaf['blue'] + '>', '@BLUE/').replace('<font color=' + tabelaf['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
 		else:
 			anotado = ""
 			estruturado = ""
@@ -604,9 +623,7 @@ if corresponde and not separate:
 		}
 	#sys.stderr.write("\nbuscaDicionarios: " + str(time.time() - start))
 	
-	sentences = {}
-	if not fastSearch:
-		sentences = {x['resultadoEstruturado'].sent_id: i for i, x in enumerate(output)}
+	sentences = {x['resultado'].split("# sent_id = ")[1].split("\n")[0]: i for i, x in enumerate(output)}
 
 	return {'output': output, 'casos': casos, 'sentences': sentences, 'parameters': pesquisa if pesquisa else parametros}
 

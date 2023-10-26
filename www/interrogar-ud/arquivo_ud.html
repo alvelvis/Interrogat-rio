@@ -21,12 +21,12 @@
     <div class="content" style="max-width:1200px; margin-top:30px;">
       <h2 class="translateHtml">Repositório</h2>
       <hr>
-      <!--JULGAMENTOh3 style="padding:10px; background-color:orange; color:white;" class="translateHtml">Atenção: O Interrogatório está integrado ao <a style="color:yellow" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, ou seja, os corpora aqui listados também estarão disponívels por lá.</h3JULGAMENTO-->
+      <!--JULGAMENTOh4 style="padding:10px; background-color:lightgreen; color:black;" class="translateHtml">Atenção: O Interrogatório está integrado ao <a style="color:green" href="https://github.com/alvelvis/Julgamento" target="_blank">Julgamento</a>, portanto os corpora listados são compartilhados entre as duas ferramentas.</h3JULGAMENTO-->
       <h3 class="translateHtml">Para alimentar o repositório:</h3>
       <div id="feed-linux">
         <ul>
-          <li class="translateHtml">Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
-          <li><div class="tooltip"><span class="tooltiptext translateHtml">Requer que os modelos treinados utilizando a ferramenta estejam na pasta "/www/cgi-bin/*.udpipe". Por padrão, disponibilizamos modelos para inglês e português.</span><span class="translateHtml">Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="http://ufal.mff.cuni.cz/udpipe" target="_blank">UDPipe v1.2.0</a>.</span></div></li>
+          <li class="translateHtml">(a) Envie um arquivo anotado no formato <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> para começar a interrogá-lo.</li>
+          <li><span class="translateHtml">(b) Você também pode enviar um arquivo em formato de texto plano para ser processado pelo <a href="https://lindat.mff.cuni.cz/services/udpipe/api-reference.php" target="_blank">UDPipe</a>.</span></li>
         </ul>
         <form action="../cgi-bin/arquivo_ud.py" id="uploadCorpusForm" method="post" enctype="multipart/form-data"> <label for="arquivo"><b class="translateHtml chooseFileLabel">Selecione o arquivo ou arraste-o para o botão abaixo:</b><br><br>
           <input type=hidden class="anotaresubmeter translateVal" value="Anotar e submeter">
@@ -41,12 +41,12 @@
             <input style="margin-left:0px; display:none;" class="btn-gradient orange small" value="Submeter" class="translateVal" id=submeter type="submit">
           </form>
       </div>
-      <div id="feed-windows">
+      <!--div id="feed-windows">
         <h4 class="translateHtml">Em um sistema Windows:</h4>
         <ul>
           <li class="translateHtml"><a href="../cgi-bin/open-repo.py">Clique aqui</a> para selecionar o arquivo <a target="_blank" href="https://universaldependencies.org/format.html">CoNLL-U</a> que deseja enviar.</li>
         </ul>
-      </div>
+      </div-->
       <h2 class="translateHtml">Corpora no repositório</h2>
       <form action="../cgi-bin/inquerito.py" method="POST" class="apagarCorpus">
         <input type=hidden name="action" value="apagarCorpus">

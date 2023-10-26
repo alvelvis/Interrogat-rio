@@ -5,6 +5,9 @@ import cgi
 import html as web
 from functions import tabela as tabelaf
 
+def regex(exp, col):
+    return re.search(r'^(' + exp + r")$", col)
+
 def getResultadosBusca():
     corpus = estrutura_ud.Corpus(recursivo=True)
     corpus.load("<!--corpus-->")
@@ -17,7 +20,10 @@ def getResultadosBusca():
         <!--pesquisa-->
 
         if bold_tokens:
-            returned_tokens[sent_id] = bold_tokens
+            returned_tokens[sent_id] = list(set(bold_tokens))
+        
+        if 'corresponde' in sentence.metadados:
+            del sentence.metadados['corresponde'] # retrocompatibility
     
     for sent_id in returned_tokens:
         returned_tokens[sent_id] = ",".join([x.id for x in returned_tokens[sent_id]])
