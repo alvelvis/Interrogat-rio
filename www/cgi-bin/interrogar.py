@@ -1,8 +1,6 @@
 #!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
-fastSearch = ['teste', 'Busca rápida']
-
 print("Content-type:text/html; charset=utf-8")
 print('\n\n')
 
@@ -14,12 +12,11 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, save_query_json
+from functions import tabela, prettyDate, encodeUrl, save_query_json, fastsearch
 import html as web
 import time
 import sys
 import json
-from chardet import detect
 
 def main():
 	if not os.path.isdir("./interrogar-ud/conllu"):
@@ -93,7 +90,7 @@ def sendPOSTInterrogar():
 	caminhoCompletoConllu = "./interrogar-ud/conllu/" + conllu
 	dataAgora = str(datetime.now()).replace(' ', '_')
 
-	if nomePesquisa and nomePesquisa not in fastSearch:
+	if nomePesquisa and nomePesquisa not in fastsearch:
 		try:
 			with open("./interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"), 'w') as f:
 				f.write("")
@@ -109,14 +106,14 @@ def sendPOSTInterrogar():
 
 	arquivoHtml = paginaHtml(caminhoCompletoConllu, caminhoCompletoHtml, nomePesquisa, dataAgora, conllu, criterio, parametros if not script else scriptParams, numeroOcorrencias, casosOcorrencias, script, fullParameters, json_id).montarHtml()
 
-	if nomePesquisa and nomePesquisa not in fastSearch:
+	if nomePesquisa and nomePesquisa not in fastsearch:
 		try:
 			os.remove("./interrogar-ud/inProgress/{}.inProgress".format(f"{conllu} {criterio} {parametros} {dataAgora.replace(':', '_')}"))
 		except:
 			pass
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
-	if nomePesquisa in fastSearch:
+	if nomePesquisa in fastsearch:
 		print(re.sub(r'<button.*?filtrar.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '').replace('<!--savequery', '').replace('savequery-->', ''))
 		exit()
 	if script:
@@ -140,13 +137,6 @@ def sendPOSTInterrogar():
 		f.write("\n".join(queries))
 
 	print('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head><body onload="redirect()"><script>function redirect() { window.location = "../'+caminhoCompletoHtml+'" }</script></body>')
-
-
-# get file encoding type
-def get_encoding_type(file):
-    with open(file, 'rb') as f:
-        rawdata = f.read()
-    return detect(rawdata)['encoding']
 
 def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
@@ -232,7 +222,7 @@ class paginaHtml():
 		criterios = [x for x in criterios if x.strip()]
 
 		refazerPesquisa = '<br><span class="translateHtml">Refazer busca</span></a>'
-		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<div><div style="margin-top:2px; margin-bottom:2px;"><span class="translateHtml" style="font-weight:bold">Busca:</span> <span id=expressao style="word-break: break-all">' + web.escape(self.parametros) + '</span>' + f'</div><span style="font-weight:bold">Corpus:</span> <span id=corpus>' + self.conllu + '</span><br><br>[<a href="#" class="newQueryFromResults translateHtml">Tentar outra busca</a>]' + (' [<a href="#" id="salvarBusca" class="translateHtml">Salvar busca</a>]' if self.nomePesquisa in fastSearch else "") + ' [<a class="refazerPesquisa translateHtml" href="../../cgi-bin/interrogar.py?corpus=' + encodeUrl(self.conllu) + '&params=' + encodeUrl(self.parametros) + '">Voltar</a>]<br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span></div>')
+		arquivoHtml = arquivoHtml.replace('<p>critério y#z#k&nbsp;&nbsp;&nbsp; arquivo_UD&nbsp;&nbsp;&nbsp; <span id="data">data</span>&nbsp;&nbsp;&nbsp;', '<div><div style="margin-top:2px; margin-bottom:2px;"><span class="translateHtml" style="font-weight:bold">Busca:</span> <span id=expressao style="word-break: break-all">' + web.escape(self.parametros) + '</span>' + f'</div><span style="font-weight:bold">Corpus:</span> <span id=corpus>' + self.conllu + '</span><br><br>[<a href="#" class="newQueryFromResults translateHtml">Tentar outra busca</a>]' + (' [<a href="#" id="salvarBusca" class="translateHtml">Salvar busca</a>]' if self.nomePesquisa in fastsearch else "") + ' [<a class="refazerPesquisa translateHtml" href="../../cgi-bin/interrogar.py?corpus=' + encodeUrl(self.conllu) + '&params=' + encodeUrl(self.parametros) + '">Voltar</a>]<br><br><span id=data><small>' + prettyDate(self.dataAgora.replace('_', ' ')).beautifyDateDMAH() + '</small></span></div>')
 		arquivoHtml = arquivoHtml.replace('id="apagar_link" value="link1"', 'id=apagar_link value="' + slugify(self.nomePesquisa) + '-' + self.json_id + '"')
 		arquivoHtml = arquivoHtml.replace('<input type="hidden" id="jsonId" value="0">', '<input type="hidden" id="jsonId" name="jsonId" value="%s">' % self.json_id)
 
@@ -240,7 +230,7 @@ class paginaHtml():
 
 	def adicionarDistribution(self):
 		if self.criterio in ["5", "1"]:			
-			if self.nomePesquisa not in fastSearch:
+			if self.nomePesquisa not in fastsearch:
 				return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=html id=html_dist value='{1}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"'), self.caminhoCompletoHtml)).replace("<input type=hidden name=coluna id=coluna_dist>", '<input type=hidden name=coluna id=coluna_dist><input type="hidden" id="jsonId" name="jsonId" value="%s">' % self.json_id)
 			return self.arquivoHtml.replace("!--DIST", "").replace("DIST-->", "><form id=dist target='_blank' action='../cgi-bin/distribution.py' method=POST><input type=hidden name=notSaved id=html_dist value='{0}'><input type=hidden name=coluna id=coluna_dist><input id=expressao_dist type=hidden name=expressao><input id=corpus_dist type=hidden name=corpus><input id=combination_dist type=hidden name=combination><input id=link_dist type=hidden name=link_dist></form>".format(self.parametros.replace("'", '"'))).replace("<input type=hidden name=coluna id=coluna_dist>", '<input type=hidden name=coluna id=coluna_dist><input type="hidden" id="jsonId" name="jsonId" value="%s">' % self.json_id)
 			#return self.arquivoHtml.replace("DIST-->", 'DIST--><span class="translateHtml">Salve a busca para visualizar a distribuição das palavras em negrito.</span>')

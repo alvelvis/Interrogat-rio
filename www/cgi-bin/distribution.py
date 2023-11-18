@@ -4,14 +4,12 @@
 print("Content-type:text/html")
 print('\n\n')
 
-fastSearch = ['teste', 'Busca rápida']
-
 import os, sys
 import cgi,cgitb
 cgitb.enable()
 import re
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD
+from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
 import datetime
 import html as web
 import estrutura_ud
@@ -138,7 +136,7 @@ pagina += '<!--a href="#" class="translateHtml" onclick="window.close()">Fechar<
 pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.py?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
 pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].value
 pagina += "<br><br><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
-if nome_interrogatorio and nome_interrogatorio not in fastSearch:
+if nome_interrogatorio and nome_interrogatorio not in fastsearch:
 	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
 pagina += "<hr>"
 

@@ -14,7 +14,7 @@ import os
 import shutil
 from functions import prettyDate, cleanEstruturaUD
 from datetime import datetime
-from functions import corpusGenericoInquerito
+from functions import corpusGenericoInquerito, fastsearch
 import re
 from subprocess import call
 import html as web
@@ -274,7 +274,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		with open('./interrogar-ud/scripts/novos_inqueritos.txt', 'r') as f:
 			novos_inqueritos = f.read().splitlines()
 		for linha in novos_inqueritos:
-			if form['nome_interrogatorio'] not in ['teste', 'Busca rápida']:
+			if form['nome_interrogatorio'] not in fastsearch:
 				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#' + form['nome_interrogatorio'].value + ' (' + form['occ'].value + ')!@#' + form['link_interrogatorio'].value + '!@#' + form['scriptName'].value + '!@#' + linha.rsplit('!@#', 1)[1])
 			else:
 				inqueritos.insert(0, linha.rsplit('!@#', 1)[0] + '!@#NONE!@#NONE!@#' + form['scriptName'].value + '!@#' + linha.rsplit('!@#', 1)[1])
@@ -451,9 +451,9 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 			<span class="changesNotSaved translateHtml" style="background-color:yellow;"></span>
 			</div>'''.format(
 				sentid='<input type=hidden name=tokenization_sentid value="' + form['sentid'].value.replace('"', '&quot;') + '">' if 'sentid' in form else '',
-				link='<input type=hidden name=tokenization_link_interrogatorio value="' + form['link_interrogatorio'].value + '">' if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
-				nome='<input type=hidden name=tokenization_nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] else '',
-				occ='<input type=hidden name=tokenization_occ value="' + form['occ'].value + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida'] and 'occ' in form else '',
+				link='<input type=hidden name=tokenization_link_interrogatorio value="' + form['link_interrogatorio'].value + '">' if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in fastsearch else '',
+				nome='<input type=hidden name=tokenization_nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in fastsearch else '',
+				occ='<input type=hidden name=tokenization_occ value="' + form['occ'].value + '">' if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in fastsearch and 'occ' in form else '',
 				conllu='<input type=hidden name=tokenization_conllu value="' + ud + '">',
 				tokenId='<input type=hidden name=tokenization_tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else '',
 				sentnum='<input type=hidden name=tokenization_sentnum value="' + str(i) + '">' if 'sentnum' in form else '',
@@ -466,9 +466,9 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 
 			html1 += '<form action="../cgi-bin/inquerito.py?sentnum='+str(i)+'&conllu=' + ud + '&action=alterar" id="dados_inquerito" method="POST">'
 			if 'sentid' in form: html1 = html1 + '<input type=hidden name=sentid value="' + form['sentid'].value.replace('"', '\"') + '">'
-			if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in ['teste', 'Busca rápida']:
+			if 'link_interrogatorio' in form and form['link_interrogatorio'].value not in fastsearch:
 				html1 = html1 + '<input type=hidden name=link_interrogatorio value="' + form['link_interrogatorio'].value + '">'
-			if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in ['teste', 'Busca rápida']:
+			if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in fastsearch:
 				html1 = html1 + '<input type=hidden name=nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">'
 				if 'occ' in form: html1 += '<input type=hidden name=occ value="' + form['occ'].value + '">'
 			

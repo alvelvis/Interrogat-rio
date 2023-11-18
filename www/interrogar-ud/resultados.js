@@ -576,7 +576,8 @@ var translations = {
 		'en-US': 'The trained models must be in the folder "/www/cgi-bin/*.udpipe". By default, Interrogatório comes with English and Portuguese models.'
 	},
 	'Selecione o arquivo ou arraste-o para o botão abaixo:': {
-		'en-US': 'Select the file or drag it to the button below:'
+		'pt-BR': 'Selecione o arquivo abaixo:',
+		'en-US': 'Select the file below:'
 	},
 	'sentenças': {
 		'en-US': 'sentences'
@@ -687,7 +688,8 @@ var translations = {
 		'en-US': 'Download the correction script model in Python.'
 	},
 	'Clique aqui': {
-		'en-US': 'Click here'
+		'pt-BR': '<font style="background-color:yellow; font-weight: bold;">Click here</font>',
+		'en-US': '<font style="background-color:yellow; font-weight: bold;">Click here</font>'
 	},
 	'Edite o script de correção de acordo com o exemplo dentro do arquivo.': {
 		'en-US': 'Edit the script according to the example in the file.'

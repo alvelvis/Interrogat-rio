@@ -60,7 +60,7 @@ with open('./interrogar-ud/inqueritos.txt', 'r') as f:
 	inqueritos = f.read()
 novo_inqueritos_cars = list()
 for inquerito_car in inqueritos_cars:
-	if ('!@#' + inquerito_car not in inqueritos or 'teste' in inquerito_car) and inquerito_car:
+	if ('!@#' + inquerito_car not in inqueritos) and inquerito_car:
 		log.append('- etiqueta de inquérito excluída: ' + inquerito_car)
 		continue
 	else:
@@ -68,7 +68,6 @@ for inquerito_car in inqueritos_cars:
 with open('./interrogar-ud/inqueritos_cars.txt', 'w') as f:
 	f.write('\n'.join(novo_inqueritos_cars))
 
-#pesquisas se 'teste' in nome
 with open('./interrogar-ud/queries.txt', 'r') as f:
 	queries = f.read().splitlines()
 novo_queries = list()

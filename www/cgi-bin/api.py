@@ -1,8 +1,6 @@
 #!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
-fastSearch = ['teste', 'Busca rápida']
-
 print("Content-type:application/json; charset=utf-8")
 print('\n\n')
 
@@ -15,7 +13,7 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD
+from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
 import html as web
 import time
 import sys
@@ -82,7 +80,7 @@ def renderSentences(script=""):
     filtros = []
     filtrar_filtros = ""
     pagina_filtros = ""
-    if nomePesquisa not in fastSearch:
+    if nomePesquisa not in fastsearch:
         pagina_html = caminhoCompletoHtml.rsplit("/", 1)[1].rsplit(".", 1)[0]
         if os.path.isfile("./cgi-bin/json/filtros.json"):
             with open("./cgi-bin/json/filtros.json") as f:
@@ -164,9 +162,9 @@ def renderSentences(script=""):
         if "@BOLD" in anotado.to_str():
             arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([functions.cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
         arquivoHtml += "</form><br>"
-        if nomePesquisa not in fastSearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
-        if nomePesquisa not in fastSearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
-        if nomePesquisa in fastSearch: arquivoHtml += "<span class='translateHtml'>Salve a busca para liberar mais opções</span>"
+        if nomePesquisa not in fastsearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
+        if nomePesquisa not in fastsearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
+        if nomePesquisa in fastsearch: arquivoHtml += "<span class='translateHtml'>Salve a busca para liberar mais opções</span>"
         arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a!-->"
         arquivoHtml += ''
         arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(startPoint+i+1)}><input type=hidden name=sent_id value=\"{estruturado.sent_id}\"><input type=hidden name=text value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(startPoint+i+1)}\")' class='translateHtml'>Visualizar árvore de dependências</a-->"

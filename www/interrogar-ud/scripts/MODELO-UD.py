@@ -21,21 +21,13 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 		...
 '''
 
-import sys, os, re
+import sys, re
 sys.path.append("./cgi-bin")
 import estrutura_ud
 from datetime import datetime
+import charset_normalizer
 import copy
-from chardet import detect
 import html
-import multiprocessing
-
-
-# get file encoding type
-def get_encoding_type(file):
-    with open(file, 'rb') as f:
-        rawdata = f.read()
-    return detect(rawdata)['encoding']
 
 conllu = sys.argv[1]
 action = sys.argv[2]
@@ -69,15 +61,10 @@ def regex(exp, col):
     return re.search(r'^(' + exp + r")$", col)
 
 srcfile = './interrogar-ud/scripts/' + issue
-trgfile = 'codification'
-from_codec = get_encoding_type(srcfile)
-with open(srcfile, 'r', encoding=from_codec) as f, open(trgfile, 'w', encoding='utf-8') as e:
-	text = f.read() # for small files, for big use chunks
-	e.write(text)
-os.remove(srcfile) # remove old encoding file
-os.rename(trgfile, srcfile) # rename new encoding
-with open(srcfile, 'r') as f:
-	codigo = [x for x in f.read().splitlines() if x.strip() and x.strip()[0] != "#"]
+file_content = str(charset_normalizer.from_path(srcfile).best())
+with open(srcfile, 'w', encoding='utf-8') as e:
+	e.write(file_content)
+codigo = [x for x in file_content.splitlines() if x.strip() and x.strip()[0] != "#"]
 
 keywords = []
 for linha in codigo:

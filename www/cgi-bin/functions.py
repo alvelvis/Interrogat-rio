@@ -5,6 +5,7 @@ corpusGenericoExpressoes = "generico.conllu"
 udpipe = "udpipe-1.2.0"
 modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
 localtime = 0
+fastsearch = ["Busca rápida"]
 
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
