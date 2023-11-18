@@ -26,10 +26,10 @@ def main():
         repo = Repo(path)
         repo.git.checkout("master")
         current = repo.head.commit
-        repo.config_writer().set_value("user", "name", "myusername").release()
-        repo.config_writer().set_value("user", "email", "myemail").release()
-        repo.config_writer().set_value("core", "fileMode", "false").release()
-        repo.config_writer().set_value("core", "autocrlf", "true").release()
+        #repo.config_writer().set_value("user", "name", "myusername").release()
+        #repo.config_writer().set_value("user", "email", "myemail").release()
+        #repo.config_writer().set_value("core", "fileMode", "false").release()
+        #repo.config_writer().set_value("core", "autocrlf", "true").release()
         repo.git.pull()
         if current != repo.head.commit:
             print("Interrogatório was updated. Please, open it again.")
