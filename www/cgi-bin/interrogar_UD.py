@@ -521,23 +521,23 @@ for token_t in available_tokens:
 	try:
 		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')):
 			corresponde = True
-			clean_text[map_id[token.id]] = "@BLUE/" + clean_text[map_id[token.id]] + "/FONT"
+			text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
 			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
 	'''
 		if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
 			condition += '''
-			clean_text[map_id[token.head_token.id]] = "@RED/" + clean_text[map_id[token.head_token.id]] + "/FONT"
+			text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
 			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
 		if "token.next_token" in pesquisa and not "_token.next_token" in pesquisa:
 			condition += '''
-			#clean_text[map_id[token.next_token.id]] = "@BLUE/" + clean_text[map_id[token.next_token.id]] + "/FONT"
+			#text_tokens[map_id[token.next_token.id]] = "@BLUE/" + text_tokens[map_id[token.next_token.id]] + "/FONT"
 			#tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
 		if "token.previous_token" in pesquisa and not '_token.previous_token' in pesquisa:
 			condition += '''
-			#clean_text[map_id[token.previous_token.id]] = "@BLUE/" + clean_text[map_id[token.previous_token.id]] + "/FONT"
+			#text_tokens[map_id[token.previous_token.id]] = "@BLUE/" + text_tokens[map_id[token.previous_token.id]] + "/FONT"
 			#tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
 		condition += '''
-			clean_text[map_id['''+arroba+'''.id]] = "<b>" + clean_text[map_id['''+arroba+'''.id]] + "</b>"
+			text_tokens[map_id['''+arroba+'''.id]] = "<b>" + text_tokens[map_id['''+arroba+'''.id]] + "</b>"
 
 			casos.append(1)
 			arroba_id = '''+arroba+'''.id
@@ -549,7 +549,7 @@ for token_t in available_tokens:
 
 			if separate:
 				corresponde = False
-				final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
+				final = "# text_tokens = " + " ".join(text_tokens) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 				output.append(final)
 			
 	except Exception as e:
@@ -557,7 +557,7 @@ for token_t in available_tokens:
 		pass
 if corresponde and not separate:
 	corresponde = False
-	final = "# clean_text = " + " ".join(clean_text) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
+	final = "# text_tokens = " + " ".join(text_tokens) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
 	output.append(final)'''
 		with open("./cgi-bin/condition.txt", "w") as f:
 			f.write(condition)
@@ -567,7 +567,7 @@ if corresponde and not separate:
 			for sent_id in sentences:
 				sentence = corpus.sentences[sent_id]
 				sentence2 = sentence
-				clean_text = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
+				text_tokens = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
 				clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
 				corresponde = False
 				tokens = sentence2.tokens_to_str()
@@ -583,16 +583,16 @@ if corresponde and not separate:
 					sent_id = part.split(":")[0]
 					token_ids = part.split(":")[1].split(",")
 					sentence = corpus.sentences[sent_id]
-					clean_text = [x.word for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+					text_tokens = [x.word for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
 					clean_id = [x.id for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
 					map_id = {x: t for t, x in enumerate(clean_id)}
 					tokens = sentence.tokens_to_str()
 					for token_id in token_ids:
 						token = sentence.tokens[sentence.map_token_id[token_id]]
 						casos.append(token)
-						clean_text[map_id[token.id]] = "<b>" + clean_text[map_id[token.id]] + "</b>"
+						text_tokens[map_id[token.id]] = "<b>" + text_tokens[map_id[token.id]] + "</b>"
 						tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
-					final = "# clean_text = " + " ".join(clean_text) + "\n" + sentence.metadados_to_str() + "\n" + tokens
+					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence.metadados_to_str() + "\n" + tokens
 					output.append(final)
 		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)

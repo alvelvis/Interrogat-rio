@@ -1458,7 +1458,7 @@ $(document).ready(function(){
 
 	function extractSentidFilter(){
 		sent_ids = []
-		clean_html = RegExp("<.*?>")
+		clean_html = RegExp("<.*?>", "g")
 		$('.anno').each(function(e){
 			sentence = $(this).html()
 			sent_id = sentence.split("# sent_id = ")[1].split("\n")[0].replace(clean_html, "")

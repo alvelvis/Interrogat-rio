@@ -41,5 +41,5 @@ if nome not in fastsearch:
         html += f"<br><span class='translateHtml'>Filtros</span>: {len([x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']])}"
     html += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link}.html'>{nome}</a>"
 html += "<hr><br>"
-html += "\n".join(['<b>' + str(i+1) + '/' + str(numeroOcorrencias) + ' - ' + fromInterrogarToHtml(x['resultadoAnotado'].sent_id) + '</b><br>' + fromInterrogarToHtml(x['resultadoAnotado'].metadados['clean_text'] if 'clean_text' in x['resultadoAnotado'].metadados else x['resultadoAnotado'].text) + '<hr>' for i, x in enumerate(ocorrencias)])
+html += "\n".join(['<b>' + str(i+1) + '/' + str(numeroOcorrencias) + ' - ' + fromInterrogarToHtml(x['resultadoAnotado'].sent_id) + '</b><br>' + fromInterrogarToHtml(x['resultadoAnotado'].metadados['text_tokens'] if 'text_tokens' in x['resultadoAnotado'].metadados else x['resultadoAnotado'].text) + '<hr>' for i, x in enumerate(ocorrencias)])
 print(html)

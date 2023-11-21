@@ -86,7 +86,7 @@ elif form['action'].value == 'view':
 	sentences = filtros[nome_html]['filtros'][nome_filtro]['sentences']
 
 	html = '<script src="../interrogar-ud/jquery-latest.js"></script>'
-	html += '<script src="../interrogar-ud/resultados.js?version=1"></script>'
+	html += '<script src="../interrogar-ud/resultados.js?version=2"></script>'
 	html += "<title>{title}</title><h1>{nome_filtro} (<span class='len_filtros'>{len_filtros}</span>)</h1>\
 		<a title='Colocar as frases deste filtro em uma nova busca' class='translateTitle translateHtml fromFilterToQuery' style='cursor:pointer; color:blue; text-decoration: underline;'>[Transformar em busca]</a> \
 		<a title='Mostrar lista de sent_id das frases' class='translateTitle translateHtml extractSentidFilter' style='cursor:pointer; color:blue; text-decoration: underline;'>[Lista de sent_id]</a> \
@@ -119,7 +119,7 @@ elif form['action'].value == 'view':
 	total = len(resultados)
 	for i, resultado in enumerate(resultados):
 		sent_id = resultado.split("# sent_id = ")[1].split("\n")[0]
-		text = resultado.split("# %s = " % ("clean_text" if "# clean_text = " in resultado else "text"))[1].split("\n")[0]
+		text = resultado.split("# %s = " % ("text_tokens" if "# text_tokens = " in resultado else "text"))[1].split("\n")[0]
 		html += '<div class="sentence"><a onclick=\'removeFromFilter($(this), "{sentence}", "{html}", "{filtro}")\' class="translateTitle" title="Retornar esta sentença para a busca inicial" style="cursor:pointer; text-decoration:none;"><font color="red">[x]</font></a> <b>{agora} / {maximo} - <span class="sent_id">{sentence}</span></b><br><span style="cursor:pointer;" class="translateTitle" title="Clique para mostrar a anotação" onclick="$(this).siblings(\'.anno\').toggle();">{text}</span><pre style="display:none" class="anno">{anno}</pre>'.format(
 			sentence=cleanEstruturaUD(fromInterrogarToHtml(sent_id)).strip(),
 			text=fromInterrogarToHtml(text),
@@ -127,7 +127,8 @@ elif form['action'].value == 'view':
 			filtro=web.escape(nome_filtro.replace('"', "&quot;")),
 			agora=i+1,
 			maximo=total,
-			anno=web.escape(fromInterrogarToHtml(resultado).replace("<b>", "@BOLD").replace("</b>", "/BOLD")).replace("@BOLD", "<b>").replace("/BOLD", "</b>"),
+			anno=web.escape(fromInterrogarToHtml(resultado).replace("<b>", "@BOLD").replace("</b>", "/BOLD").replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')\
+				).replace("@BOLD", "<b>").replace("/BOLD", "</b>").replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>'),
 			)
 		html += "<hr></div>"
 
