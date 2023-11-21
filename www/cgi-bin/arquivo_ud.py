@@ -116,7 +116,7 @@ elif not 'validate' in form:
         windows_path = askopenfilename(title="Select a CoNLL-U or a TXT file", filetypes=[("CoNLL-U or Text file", "*.conllu; *.txt")],) # show an "Open" dialog box and return the path to the selected file
         if windows_path:
             filename = slugify(os.path.basename(windows_path))
-            file_content = str(charset_normalizer.from_path(windows_path).best()).strip() + "\n\n"
+            file_content = str(charset_normalizer.from_path(windows_path).best()).replace("\r\n", "\n").strip() + "\n\n"
             filename_path = "./interrogar-ud/conllu/" + filename
             if filename.endswith(".conllu"):
                 save_file(filename, filename_path, file_content)
