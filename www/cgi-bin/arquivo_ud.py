@@ -19,9 +19,9 @@ if 'win' in sys.platform:
     from tkinter.filedialog import askopenfilename
 
 JULGAMENTO = False
-if os.path.isdir("../Julgamento"):
+if os.path.isdir("../Julgamento/static/uploads"):
     JULGAMENTO = "../Julgamento"
-if os.path.isdir("../../Julgamento"):
+if os.path.isdir("../../Julgamento/static/uploads"):
     JULGAMENTO = "../../Julgamento"
 
 form = cgi.FieldStorage()
