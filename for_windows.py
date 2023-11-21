@@ -24,7 +24,6 @@ def main():
     try:
         from git import Repo
         repo = Repo(path)
-        repo.git.checkout("master")
         current = repo.head.commit
         #repo.config_writer().set_value("user", "name", "myusername").release()
         #repo.config_writer().set_value("user", "email", "myemail").release()
