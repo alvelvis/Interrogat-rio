@@ -688,7 +688,7 @@ var translations = {
 		'en-US': 'Download the correction script model in Python.'
 	},
 	'Clique aqui': {
-		'pt-BR': '<font style="background-color:yellow; font-weight: bold;">Click here</font>',
+		'pt-BR': '<font style="background-color:yellow; font-weight: bold;">Clique aqui</font>',
 		'en-US': '<font style="background-color:yellow; font-weight: bold;">Click here</font>'
 	},
 	'Edite o script de correção de acordo com o exemplo dentro do arquivo.': {
