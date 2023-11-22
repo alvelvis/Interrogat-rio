@@ -165,7 +165,6 @@ def renderSentences(script=""):
         if nomePesquisa not in fastsearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
         if nomePesquisa not in fastsearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
         if nomePesquisa in fastsearch: arquivoHtml += "<span class='translateHtml'>Salve a busca para liberar mais opções</span>"
-        arquivoHtml += f"<form action=\"../../cgi-bin/udpipe.py?conllu={conllu}\" target=\"_blank\" method=POST id=udpipe_{str(startPoint+i+1)}><input type=hidden name=textheader value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='anotarudpipe(\"udpipe_{str(startPoint+i+1)}\")' class='translateHtml'>Anotar frase com o UDPipe</a!-->"
         arquivoHtml += ''
         arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(startPoint+i+1)}><input type=hidden name=sent_id value=\"{estruturado.sent_id}\"><input type=hidden name=text value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(startPoint+i+1)}\")' class='translateHtml'>Visualizar árvore de dependências</a-->"
         arquivoHtml += '</p></span>\n'
