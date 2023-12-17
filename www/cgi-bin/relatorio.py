@@ -22,7 +22,6 @@ dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0) for x in sor
 df = pd.concat(dfs).reset_index(drop=True)
 df.tag.fillna("INQUÉRITO", inplace=True)
 df.fillna("", inplace=True)
-#df.to_csv("./test.csv")
 
 date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"

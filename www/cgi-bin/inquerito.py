@@ -146,7 +146,10 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		f'{form["link_interrogatorio"].value}'
 		]
 	
-	result = subprocess.call(command, shell=True)
+	if 'win' in sys.platform:
+		subprocess.call(command, shell=True)
+	else:
+		subprocess.run(command)
 	sys.stderr.write('\nbatch_correction: {}'.format(time.time() - start))
 	
 	if form['executar'].value == 'exec':

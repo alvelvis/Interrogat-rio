@@ -49,7 +49,7 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
 
     if 'win' in sys.platform:
         html = html.replace("<!--INPUT-->", '<input value="Escolher arquivo" class="translateVal" type="submit">')
-        html = html.replace('<select id="chooseLanguage" name="chooseLanguage" style="margin-top: 10px; margin-bottom: 10px; display:none">', 'Modelo para anotação de arquivos .txt: <select id="chooseLanguage" name="chooseLanguage" style="margin-top: 10px; margin-bottom: 10px;">')
+        html = html.replace('<select id="chooseLanguage" name="chooseLanguage" style="margin-top: 10px; margin-bottom: 10px; display:none">', '<span class="translateHtml">Modelo para anotação de arquivos .txt</span>: <select id="chooseLanguage" name="chooseLanguage" style="margin-top: 10px; margin-bottom: 10px;">')
     else:
         html = html.replace("<!--INPUT-->", '<input name="file" value="Escolher arquivo" class="translateVal uploadFile" required="required" type="file">')
     html = html.replace("<!--chooseLanguage-->", udpipe_models)

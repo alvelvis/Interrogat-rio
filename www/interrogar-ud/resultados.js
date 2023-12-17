@@ -1030,6 +1030,9 @@ var translations = {
 	},
 	'Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez': {
 		'en-US': 'New feature: Sentences returned in a query can now be manually filtered to up to 5 groups at once'
+	},
+	'Modelo para anotação de arquivos .txt': {
+		'en-US': "Model for the annotation of .txt files"
 	}
 }
 
