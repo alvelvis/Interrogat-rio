@@ -5,10 +5,7 @@ import os
 import cgi, cgitb
 cgitb.enable()
 import estrutura_dados
-import functions
-
-modelo = functions.modelo
-udpipe = functions.udpipe
+from utils import modelo, udpipe
 
 html = '<html><head><script src=\"../interrogar-ud/jquery-latest.js\"></script><script src=\"../interrogar-ud/resultados.js?version=15\"></script><meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0"><title class="translateHtml">UDPipe: Interrogatório</title></head><body>'
 

@@ -9,11 +9,9 @@ import cgi,cgitb
 cgitb.enable()
 import re
 import interrogar_UD
-import functions
-from functions import tabela
 import json
 from credenciar import LOGIN
-from functions import fromInterrogarToHtml, cleanEstruturaUD
+from utils import fromInterrogarToHtml, cleanEstruturaUD, tabela, encodeUrl
 import html as web
 import sys
 
@@ -97,7 +95,7 @@ elif form['action'].value == 'view':
 		<span class='translateHtml'>Corpus:</span> <a id='corpus' href='../interrogar-ud/conllu/{ud}' download>{ud}</a><br><br>".format(
 		title=nome_filtro + ' (' + str(num_filtros) + ') - Interrogatório',
 		nome_filtro=web.escape(nome_filtro),
-		nome_filtro_encoded = functions.encodeUrl(nome_filtro),
+		nome_filtro_encoded = encodeUrl(nome_filtro),
 		len_filtros=num_filtros,
 		nome_html=nome_html,
 		ud=ud,

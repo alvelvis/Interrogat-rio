@@ -13,11 +13,10 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
+from utils import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch, save_query_json, cleanEstruturaUD
 import html as web
 import time
 import sys
-import functions
 import json
 import shutil
 
@@ -122,7 +121,7 @@ def renderSentences(script=""):
         estruturado = estrutura_ud.Sentence(recursivo=False)
         anotado.build(web.escape(ocorrencia['resultado'].replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '>', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT')))    
         estruturado.build(web.unescape(ocorrencia['resultado']).replace('<b>', '@BOLD').replace('</b>', '/BOLD').replace('<font color=' + tabela['yellow'] + '>', '@YELLOW/').replace('<font color=' + tabela['red'] + '>', '@RED/').replace('<font color=' + tabela['cyan'] + '">', '@CYAN/').replace('<font color=' + tabela['blue'] + '>', '@BLUE/').replace('<font color=' + tabela['purple'] + '>', '@PURPLE/').replace('</font>', '/FONT').replace('@BOLD', '').replace('/BOLD', '').replace('@YELLOW/', '').replace('@RED/', '').replace('@CYAN/', '').replace('@BLUE/', '').replace('@PURPLE/', '').replace('/FONT', ''))
-        estruturado.tokens = [functions.cleanEstruturaUD(x.split("\t")[0]) for x in ocorrencia['resultado'].splitlines() if "<b>" in x and x.count("\t") >= 9]
+        estruturado.tokens = [cleanEstruturaUD(x.split("\t")[0]) for x in ocorrencia['resultado'].splitlines() if "<b>" in x and x.count("\t") >= 9]
 
         if not estruturado.sent_id in filtros and not estruturado.text in filtros:
             resultados.append({'anotado': anotado, 'estruturado': estruturado})
@@ -160,7 +159,7 @@ def renderSentences(script=""):
         arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(startPoint+i+1)}\">"
         arquivoHtml += f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{estruturado.text}\">"
         if "@BOLD" in anotado.to_str():
-            arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([functions.cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
+            arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
         arquivoHtml += "</form><br>"
         if nomePesquisa not in fastsearch: arquivoHtml += f"<a style=\"cursor:pointer\" onclick='selectAbove({str(startPoint+i+1)})' class='translateHtml'>Selecionar todas as frases acima</a><br>"
         if nomePesquisa not in fastsearch: arquivoHtml += f"<!--a style=\"cursor:pointer\" onclick='filtraragora(\"{str(startPoint+i+1)}\")'>Separar sentença</a-->"
@@ -309,7 +308,7 @@ def filtrar(form):
             nome_filtro = form['nome_pesquisa'].value.strip()
 
         resultados = interrogar_UD.main(corpus, int(criterio), parametros, fastSearch=True)    
-        json_id = functions.save_query_json(resultados, persistent=True, name="%s (filter: %s)" % (nome_filtro, pagina_html))
+        json_id = save_query_json(resultados, persistent=True, name="%s (filter: %s)" % (nome_filtro, pagina_html))
    
         if not pagina_html in filtros:
             filtros[pagina_html] = {'ud': ud, 'filtros': {}}

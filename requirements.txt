@@ -17,3 +17,4 @@ urllib3==1.26.7
 yarg==0.1.9
 udapi
 openai
+pandas

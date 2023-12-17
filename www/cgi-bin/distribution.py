@@ -9,7 +9,7 @@ import cgi,cgitb
 cgitb.enable()
 import re
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
+from utils import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
 import datetime
 import html as web
 import estrutura_ud

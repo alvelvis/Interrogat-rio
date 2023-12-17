@@ -10,9 +10,8 @@ cgitb.enable()
 import estrutura_ud
 import interrogar_UD
 from datetime import datetime
-from functions import prettyDate, encodeUrl, fromInterrogarToHtml
+from utils import prettyDate, encodeUrl, fromInterrogarToHtml, corpusGenericoExpressoes
 import html as web
-from functions import corpusGenericoExpressoes
 
 with open("./cgi-bin/expressoes_5.txt") as f:
     fileExpressions = f.read().splitlines()

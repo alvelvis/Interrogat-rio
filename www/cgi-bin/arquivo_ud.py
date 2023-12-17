@@ -12,7 +12,7 @@ import subprocess
 import requests
 import charset_normalizer
 from estrutura_dados import slugify as slugify
-from functions import prettyDate
+from utils import prettyDate
 from max_upload import max_filesize
 if 'win' in sys.platform:
     from tkinter import Tk     # from tkinter import Tk for Python 3.x

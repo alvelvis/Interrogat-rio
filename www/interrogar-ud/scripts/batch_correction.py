@@ -24,14 +24,20 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 import sys, re
 sys.path.append("./cgi-bin")
 import estrutura_ud
+from utils import fastsearch
 from datetime import datetime
 import charset_normalizer
 import copy
+import pandas as pd
 import html
 
 conllu = sys.argv[1]
 action = sys.argv[2]
-issue = sys.argv[3]
+script_file = sys.argv[3]
+script_name = sys.argv[4]
+interrogatorio = sys.argv[5] if sys.argv[5] not in fastsearch else ""
+occ = int(sys.argv[6]) if sys.argv[5] not in fastsearch else ""
+href = sys.argv[7] if sys.argv[5] not in fastsearch else ""
 
 with open('./interrogar-ud/scripts/headers.txt', 'r') as f:
 	headers = f.read().splitlines()
@@ -60,7 +66,7 @@ def get_head(tok, sentence):
 def regex(exp, col):
     return re.search(r'^(' + exp + r")$", col)
 
-srcfile = './interrogar-ud/scripts/' + issue
+srcfile = './interrogar-ud/scripts/' + script_file
 file_content = str(charset_normalizer.from_path(srcfile).best())
 with open(srcfile, 'w', encoding='utf-8') as e:
 	e.write(file_content)
@@ -75,6 +81,7 @@ arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywo
 arquivo_ud.load('./interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
+date = datetime.now()
 for x, linha in enumerate(codigo):
 	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
@@ -82,27 +89,30 @@ for x, linha in enumerate(codigo):
 		tab = (len(linha.split('\t')) -1) * '\t'
 		codigo[x] = tab + "try:\n" + \
 					tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
-					tab + "except Exception as e:\n" + \
-					tab + "\tsys.stderr.write(str(e))\n" + \
-					codigo[x] + "\n" + \
-					tab + "try:\n" + \
-					tab + "\tif anterior != " + token_var + ".to_str():\n" + \
-					tab + "\t\tnovo_inquerito.append(' '.join([(x.word if x.id != " + token_var + ".id else '<b>{}</b>'.format(x.word)) for x in sentence.tokens if not '-' in x.id]) + \
-													'!@#' + anterior + ' --> ' + " + token_var + ".to_str() + ' (head: ' + get_head(" + token_var + ", sentence) + ')' + \
-													'!@#' + conllu + \
-													'!@#' + str(datetime.now()).replace(' ', '_').split('.')[0] + \
-													'!@#' + sentence.sent_id)\n" + \
-					tab + "\t\tsim.append(' '.join([(html.escape(x.word) if x.id != " + token_var + ".id else '<b>{}</b>'.format(html.escape(x.word))) for x in sentence.tokens if not '-' in x.id]) + '''\n''' + \
-											'ANTES: ' + html.escape(anterior) + '''\n''' + \
-											'DEPOIS: ' + html.escape(" + token_var + ".to_str() + ' (head: ' + get_head(" + token_var + ", sentence) + ')'))\n" + \
+					tab + codigo[x] + "\n" + \
+					tab + f'''\tnew_inquiries.append({{
+									'date': "{date.timestamp()}",
+									'tag': "{script_name}",
+									'conllu': "{conllu.split('.conllu')[0]}",
+									'text': " ".join([x.word if x.id != {token_var}.id else "<b>%s</b>" % x.word for x in sentence.tokens if not '-' in x.id]),
+									'sent_id': sentence.sent_id,
+									'before': anterior, 
+									'after': {token_var}.to_str(),
+									'col': "{token_col}",
+									'head': get_head({token_var}, sentence), 
+									'interrogatorio': "{interrogatorio}",
+									'occurrences': "{occ}",
+									'href': "{href}",
+									}})\n''' + \
 					tab + "except Exception as e:\n" + \
 					tab + "\tsys.stderr.write(str(e))"
 
-with open("./cgi-bin/codigo.txt", "w") as f:
+with open("./cgi-bin/debug_batch_correction.txt", "w") as f:
 	f.write("\n".join(codigo))
 
 codigo = "\n".join(codigo)
 
+new_inquiries = []
 for head in headers:
 	sentence = arquivo_ud.sentences[head]
 	tokens = sentence.tokens
@@ -115,15 +125,13 @@ for head in headers:
 			sys.stderr.write("\n%s" % str(e))
 			pass
 		except Exception as e:
-			with open("./cgi-bin/error.log", "w") as f:
+			with open("./cgi-bin/debug_batch_correction_error.log", "w") as f:
 				f.write(html.escape(str(e)))
 			exit()
 										
-if action == 'sim':
-	with open('./interrogar-ud/scripts/sim.txt', 'w') as f:
-		f.write('\n\n'.join(sim))
+df = pd.DataFrame(new_inquiries)
+df.to_csv("./interrogar-ud/batch_correction_simulation.csv")
+
 if action == 'exec':
-	with open('./interrogar-ud/scripts/novos_inqueritos.txt', 'w') as f:
-		f.write('\n'.join(novo_inquerito))
 	with open('./interrogar-ud/conllu/' + conllu + '_script', 'w') as f:
 		f.write(arquivo_ud.to_str())

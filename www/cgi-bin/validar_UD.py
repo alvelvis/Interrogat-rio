@@ -3,7 +3,7 @@ import interrogar_UD
 import sys
 import re
 import pprint
-from functions import fromInterrogarToHtml
+from utils import fromInterrogarToHtml
 
 def validate(conllu, sent_id = None, errorList = "validar_UD.txt", noMissingToken=False):
 

@@ -12,11 +12,9 @@ import estrutura_dados
 import estrutura_ud
 import interrogar_UD
 from datetime import datetime
-import functions
-from functions import tabela, prettyDate
+from utils import tabela, prettyDate, fromInterrogarToHtml
 import json
 from credenciar import LOGIN
-from functions import fromInterrogarToHtml
 
 from estrutura_dados import slugify as slugify
 

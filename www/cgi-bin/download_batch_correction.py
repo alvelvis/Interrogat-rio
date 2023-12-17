@@ -7,7 +7,7 @@ print('\n\n')
 import cgi,cgitb
 cgitb.enable()
 
-with open("./interrogar-ud/scripts/modelo_script.txt") as f:
+with open("./interrogar-ud/scripts/modelo_batch_correction.txt") as f:
     script = f.read().splitlines()
 
 form = cgi.FieldStorage()

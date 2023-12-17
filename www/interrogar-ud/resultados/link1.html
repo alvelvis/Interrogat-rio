@@ -63,7 +63,7 @@
           <li class="translateHtml">Antes de efetivar mudanças, você será levado a uma tela de simulação de alterações.</li>
           <ol type="1">
             <li>
-              <span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/modelo_script.py?crit=&params=" target="_blank">Clique aqui</a>.
+              <span class="translateHtml">Baixe o modelo de script de correção em Python.</span> <a class="translateHtml" href="../../cgi-bin/download_batch_correction.py?crit=&params=" target="_blank">Clique aqui</a>.
             </li>
             <li class="translateHtml">Edite o script de correção de acordo com o exemplo dentro do arquivo.</li>
             <li class="translateHtml">Escolha um nome para o tipo de correção que está propondo e submeta sua versão editada do script abaixo.</li>
@@ -76,7 +76,7 @@
             <input type="file" onchange="if (! $('#nomeScript').val()) { $('#nomeScript').val($('#fileScript').val().split(/(\\|\/)/g).pop().split('.txt')[0]) }" name="fileScript" id="fileScript" required=""><br>
             <br>
             <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>
-            <input name="scriptName" id="nomeScript" required=""><br>
+            <input name="scriptName" style="min-width:400px;" id="nomeScript" required=""><br>
             <br>
             <input name="sendFileScript" id="sendFileScript" value="Simular alterações" style="margin-left:0px;" class="translateVal buscaOption btn-gradient orange small" type="submit" onclick=""> <!--input id="clearBatch" value="Limpar" type="button" style="margin-left:0px;" class="translateVal buscaOption btn-gradient red small"
 onclick=""-->

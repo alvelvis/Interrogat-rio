@@ -9,7 +9,7 @@ cgitb.enable()
 import estrutura_ud
 import re
 import html as web
-from functions import prettyDate
+from utils import prettyDate
 from datetime import datetime
 
 form = cgi.FieldStorage()

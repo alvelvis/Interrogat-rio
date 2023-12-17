@@ -12,7 +12,7 @@ import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from functions import tabela, prettyDate, encodeUrl, save_query_json, fastsearch
+from utils import tabela, prettyDate, encodeUrl, save_query_json, fastsearch
 import html as web
 import time
 import sys
@@ -142,7 +142,7 @@ def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
 		if not os.path.isdir('./cgi-bin/scripts'):
 			os.mkdir('./cgi-bin/scripts')
-		with open("./interrogar-ud/modelo_query.py") as f:
+		with open("./interrogar-ud/modelo_query.txt") as f:
 			modelo_query = f.read()
 		with open('./cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
@@ -253,7 +253,7 @@ class paginaHtml():
 	def montarHtml(self):
 		with open("./interrogar-ud/resultados/link1.html", "r") as f:
 			self.arquivoHtml = f.read()
-			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/modelo_script.py?crit=&params=", f"../cgi-bin/modelo_script.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
+			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/download_batch_correction.py?crit=&params=", f"../cgi-bin/download_batch_correction.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/filtrar.py', '../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.json_id + '&udoriginal=' + self.conllu)
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/conllu.py', '../cgi-bin/conllu.py?html=./interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.json_id + '.html')
 

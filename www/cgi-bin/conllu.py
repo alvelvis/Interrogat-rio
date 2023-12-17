@@ -9,7 +9,7 @@ import cgi,cgitb
 cgitb.enable()
 import re
 from datetime import datetime
-from functions import tabela
+from utils import tabela
 import html as web
 
 from estrutura_dados import slugify as slugify

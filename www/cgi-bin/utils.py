@@ -7,6 +7,21 @@ modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
 localtime = 0
 fastsearch = ["Busca rápida"]
 
+col_to_idx = {
+	'id': 0,
+	'word': 1,
+	'lemma': 2,
+	'upos': 3,
+	'xpos': 4,
+	'feats': 5,
+	'dephead': 6,
+	'deprel': 7,
+	'deps': 8,
+	'misc': 9
+}
+
+idx_to_col = {v: k for k, v in col_to_idx.items()}
+
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
 			'blue': 'blue',
@@ -57,6 +72,9 @@ def cleanEstruturaUD(s):
 
 def fromInterrogarToHtml(s):
     return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')
+
+def escape_html_except_bold(s):
+    return s.replace("<b>", "@BOLD").replace("</b>", "/BOLD").replace("<", "&lt;").replace(">", "&gt;").replace("@BOLD", "<b>").replace("/BOLD", "</b>")
 
 class prettyDate:
 

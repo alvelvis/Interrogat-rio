@@ -27,7 +27,7 @@
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
-    <li><a href="../cgi-bin/inquerito.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>
+    <li><a href="../cgi-bin/relatorio.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio/wiki" target="_blank" class="translateHtml">Wiki - documentação das ferramentas</a></li>
     <li><a href="http://github.com/alvelvis/Julgamento" target="_blank" class="translateHtml">Julgamento - avaliação de corpora anotados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank" class="translateHtml">Código fonte do Interrogatório no GitHub</a></li>

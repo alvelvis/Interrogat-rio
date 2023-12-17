@@ -9,7 +9,7 @@ import sys
 import cgi, cgitb
 cgitb.enable()
 import interrogar_UD
-from functions import prettyDate, fromInterrogarToHtml, fastsearch
+from utils import prettyDate, fromInterrogarToHtml, fastsearch
 from datetime import datetime
 import json
 

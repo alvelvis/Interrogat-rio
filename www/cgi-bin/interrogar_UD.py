@@ -6,6 +6,7 @@ import time
 import cgi
 import html as web
 from collections import defaultdict
+from utils import col_to_idx
 
 tabelaf = {      'yellow': 'green',
                         'purple': 'purple',
@@ -28,18 +29,6 @@ def fromInterrogarToHtml(s):
     return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabelaf['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabelaf['purple'] + '>').replace('@BLUE/', '<font color=' + tabelaf['blue'] + '>').replace('@RED/', '<font color=' + tabelaf['red'] + '>').replace('@CYAN/', '<font color=' + tabelaf['cyan'] + '>').replace('/FONT', '</font>')
 
 different_distribution = ["dependentes", "children"]
-coluna_tab = {
-	'id': 0,
-	'word': 1,
-	'lemma': 2,
-	'upos': 3,
-	'xpos': 4,
-	'feats': 5,
-	'dephead': 6,
-	'deprel': 7,
-	'deps': 8,
-	'misc': 9
-}
 
 def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="", criterio=0):
 	import estrutura_ud
@@ -84,7 +73,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 					if token.startswith("# sent_id = "):
 						sent_id = token.split("# sent_id = ")[1]
 				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
-					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[coluna_tab[coluna]].replace("/FONT", "")))
+					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[col_to_idx[coluna]].replace("/FONT", "")))
 					dist.append(entrada)
 					if not entrada in lista:
 						lista[entrada] = 0
