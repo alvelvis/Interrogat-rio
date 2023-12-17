@@ -133,20 +133,20 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		f.write("\n".join(headers))
 	
 	start = time.time()
-	call_python = "python3" if not 'win' in sys.platform else "\"{}\\python.exe\"".format(os.path.join("..", "Python39"))
+	call_python = "python3" if not 'win' in sys.platform else os.path.join("..", "Python39", "python.exe")
 	command = [
-		call_python,
-		"./interrogar-ud/scripts/batch_correction.py",
-		form['conllu'].value,
-		form['executar'].value,
-		estrutura_dados.slugify(form['scriptName'].value),
-		form['scriptName'].value,
-		form['nome_interrogatorio'].value,
-		form['occ'].value,
-		form['link_interrogatorio'].value
+		f'{call_python}',
+		f'./interrogar-ud/scripts/batch_correction.py',
+		f'{form["conllu"].value}',
+		f'{form["executar"].value}',
+		f'{estrutura_dados.slugify(form["scriptName"].value)}',
+		f'{form["scriptName"].value}',
+		f'{form["nome_interrogatorio"].value}',
+		f'{form["occ"].value}',
+		f'{form["link_interrogatorio"].value}'
 		]
 	
-	result = subprocess.run(command, check=True, text=True)
+	result = subprocess.call(command, shell=True)
 	sys.stderr.write('\nbatch_correction: {}'.format(time.time() - start))
 	
 	if form['executar'].value == 'exec':
@@ -155,7 +155,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		os.rename("./interrogar-ud/batch_correction_simulation.csv", "./interrogar-ud/inqueritos/%s-%s.csv" % (str(datetime.fromtimestamp(date)).replace(":", "_"), str(uuid.uuid4())))
 		os.remove('./interrogar-ud/conllu/' + form['conllu'].value)
 		os.rename('./interrogar-ud/conllu/' + form['conllu'].value + '_script', './interrogar-ud/conllu/' + form['conllu'].value)
-		html = f"<script>window.location.href = '../cgi-bin/relatorio.py?date={date}'</script>"
+		html = f"<script>window.alert('Modificações realizadas com sucesso!'); window.location.href = '../cgi-bin/relatorio.py?date={date}'</script>"
 					
 	elif form['executar'].value == 'sim':
 		try:

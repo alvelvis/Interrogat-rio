@@ -63,15 +63,15 @@ else:
     tags = df.tag.unique()
     
     html += "<select class='changeFilter corpusSelection'>"
-    html += f'<option value="*">Todos os corpora ({len(conllus)})</option>'
+    html += f'<option value="*">Todos os corpora ({len(conllus)} corpora)</option>'
     for conllu in conllus:
-        html += f"<option value='{web.escape(conllu)}'>{web.escape(conllu)} ({len([df[df.conllu == conllu]])})</option>"
+        html += f"<option value='{web.escape(conllu)}'>{web.escape(conllu)} ({len(df[df.conllu == conllu])} modificações)</option>"
     html += "</select>"
 
     html += "<select class='changeFilter tagSelection'>"
-    html += f'<option value="*">Todas as correções ({len(tags)})</option>'
+    html += f'<option value="*">Todas as correções ({len(tags)} tipos)</option>'
     for tag in tags:
-        html += f"<option value='{web.escape(tag)}'>{web.escape(tag)} ({len([df[df.tag == tag]])})</option>"
+        html += f"<option value='{web.escape(tag)}'>{web.escape(tag)} ({len(df[df.tag == tag])} modificações)</option>"
     html += "</select>"
 
     html += "<hr>"
