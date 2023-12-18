@@ -66,6 +66,35 @@ form = cgi.FieldStorage()
 if not os.path.isdir("./interrogar-ud/inqueritos"):
 	os.mkdir("./interrogar-ud/inqueritos")
 
+# Backwards compatibility
+if os.path.isfile("./interrogar-ud/inqueritos.txt"):
+	new_inquiries = []
+	with open("./interrogar-ud/inqueritos.txt") as f:
+		inqueritos = f.read().splitlines()
+	for inquerito in inqueritos:
+		if inquerito.strip():
+			new_inquiries.append({
+				'text': inquerito.split("!@#")[0],
+				'before': inquerito.split("!@#")[1].split(" --> ")[0],
+				'after': inquerito.split("!@#")[1].split(" --> ")[1].split(" (head: ")[0],
+				'head': inquerito.split("!@#")[1].split(" --> ")[1].split(" (head: ")[1].split(")")[0] if "head:" in inquerito else None,
+				'conllu': inquerito.split("!@#")[2].split(".conllu")[0],
+				'date': datetime.strptime(inquerito.split("!@#")[3], '%Y-%m-%d_%H:%M:%S').timestamp(),
+				'interrogatorio': inquerito.split("!@#")[4].rsplit(" (", 1)[0] if inquerito.split("!@#")[4] != "NONE" else None,
+				'occurrences': inquerito.split("!@#")[4].rsplit(" (", 1)[1].split(")")[0] if inquerito.split("!@#")[4] != "NONE" else None,
+				'href': inquerito.split("!@#")[5] if inquerito.split("!@#")[4] != "NONE" else None,
+				'tag': inquerito.split("!@#")[6] if inquerito.split("!@#")[6] != "NONE" else None,
+				'sent_id': inquerito.split("!@#")[7]
+			})
+	
+	df = pd.DataFrame(new_inquiries)
+	dates = df.date.unique()
+	for date in dates:
+		rows = df[df.date == date]
+		filename = "./interrogar-ud/inqueritos/%s-%s.csv" % (str(datetime.fromtimestamp(date)).replace(":", "_"), str(uuid.uuid4()))
+		rows.to_csv(filename)
+	os.remove("./interrogar-ud/inqueritos.txt")
+
 bosqueNaoEncontrado = corpusGenericoInquerito
 
 arquivos = list()

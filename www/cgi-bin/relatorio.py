@@ -16,7 +16,7 @@ inqueritos_folder = "./interrogar-ud/inqueritos"
 if not os.path.isdir(inqueritos_folder):
     os.mkdir(inqueritos_folder)
 
-readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%d-%m-%Y %H:%M")
+readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
 
 dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0) for x in sorted(os.listdir(inqueritos_folder), reverse=True) if x.endswith(".csv")]
 df = pd.concat(dfs).reset_index(drop=True)
@@ -26,7 +26,9 @@ df.fillna("", inplace=True)
 date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"
 html += "<h1>Relatório de inquéritos</h1>"
-html += "Relatório gerado {}.<hr>".format(readable_date(date))
+html += "[<a href='../cgi-bin/relatorio.py'>Voltar</a>]"
+html += "<br><br>Relatório gerado {}.".format(readable_date(date))
+html += "<hr>"
 
 forms = cgi.FieldStorage()
 if 'date' in forms:
@@ -35,7 +37,7 @@ if 'date' in forms:
     href = rows.href.iloc[0]
     occurrences = rows.occurrences.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
-    html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b> [<a href='../cgi-bin/relatorio.py'>Voltar</a>]"
+    html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
     html += "<br>Página no Interrogatório: "
     html += f"<a href='../{href}'>{web.escape(interrogatorio)} ({occurrences:.0f})</a>" if interrogatorio else "Busca rápida"
     html += "<hr>"
@@ -43,18 +45,19 @@ if 'date' in forms:
     for idx in rows.index:
         sent_id = rows["sent_id"][idx]
         text = rows["text"][idx]
+        col = rows["col"][idx]
         before = rows["before"][idx]
         after = rows["after"][idx]
-        head = rows["head"][idx]
-        col = rows["col"][idx]
-        before_after = ""
         if col in col_to_idx:
-            col_before = before.split("\t")[col_to_idx[col]]
-            col_after = after.split("\t")[col_to_idx[col]]
-            before_after = f"{web.escape(col)}: {web.escape(col_before)} -> {web.escape(col_after)}\n"
+            before = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(before.split("\t"))])
+            after = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(after.split("\t"))])
+        head = rows["head"][idx]
+        before_after = ""
+        if text:
             text = escape_html_except_bold(text) + "\n"
+        if head:
             head = f"(head: {web.escape(head)})"
-        html += f'{before_after}{web.escape(sent_id)}\n{text}ANTES: {web.escape(before)}\nDEPOIS: {web.escape(after)} {head}\n\n'
+        html += f'{web.escape(sent_id)}\n{text}ANTES: {escape_html_except_bold(before)}\nDEPOIS: {escape_html_except_bold(after)} {head}\n\n'
     html += "</pre>"
 else:
     dates = df.date.unique()
