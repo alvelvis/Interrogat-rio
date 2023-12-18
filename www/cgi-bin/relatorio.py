@@ -45,7 +45,7 @@ if 'date' in forms:
     interrogatorio = rows.interrogatorio.iloc[0]
     html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
     html += "<br>Nome da correção: %s" % tag
-    html += "<br>Busca inicial: "
+    html += "<br>Busca: "
     html += f"<a target='_blank' href='../{href}'>{web.escape(interrogatorio)} ({occurrences:.0f})</a>" if interrogatorio else "Busca rápida"
     html += "<br>Corpus: <a href='../interrogar-ud/conllu/{ud}.conllu'>{ud}.conllu</a>".format(ud=web.escape(conllu))
     html += "<hr>"
