@@ -31,7 +31,7 @@ date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"
 html += "<h1>Relatório de inquéritos</h1>"
 if 'date' in forms:
-    html += "[<a href='../cgi-bin/relatorio.py'>Voltar</a>]<br><br>"
+    html += "[<a href='../cgi-bin/relatorio.py'>Todos os relatórios</a>]<br><br>"
 html += "Relatório gerado {}.".format(readable_date(date))
 html += "<hr>"
 
@@ -39,11 +39,15 @@ if 'date' in forms:
     date = float(forms['date'].value)
     rows = df[df.date == date]
     href = rows.href.iloc[0]
+    tag = rows.tag.iloc[0]
+    conllu = rows.conllu.iloc[0]
     occurrences = rows.occurrences.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
     html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
-    html += "<br>Fonte: "
-    html += f"<a href='../{href}'>{web.escape(interrogatorio)} ({occurrences:.0f})</a>" if interrogatorio else "Busca rápida"
+    html += "<br>Nome da correção: %s" % tag
+    html += "<br>Busca inicial: "
+    html += f"<a target='_blank' href='../{href}'>{web.escape(interrogatorio)} ({occurrences:.0f})</a>" if interrogatorio else "Busca rápida"
+    html += "<br>Corpus: <a href='../interrogar-ud/conllu/{ud}.conllu'>{ud}.conllu</a>".format(ud=web.escape(conllu))
     html += "<hr>"
     html += "<pre>"
     for idx in rows.index:
