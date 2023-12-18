@@ -11,6 +11,7 @@ import pandas as pd
 import datetime
 import html as web
 from utils import escape_html_except_bold, col_to_idx
+forms = cgi.FieldStorage()
 
 inqueritos_folder = "./interrogar-ud/inqueritos"
 if not os.path.isdir(inqueritos_folder):
@@ -26,11 +27,11 @@ df.fillna("", inplace=True)
 date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"
 html += "<h1>Relatório de inquéritos</h1>"
-html += "[<a href='../cgi-bin/relatorio.py'>Voltar</a>]"
-html += "<br><br>Relatório gerado {}.".format(readable_date(date))
+if 'date' in forms:
+    html += "[<a href='../cgi-bin/relatorio.py'>Voltar</a>]<br><br>"
+html += "Relatório gerado {}.".format(readable_date(date))
 html += "<hr>"
 
-forms = cgi.FieldStorage()
 if 'date' in forms:
     date = float(forms['date'].value)
     rows = df[df.date == date]
@@ -43,7 +44,7 @@ if 'date' in forms:
     html += "<hr>"
     html += "<pre>"
     for idx in rows.index:
-        sent_id = rows["sent_id"][idx]
+        sent_id = str(rows["sent_id"][idx])
         text = rows["text"][idx]
         col = rows["col"][idx]
         before = rows["before"][idx]
