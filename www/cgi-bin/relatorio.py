@@ -20,6 +20,9 @@ if not os.path.isdir(inqueritos_folder):
 readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
 
 dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0) for x in sorted(os.listdir(inqueritos_folder), reverse=True) if x.endswith(".csv")]
+if not dfs:
+    print("Nenhum inquérito foi finalizado ainda.")
+    exit()
 df = pd.concat(dfs).reset_index(drop=True)
 df.tag.fillna("INQUÉRITO", inplace=True)
 df.fillna("", inplace=True)
