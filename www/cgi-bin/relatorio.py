@@ -42,7 +42,7 @@ if 'date' in forms:
     occurrences = rows.occurrences.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
     html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
-    html += "<br>Página no Interrogatório: "
+    html += "<br>Fonte: "
     html += f"<a href='../{href}'>{web.escape(interrogatorio)} ({occurrences:.0f})</a>" if interrogatorio else "Busca rápida"
     html += "<hr>"
     html += "<pre>"
