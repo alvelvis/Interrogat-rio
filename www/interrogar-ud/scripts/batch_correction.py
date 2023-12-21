@@ -30,6 +30,7 @@ import charset_normalizer
 import copy
 import pandas as pd
 import html
+import uuid
 
 conllu = sys.argv[1]
 action = sys.argv[2]
@@ -82,6 +83,7 @@ arquivo_ud.load('./interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
 date = datetime.now()
+_id = str(uuid.uuid4())
 for x, linha in enumerate(codigo):
 	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
@@ -91,6 +93,7 @@ for x, linha in enumerate(codigo):
 					tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
 					tab + codigo[x] + "\n" + \
 					tab + f'''\tnew_inquiries.append({{
+									'_id': "{_id}",
 									'date': "{date.timestamp()}",
 									'tag': "{script_name}",
 									'conllu': "{conllu.split('.conllu')[0]}",

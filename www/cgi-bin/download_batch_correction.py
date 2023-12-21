@@ -24,11 +24,11 @@ if 'tokens=' in parametros:
 elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
     script[empty_line] = 'if ' + parametros.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "") + ":"
 
-with open("./interrogar-ud/scripts/interrogar-script.txt", "w") as f:
+with open("./interrogar-ud/scripts/modelo-batch.txt", "w") as f:
     f.write("\n".join(script))
 
 print('''
-<a href="../interrogar-ud/scripts/interrogar-script.txt" id="download" download >Initiate download from link</a>
+<a href="../interrogar-ud/scripts/modelo-batch.txt" id="download" download >Initiate download from link</a>
 <a href="#" id="close" onclick="window.close()" ><br>Close tab</a>
 <script type="text/javascript">
     // initiate download by script

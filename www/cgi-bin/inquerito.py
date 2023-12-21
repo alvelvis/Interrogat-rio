@@ -72,14 +72,16 @@ if os.path.isfile("./interrogar-ud/inqueritos.txt"):
 	with open("./interrogar-ud/inqueritos.txt") as f:
 		inqueritos = f.read().splitlines()
 	for inquerito in inqueritos:
+		_id = str(uuid.uuid4())
 		if inquerito.strip():
 			new_inquiries.append({
+				'_id': _id,
+				'date': datetime.strptime(inquerito.split("!@#")[3], '%Y-%m-%d_%H:%M:%S').timestamp(),
 				'text': inquerito.split("!@#")[0],
 				'before': inquerito.split("!@#")[1].split(" --> ")[0],
 				'after': inquerito.split("!@#")[1].split(" --> ")[1].split(" (head: ")[0],
 				'head': inquerito.split("!@#")[1].split(" --> ")[1].split(" (head: ")[1].split(")")[0] if "head:" in inquerito else None,
 				'conllu': inquerito.split("!@#")[2].split(".conllu")[0],
-				'date': datetime.strptime(inquerito.split("!@#")[3], '%Y-%m-%d_%H:%M:%S').timestamp(),
 				'interrogatorio': inquerito.split("!@#")[4].rsplit(" (", 1)[0] if inquerito.split("!@#")[4] != "NONE" else None,
 				'occurrences': inquerito.split("!@#")[4].rsplit(" (", 1)[1].split(")")[0] if inquerito.split("!@#")[4] != "NONE" else None,
 				'href': inquerito.split("!@#")[5] if inquerito.split("!@#")[4] != "NONE" else None,
@@ -88,10 +90,10 @@ if os.path.isfile("./interrogar-ud/inqueritos.txt"):
 			})
 	
 	df = pd.DataFrame(new_inquiries)
-	dates = df.date.unique()
-	for date in dates:
-		rows = df[df.date == date]
-		filename = "./interrogar-ud/inqueritos/%s-%s.csv" % (str(datetime.fromtimestamp(date)).replace(":", "_"), str(uuid.uuid4()))
+	_ids = df._id.unique()
+	for _id in _ids:
+		rows = df[df._id == _id]
+		filename = "./interrogar-ud/inqueritos/%s.csv" % _id
 		rows.to_csv(filename)
 	os.remove("./interrogar-ud/inqueritos.txt")
 
@@ -183,11 +185,11 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	
 	if form['executar'].value == 'exec':
 		df = pd.read_csv("./interrogar-ud/batch_correction_simulation.csv", index_col=0)
-		date = df.date[0]
-		os.rename("./interrogar-ud/batch_correction_simulation.csv", "./interrogar-ud/inqueritos/%s-%s.csv" % (str(datetime.fromtimestamp(date)).replace(":", "_"), str(uuid.uuid4())))
+		_id = df._id.iloc[0]
+		os.rename("./interrogar-ud/batch_correction_simulation.csv", "./interrogar-ud/inqueritos/%s.csv" % (_id))
 		os.remove('./interrogar-ud/conllu/' + form['conllu'].value)
 		os.rename('./interrogar-ud/conllu/' + form['conllu'].value + '_script', './interrogar-ud/conllu/' + form['conllu'].value)
-		html = f"<script>window.alert('Modificações realizadas com sucesso!'); window.location.href = '../cgi-bin/relatorio.py?date={date}'</script>"
+		html = f"<script>window.alert('Modificações realizadas com sucesso!'); window.location.href = '../cgi-bin/relatorio.py?id={_id}'</script>"
 					
 	elif form['executar'].value == 'sim':
 		try:
@@ -206,7 +208,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 				sim.extend([df['text'][idx], "ANTES: %s" % df['before'][idx], "DEPOIS: %s (head: %s)" % (df['after'][idx], df['head'][idx]), ""])
 			sim = "\n".join(sim)
 		else:
-			print("A regra de correção não encontrou nenhuma correspondências nas frases.")
+			print("A regra de correção não encontrou nenhuma correspondência nas frases.")
 			exit()
 
 		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação ({len(df)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
@@ -470,7 +472,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 			sys.stderr.write("\b=== sentnum did not change")
 
 	new_inquiries = []
-	date = datetime.now()
+	date = datetime.now().timestamp()
+	_id = str(uuid.uuid4())
 	for key in dict(form).keys():
 		value = dict(form)[key]
 		if re.search(r'^\d+-(\d+|meta)$', key) and not '# sent_id = ' in value.value:
@@ -489,7 +492,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				depois = conlluzao[sentnum][token]
 
 			new_inquiries.append({
-				'date': date.timestamp(),
+				'_id': _id,
+				'date': date,
 				'tag': tag if 'tag' in form else None,
 				'conllu': ud.split(".conllu")[0],
 				'textheader': form['textheader'].value, 
@@ -505,7 +509,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				})
 
 	df = pd.DataFrame(new_inquiries)
-	df.to_csv("./interrogar-ud/inqueritos/%s-%s.csv" % (str(date).replace(":", "_"), str(uuid.uuid4())))
+	df.to_csv("./interrogar-ud/inqueritos/%s.csv" % _id)
 			
 	estrutura_dados.EscreverUD(conlluzao, './interrogar-ud/conllu/' + ud + '_inquerito')
 	os.remove('./interrogar-ud/conllu/' + ud)
