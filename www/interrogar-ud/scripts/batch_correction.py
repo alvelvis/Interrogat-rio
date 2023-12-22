@@ -24,7 +24,7 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 import sys, re
 sys.path.append("./cgi-bin")
 import estrutura_ud
-from utils import fastsearch
+from utils import fastsearch, col_to_idx
 from datetime import datetime
 import charset_normalizer
 import copy
@@ -85,30 +85,31 @@ token_var = 'token'
 date = datetime.now()
 _id = str(uuid.uuid4())
 for x, linha in enumerate(codigo):
-	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and 'token.' in linha and not 'else:' in linha and not 'elif ' in linha:
+	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
-		tab = (len(linha.split('\t')) -1) * '\t'
-		codigo[x] = tab + "try:\n" + \
-					tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
-					tab + codigo[x] + "\n" + \
-					tab + f'''\tnew_inquiries.append({{
-									'_id': "{_id}",
-									'date': "{date.timestamp()}",
-									'tag': "{script_name}",
-									'conllu': "{conllu.split('.conllu')[0]}",
-									'text': " ".join([x.word if x.id != {token_var}.id else "<b>%s</b>" % x.word for x in sentence.tokens if not '-' in x.id]),
-									'sent_id': sentence.sent_id,
-									'before': anterior, 
-									'after': {token_var}.to_str(),
-									'col': "{token_col}",
-									'head': get_head({token_var}, sentence), 
-									'interrogatorio': "{interrogatorio}",
-									'occurrences': "{occ}",
-									'href': "{href}",
-									}})\n''' + \
-					tab + "except Exception as e:\n" + \
-					tab + "\tsys.stderr.write(str(e))"
+		if token_col in col_to_idx:
+			tab = (len(linha.split('\t')) -1) * '\t'
+			codigo[x] = tab + "try:\n" + \
+						tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
+						tab + "\t" + codigo[x].strip() + "\n" + \
+						tab + f'''\tnew_inquiries.append({{
+										'_id': "{_id}",
+										'date': "{date.timestamp()}",
+										'tag': "{script_name}",
+										'conllu': "{conllu.split('.conllu')[0]}",
+										'text': " ".join([x.word if x.id != {token_var}.id else "<b>%s</b>" % x.word for x in sentence.tokens if not '-' in x.id]),
+										'sent_id': sentence.sent_id,
+										'before': anterior, 
+										'after': {token_var}.to_str(),
+										'col': "{token_col}",
+										'head': get_head({token_var}, sentence), 
+										'interrogatorio': "{interrogatorio}",
+										'occurrences': "{occ}",
+										'href': "{href}",
+										}})\n''' + \
+						tab + "except Exception as e:\n" + \
+						tab + "\tsys.stderr.write(str(e))"
 
 with open("./cgi-bin/debug_batch_correction.txt", "w") as f:
 	f.write("\n".join(codigo))
