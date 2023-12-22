@@ -93,7 +93,8 @@ for x, linha in enumerate(codigo):
 			codigo[x] = tab + "try:\n" + \
 						tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
 						tab + "\t" + codigo[x].strip() + "\n" + \
-						tab + f'''\tnew_inquiries.append({{
+						tab + f"\tif anterior != {token_var}.to_str():\n" + \
+						tab + f'''\t\tnew_inquiries.append({{
 										'_id': "{_id}",
 										'date': "{date.timestamp()}",
 										'tag': "{script_name}",
