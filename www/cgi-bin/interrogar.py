@@ -114,13 +114,10 @@ def sendPOSTInterrogar():
 
 	#Printar sem as funções mais importantes caso seja Busca rápida
 	if nomePesquisa in fastsearch:
-		print(re.sub(r'<button.*?filtrar.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '').replace('<!--savequery', '').replace('savequery-->', ''))
+		print(re.sub(r'<button.*?filtrar.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('<!--savequery', '').replace('savequery-->', ''))
 		exit()
 	if script:
 		arquivoHtml = arquivoHtml.replace('Exportar resultados para .html', '')
-
-	#if int(criterio) != 5:
-	#arquivoHtml = arquivoHtml.replace('Selecionar múltiplas sentenças', '').replace('Deselecionar todas as sentenças', '').replace('Selecionar todas as sentenças', '')
 
 	with open(caminhoCompletoHtml, "w") as f:
 		f.write(arquivoHtml)

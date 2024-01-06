@@ -755,15 +755,6 @@ var translations = {
 	'Modifique a anotação da frase com um determinado sent_id.': {
 		'en-US': 'Modify the annotation of a sentence with a given sent_id.'
 	},
-	'Selecionar múltiplas sentenças': {
-		'en-US': 'Select multiple sentences'
-	},
-	'Selecionar todas as sentenças': {
-		'en-US': 'Select all sentences'
-	},
-	'Deselecionar todas as sentenças': {
-		'en-US': 'Deselect all sentences'
-	},
 	'A correção em lote permite modificar todas ou parte das sentenças do corpus com um script escrito em Python.': {
 		'en-US': 'Batch correction allows you to modify all or part of the sentences in the corpus with a script written in Python.'
 	},
@@ -1604,7 +1595,6 @@ $(document).ready(function(){
         $('.tab button').css('background-color', '');
         $('.filterDiv').hide();
         $('#script').hide();
-        $('.selectSome').hide();
         $('.inqueritoSome').hide();
         $('.viewDist').hide();
         if ($('.tab' + $(this).attr('tab')).is(":visible")){
@@ -2041,18 +2031,6 @@ function tudo(event) {
     var checkboxes, i, anotacoes;
     checkboxes = document.getElementsByClassName("cb");
     anotacoes = document.getElementsByClassName("anotacao");
-
-    if (event == "marcar"){
-        for (i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
-        }
-    }
-
-    if (event == "desmarcar"){
-        for (i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = false;
-        }
-    }
 
     if (event == "abrir") {
         for (i = 0; i < anotacoes.length; i++) {
