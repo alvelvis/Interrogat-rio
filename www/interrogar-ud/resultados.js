@@ -175,14 +175,14 @@ var translations = {
 	'Voltar à busca normal': {
 		'en-US': 'Return to regular queries'
 	},
-	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.': {
-		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">query script model</a> in Python.'
+	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">modelo de script de busca</a> em Python.': {
+		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">query script model</a> in Python.'
 	},
 	'Edite-o de modo a encontrar as frases pretendidas.': {
 		'en-US': 'Edit it in order to find the intended sentences.'
 	},
-	'Submeta o script de busca.': {
-		'en-US': 'Submit the query script.'
+	'Submeta o script de busca no botão abaixo.': {
+		'en-US': 'Submit the query script in the button below.'
 	},
 	'(b) Editando o código manualmente:': {
 		'en-US': '(b) Editing the code manually:'
@@ -584,6 +584,9 @@ var translations = {
 	},
 	'arquivos': {
 		'en-US': 'files'
+	},
+	'colunas': {
+		'en-US': 'columns'
 	},
 	'validar': {
 		'en-US': 'validate'
@@ -997,8 +1000,11 @@ var translations = {
 	'Navegue até o arquivo de busca ou arraste-o até o botão abaixo:': {
 		'en-US': "Browse to the query script file or drag it to the button below:"
 	},
-	'Nova função: Arquivos em TXT podem ser enviados ao Interrogatório para serem anotados pelo UDPipe Online': {
-		'en-US': 'New feature: TXT files can be submitted to Interrogatório to be annotated using UDPipe Online'
+	'Nova função: Arquivos em TXT podem ser enviados para serem anotados pelo UDPipe Online': {
+		'en-US': 'New feature: TXT files can be submitted to be annotated using UDPipe Online'
+	},
+	'Nova função: Agora é possível adicionar e remover colunas do um corpus': {
+		'en-US': 'New feature: Now it is possible to add or remove columns from a corpus'
 	},
 	'Grupo 1:': {
 		'en-US': 'Group 1:'
@@ -1094,6 +1100,7 @@ function loadCorpora(){
         function(data) {
 			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
 			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+			$("[ud='" + JSON.parse(data).ud + "'].n_columns").html(JSON.parse(data).n_columns);
 			$("[ud='" + JSON.parse(data).ud + "'].n_files").html(JSON.parse(data).n_files);
         },
         "text",
@@ -1525,6 +1532,7 @@ $(document).ready(function(){
         function(data) {
 			$("[ud='" + JSON.parse(data).ud + "'].n_sent").html(JSON.parse(data).n_sent);
 			$("[ud='" + JSON.parse(data).ud + "'].n_tokens").html(JSON.parse(data).n_tokens);
+			$("[ud='" + JSON.parse(data).ud + "'].n_columns").html(JSON.parse(data).n_columns);
 			$("[ud='" + JSON.parse(data).ud + "'].n_files").html(JSON.parse(data).n_files);
 			endLoadingScreen();
         },

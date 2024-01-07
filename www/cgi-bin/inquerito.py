@@ -14,7 +14,8 @@ import uuid
 import os
 import shutil
 from datetime import datetime
-from utils import corpusGenericoInquerito, fastsearch, cleanEstruturaUD, idx_to_col, escape_html_except_bold
+from utils import corpusGenericoInquerito, fastsearch, cleanEstruturaUD, escape_html_except_bold, delete_from_conllu_json
+from estrutura_ud import idx_to_col
 import re
 import html as web
 import subprocess
@@ -129,6 +130,7 @@ if (os.environ['REQUEST_METHOD'] == "POST") or ('textheader' in cgi.FieldStorage
 
 if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
 	shutil.move('./interrogar-ud/conllu/' + form['ud'].value, './interrogar-ud/tmp/' + form['ud'].value)
+	delete_from_conllu_json(form['ud'].value)
 	if JULGAMENTO and os.path.isfile(f'{JULGAMENTO}/static/uploads/' + form['ud'].value.rsplit(".", 1)[0] + "_original.conllu"):
 		os.remove(f'{JULGAMENTO}/static/uploads/' + form['ud'].value.rsplit(".", 1)[0] + "_original.conllu")
 	print('<script>window.location = "../cgi-bin/arquivo_ud.py"</script>')
@@ -501,7 +503,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				'text': " ".join([x[1] if x[0] != depois.split("\t")[0] else "<b>%s</b>" % x[1] for x in conlluzao[sentnum] if not '-' in x[0] and isinstance(x, list)]) if coluna != "meta" else None,
 				'before': antes, 
 				'after': depois,
-				'col': idx_to_col[coluna] if coluna != "meta" else depois.split(" = ")[0].split("# ")[1],
+				'col': idx_to_col.get(coluna, "col%s" % (coluna+1)) if coluna != "meta" else depois.split(" = ")[0].split("# ")[1],
 				'head': get_head(conlluzao[sentnum], conlluzao[sentnum][token]), 
 				'interrogatorio': form['nome_interrogatorio'].value if 'nome_interrogatorio' in form else None,
 				'occurrences': form['occ'].value if 'nome_interrogatorio' in form else None,

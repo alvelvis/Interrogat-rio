@@ -12,7 +12,8 @@ import datetime
 import sys
 import html as web
 import uuid
-from utils import escape_html_except_bold, col_to_idx, fastsearch
+from estrutura_ud import col_to_idx
+from utils import escape_html_except_bold, fastsearch
 forms = cgi.FieldStorage()
 
 inqueritos_folder = "./interrogar-ud/inqueritos"
@@ -77,9 +78,10 @@ if 'id' in forms:
         col = rows["col"][idx] if 'col' in rows.columns else None
         before = rows["before"][idx]
         after = rows["after"][idx]
-        if col and col in col_to_idx:
-            before = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(before.split("\t"))])
-            after = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(after.split("\t"))])
+        sys.stderr.write(str(int(col.split("col")[1])-1))
+        if col and (col in col_to_idx or col.startswith("col")):
+            before = "\t".join([x if col_to_idx.get(col, int(col.split("col")[1])-1) != i else "<b>%s</b>" % x for i, x in enumerate(before.split("\t"))])
+            after = "\t".join([x if col_to_idx.get(col, int(col.split("col")[1])-1) != i else "<b>%s</b>" % x for i, x in enumerate(after.split("\t"))])
         head = rows["head"][idx]
         before_after = ""
         if text:

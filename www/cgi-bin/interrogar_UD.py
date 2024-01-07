@@ -6,7 +6,7 @@ import time
 import cgi
 import html as web
 from collections import defaultdict
-from utils import col_to_idx
+from estrutura_ud import col_to_idx
 
 tabelaf = {      'yellow': 'green',
                         'purple': 'purple',

@@ -1,0 +1,11 @@
+# Escreva o seu script de busca abaixo
+# Utilize o atributo "sentence.tokens" para acessar todos os tokens na frase
+# Utilize a lista "bold_tokens" para negritar os tokens que você desejar na busca
+# Se nenhum token for negritado, a frase não contará como um resultado de busca
+# Os tokens negritados, além de facilitarem a visualização das frases, são os alvos das buscas por distribuição (de lema, POS, deprel, etc.)
+# Para buscar utilizando expressão regular, utilize a função regex(), como no exemplo abaixo
+# Ex: regex(".*mod", token.deprel)
+
+for token in sentence.tokens:
+    if token.word == "palavra" or regex("palav.*", token.word):
+        bold_tokens.append(token)

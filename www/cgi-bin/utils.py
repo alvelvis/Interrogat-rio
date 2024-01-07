@@ -1,26 +1,14 @@
 import re
+import os
+import json
 
 corpusGenericoInquerito = "bosque.conllu"
 corpusGenericoExpressoes = "generico.conllu"
+conllu_json_file = "./interrogar-ud/conllu.json"
 udpipe = "udpipe-1.2.0"
 modelo = "portuguese-bosque-ud-2.4-190531.udpipe"
 localtime = 0
 fastsearch = ["Busca rápida"]
-
-col_to_idx = {
-	'id': 0,
-	'word': 1,
-	'lemma': 2,
-	'upos': 3,
-	'xpos': 4,
-	'feats': 5,
-	'dephead': 6,
-	'deprel': 7,
-	'deps': 8,
-	'misc': 9
-}
-
-idx_to_col = {v: k for k, v in col_to_idx.items()}
 
 tabela = {	'yellow': 'green',
 			'purple': 'purple',
@@ -28,6 +16,23 @@ tabela = {	'yellow': 'green',
 			'red': 'red',
 			'cyan': 'cyan',
 }
+
+def load_conllu_json():
+    conllus = {}
+    if os.path.isfile(conllu_json_file):
+        with open(conllu_json_file) as f:
+            conllus = json.load(f)
+    return conllus
+
+def delete_from_conllu_json(ud):
+    conllus = load_conllu_json()
+    if ud in conllus:
+        del conllus[ud]
+    save_conllu_json(conllus)
+
+def save_conllu_json(conllus):
+    with open(conllu_json_file, "w") as f:
+        json.dump(conllus, f)
 
 def save_query_json(query_json, persistent=False, name=""):
     '''JSON should be a interrogar_UD dictionary
