@@ -108,7 +108,6 @@ elif form['action'].value == 'view':
 		json_id = parametro['json_id']
 		with open("./cgi-bin/json/%s.json" % json_id) as f:
 			busca = json.load(f)
-		#busca = interrogar_UD.main(f"./interrogar-ud/conllu/{ud}", int(parametros.split(" ", 1)[0]), parametros.split(" ", 1)[1])
 		for x in busca['sentences']:
 			if x in sentences and x not in sentences_ja_filtrados:
 				resultados.append(busca['output'][busca['sentences'][x]]['resultado'])

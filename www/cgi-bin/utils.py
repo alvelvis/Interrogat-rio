@@ -1,4 +1,5 @@
 import re
+import uuid
 
 corpusGenericoInquerito = "bosque.conllu"
 corpusGenericoExpressoes = "generico.conllu"
@@ -53,7 +54,7 @@ def save_query_json(query_json, persistent=False, name=""):
 
     # save query json
     now_datetime = datetime.now()
-    json_id = str(now_datetime).replace(" ", "-").replace(":", "_")
+    json_id = str(uuid.uuid4())
     with open(os.path.join(path, json_id + ".json"), "w") as f:
         f.write(json.dumps(query_json))
 
