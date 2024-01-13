@@ -1,5 +1,7 @@
 import re
 import uuid
+import html as web
+import datetime
 
 corpusGenericoInquerito = "bosque.conllu"
 corpusGenericoExpressoes = "generico.conllu"
@@ -29,6 +31,42 @@ tabela = {	'yellow': 'green',
 			'red': 'red',
 			'cyan': 'cyan',
 }
+
+readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
+
+def build_modifications_html(df, _id):
+    output = ""
+    rows = df[df._id == _id]
+    date = rows.date.iloc[0]
+    href = rows.href.iloc[0]
+    tag = rows.tag.iloc[0]
+    conllu = rows.conllu.iloc[0]
+    interrogatorio = rows.interrogatorio.iloc[0]
+    output += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
+    output += "<br>Nome da correção: %s" % tag
+    output += "<br>Busca: "
+    output += f"<a target='_blank' href='../{href}'>{web.escape(interrogatorio)}</a>" if interrogatorio not in fastsearch else web.escape(interrogatorio)
+    output += "<br>Corpus: {ud}.conllu".format(ud=web.escape(conllu))
+    output += "<hr>"
+    output += "<pre>"
+    len_df = len(df)
+    for i, idx in enumerate(rows.index):
+        sent_id = str(rows["sent_id"][idx])
+        text = rows["text"][idx]
+        col = rows["col"][idx] if 'col' in rows.columns else None
+        before = rows["before"][idx]
+        after = rows["after"][idx]
+        if col and col in col_to_idx:
+            before = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(before.split("\t"))])
+            after = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(after.split("\t"))])
+        head = rows["head"][idx]
+        if text:
+            text = escape_html_except_bold(text) + "\n"
+        if head:
+            head = f"(head: {web.escape(head)})"
+        output += f'{i+1}/{len_df} - {web.escape(sent_id)}\n{text}ANTES: {escape_html_except_bold(before)}\nDEPOIS: {escape_html_except_bold(after)} {head}\n\n'
+    output += "</pre>"
+    return output
 
 def save_query_json(query_json, persistent=False, name=""):
     '''JSON should be a interrogar_UD dictionary

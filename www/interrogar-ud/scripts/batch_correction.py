@@ -36,7 +36,7 @@ conllu = sys.argv[1]
 action = sys.argv[2]
 script_file = sys.argv[3]
 script_name = sys.argv[4]
-interrogatorio = sys.argv[5] if sys.argv[5] not in fastsearch else ""
+interrogatorio = sys.argv[5]
 occ = int(sys.argv[6]) if sys.argv[5] not in fastsearch else ""
 href = sys.argv[7] if sys.argv[5] not in fastsearch else ""
 

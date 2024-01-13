@@ -12,14 +12,12 @@ import datetime
 import sys
 import html as web
 import uuid
-from utils import escape_html_except_bold, col_to_idx, fastsearch
+from utils import build_modifications_html, readable_date
 forms = cgi.FieldStorage()
 
 inqueritos_folder = "./interrogar-ud/inqueritos"
 if not os.path.isdir(inqueritos_folder):
     os.mkdir(inqueritos_folder)
-
-readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
 
 if not 'id' in forms:
     dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0) for x in sorted(os.listdir(inqueritos_folder), reverse=True) if x.endswith(".csv")]
@@ -57,37 +55,7 @@ html += "Relatório gerado {}.".format(readable_date(date))
 html += "<hr>"
 
 if 'id' in forms:
-    _id = forms['id'].value
-    rows = df[df._id == _id]
-    date = rows.date.iloc[0]
-    href = rows.href.iloc[0]
-    tag = rows.tag.iloc[0]
-    conllu = rows.conllu.iloc[0]
-    interrogatorio = rows.interrogatorio.iloc[0]
-    html += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
-    html += "<br>Nome da correção: %s" % tag
-    html += "<br>Busca: "
-    html += f"<a target='_blank' href='../{href}'>{web.escape(interrogatorio)}</a>" if interrogatorio not in fastsearch else web.escape(interrogatorio)
-    html += "<br>Corpus: <a href='../interrogar-ud/conllu/{ud}.conllu'>{ud}.conllu</a>".format(ud=web.escape(conllu))
-    html += "<hr>"
-    html += "<pre>"
-    for idx in rows.index:
-        sent_id = str(rows["sent_id"][idx])
-        text = rows["text"][idx]
-        col = rows["col"][idx] if 'col' in rows.columns else None
-        before = rows["before"][idx]
-        after = rows["after"][idx]
-        if col and col in col_to_idx:
-            before = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(before.split("\t"))])
-            after = "\t".join([x if col_to_idx[col] != i else "<b>%s</b>" % x for i, x in enumerate(after.split("\t"))])
-        head = rows["head"][idx]
-        before_after = ""
-        if text:
-            text = escape_html_except_bold(text) + "\n"
-        if head:
-            head = f"(head: {web.escape(head)})"
-        html += f'{web.escape(sent_id)}\n{text}ANTES: {escape_html_except_bold(before)}\nDEPOIS: {escape_html_except_bold(after)} {head}\n\n'
-    html += "</pre>"
+    html += build_modifications_html(df, forms['id'].value)
 else:
     _ids = df._id.unique()
     dates = df.date.unique()

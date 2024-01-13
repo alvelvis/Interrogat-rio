@@ -14,7 +14,7 @@ import uuid
 import os
 import shutil
 from datetime import datetime
-from utils import corpusGenericoInquerito, fastsearch, cleanEstruturaUD, idx_to_col, escape_html_except_bold
+from utils import corpusGenericoInquerito, fastsearch, cleanEstruturaUD, idx_to_col, build_modifications_html
 import re
 import html as web
 import subprocess
@@ -203,19 +203,15 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 			exit()
 
 		if (len(df)):
-			sim = []
-			for idx in df.index:
-				sim.extend([df['text'][idx], "ANTES: %s" % df['before'][idx], "DEPOIS: %s (head: %s)" % (df['after'][idx], df['head'][idx]), ""])
-			sim = "\n".join(sim)
+			_id = df._id.iloc[0]
 		else:
 			print("A regra de correção não encontrou nenhuma correspondência nas frases.")
 			exit()
 
-		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação ({len(df)})</h1>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.\
-		<br>Nome da correção: ' + web.escape(form['scriptName'].value) + '\
-		<br>Corpus: <a target="_blank" href="../interrogar-ud/conllu/' + form['conllu'].value + '" download>' + form['conllu'].value + '</a>\
-		<hr>'
-		html += "<pre>" + escape_html_except_bold(sim) + "</pre>"
+		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação de correção em lote ({len(df)})</h1>Essa página é apenas uma simulação das alterações que serão feitas no corpus.'
+		html += '<br>Verifique se as alterações estão adequadas e execute o script de correção no <a style="color:blue; cursor:pointer;" onclick="window.scrollTo(0,document.body.scrollHeight);">final da página</a>.'
+		html += "<hr>"
+		html += build_modifications_html(df, _id)
 		html += '<br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" id="execScriptForm" method="POST"><input type=hidden name=parametros value=\''+form['parametros'].value+'\'><input type=hidden name=criterio value=\"'+form['criterio'].value+'\"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="EXECUTAR SCRIPT" id="execScript" onclick="execScript.value = 'AGUARDE...'; execScript.disabled = true; execScriptForm.submit()"></form>'''
 
 	os.remove('./interrogar-ud/scripts/headers.txt')
