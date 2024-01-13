@@ -8,14 +8,11 @@ import os
 import cgi, cgitb
 cgitb.enable()
 import re
-import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from utils import tabela, prettyDate, encodeUrl, save_query_json, fastsearch
+from utils import prettyDate, encodeUrl, save_query_json, fastsearch, query_is_python, query_is_tokens
 import html as web
-import time
-import sys
 import json
 
 def main():
@@ -154,7 +151,7 @@ def definirVariaveisDePesquisa(form):
 	if re.search(r'^\d+$', pesquisa.split(' ')[0]) and ' ' in pesquisa:
 		criterio = pesquisa.split(' ')[0]
 		parametros = pesquisa.split(' ', 1)[1]
-	elif len(pesquisa.split('"')) > 2 or any(x in pesquisa for x in ["==", " = ", " != "]) or "tokens=" in pesquisa or script:
+	elif query_is_python(pesquisa) or query_is_tokens(pesquisa) or script:
 		criterio = '5'
 		parametros = pesquisa
 	else:

@@ -1,18 +1,17 @@
 # -*- coding: UTF-8 -*-
 import re
-import copy
 import sys
 import time
-import cgi
 import html as web
 from collections import defaultdict
-from utils import col_to_idx
+from utils import col_to_idx, query_is_python, query_is_tokens
 
-tabelaf = {      'yellow': 'green',
-                        'purple': 'purple',
-                        'blue': 'blue',
-                        'red': 'red',
-                        'cyan': 'cyan',
+tabelaf = {
+	'yellow': 'green',
+    'purple': 'purple',
+    'blue': 'blue',
+    'red': 'red',
+    'cyan': 'cyan',
 }
 
 
@@ -38,7 +37,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 		if re.search(r"^\d+\s", parametros):
 			criterio = int(parametros.split(" ", 1)[0])
 			parametros = parametros.split(" ", 1)[1]
-		elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]) or "tokens=" in parametros:
+		elif query_is_python(parametros) or query_is_tokens(parametros):
 			criterio = 5
 		else:
 			criterio = 1
@@ -147,7 +146,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	pesquisa = ""
 
 	if not criterio:
-		if len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]) or "tokens=" in parametros:
+		if query_is_python(parametros) or query_is_tokens(parametros):
 			criterio = 5
 		else:
 			criterio = 1
@@ -368,19 +367,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 	#Python
 	if criterio == 5:
-
 		indexed_conditions = None
 		agilizar = None
 		any_of_keywords = None
-		if "tokens=" in parametros:
+		if query_is_tokens(parametros):
 			parametros = parametros.replace(" ", "")
-			#query = parametros.split("tokens=")[1]
-			#tokens = {sent.split(":")[0]: sent.split(":")[1].split(",") for sent in query.split("|") if sent}
-			#any_of_keywords = ['# sent_id = %s\n' % x for x in list(tokens.keys())]
-			#pesquisa = " or ".join(['(sentence.sent_id == "{}" and token.id in "{}".split("|"))'.format(sentid, "|".join(tokens[sentid]))
-			   #for sentid in tokens])
 			arroba = "token"
-			#sys.stderr.write("\nquery: %s\n" % pesquisa)
 		else:
 			parametros = parametros.split(" and ")
 			for t, parametro in enumerate(parametros):
@@ -552,7 +544,7 @@ if corresponde and not separate:
 			f.write(condition)
 
 		t1 = time.time()
-		if not 'tokens=' in parametros:
+		if not query_is_tokens(parametros):
 			for sent_id in sentences:
 				sentence = corpus.sentences[sent_id]
 				sentence2 = sentence

@@ -4,15 +4,14 @@
 print("Content-type:text/html")
 print('\n\n')
 
-import os, sys
+import os
 import cgi,cgitb
 cgitb.enable()
 import re
 from datetime import datetime
-from utils import tabela, prettyDate, encodeUrl, cleanEstruturaUD, fastsearch
+from utils import prettyDate, encodeUrl, fastsearch, query_is_python, query_is_tokens
 import datetime
 import html as web
-import estrutura_ud
 import interrogar_UD
 import json
 
@@ -135,7 +134,7 @@ pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
 pagina += '<!--a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br--><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
 pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.py?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
 pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].value
-pagina += "<br><br><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
+pagina += "<hr><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
 if nome_interrogatorio and nome_interrogatorio not in fastsearch:
 	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
 pagina += "<hr>"
@@ -146,7 +145,7 @@ parametros = expressao
 if re.search(r"^\d+\s", parametros):
 	criterio = int(parametros.split(" ", 1)[0])
 	parametros = parametros.split(" ", 1)[1]
-elif len(parametros.split('"')) > 2 or any(x in parametros for x in ["==", " = ", " != "]):
+elif query_is_python(parametros):
 	criterio = 5
 else:
 	criterio = 1
@@ -167,14 +166,11 @@ if criterio == 5:
 	with open("./cgi-bin/dist.log", 'w') as f:
 		f.write("\n".join([identificador, expressao]))
 
-script = "tokens=" in parametros
+script = query_is_tokens(parametros)
 pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{form['coluna'].value}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
 for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
-	#entrada[0] = entrada[0].replace("/FONT", "")
 	entradaEscapada = re.escape(entrada[0])
-	#if criterio == 5:
-		#pipeline = "".join([f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(x)}\"" for x in entradaEscapada.split("\\|")])		
 	if not form["coluna"].value in interrogar_UD.different_distribution:
 		if criterio != 5 or script:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"

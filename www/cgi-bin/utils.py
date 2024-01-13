@@ -33,6 +33,8 @@ tabela = {	'yellow': 'green',
 }
 
 readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
+query_is_python = lambda x: len(x.split('"')) > 2 or any(y in x for y in ["==", " = ", " != "])
+query_is_tokens = lambda x: x.startswith("tokens=")
 
 def build_modifications_html(df, _id):
     output = ""
