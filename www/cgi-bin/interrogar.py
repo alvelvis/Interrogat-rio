@@ -136,13 +136,13 @@ def definirVariaveisDePesquisa(form):
 	if 'scriptQueryFile' in form and form['scriptQueryFile'].value:
 		if not os.path.isdir('./cgi-bin/scripts'):
 			os.mkdir('./cgi-bin/scripts')
-		with open("./interrogar-ud/modelo_query.txt") as f:
+		with open("./interrogar-ud/modelo-query.txt") as f:
 			modelo_query = f.read()
 		with open('./cgi-bin/scripts/' + form['scriptQueryFile'].filename, 'wb') as f:
 			f.write(form['scriptQueryFile'].file.read())
 		with open("./cgi-bin/scripts/" + form['scriptQueryFile'].filename) as f:
 			with open("./cgi-bin/queryScript.py", "w") as w:
-				w.write(modelo_query.replace("<!--pesquisa-->", "\n        ".join(f.read().replace("\t", "    ").splitlines())))
+				w.write(modelo_query.replace("<!--pesquisa-->", "\n            ".join(f.read().replace("\t", "    ").splitlines())))
 		script = form['scriptQueryFile'].filename
 	else:
 		script = False

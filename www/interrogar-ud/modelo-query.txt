@@ -17,7 +17,8 @@ def getResultadosBusca():
     returned_tokens = {}
     for sent_id, sentence in corpus.sentences.items():
         bold_tokens = []
-        <!--pesquisa-->
+        for token in sentence.tokens:
+            <!--pesquisa-->
 
         if bold_tokens:
             returned_tokens[sent_id] = list(set(bold_tokens))

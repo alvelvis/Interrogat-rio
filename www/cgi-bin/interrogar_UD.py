@@ -571,7 +571,8 @@ if corresponde and not separate:
 					for token_id in token_ids:
 						token = sentence.tokens[sentence.map_token_id[token_id]]
 						casos.append(token)
-						text_tokens[map_id[token.id]] = "<b>" + text_tokens[map_id[token.id]] + "</b>"
+						if token.id in map_id:
+							text_tokens[map_id[token.id]] = "<b>" + text_tokens[map_id[token.id]] + "</b>"
 						tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
 					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence.metadados_to_str() + "\n" + tokens
 					output.append(final)

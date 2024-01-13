@@ -6,6 +6,5 @@
 # Para buscar utilizando expressão regular, utilize a função regex(), como no exemplo abaixo
 # Ex: regex(".*mod", token.deprel)
 
-for token in sentence.tokens:
-    if token.word == "palavra" or regex("palav.*", token.word):
-        bold_tokens.append(token)
+if token.word == "palavra" or regex("palav.*", token.word):
+    bold_tokens.append(token)

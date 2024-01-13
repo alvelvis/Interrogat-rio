@@ -249,7 +249,7 @@
 </ol>
 <h3 class="translateHtml">(b) Editando o código manualmente:</h3>
 <ol type="1">
-<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo_query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
+<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo-query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
 <li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
 <li><a href="#" class="translateHtml" onclick="$('#scriptQueryFile').click()">Submeta o script de busca.</a></li>
 </ol>

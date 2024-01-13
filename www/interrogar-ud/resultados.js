@@ -175,8 +175,8 @@ var translations = {
 	'Voltar à busca normal': {
 		'en-US': 'Return to regular queries'
 	},
-	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">modelo de script de busca</a> em Python.': {
-		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo_query.txt">query script model</a> in Python.'
+	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">modelo de script de busca</a> em Python.': {
+		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">query script model</a> in Python.'
 	},
 	'Edite-o de modo a encontrar as frases pretendidas.': {
 		'en-US': 'Edit it in order to find the intended sentences.'
@@ -888,7 +888,8 @@ var translations = {
 		'en-US': 'Feature exclusively available for criterion 5'
 	},
 	"Esc: Encerrar inquérito": {
-		"en-US": "Esc: End inquiry"
+		"pt-BR": "Fechar inquérito sem salvar",
+		"en-US": "Esc: End inquiry without saving"
 	},
 	"Tab / Shift + Tab: ir para coluna à direita/esquerda": {
 		"en-US": "Tab / Shift + Tab: go the column to the right/left"
