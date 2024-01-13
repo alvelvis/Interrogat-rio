@@ -174,7 +174,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		f'{form["scriptName"].value}',
 		f'{form["nome_interrogatorio"].value}',
 		f'{form["occ"].value}',
-		f'{form["link_interrogatorio"].value}'
+		f'{form["link_interrogatorio"].value}',
+		f'{form["parametros"].value}',
+		f'{form["fullParameters"].value}',
 		]
 	
 	if 'win' in sys.platform:
@@ -205,7 +207,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		if (len(df)):
 			_id = df._id.iloc[0]
 		else:
-			print("A regra de correção não encontrou nenhuma correspondência nas frases.")
+			print("A regra de correção não encontrou nenhuma correspondência nas frases ou nenhuma modificação seria realizada com as condições do script.")
 			exit()
 
 		html = f'<title>Simulação de correção em lote: Interrogatório</title><h1>Simulação de correção em lote ({len(df)})</h1>Essa página é apenas uma simulação das alterações que serão feitas no corpus.'
@@ -213,7 +215,17 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		html += "<hr>"
 		html += build_modifications_html(df, _id)
 		html += '<hr>Clique se a simulação estiver adequada para executar o script, salvar as modificações e visualizar o relatório de modificações (inquéritos):'
-		html += '<br><br><form action="../cgi-bin/inquerito.py?action=script&executar=exec" id="execScriptForm" method="POST"><input type=hidden name=parametros value=\''+form['parametros'].value+'\'><input type=hidden name=criterio value=\"'+form['criterio'].value+'\"><input type=hidden name="nome_interrogatorio" value="''' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '''"><input type=hidden name=occ value="''' + form['occ'].value + '''"><input type=hidden name="link_interrogatorio" value="''' + form['link_interrogatorio'].value + '''"><input type=hidden name="conllu" value="''' + form['conllu'].value + '''"><input type=hidden value="''' + form['scriptName'].value.replace('"', '&quot;') + '''" name="scriptName"><input type=submit value="EXECUTAR SCRIPT" id="execScript" onclick="execScript.value = 'AGUARDE...'; execScript.disabled = true; execScriptForm.submit()"></form>'''
+		html += '<br><br>'
+		html += '<form action="../cgi-bin/inquerito.py?action=script&executar=exec" id="execScriptForm" method="POST">'
+		html += '<input type=hidden name=parametros value=\''+form['parametros'].value+'\'>'
+		html += '<input type=hidden name=fullParameters value=\''+form['fullParameters'].value+'\'>'
+		html += '<input type=hidden name=criterio value=\"'+form['criterio'].value+'\">'
+		html += '<input type=hidden name="nome_interrogatorio" value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">'
+		html += '<input type=hidden name=occ value="' + form['occ'].value + '">'
+		html += '<input type=hidden name="link_interrogatorio" value="' + form['link_interrogatorio'].value + '">'
+		html += '<input type=hidden name="conllu" value="' + form['conllu'].value + '">'
+		html += '<input type=hidden value="' + form['scriptName'].value.replace('"', '&quot;') + '" name="scriptName">'
+		html += '<input type=submit value="EXECUTAR SCRIPT" id="execScript" onclick="execScript.value = \'AGUARDE...\'; execScript.disabled = true; execScriptForm.submit()"></form>'
 		html += "<hr><br>"
 
 	os.remove('./interrogar-ud/scripts/headers.txt')

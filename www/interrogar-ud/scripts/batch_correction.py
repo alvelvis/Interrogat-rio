@@ -24,11 +24,11 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 import sys, re
 sys.path.append("./cgi-bin")
 import estrutura_ud
-from utils import fastsearch, col_to_idx
+from utils import fastsearch, col_to_idx, query_is_python
 from datetime import datetime
 import charset_normalizer
-import copy
 import pandas as pd
+import copy
 import html
 import uuid
 
@@ -39,6 +39,8 @@ script_name = sys.argv[4]
 interrogatorio = sys.argv[5]
 occ = int(sys.argv[6]) if sys.argv[5] not in fastsearch else ""
 href = sys.argv[7] if sys.argv[5] not in fastsearch else ""
+query = sys.argv[8]
+full_query = sys.argv[9] if query_is_python(sys.argv[9]) else ""
 
 with open('./interrogar-ud/scripts/headers.txt', 'r') as f:
 	headers = f.read().splitlines()
@@ -78,7 +80,7 @@ for linha in codigo:
 	if 'if ' in linha:
 		keywords.extend([x.replace("^(", "").replace(")$", "") for x in re.findall(r'"([^"]*)"', linha) if not x.startswith(")") and not x.endswith("(")])#[x.replace("\\(", "<abreparenteses>").replace("\\)", "<fechaparenteses>").replace("(", "").replace(")", "").replace("<abreparenteses>", "\\(").replace("<fechaparenteses>", "\\)") for x in re.findall(r'"([^"]*)"', linha)])
 
-arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywords=headers)
+arquivo_ud = estrutura_ud.Corpus(recursivo=True, keywords=keywords, any_of_keywords=["# sent_id = %s\n" % x for x in headers])
 arquivo_ud.load('./interrogar-ud/conllu/' + conllu)
 
 token_var = 'token'
@@ -108,6 +110,8 @@ for x, linha in enumerate(codigo):
 										'interrogatorio': "{interrogatorio}",
 										'occurrences': "{occ}",
 										'href': "{href}",
+										'query': query,
+										'full_query': full_query,
 										}})\n''' + \
 						tab + "except Exception as e:\n" + \
 						tab + "\tsys.stderr.write(str(e))"

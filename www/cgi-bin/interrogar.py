@@ -11,7 +11,7 @@ import re
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from utils import prettyDate, encodeUrl, save_query_json, fastsearch, query_is_python, query_is_tokens
+from utils import prettyDate, encodeUrl, save_query_json, fastsearch, query_is_python, query_is_tokens, replace_regex
 import html as web
 import json
 
@@ -203,7 +203,7 @@ class paginaHtml():
 		self.numeroOcorrencias = numeroOcorrencias
 		self.casosOcorrencias = casosOcorrencias
 		self.script = script
-		self.fullParameters = fullParameters
+		self.fullParameters = replace_regex(fullParameters)
 		self.json_id = json_id
 
 	def adicionarHeader(self):
@@ -234,12 +234,12 @@ class paginaHtml():
 		arquivoHtml = self.arquivoHtml.split("<!--script-->")
 		arquivoHtml[0] += "<input type=hidden name=criterio value=\"{}\"><input type=hidden name=parametros value=\'{}\'><input type=hidden name=nome_interrogatorio value=\"{}\"><input type=hidden name=occ value=\"{}\"><input type=hidden name=link_interrogatorio value=\"{}\"><input type=hidden name=conllu value=\"{}\"><input type=hidden name=fullParameters value='{}'>".format(
 			self.criterio,
-			self.parametros,
-			web.escape(self.nomePesquisa).replace('"', "&quot;"),
+			web.escape(self.parametros),
+			web.escape(self.nomePesquisa),
 			self.numeroOcorrencias,
 			self.caminhoCompletoHtml,
-			self.conllu,
-			self.fullParameters,
+			web.escape(self.conllu),
+			web.escape(self.fullParameters),
 		)	
 
 		return "".join(arquivoHtml)

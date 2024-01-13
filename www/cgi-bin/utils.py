@@ -33,21 +33,23 @@ tabela = {	'yellow': 'green',
 }
 
 readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
-query_is_python = lambda x: len(x.split('"')) > 2 or any(y in x for y in ["==", " = ", " != "])
+query_is_python = lambda x: len(x.split('"')) > 2 or any(y in x for y in ["==", " = ", " != "]) or 'regex(' in x
 query_is_tokens = lambda x: x.startswith("tokens=")
+replace_regex = lambda x: x.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "")
 
 def build_modifications_html(df, _id):
     output = ""
     rows = df[df._id == _id]
     date = rows.date.iloc[0]
-    href = rows.href.iloc[0]
     tag = rows.tag.iloc[0]
     conllu = rows.conllu.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
+    query = rows['query'].iloc[0] if 'query' in rows.columns else None
     output += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
     output += "<br>Nome da correção: %s" % tag
-    output += "<br>Busca: "
-    output += f"<a target='_blank' href='../{href}'>{web.escape(interrogatorio)}</a>" if interrogatorio not in fastsearch else web.escape(interrogatorio)
+    output += "<br>Busca: " + web.escape(interrogatorio)
+    if isinstance(query, str):
+        output += "<br>Expressão de busca: %s" % query
     output += "<br>Corpus: {ud}.conllu".format(ud=web.escape(conllu))
     output += "<hr>"
     output += "<pre>"
@@ -65,7 +67,7 @@ def build_modifications_html(df, _id):
         if text:
             text = escape_html_except_bold(text) + "\n"
         if head:
-            head = f"(head: {web.escape(head)})"
+            head = f"(head: {web.escape(str(head))})"
         output += f'{i+1}/{len_df} - {web.escape(sent_id)}\n{text}ANTES: {escape_html_except_bold(before)}\nDEPOIS: {escape_html_except_bold(after)} {head}\n\n'
     output += "</pre>"
     return output
