@@ -11,7 +11,7 @@ import re
 import estrutura_ud
 from estrutura_dados import slugify as slugify
 import interrogar_UD
-from utils import tabela, encodeUrl, cleanEstruturaUD, fastsearch, save_query_json, cleanEstruturaUD, query_is_python, query_is_tokens
+from utils import tabela, encodeUrl, cleanEstruturaUD, fastsearch, save_query_json, cleanEstruturaUD, query_is_python, query_is_tokens, load_conllu_json, save_conllu_json
 import html as web
 import time
 import sys
@@ -19,16 +19,12 @@ import json
 
 form = cgi.FieldStorage()
 
-def loadCorpus(ud, size="0.0", updateCorpus=False):
-    
-    conllus = {}
-    if os.path.isfile("./interrogar-ud/conllu.json"):
-        with open("./interrogar-ud/conllu.json") as f:
-            conllus = json.load(f)
-
+def loadCorpus(ud, size="0.0", updateCorpus=False):      
+    conllus = load_conllu_json()
     n_sent = 0
     n_tokens = 0
     n_files = 0
+    n_columns = set()
     files = []
 
     if (updateCorpus) or (size and float(size) < 50.0) or (ud in conllus):
@@ -45,22 +41,28 @@ def loadCorpus(ud, size="0.0", updateCorpus=False):
                                     files.append(filename)
                         if line and not line.strip().startswith('#') and len(line.split("\t")) > 5 and not '-' in line.split("\t")[0]:
                             n_tokens += 1
+                        if "\t" in line:
+                            n_columns.add(str(line.count("\t") + 1))
                 n_files = len(files)
                 conllus[ud]['n_sent'] = n_sent
                 conllus[ud]['n_tokens'] = n_tokens
                 conllus[ud]['n_files'] = n_files
-                with open("./interrogar-ud/conllu.json", "w") as f:
-                    json.dump(conllus, f)
+                n_columns = "/".join(n_columns)
+                if '/' in n_columns:
+                    n_columns = "<font color=red>%s</font>" % n_columns
+                conllus[ud]['n_columns'] = n_columns
+                save_conllu_json(conllus)
             else:
                 n_sent = conllus[ud]['n_sent']
                 n_tokens = conllus[ud]['n_tokens']
+                n_columns = conllus[ud]['n_columns'] if 'n_columns' in conllus[ud] else "NEEDS UPDATE"
                 n_files = conllus[ud]['n_files'] if 'n_files' in conllus[ud] else "NEEDS UPDATE"
-            print(json.JSONEncoder().encode({'success': True, 'n_sent': n_sent, 'n_tokens': n_tokens, 'n_files': n_files if n_files else 1, 'ud': ud}))
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': "{:,}".format(n_sent), 'n_tokens': "{:,}".format(n_tokens), 'n_columns': n_columns, 'n_files': n_files if n_files else 1, 'ud': ud}))
         except Exception as e:
             sys.stderr.write(str(e))
-            print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_files': 'MEMORY_LEAK', 'ud': ud}))
+            print(json.JSONEncoder().encode({'success': True, 'n_sent': "MEMORY_LEAK", 'n_tokens': "MEMORY_LEAK", 'n_columns': 'MEMORY_LEAK', 'n_files': 'MEMORY_LEAK', 'ud': ud}))
     else:
-        print(json.JSONEncoder().encode({'success': True, 'n_sent': "NEEDS UPDATE", 'n_tokens': "NEEDS UPDATE", 'n_files': 'NEEDS UPDATE', 'ud': ud}))
+        print(json.JSONEncoder().encode({'success': True, 'n_sent': "NEEDS UPDATE", 'n_tokens': "NEEDS UPDATE", 'n_columns': "NEEDS UPDATE", 'n_files': 'NEEDS UPDATE', 'ud': ud}))
 
 def renderSentences(script=""):
 

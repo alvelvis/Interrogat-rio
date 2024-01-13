@@ -4,7 +4,8 @@ import sys
 import time
 import html as web
 from collections import defaultdict
-from utils import col_to_idx, query_is_python, query_is_tokens
+from utils import query_is_python, query_is_tokens
+from estrutura_ud import col_to_idx
 
 tabelaf = {
 	'yellow': 'green',

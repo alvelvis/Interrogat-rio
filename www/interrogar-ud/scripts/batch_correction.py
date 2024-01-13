@@ -24,7 +24,8 @@ Para procurar outro token (token2) na mesma sentença e saber qual a posição d
 import sys, re
 sys.path.append("./cgi-bin")
 import estrutura_ud
-from utils import fastsearch, col_to_idx, query_is_python
+from utils import fastsearch, query_is_python
+from estrutura_ud import col_to_idx
 from datetime import datetime
 import charset_normalizer
 import pandas as pd
@@ -90,7 +91,7 @@ for x, linha in enumerate(codigo):
 	if linha.strip() and not 'if ' in linha and ' = ' in linha and '.' in linha.split(" = ")[0] and not 'for ' in linha and not 'else:' in linha and not 'elif ' in linha:
 		token_var = linha.split(" = ")[0].strip().rsplit(".", 1)[0].strip()
 		token_col = linha.split(" = ")[0].strip().rsplit(".", 1)[1].strip()
-		if token_col in col_to_idx:
+		if token_col in col_to_idx or token_col.startswith("col"):
 			tab = (len(linha.split('\t')) -1) * '\t'
 			codigo[x] = tab + "try:\n" + \
 						tab + "\tanterior = copy.copy(" + token_var + ".to_str()[:])\n" + \
@@ -116,10 +117,10 @@ for x, linha in enumerate(codigo):
 						tab + "except Exception as e:\n" + \
 						tab + "\tsys.stderr.write(str(e))"
 
-with open("./cgi-bin/debug_batch_correction.txt", "w") as f:
-	f.write("\n".join(codigo))
-
 codigo = "\n".join(codigo)
+
+with open("./cgi-bin/debug_batch_correction.txt", "w") as f:
+	f.write(codigo)
 
 new_inquiries = []
 for head in headers:

@@ -12,6 +12,21 @@ def chunkIt(seq, num):
 
     return out
 
+col_to_idx = {
+	'id': 0,
+	'word': 1,
+	'lemma': 2,
+	'upos': 3,
+	'xpos': 4,
+	'feats': 5,
+	'dephead': 6,
+	'deprel': 7,
+	'deps': 8,
+	'misc': 9
+}
+
+idx_to_col = {v: k for k, v in col_to_idx.items()}
+
 empty_feats = {x.lower(): "_" for x in "PronType Gender VerbForm NumType Animacy Mood Poss NounClass Tense Reflex Number Aspect Foreign Case Voice Abbr Definite Evident Typo Degree Polarity Person Polite Clusivity".split()}
 
 class Token:
@@ -31,34 +46,27 @@ class Token:
 		self.misc = "_"
 		self.children = []
 		self.separator = separator
-		#self.sent_id = sent_id
-		#self.text = text
 		self.color = ""		
 
 	def to_str(self):
-		return self.separator.join([self.id, self.word, self.lemma, self.upos, self.xpos, self.feats, self.dephead, self.deprel, self.deps, self.misc])
+		cols = list(col_to_idx.keys()) + [x for x in self.__dict__ if x.startswith("col") and x != "color"]
+		return self.separator.join([self.__dict__[col] for col in cols])
 
 	def build(self, txt):
 		coluna = txt.split(self.separator)
-		self.id = coluna[0]
-		self.word = coluna[1]
-		self.lemma = coluna[2]
-		self.upos = coluna[3]
-		self.xpos = coluna[4]
-		self.feats = coluna[5]
-		self.dephead = coluna[6]
-		self.deprel = coluna[7]
-		self.deps = coluna[8]
-		self.sema = coluna[8]
-		self.misc = coluna[9]
+		for idx in range(len(coluna)):
+			if idx < len(idx_to_col):
+				self.__setattr__(idx_to_col[idx], coluna[idx])
+			else:
+				self.__setattr__("col%s" % (idx+1), coluna[idx])
 		if self.feats != "_":
 			for feat in self.feats.split("|"):
 				if '=' in feat:
-					self.__dict__[feat.split("=")[0].lower()] = feat.split("=")[1]
+					self.__setattr__(feat.split("=")[0].lower(), feat.split("=")[1])
 		if self.misc != "_":
 			for misc in self.misc.split("|"):
 				if '=' in misc:
-					self.__dict__[misc.split("=")[0].lower()] = misc.split("=")[1]
+					self.__setattr__(misc.split("=")[0].lower(), misc.split("=")[1])
 
 
 class Sentence:

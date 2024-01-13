@@ -11,6 +11,7 @@ import datetime
 import subprocess
 import requests
 import charset_normalizer
+import html as web
 from estrutura_dados import slugify as slugify
 from utils import prettyDate
 from max_upload import max_filesize
@@ -63,7 +64,7 @@ if os.environ['REQUEST_METHOD'] != 'POST' and not 'validate' in form:
     uds = [x for x in os.listdir('./interrogar-ud/conllu') if os.path.isfile('./interrogar-ud/conllu/' + x) if x != "README.md" and x.endswith(".conllu")]
 
     for ud in sorted(uds, key=lambda x: x.lower()):
-        html1 += f'<div class="container-lr"><b>{ud.rsplit(".conllu")[0]}</b> &nbsp;&nbsp; <span ud="{ud}" size="{str(file_size("./interrogar-ud/conllu/" + ud)).split(" ")[0]}" class="n_sent">carregando...</span> <span class="translateHtml">sentenças</span> &nbsp;&nbsp; <span ud="{ud}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; <span ud="{ud}" class="n_files">carregando...</span> <span class="translateHtml">arquivos</span> &nbsp;&nbsp; ' + str(file_size('./interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('./interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + f''' &nbsp;&nbsp;&nbsp; [ <a href="../interrogar-ud/conllu/{ud}" download>download</a> | <a class="translateHtml updateCorpus" ud="{ud}" href="#" >atualizar</a><!--a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.py?validate=''' + ud + '''">| validar</a--> | <a class="translateHtml" href="#" onclick='apagarCorpus("''' + ud + '''")' >excluir</a> ]</div>\n'''
+        html1 += f'<div class="container-lr"><b>{web.escape(ud.rsplit(".conllu")[0])}</b> &nbsp;&nbsp; <span ud="{web.escape(ud)}" size="{str(file_size("./interrogar-ud/conllu/" + ud)).split(" ")[0]}" class="n_sent">carregando...</span> <span class="translateHtml">frases</span> &nbsp;&nbsp; <span ud="{web.escape(ud)}" class="n_tokens">carregando...</span> tokens &nbsp;&nbsp; <span ud="{web.escape(ud)}" class="n_columns">carregando...</span> <span class="translateHtml">colunas</span> &nbsp;&nbsp; <span ud="{web.escape(ud)}" class="n_files">carregando...</span> <span class="translateHtml">arquivos</span> &nbsp;&nbsp; ' + str(file_size('./interrogar-ud/conllu/' + ud)) + ' &nbsp;&nbsp; ' + prettyDate(str(datetime.datetime.fromtimestamp(os.path.getctime('./interrogar-ud/conllu/' + ud)))).beautifyDateDMAH() + f''' &nbsp;&nbsp;&nbsp; [ <a href="../interrogar-ud/conllu/{web.escape(ud)}" title="Fazer download do corpus" download>download</a> | <a class="translateHtml updateCorpus" ud="{web.escape(ud)}" href="#" title="Atualizar informações sobre o corpus, como número de tokens e frases">atualizar</a> | <a class="translateHtml" ud="{web.escape(ud)}" target="_blank" href="../cgi-bin/gerenciar_colunas.py?conllu={web.escape(ud)}" title="Gerenciar, adicionar ou remover colunas do corpus">colunas</a><!--a target="_blank" class="translateHtml" href="../cgi-bin/arquivo_ud.py?validate=''' + web.escape(ud) + '''">| validar</a--> | <a class="translateHtml" href="#" onclick='apagarCorpus("''' + web.escape(ud) + '''")' title="Excluir corpus do Interrogatório">excluir</a> ]</div>\n'''
 
     novo_html = html1 + "<script>loadCorpora()</script>" + html2
 
