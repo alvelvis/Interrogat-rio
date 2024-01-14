@@ -74,13 +74,13 @@ html += "Colunas (%s): " % len(cols) + " | ".join(['''<a style='text-decoration:
 html += "<hr>"
 html += "O corpus tem " + ", ".join(["{:,} token{} com {} colunas".format(cols_per_token[n], "s" if cols_per_token[n]>1 else "", n) for n in cols_per_token]) + "."
 html += "<hr>"
-html += "<b>Adicionar coluna</b> - Valor padrão: <input type=text style='text-align:center' value='_' id='new_col_default'> <input type='button' onclick='add_col({0})' value='col{0}'>".format(len(cols)+1, conllu)
+html += "<b>Adicionar coluna</b> - Valor padrão: <input type=text style='text-align:center' value='_' id='new_col_default'> <input type='button' id='addCol' onclick='add_col({0})' value='col{0}'>".format(len(cols)+1, conllu)
 html += "<hr>"
 html += "Remover coluna: " + ", ".join(['''<a style='text-decoration:none; color:blue;' href='#' onclick='remove_col("{0}")'>{0}</a>'''.format(x) for x in cols if x not in col_to_idx])
 html += "<hr>"
 
 for col in cols:
-    html += "<table style='display:none;' class='col' col='%s'>" % col
+    html += "<table style='display:none; margin:20px;' class='col' col='%s'>" % col
     html += "<tr><th>%s (%s)</th><th>freq. (%s)</th>" % (col, len(cols[col]), sum(cols[col].values()))
     for val in sorted(cols[col], key=lambda x: cols[col][x], reverse=True):
         html += "<tr><td>%s</td><td>%s</td></tr>" % (val, cols[col][val])
@@ -89,6 +89,8 @@ for col in cols:
 html += '<script src="../interrogar-ud/jquery-latest.js"></script>'
 html += '''<script>
 function add_col(new_col) {{
+    addCol.value = "AGUARDE..."
+    addCol.disabled = true
     value = $('#new_col_default').val()
     if (value.trim().length>0) {{
         window.location.href = "?conllu={conllu}&default=" + encodeURI(value) + "&new_col=col" + encodeURI(new_col)

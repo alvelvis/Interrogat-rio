@@ -20,7 +20,7 @@ if not os.path.isdir(inqueritos_folder):
     os.mkdir(inqueritos_folder)
 
 if not 'id' in forms:
-    dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0) for x in sorted(os.listdir(inqueritos_folder), reverse=True) if x.endswith(".csv")]
+    dfs = [pd.read_csv(os.path.join(inqueritos_folder, x), index_col=0, dtype=str) for x in sorted(os.listdir(inqueritos_folder), reverse=True) if x.endswith(".csv")]
     if not dfs:
         print("Nenhum inquérito foi finalizado ainda.")
         exit()
@@ -50,12 +50,30 @@ date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"
 html += "<h1>Relatório de inquéritos</h1>"
 if 'id' in forms:
-    html += "[<a href='../cgi-bin/relatorio.py'>Todos os relatórios</a>]<br><br>"
+    html += "[<a href='../cgi-bin/relatorio.py' style='color:blue'>Todos os relatórios</a>] [<a href='../cgi-bin/relatorio.py?rules=%s' style='color:blue'>Transformar em regras</a>]<br><br>" % forms['id'].value
 html += "Relatório gerado {}.".format(readable_date(date))
 html += "<hr>"
 
 if 'id' in forms:
     html += build_modifications_html(df, forms['id'].value)
+elif 'rules' in forms:
+    _id = forms['rules'].value
+    modifications = []
+    rows = df[df._id == _id]
+    rule = ""
+    full_query = rows['full_query'].iloc[0] if 'full_query' in df.columns else ""
+    if full_query and isinstance(full_query, str):
+        rule = "if %s:\n" % full_query
+    tab = "\t" if rule else ""
+    for i, idx in enumerate(rows.index):
+        sent_id = rows['sent_id'][idx]
+        col = rows['col'][idx]
+        value = rows['value'][idx] if 'value' in rows.columns else ""
+        token_id = rows['token_id'][idx] if 'token_id' in rows.columns else ""
+        if value and token_id:
+            modifications.append(f'{tab}if sentence.sent_id == "{sent_id}" and token.id == "{token_id}":\n{tab}\ttoken.{col} = "{value}"')
+    print("<pre>" + web.escape(rule + "\n".join(modifications)) + "</pre>")
+    exit()
 else:
     _ids = df._id.unique()
     dates = df.date.unique()

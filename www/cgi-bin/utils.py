@@ -22,7 +22,7 @@ tabela = {
     'cyan': 'cyan',
 }
 
-readable_date = lambda x: datetime.datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M")
+readable_date = lambda x: datetime.datetime.fromtimestamp(float(x)).strftime("%Y-%m-%d %H:%M")
 query_is_python = lambda x: len(x.split('"')) > 2 or any(y in x for y in ["==", " = ", " != "]) or 'regex(' in x
 query_is_tokens = lambda x: x.startswith("tokens=")
 replace_regex = lambda x: x.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "")
