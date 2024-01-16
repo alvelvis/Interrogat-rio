@@ -182,7 +182,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		]
 	
 	if 'win' in sys.platform:
-		subprocess.call(command, shell=True)
+		subprocess.call(command)
 	else:
 		subprocess.run(command)
 	sys.stderr.write('\nbatch_correction: {}'.format(time.time() - start))
