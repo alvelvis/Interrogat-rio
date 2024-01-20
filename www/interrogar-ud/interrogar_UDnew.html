@@ -7,7 +7,7 @@
     <link href="../interrogar-ud/style.css?version=3" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <script src="../interrogar-ud/jquery.min.js"></script>
-    <script src="../interrogar-ud/resultados.js?version=13"></script>
+    <script src="../interrogar-ud/resultados.js?version=14"></script>
   <style>
     /*.interrogar {
       max-height: calc(80vh - 90px);
@@ -58,21 +58,7 @@
               
             <div class="dist" style="display:none">
 		<h4 class="translateHtml">Visualizar distribuição de:</h4>
-                
-              <ul>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Lema da palavra">lemma</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical">upos</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical específica">xpos</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Atributos morfológicos">feats</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência">deprel</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência específica">deps</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
-                <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Dependentes sintáticos">dependentes</a></li>
-              </ul>
-
+              <!--REPLACE_DIST-->
             </div>
             <div class="notDist" style="display:none; overflow:auto;">
               <span class="translateHtml">Para habilitar a visualização da distribuição de alguma anotação, utilize o <a href="#criterio_1" criterio="1" class="toggleCriteria">Regex</a>, o <a href="#criterio_5" criterio="5" class="toggleCriteria">Python Simplificado</a> ou o <a href="#interactive" criterio="0" class="toggleCriteria">construtor de expressões de busca</a>.</span>

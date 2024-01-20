@@ -26,6 +26,22 @@ readable_date = lambda x: datetime.datetime.fromtimestamp(float(x)).strftime("%Y
 query_is_python = lambda x: len(x.split('"')) > 2 or any(y in x for y in ["==", " = ", " != "]) or 'regex(' in x
 query_is_tokens = lambda x: x.startswith("tokens=")
 replace_regex = lambda x: x.replace('re.search( r"^(" + r', 'regex(').replace(' + r")$"', '').replace(".__dict__['", ".").replace("'] ", "")
+view_dist_html = '''
+<ul>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token na sentença">id</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Forma da palavra">word</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Lema da palavra">lemma</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical">upos</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Classe gramatical específica">xpos</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Atributos morfológicos">feats</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Número do token do qual é dependente sintaticamente">dephead</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência">deprel</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Relação de dependência específica">deps</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle" title="Miscelânea">misc</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Você pode digitar o nome de qualquer coluna">outro atributo</a></li>
+    <li><a style="cursor:pointer" class="verDist translateTitle translateHtml" title="Dependentes sintáticos">dependentes</a></li>
+</ul>
+'''
 
 def build_modifications_html(df, _id):
     output = ""

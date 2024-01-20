@@ -178,6 +178,12 @@ var translations = {
 	'Baixe o <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">modelo de script de busca</a> em Python.': {
 		'en-US': 'Download the <a target="_blank" download="" href="../interrogar-ud/scripts/modelo-query.txt">query script model</a> in Python.'
 	},
+	'Você pode digitar o nome de qualquer coluna': {
+		'en-US': 'You can type the name of any column'
+	},
+	'outro atributo': {
+		'en-US': 'another attribute'
+	},
 	'Edite-o de modo a encontrar as frases pretendidas.': {
 		'en-US': 'Edit it in order to find the intended sentences.'
 	},
@@ -1740,7 +1746,13 @@ $(document).ready(function(){
 				$('.verDist').css('color', '');
 				$(this).css('color', 'rgba(255,105,30,1)');
 			};
-			dist($(this).html());
+			attribute = $(this).html();
+			if (attribute == "outro atributo" || attribute == "another attribute") {
+				attribute = window.prompt("Nome da coluna: ")
+			}
+			if (attribute.trim().length > 0) {
+				dist(attribute);
+			}
 		} else {
 			$('.corpusLabel').css('color', 'red');
 		};

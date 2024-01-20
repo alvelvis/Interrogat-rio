@@ -11,7 +11,7 @@ import re
 from estrutura_dados import slugify as slugify
 import interrogar_UD
 from datetime import datetime
-from utils import prettyDate, encodeUrl, save_query_json, fastsearch, query_is_python, query_is_tokens, replace_regex
+from utils import prettyDate, encodeUrl, save_query_json, fastsearch, query_is_python, query_is_tokens, replace_regex, view_dist_html
 import html as web
 import json
 
@@ -73,7 +73,8 @@ def sendRequestInterrogar():
 	refazerNome = cgi.FieldStorage()['nome'].value if 'nome' in cgi.FieldStorage() else "Busca salva"
 	paginaHTML = paginaHTML.replace('id="pesquisa"', f'''id="pesquisa" value='{web.escape(refazerPesquisa)}\'''')\
 						.replace(f"value='{refazerCorpus}'", f"value='{refazerCorpus}' selected")\
-						.replace('name="nome" value="Busca salva"', f'name="nome" value=\'{web.escape(refazerNome)}\'')
+						.replace('name="nome" value="Busca salva"', f'name="nome" value=\'{web.escape(refazerNome)}\'')\
+						.replace('<!--REPLACE_DIST-->', view_dist_html)
 	if 'save' in cgi.FieldStorage():
 		paginaHTML = paginaHTML.replace('checked><div onclick="$(\'.toggleRapida\')', '><div onclick="$(\'.toggleRapida\')').replace('><div onclick="$(\'.toggleSalvar\')', 'checked><div onclick="$(\'.toggleSalvar\')"')
 	if 'go' in cgi.FieldStorage():
@@ -250,6 +251,7 @@ class paginaHtml():
 			self.arquivoHtml = self.arquivoHtml.replace("../cgi-bin/download_batch_correction.py?crit=&params=", f"../cgi-bin/download_batch_correction.py?crit={self.criterio}&params={encodeUrl(self.fullParameters)}")
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/filtrar.py', '../cgi-bin/filtrar.py?html=' + slugify(self.nomePesquisa) + '_' + self.json_id + '&udoriginal=' + self.conllu)
 			self.arquivoHtml = self.arquivoHtml.replace('../cgi-bin/conllu.py', '../cgi-bin/conllu.py?html=./interrogar-ud/resultados/' + slugify(self.nomePesquisa) + '_' + self.json_id + '.html')
+			self.arquivoHtml = self.arquivoHtml.replace('<!--REPLACE_DIST-->', view_dist_html)
 
 		self.arquivoHtml = self.adicionarHeader()
 		#if not self.script:

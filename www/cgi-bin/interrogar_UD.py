@@ -67,13 +67,17 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	dispersion_files = {}
 	for sentence in corpus:
 		sent_id = ""
-		if not coluna in different_distribution:	
+		if not coluna in different_distribution:
 			for t, token in enumerate(sentence.splitlines()):
 				if not sent_id:
 					if token.startswith("# sent_id = "):
 						sent_id = token.split("# sent_id = ")[1]
-				elif ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
-					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[col_to_idx[coluna]].replace("/FONT", "")))
+				if ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
+					if coluna in col_to_idx:
+						idx = col_to_idx[coluna]
+					else:
+						idx = int(coluna.split("col")[1])-1
+					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[idx].replace("/FONT", "")))
 					dist.append(entrada)
 					if not entrada in lista:
 						lista[entrada] = 0
@@ -84,7 +88,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 						filename = sent_id.rsplit("-", 1)[0]
 						if not filename in dispersion_files[entrada]:
 							dispersion_files[entrada].append(filename)
-		if coluna in different_distribution:
+		elif coluna in different_distribution:
 			for t, token in enumerate(sentence.tokens):
 				if '<b>' in token.to_str() or "</b>" in token.to_str():
 					if not coluna in different_distribution:

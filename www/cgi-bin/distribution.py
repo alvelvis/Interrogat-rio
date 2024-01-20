@@ -44,7 +44,8 @@ if json_id:
 	with open(path) as f:
 		json_query = json.load(f)
 
-dic_dist = interrogar_UD.getDistribution(json_query if json_id else ("./interrogar-ud/conllu/" + form['corpus'].value), form['notSaved'].value, filtros=filtros, coluna=form['coluna'].value) # "./interrogar-ud/conllu/" + form['corpus'].value
+coluna = form['coluna'].value
+dic_dist = interrogar_UD.getDistribution(json_query if json_id else ("./interrogar-ud/conllu/" + form['corpus'].value), form['notSaved'].value, filtros=filtros, coluna=coluna) # "./interrogar-ud/conllu/" + form['corpus'].value
 
 pagina = '''
 	<meta name="viewport" http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0">
@@ -129,12 +130,12 @@ function sortTable(n) {
 }
 </script>
 '''
-pagina += "<title>Distribuição de " + form["coluna"].value + ": Interrogatório</title>"
-pagina += "<h1>Distribuição de " + form["coluna"].value + "</h1>"
+pagina += "<title>Distribuição de " + coluna + ": Interrogatório</title>"
+pagina += "<h1>Distribuição de " + coluna + "</h1>"
 pagina += '<!--a href="#" class="translateHtml" onclick="window.close()">Fechar</a><br><br--><span class="translateHtml">Relatório gerado dia</span> ' + prettyDate(str(datetime.datetime.now())).beautifyDateDMAH() + ''
 pagina += f"<hr><span class='translateHtml'>Busca:</span> <a href='../cgi-bin/interrogar.py?corpus={form['corpus'].value}&params={form['expressao'].value}'>" + web.escape(form["expressao"].value) + "</a><br>"
 pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].value
-pagina += "<hr><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>"+form["coluna"].value+"</b> diferentes: "+str(len(dic_dist["lista"]))
+pagina += "<hr><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>" + coluna + "</b> diferentes: "+str(len(dic_dist["lista"]))
 if nome_interrogatorio and nome_interrogatorio not in fastsearch:
 	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
 pagina += "<hr>"
@@ -167,16 +168,16 @@ if criterio == 5:
 		f.write("\n".join([identificador, expressao]))
 
 script = query_is_tokens(parametros)
-pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{form['coluna'].value}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
+pagina += f"<br><table id='mainTable' style='border-spacing: 20px 0px; margin-left:0px; text-align:left'><tr><th style='cursor:pointer' onclick='sortTable(0);'>{coluna}</th><th style='cursor:pointer' onclick='sortTable(1);' class='translateHtml'>frequência</th><th style='cursor:pointer' onclick='sortTable(2);' class='translateHtml'>em arquivos</th></tr>"
 for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dist["lista"][x], x))):
 	entrada = [dicionario, dic_dist["lista"][dicionario]]
 	entradaEscapada = re.escape(entrada[0])
-	if not form["coluna"].value in interrogar_UD.different_distribution:
+	if not coluna in interrogar_UD.different_distribution:
 		if criterio != 5 or script:
 			pagina += f"<tr><td>" + web.escape(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
 		else:
-			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{form['coluna'].value} == \"{encodeUrl(re.escape(entrada[0]))}\"") + "' title='Buscar casos: {}' style='text-decoration: none; color:blue;'>".format(web.escape(entrada[0])) + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
-	elif form["coluna"].value in ["dependentes", "children"]:	
+			pagina += f"<tr><td><a target='_blank' href='../cgi-bin/interrogar.py?go=True&corpus={form['corpus'].value}&params=" + encodeUrl(expressao.replace(' @', ' ') + f" and @{identificador}.{coluna} == \"{encodeUrl(re.escape(entrada[0]))}\"") + "' title='Buscar casos: {}' style='text-decoration: none; color:blue;'>".format(web.escape(entrada[0])) + web.escape(entrada[0]) + "</a></td><td>" + str(entrada[1]) + "</td><td>" + (str(len(dic_dist["dispersion_files"][entrada[0]])) if entrada[0] in dic_dist["dispersion_files"] else "1") + "</td></tr>"
+	elif coluna in ["dependentes", "children"]:	
 		sent_ids = []
 		for sent_id in dic_dist["all_children"][entrada[0]]:
 			sent_ids.append(sent_id)
@@ -188,7 +189,7 @@ for i, dicionario in enumerate(sorted(dic_dist["lista"], key=lambda x: (-dic_dis
 pagina += "</table>"
 
 '''
-pagina += "<br><br><table style='border-spacing: 20px 0px;'><tr><th>#</th><th>"+form["coluna"].value+" diferentes</th></tr>"
+pagina += "<br><br><table style='border-spacing: 20px 0px;'><tr><th>#</th><th>"+coluna+" diferentes</th></tr>"
 for entrada in sorted(lista_freq, key=lambda x: (x[1], x[0]), reverse=True):
 	pagina += "<tr><td>" + str(entrada[0]) + "</td><td>" + str(entrada[1]) + "</td></tr>"
 pagina += "</table>"
