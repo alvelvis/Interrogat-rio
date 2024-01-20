@@ -166,8 +166,8 @@ def renderSentences(script=""):
         arquivoHtml += ''
         arquivoHtml += f"<form action=\"../../cgi-bin/draw_tree.py?conllu={conllu}\" target=\"_blank\" method=POST id=tree_{str(startPoint+i+1)}><input type=hidden name=sent_id value=\"{estruturado.sent_id}\"><input type=hidden name=text value=\"{estruturado.text}\"></form><!--a style=\"cursor:pointer\" onclick='drawtree(\"tree_{str(startPoint+i+1)}\")' class='translateHtml'>Visualizar árvore de dependências</a-->"
         arquivoHtml += '</p></span>\n'
-        #if 'text_tokens' in anotado.metadados:
-            #del anotado.metadados['text_tokens']
+        if 'text_tokens' in anotado.metadados:
+            del anotado.metadados['text_tokens']
         arquivoHtml += f"<pre id=div_{str(startPoint+i+1)} style=\"display:none\">{anotado.to_str().replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')}</pre>" + '\n'
         arquivoHtml += '</div>\n'
 
