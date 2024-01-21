@@ -16,7 +16,7 @@
 </ul>
 <h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
-    <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Agora é possível adicionar e remover colunas do seu corpus</a></li>
+    <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Agora é possível adicionar e remover colunas de um corpus</a></li>
     <li><a href="#" class="translateHtml">Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez</a></li>
     <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Arquivos em TXT podem ser enviados para serem anotados pelo UDPipe Online</a></li>
     <li><a href="#queryScriptTab" class="translateHtml" onclick="$('#openQueryScript').click()">Nova função: Agora é possível criar códigos de busca em Python com a ajuda do ChatGPT</a></li>

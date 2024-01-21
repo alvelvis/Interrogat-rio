@@ -180,7 +180,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				corpus = estrutura_ud.Corpus(recursivo=False, sent_id=sent_id)
 			start = time.time()
 			corpus.load(arquivoUD)
-			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
 		else:
 			corpus = arquivoUD
 			
@@ -462,14 +461,12 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				corpus = estrutura_ud.Corpus(recursivo=False, keywords=agilizar if not '!=' in parametros and agilizar else "", any_of_keywords=any_of_keywords if any_of_keywords else "")
 			start = time.time()
 			corpus.load(arquivoUD)
-			sys.stderr.write("\ncorpus.build: " + str(time.time() - start))
 		else:
 			corpus = arquivoUD
 
 		start = time.time()
 		casos = []
 	
-		t1 = time.time()
 		if indexed_conditions:
 			sentences = defaultdict(list)
 			tokens = defaultdict(list)
@@ -494,7 +491,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 				sentences[sent_id].append(t)
 		else:
 			sentences = corpus.sentences
-		sys.stderr.write(f"\nindexing: {time.time() - t1}")
+		sys.stderr.write(f"\nindexing: {time.time() - start}")
 
 		condition = "global sim; sim = 0"
 		condition += '''
@@ -548,7 +545,7 @@ if corresponde and not separate:
 		with open("./cgi-bin/condition.txt", "w") as f:
 			f.write(condition)
 
-		t1 = time.time()
+		start = time.time()
 		if not query_is_tokens(parametros):
 			for sent_id in sentences:
 				sentence = corpus.sentences[sent_id]
@@ -581,9 +578,8 @@ if corresponde and not separate:
 						tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
 					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence.metadados_to_str() + "\n" + tokens
 					output.append(final)
-		sys.stderr.write("\ncritério 5: " + str(time.time() - start))
 		casos = len(casos)
-		sys.stderr.write(f"\nfor each sentence: {time.time() - t1}")
+		sys.stderr.write(f"\nfor each sentence: {time.time() - start}")
 	
 	#Transforma o output em lista de sentenças (sem splitlines e sem split no \t)
 	if criterio not in [5, 2, 1]:
