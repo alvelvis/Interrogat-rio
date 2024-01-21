@@ -2,7 +2,9 @@
 import re
 import sys
 import time
+import os
 import html as web
+import multiprocessing
 from collections import defaultdict
 from utils import query_is_python, query_is_tokens
 from estrutura_ud import col_to_idx
@@ -495,54 +497,24 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 		start = time.time()
 		if not query_is_tokens(parametros):
-			for sent_id in sentences:
+			n_process = multiprocessing.cpu_count()*2
+			args = []
+			for sent_id in sentences.keys():
 				sentence = corpus.sentences[sent_id]
-				sentence2 = sentence
-				text_tokens = [x.word for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-				clean_id = [x.id for x in sentence2.tokens if not '-' in x.id and not '.' in x.id]
-				corresponde = False
-				tokens = sentence2.tokens_to_str()
-				map_id = {x: t for t, x in enumerate(clean_id)}
-				if limit and limit == len(output):
-					break
-				if not indexed_conditions:
-					available_tokens = list(range(len(sentence.tokens)))
-				else:
-					available_tokens = sentences[sent_id]
-				for token_t in available_tokens:
-					token = sentence.tokens[token_t]
-					try:
-						if (not "-" in token.id and not '.' in token.id and eval(pesquisa)):
-							corresponde = True
-							text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
-							tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
-
-						if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
-							text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
-							tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
-							
-						text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
-						casos.append(1)
-						arroba_id = eval(arroba).id
-						tokens = tokens.splitlines()
-						for l, linha in enumerate(tokens):
-							if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
-								tokens[l] = "<b>" + tokens[l] + "</b>"
-						tokens = "\n".join(tokens)
-
-						if separate:
-							corresponde = False
-							final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence2.metadados_to_str() + "\n" + tokens
-							output.append(final)
-							
-					except Exception as e:
-						sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
-						pass
-					
-				if corresponde and not separate:
-					corresponde = False
-					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence2.metadados_to_str() + "\n" + tokens
-					output.append(final)
+				clean_id = [x.id for x in sentence.tokens if not '-' in x.id and not '.' in x.id]
+				args.append({
+					'available_tokens': list(range(len(sentence.tokens))) if not indexed_conditions else sentences[sent_id],
+					'text_tokens': [x.word for x in sentence.tokens if not '-' in x.id and not '.' in x.id],
+					'tokens': sentence.tokens_to_str(),
+					'sentence_tokens': sentence.tokens,
+					'sentence_metadados': sentence.metadados_to_str(),
+					'map_id': {x: t for t, x in enumerate(clean_id)},
+					})
+			args = chunks(args, n_process)
+			with multiprocessing.Pool(n_process) as p:
+				for result in p.starmap(process_sentences, [(arg, pesquisa, arroba, limit, separate) for arg in args]):
+					output.extend(result[0])
+					casos.extend(result[1])			
 		else:
 			if parametros != "tokens=":
 				query = parametros.split("tokens=")[1]
@@ -594,6 +566,63 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 	sentences = {x['resultado'].split("# sent_id = ")[1].split("\n")[0]: i for i, x in enumerate(output)}
 
 	return {'output': output, 'casos': casos, 'sentences': sentences, 'parameters': pesquisa if pesquisa else parametros}
+
+def process_sentences(args, pesquisa, arroba, limit, separate):
+	output = []
+	casos = []
+	sys.stderr.write("\nProcessing %s sentences, process no. %s" % (len(args), os.getpid()))
+	for arg in args:
+		available_tokens = arg['available_tokens']
+		text_tokens = arg['text_tokens']
+		tokens = arg['tokens']
+		sentence_tokens = arg['sentence_tokens']
+		sentence_metadados = arg['sentence_metadados']
+		map_id = arg['map_id']
+		
+		corresponde = False
+		if limit and limit == len(output):
+			break
+		for token_t in available_tokens:
+			token = sentence_tokens[token_t]
+			try:
+				if (not "-" in token.id and not '.' in token.id and eval(pesquisa)):
+					corresponde = True
+					text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
+					tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
+
+				if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
+					text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
+					tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
+					
+				text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
+				casos.append(1)
+				arroba_id = eval(arroba).id
+				tokens = tokens.splitlines()
+				for l, linha in enumerate(tokens):
+					if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
+						tokens[l] = "<b>" + tokens[l] + "</b>"
+				tokens = "\n".join(tokens)
+
+				if separate:
+					corresponde = False
+					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence_metadados + "\n" + tokens
+					output.append(final)
+					
+			except Exception as e:
+				sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
+				pass
+
+		if corresponde and not separate:
+			corresponde = False
+			final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence_metadados + "\n" + tokens
+			output.append(final)
+
+	return output, casos
+
+def chunks(l, n):
+    """Yield n number of striped chunks from l."""
+    for i in range(0, n):
+        yield l[i::n]
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web
 if __name__ == '__main__':

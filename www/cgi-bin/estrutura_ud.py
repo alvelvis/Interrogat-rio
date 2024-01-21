@@ -1,17 +1,6 @@
 import sys, re, time
 from collections import defaultdict
 
-def chunkIt(seq, num):
-    avg = len(seq) / float(num)
-    out = []
-    last = 0.0
-
-    while last < len(seq):
-        out.append(seq[int(last):int(last + avg)])
-        last += avg
-
-    return out
-
 col_to_idx = {
 	'id': 0,
 	'word': 1,
@@ -30,7 +19,7 @@ idx_to_col = {v: k for k, v in col_to_idx.items()}
 empty_feats = {x.lower(): "_" for x in "PronType Gender VerbForm NumType Animacy Mood Poss NounClass Tense Reflex Number Aspect Foreign Case Voice Abbr Definite Evident Typo Degree Polarity Person Polite Clusivity".split()}
 
 class Token:
-	
+
 	def __init__(self, separator='\t'):
 		self.__dict__.update(empty_feats)
 		self.id = "0"
