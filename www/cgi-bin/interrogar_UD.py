@@ -493,58 +493,6 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 			sentences = corpus.sentences
 		sys.stderr.write(f"\nindexing: {time.time() - start}")
 
-		condition = "global sim; sim = 0"
-		condition += '''
-if not indexed_conditions:
-	available_tokens = list(range(len(sentence.tokens)))
-else:
-	available_tokens = sentences[sent_id]
-for token_t in available_tokens:
-	token = sentence.tokens[token_t]
-	try:
-		if (not "-" in token.id and not '.' in token.id and (''' + pesquisa + ''')):
-			corresponde = True
-			text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
-			tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
-	'''
-		if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
-			condition += '''
-			text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
-			tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")'''
-		if "token.next_token" in pesquisa and not "_token.next_token" in pesquisa:
-			condition += '''
-			#text_tokens[map_id[token.next_token.id]] = "@BLUE/" + text_tokens[map_id[token.next_token.id]] + "/FONT"
-			#tokens = tokens.replace(token.next_token.string, "@BLUE/" + token.next_token.string + "/FONT")'''
-		if "token.previous_token" in pesquisa and not '_token.previous_token' in pesquisa:
-			condition += '''
-			#text_tokens[map_id[token.previous_token.id]] = "@BLUE/" + text_tokens[map_id[token.previous_token.id]] + "/FONT"
-			#tokens = tokens.replace(token.previous_token.string, "@BLUE/" + token.previous_token.string + "/FONT")'''
-		condition += '''
-			text_tokens[map_id['''+arroba+'''.id]] = "<b>" + text_tokens[map_id['''+arroba+'''.id]] + "</b>"
-
-			casos.append(1)
-			arroba_id = '''+arroba+'''.id
-			tokens = tokens.splitlines()
-			for l, linha in enumerate(tokens):
-				if linha.split("\\t")[0] == arroba_id or ("/" in linha.split("\\t")[0] and linha.split("\\t")[0].split("/")[1] == arroba_id):
-					tokens[l] = "<b>" + tokens[l] + "</b>"
-			tokens = "\\n".join(tokens)
-
-			if separate:
-				corresponde = False
-				final = "# text_tokens = " + " ".join(text_tokens) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
-				output.append(final)
-			
-	except Exception as e:
-		sys.stderr.write(\"\\n\" + str(e) + ': ' + token.to_str())
-		pass
-if corresponde and not separate:
-	corresponde = False
-	final = "# text_tokens = " + " ".join(text_tokens) + "\\n" + sentence2.metadados_to_str() + "\\n" + tokens
-	output.append(final)'''
-		with open("./cgi-bin/condition.txt", "w") as f:
-			f.write(condition)
-
 		start = time.time()
 		if not query_is_tokens(parametros):
 			for sent_id in sentences:
@@ -557,7 +505,44 @@ if corresponde and not separate:
 				map_id = {x: t for t, x in enumerate(clean_id)}
 				if limit and limit == len(output):
 					break
-				exec(condition)
+				if not indexed_conditions:
+					available_tokens = list(range(len(sentence.tokens)))
+				else:
+					available_tokens = sentences[sent_id]
+				for token_t in available_tokens:
+					token = sentence.tokens[token_t]
+					try:
+						if (not "-" in token.id and not '.' in token.id and eval(pesquisa)):
+							corresponde = True
+							text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
+							tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
+
+						if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
+							text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
+							tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
+							
+						text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
+						casos.append(1)
+						arroba_id = eval(arroba).id
+						tokens = tokens.splitlines()
+						for l, linha in enumerate(tokens):
+							if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
+								tokens[l] = "<b>" + tokens[l] + "</b>"
+						tokens = "\n".join(tokens)
+
+						if separate:
+							corresponde = False
+							final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence2.metadados_to_str() + "\n" + tokens
+							output.append(final)
+							
+					except Exception as e:
+						sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
+						pass
+					
+				if corresponde and not separate:
+					corresponde = False
+					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence2.metadados_to_str() + "\n" + tokens
+					output.append(final)
 		else:
 			if parametros != "tokens=":
 				query = parametros.split("tokens=")[1]
