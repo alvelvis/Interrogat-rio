@@ -71,7 +71,7 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt", noMissingToke
                 continue
 
             parameters = error.strip()
-            for sentString in interrogar_UD.main(corpus, 5, parameters, 0, sent_id, separate=True)['output']:
+            for sentString in interrogar_UD.main(corpus, 5, parameters, 0, sent_id)['output']:
                 if not comment in errorDictionary:
                     errorDictionary[comment] = []
                 sentence = estrutura_ud.Sentence(recursivo=True)
@@ -82,11 +82,14 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt", noMissingToke
                         tokenT = t
                         break
 
-                errorDictionary[comment].append({
+                error_feats = {
                     "t": tokenT,
                     "sentence": sentence,
                     "attribute": coluna,
-                })
+                }
+
+                if not error_feats in errorDictionary[comment]:
+                    errorDictionary[comment].append(error_feats)
 
 
     return errorDictionary

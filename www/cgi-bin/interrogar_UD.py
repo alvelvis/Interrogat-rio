@@ -148,7 +148,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	return {"all_children": all_children, "lista": lista, "dist": len(dist), "dispersion_files": dispersion_files}
 
 #Crio a função que vai ser chamada seja pelo HTML ou seja pelo terminal
-def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False, separate=False):
+def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False):
 	parametros = parametros.strip().replace('“', '"').replace('”', '"')
 	pesquisa = ""
 
@@ -512,7 +512,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 					})
 			args = chunks(args, n_process)
 			with multiprocessing.Pool(n_process) as p:
-				for result in p.starmap(process_sentences, [(arg, pesquisa, arroba, limit, separate) for arg in args]):
+				for result in p.starmap(process_sentences, [(arg, pesquisa, arroba, limit) for arg in args if arg]):
 					output.extend(result[0])
 					casos.extend(result[1])			
 		else:
@@ -567,7 +567,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False,
 
 	return {'output': output, 'casos': casos, 'sentences': sentences, 'parameters': pesquisa if pesquisa else parametros}
 
-def process_sentences(args, pesquisa, arroba, limit, separate):
+def process_sentences(args, pesquisa, arroba, limit):
 	output = []
 	casos = []
 	sys.stderr.write("\nProcessing %s sentences, process no. %s" % (len(args), os.getpid()))
@@ -602,17 +602,12 @@ def process_sentences(args, pesquisa, arroba, limit, separate):
 					if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
 						tokens[l] = "<b>" + tokens[l] + "</b>"
 				tokens = "\n".join(tokens)
-
-				if separate:
-					corresponde = False
-					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence_metadados + "\n" + tokens
-					output.append(final)
 					
 			except Exception as e:
 				sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
 				pass
 
-		if corresponde and not separate:
+		if corresponde:
 			corresponde = False
 			final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence_metadados + "\n" + tokens
 			output.append(final)
