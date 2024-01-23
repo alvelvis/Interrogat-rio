@@ -528,7 +528,6 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	estrutura_dados.EscreverUD(conlluzao, './interrogar-ud/conllu/' + ud + '_inquerito')
 	os.remove('./interrogar-ud/conllu/' + ud)
 	os.rename('./interrogar-ud/conllu/' + ud + "_inquerito", './interrogar-ud/conllu/' + ud)
-
 	html = '''<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1.0" name="viewport"></head><body><form action="../cgi-bin/inquerito.py?conllu=''' + ud + '''" method="POST" id="reenviar"><input type=hidden name=sentid value="''' + sentid + '''"><input type=hidden name=occ value="''' + ocorrencias + '''"><input type="hidden" name="textheader" value="''' + text.replace('/BOLD','').replace('@BOLD','').replace('@YELLOW/', '').replace('@PURPLE/', '').replace('@BLUE/', '').replace('@RED/', '').replace('@CYAN/', '').replace('/FONT', '') + '''"><input type=hidden name="nome_interrogatorio" value="''' + nome.replace('"', '&quot;') + '''"><input type=hidden name="link_interrogatorio" value="''' + link + '''"><input type=hidden name=finalizado value=sim>'''
 	if 'tag' in form: html += '<input type=hidden name=tag value="' + form['tag'].value + '">'
 	html += '<input type=hidden name=tokenId value="' + form['tokenId'].value + '">' if 'tokenId' in form else ''

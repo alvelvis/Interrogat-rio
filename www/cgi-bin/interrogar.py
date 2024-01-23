@@ -1,7 +1,7 @@
 #!../.interrogatorio/bin/python3
 # -*- coding: UTF-8 -*-
 
-print("Content-type:text/html; charset=utf-8")
+print('Content-type:text/html; charset=utf-8')
 print('\n\n')
 
 import os

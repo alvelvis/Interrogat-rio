@@ -11,10 +11,10 @@ from estrutura_ud import col_to_idx
 
 tabelaf = {
 	'yellow': 'green',
-    'purple': 'purple',
-    'blue': 'blue',
-    'red': 'red',
-    'cyan': 'cyan',
+	'purple': 'purple',
+	'blue': 'blue',
+	'red': 'red',
+	'cyan': 'cyan',
 }
 
 
@@ -22,13 +22,13 @@ def shortcuts(s):
 	return s.replace(".pt", ".previous_token").replace(".ht", ".head_token").replace(".nt", ".next_token")
 
 def slugify(value):
-    return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
+	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 
 def cleanEstruturaUD(s):
-    return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
+	return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
 
 def fromInterrogarToHtml(s):
-    return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabelaf['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabelaf['purple'] + '>').replace('@BLUE/', '<font color=' + tabelaf['blue'] + '>').replace('@RED/', '<font color=' + tabelaf['red'] + '>').replace('@CYAN/', '<font color=' + tabelaf['cyan'] + '>').replace('/FONT', '</font>')
+	return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabelaf['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabelaf['purple'] + '>').replace('@BLUE/', '<font color=' + tabelaf['blue'] + '>').replace('@RED/', '<font color=' + tabelaf['red'] + '>').replace('@CYAN/', '<font color=' + tabelaf['cyan'] + '>').replace('/FONT', '</font>')
 
 different_distribution = ["dependentes", "children"]
 
@@ -615,9 +615,9 @@ def process_sentences(args, pesquisa, arroba, limit):
 	return output, casos
 
 def chunks(l, n):
-    """Yield n number of striped chunks from l."""
-    for i in range(0, n):
-        yield l[i::n]
+	"""Yield n number of striped chunks from l."""
+	for i in range(0, n):
+		yield l[i::n]
 
 #Ele só pede os inputs se o script for executado pelo terminal. Caso contrário (no caso do código ser chamado por uma página html), ele não pede os inputs, pois já vou dar a ele os parâmetros por meio da página web
 if __name__ == '__main__':
@@ -645,7 +645,7 @@ if __name__ == '__main__':
 			k=input('e nenhum outro token com valor: ')
 			w=int(input('na coluna: '))
 			nome=input('nomeie sua criação:\n')
-			parametros  = y + '#' + str(z) + '#' + k + '#' + str(w)
+			parametros = y + '#' + str(z) + '#' + k + '#' + str(w)
 			
 		if criterio == 4:
 			filho = input('Filho: ')
