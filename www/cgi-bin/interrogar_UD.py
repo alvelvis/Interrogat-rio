@@ -511,10 +511,18 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 					'map_id': {x: t for t, x in enumerate(clean_id)},
 					})
 			args = chunks(args, n_process)
-			with multiprocessing.Pool(n_process) as p:
-				for result in p.starmap(process_sentences, [(arg, pesquisa, arroba, limit) for arg in args if arg]):
-					output.extend(result[0])
-					casos.extend(result[1])			
+			if not 'win' in sys.platform:
+				# Multiprocessing está bugando no Windows
+				with multiprocessing.Pool(n_process) as p:
+					for result in p.starmap(process_sentences, [(arg, pesquisa, arroba, limit) for arg in args if arg]):
+						output.extend(result[0])
+						casos.extend(result[1])
+			else:
+				for arg in args:
+					if arg:
+						result = process_sentences(arg, pesquisa, arroba, limit)
+						output.extend(result[0])
+						casos.extend(result[1])
 		else:
 			if parametros != "tokens=":
 				query = parametros.split("tokens=")[1]
