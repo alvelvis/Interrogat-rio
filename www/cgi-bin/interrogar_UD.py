@@ -598,18 +598,18 @@ def process_sentences(args, pesquisa, arroba, limit):
 					text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
 					tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
 
-				if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
-					text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
-					tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
-					
-				text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
-				casos.append(1)
-				arroba_id = eval(arroba).id
-				tokens = tokens.splitlines()
-				for l, linha in enumerate(tokens):
-					if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
-						tokens[l] = "<b>" + tokens[l] + "</b>"
-				tokens = "\n".join(tokens)
+					if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
+						text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
+						tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
+						
+					text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
+					casos.append(1)
+					arroba_id = eval(arroba).id
+					tokens = tokens.splitlines()
+					for l, linha in enumerate(tokens):
+						if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
+							tokens[l] = "<b>" + tokens[l] + "</b>"
+					tokens = "\n".join(tokens)
 					
 			except Exception as e:
 				sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
