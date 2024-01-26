@@ -7,4 +7,4 @@ if [ ! -d .interrogatorio ]; then
 fi
 
 . .interrogatorio/bin/activate
-pip3 install --disable-pip-version-check -r requirements.txt
+pip3 install --no-warn-script-location --disable-pip-version-check -r requirements.txt
