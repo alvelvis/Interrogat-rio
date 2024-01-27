@@ -10,7 +10,8 @@ def main():
         branch = "master" if sys.argv[1] == "stable" else sys.argv[1]
 
     # to make a new update that requires new packages: append the name of the package in the list and try to import it
-    new_packages = "GitPython udapi openai pandas".split(" ")
+    # it's necessary to put this same package here, in requirements.txt and in run_interrogatorio.sh
+    new_packages = "GitPython udapi openai pandas pyarrow".split(" ")
     try:
         exec("import {}".format(new_packages[-1]))
     except:

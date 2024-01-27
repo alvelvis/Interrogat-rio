@@ -6,7 +6,7 @@ fi
 
 . .interrogatorio/bin/activate
 
-if ! python3 -c "import pandas"; then
+if ! python3 -c "import pyarrow"; then
   if ! pip3 install --no-warn-script-location --disable-pip-version-check -r requirements.txt; then
     sudo apt install python3-pip
     pip3 install --no-warn-script-location --disable-pip-version-check -r requirements.txt
