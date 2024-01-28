@@ -8,8 +8,6 @@ Interrogatório is part of ET: a workstation for querying, editing and evaluatin
 
 If you wish to deploy Interrogatório to a web server, using Ubuntu/Apache2, check [Deploying with Ubuntu/Apache2](https://github.com/alvelvis/Interrogat-rio/wiki/Deploying-with-Ubuntu-Apache2).
 
-Check the [Wiki](https://github.com/alvelvis/Interrogat-rio/wiki) for a broader understanding of Interrogatório tools.
-
 # How to run on a Windows machine
 
 1) Go to [releases](https://github.com/alvelvis/Interrogat-rio/releases)

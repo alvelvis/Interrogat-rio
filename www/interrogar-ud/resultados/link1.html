@@ -53,9 +53,9 @@
           </ol>
         </ul>
         <div style="margin-left:40px;">
+          <a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a>
           <form class='scriptForm' method="post" action="../../cgi-bin/inquerito.py?action=script&executar=sim" enctype="multipart/form-data" target="_blank">
-            <label for="fileScript"><b class="translateHtml">Navegue até o arquivo editado ou arraste-o até o botão:</b></label><br>
-            <br>
+            <label for="fileScript"><h3 class="translateHtml">Navegue até o arquivo editado ou arraste-o até o botão:</h3></label>
             <input type="file" onchange="if (! $('#nomeScript').val()) { $('#nomeScript').val($('#fileScript').val().split(/(\\|\/)/g).pop().split('.txt')[0]) }" name="fileScript" id="fileScript" required=""><br>
             <br>
             <label for="scriptName"><b class="translateHtml">Dê um nome à correção:</b></label><br>

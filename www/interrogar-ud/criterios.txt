@@ -28,9 +28,9 @@
 </ul>
 <h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
 <ul class="linksUteis">
+    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a></li>
     <li><a href="../cgi-bin/relatorio.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>
-    <li><a href="http://github.com/alvelvis/Interrogat-rio/wiki" target="_blank" class="translateHtml">Wiki - documentação das ferramentas</a></li>
-    <li><a href="http://github.com/alvelvis/Julgamento" target="_blank" class="translateHtml">Julgamento - avaliação de corpora anotados</a></li>
+    <li><a href="http://github.com/alvelvis/Julgamento" target="_blank" class="translateHtml">Julgamento - ambiente para avaliação de corpora anotados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank" class="translateHtml">Código fonte do Interrogatório no GitHub</a></li>
 </ul>
 
@@ -184,6 +184,7 @@
 <ul><li>
 <a id="nummod" style="cursor:pointer" onclick="pesquisa('nummod')">.*\t.*\t.*\tNUM\t(?!.*nummod)</a>
 </li></ul>
+<a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a>
 
 !@#<h3 class="translateHtml">Ausência de B apontando para A</h3>
 <span class="translateHtml">Se em uma sentença tiver um token marcado como A na coluna X e não tiver nenhum outro token com valor B na coluna Y apontando para A, retornar a sentença.</span>
@@ -230,12 +231,13 @@
 <ul><li>
 <a id="6" style="cursor:pointer" onclick="pesquisa('6')">word = "é" and upos = "AUX" and @head_token.upos != "VERB"</a>
 </li></ul>
-<span class="translateHtml">Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do padrão Python Simplificado</a>.</span>
+<a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a>
 <br>
 
 !@#<a id="queryScriptTab"></a>
 <div class="scriptQuery">
 <h3 class="translateHtml">Escreva seu código de busca Python</h3>
+<a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a>
 <h3 class="translateHtml">(a) Usando o ChatGPT:</h3>
 <a href="../interrogar-ud/chatGPTQueryScript.txt" style="display:none" id="downloadChatGPTQueryScript" download>Initiate download from link</a>
 <ol type="1">

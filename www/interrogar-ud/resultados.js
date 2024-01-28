@@ -310,7 +310,7 @@ var translations = {
 		'en-US': 'When possible, "Show context" will show all sentences in a document'
 	},
 	'Links úteis': {
-		'en-US': 'Useful pages'
+		'en-US': 'Useful resources'
 	},
 	'Repositório dos corpora': {
 		'en-US': 'Corpora repository'
@@ -321,8 +321,8 @@ var translations = {
 	'Relatório de inquéritos finalizados': {
 		'en-US': 'Finished inquiries report'
 	},
-	'Julgamento - avaliação de corpora anotados': {
-		'en-US': 'Julgamento - evaluating annotated corpora'
+	'Julgamento - ambiente para avaliação de corpora anotados': {
+		'en-US': 'Julgamento - environment for evaluating annotated corpora'
 	},
 	'Código fonte do Interrogatório no GitHub': {
 		'en-US': 'Interrogatório source code on GitHub'
@@ -489,9 +489,6 @@ var translations = {
 	},
 	'1) Procurar por tokens "é" que sejam AUX, mas cujos pais não sejam VERB (negrito no pai).': {
 		'en-US': '1) Search for "é" tokens that are AUX, but which parents are not VERB (parent in bold).'
-	},
-	'Para mais exemplos, veja o <a target="_blank" href="../cgi-bin/expressoes_5.py">banco de expressões do padrão Python Simplificado</a>.': {
-		'en-US': 'For more examples, see the <a target="_blank" href="../cgi-bin/expressoes_5.py">expressions bank for the Simplified Python pattern</a>.'
 	},
 	'Voltar ao topo': {
 		'en-US': 'Back to top'
@@ -821,8 +818,8 @@ var translations = {
 	'frequência': {
 		'en-US': 'frequency'
 	},
-	'Wiki - documentação das ferramentas': {
-		'en-US': 'Wiki - documentation for our tools'
+	'Exemplos de busca e de correção em lote': {
+		'en-US': 'Query and batch correction examples'
 	},
 	'Dependentes sintáticos': {
 		'en-US': 'Syntactic children'

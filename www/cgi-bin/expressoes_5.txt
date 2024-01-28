@@ -1,3 +1,0 @@
-5 lemma = "[A-Z].*" and upos != "PROPN"
-5 head_token.word = "[sS]endo" and token.word = "assim"
-5 word = "é" and upos = "AUX" and @head_token.upos != "VERB"
