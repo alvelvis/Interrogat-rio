@@ -896,8 +896,7 @@ var translations = {
 	"Função exclusiva para critério 5": {
 		'en-US': 'Feature exclusively available for criterion 5'
 	},
-	"Esc: Encerrar inquérito": {
-		"pt-BR": "Fechar inquérito sem salvar",
+	"Esc: Fechar inquérito sem salvar": {
 		"en-US": "Esc: End inquiry without saving"
 	},
 	"Tab / Shift + Tab: ir para coluna à direita/esquerda": {

@@ -4,12 +4,11 @@
 print('Content-type:text/html; charset=utf-8')
 print('\n\n')
 
+import time
 import sys
 import cgi, cgitb
 cgitb.enable()
-import time
 import estrutura_dados
-import pandas as pd
 import uuid
 import os
 import shutil
@@ -21,12 +20,12 @@ import html as web
 import subprocess
 import html as web
 import validar_UD
-from credenciar import LOGIN
 import interrogar_UD
 import variables
-from udapi.core.document import Document
 from io import StringIO
+from udapi.core.document import Document
 import json
+import csv
 
 JULGAMENTO = False
 if os.path.isdir("../Julgamento"):
@@ -90,6 +89,7 @@ if os.path.isfile("./interrogar-ud/inqueritos.txt"):
 				'sent_id': inquerito.split("!@#")[7]
 			})
 	
+	import pandas as pd
 	df = pd.DataFrame(new_inquiries)
 	_ids = df._id.unique()
 	for _id in _ids:
@@ -100,13 +100,8 @@ if os.path.isfile("./interrogar-ud/inqueritos.txt"):
 
 bosqueNaoEncontrado = corpusGenericoInquerito
 
-arquivos = list()
-for i, arquivo in enumerate(os.listdir('./interrogar-ud/conllu')):
-	arquivos.append('<option value="'+arquivo+'">'+arquivo+'</option>')
-
 with open('./interrogar-ud/inquerito.html', 'r') as f:
 	html = f.read()
-html = html.split('<select name="conllu">')[0] + '<select name="conllu">' + "\n".join(arquivos) + '</select>' + html.split('</select>')[1]
 
 html1 = html.split('<!--SPLIT-->')[0]
 html2 = html.split('<!--SPLIT-->')[1]
@@ -118,15 +113,6 @@ def get_head(frase, token):
 		if isinstance(linha, list) and token[6] == linha[0]:
 			return linha[1]
 	return ''
-
-if (os.environ['REQUEST_METHOD'] == "POST") or ('textheader' in cgi.FieldStorage() and 'corpus' in cgi.FieldStorage()):
-	if LOGIN:
-		if (not 'HTTP_COOKIE' in os.environ) or ('HTTP_COOKIE' in os.environ and not 'conectado' in os.environ['HTTP_COOKIE']):
-			html = '<script>window.location = "../interrogar-ud/autenticar.html"</script>'
-			print(html)
-			exit()
-	else:
-		pass
 
 if os.environ['REQUEST_METHOD'] == "POST" and 'ud' in form.keys() and 'action' in form.keys() and form['action'].value == 'apagarCorpus':
 	shutil.move('./interrogar-ud/conllu/' + form['ud'].value, './interrogar-ud/tmp/' + form['ud'].value)
@@ -187,6 +173,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		subprocess.run(command)
 	sys.stderr.write('\nbatch_correction: {}'.format(time.time() - start))
 	
+	import pandas as pd
 	if form['executar'].value == 'exec':
 		df = pd.read_csv("./interrogar-ud/batch_correction_simulation.csv", index_col=0)
 		_id = df._id.iloc[0]
@@ -240,7 +227,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 	if not os.path.isfile('./interrogar-ud/conllu/' + ud):
 		print(f"Corpus {ud} não encontrado.")
 		exit()
-	conlluzao = estrutura_dados.LerUD('./interrogar-ud/conllu/' + ud)
+	conlluzao = estrutura_dados.LerUD('./interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value)
 	if 'finalizado' in form:
 		erros = []
 		if 'sentid' in form:
@@ -269,10 +256,12 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 		html1 += "<br>"
 
 	mostrar_contexto = f'<a href="../cgi-bin/contexto.py?corpus={ud}&sent_id={form["sentid"].value}" target="_blank" class="translateHtml">Mostrar contexto</a> - ' if 'sentid' in form and (('-' in form['sentid'].value and re.search('^\d+$', form['sentid'].value.rsplit("-", 1)[1])) or (re.search("^\d+$", form['sentid'].value))) else ""
-	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + f'<br><br><a href="../cgi-bin/relatorio.py" class="translateHtml">Relatório de inquéritos</a> - ' + mostrar_contexto + ' <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><!--a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a--><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form><a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
+	html1 = html1.split('<div class="header">')[0] + '<div class="header"><h1 class="translateHtml">Novo inquérito</h1><br><br>' + colored_ud + f'<br><br><a href="../cgi-bin/relatorio.py" class="translateHtml" target="_blank">Relatório de inquéritos</a> - ' + mostrar_contexto + ' <form style="display:inline-block" target="_blank" method="POST" action="../cgi-bin/draw_tree.py?conllu=' + ud + '"><!--a href="#" onclick="this.parentNode.submit()" class="translateHtml">Visualizar árvore</a--><input type=hidden name=text value="' + form['textheader'].value + '"><input type=hidden name=sent_id value="' + form['sentid'].value + '"></form><a style="cursor:pointer;" onclick="window.close()" class="translateHtml endInquerito">Encerrar inquérito</a></div>' + html1.split('</div>', 3)[3]
 
 	achou = False
 	for i, sentence in enumerate(conlluzao):
+		if not isinstance(sentence, list):
+			continue
 		sentence2 = sentence
 		for a, linha in enumerate(sentence2):
 			if isinstance(linha, list):
@@ -281,7 +270,7 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 		if '# text = ' in form['textheader'].value or '# sent_id = ' in form['textheader'].value:
 			form['textheader'].value = form['textheader'].value.split(' = ', 1)[1]
 		if ('# text = ' + form['textheader'].value + '\n' in sentence2) or ('# sent_id = ' + form['textheader'].value + '\n' in sentence2) or ('sentid' in form and '# sent_id = ' + form['sentid'].value + '\n' in sentence2):
-			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Encerrar inquérito</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
+			html1 += '<h3 class="translateHtml">Controles:</h3><span class="translateHtml">Esc: Fechar inquérito sem salvar</span><br><span class="translateHtml">Tab / Shift + Tab: ir para coluna à direita/esquerda</span><br><span class="translateHtml">↑ / ↓: ir para linha acima/abaixo</span><br><span class="translateHtml">↖: Arraste a coluna <b>dephead</b> de um token para a linha do token do qual ele depende</span><br><span class="translateHtml">Shift + Scroll: Mover tabela para os lados</span><br><br>'
 			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" onclick="enviar()" class="translateVal btn-gradient green small" id="sendAnnotation" value="Realizar alteração (Ctrl+Enter)"> '
 			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient blue small" id="changeTokenization" value="Modificar tokenização"> '
 			html1 += '<input style="display: inline-block; margin: 0px; cursor:pointer;" type="button" class="translateVal btn-gradient orange small" id="viewTree" value="Ver árvore"><br><br>'
@@ -469,7 +458,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	text = form['textheader'].value
 	tag = web.unescape(form['tag'].value) if 'tag' in form else 'NONE'
 	if tag[0] == '#': tag = tag[1:]
-	conlluzao = estrutura_dados.LerUD('./interrogar-ud/conllu/' + ud)
+	conlluzao = estrutura_dados.LerUD('./interrogar-ud/conllu/' + ud, sent_id=form['sentid'].value)
 	inqueritos_concluidos = list()
 
 	sentnum = int(form['sentnum'].value)
@@ -486,6 +475,7 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 	new_inquiries = []
 	date = datetime.now().timestamp()
 	_id = str(uuid.uuid4())
+	i = -1
 	for key in dict(form).keys():
 		value = dict(form)[key]
 		if re.search(r'^\d+-(\d+|meta)$', key) and not '# sent_id = ' in value.value:
@@ -503,7 +493,9 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				conlluzao[sentnum][token] = value
 				depois = conlluzao[sentnum][token]
 
+			i += 1
 			new_inquiries.append({
+				'idx': i,
 				'_id': _id,
 				'date': date,
 				'tag': tag if 'tag' in form else None,
@@ -522,8 +514,12 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				'href': form['link_interrogatorio'].value if 'nome_interrogatorio' in form else None,
 				})
 
-	df = pd.DataFrame(new_inquiries)
-	df.to_csv("./interrogar-ud/inqueritos/%s.csv" % _id)
+	if new_inquiries:
+		headers = new_inquiries[0].keys()
+		with open("./interrogar-ud/inqueritos/%s.csv" % _id, 'w') as f:
+			writer = csv.DictWriter(f, fieldnames=list(headers))
+			writer.writeheader()
+			writer.writerows(new_inquiries)
 			
 	estrutura_dados.EscreverUD(conlluzao, './interrogar-ud/conllu/' + ud + '_inquerito')
 	os.remove('./interrogar-ud/conllu/' + ud)

@@ -6,7 +6,7 @@ Objetivo: ser importado em outros códigos do pacote ACDC-UD: "import estrutura_
 '''
 
 #Abre o arquivo UD em um caminho dado ("ud_file"), segmenta suas sentenças, suas linhas, e cada uma das 10 colunas dos seus tokens
-def LerUD(ud_file):
+def LerUD(ud_file, sent_id=""):
 
 	codification = "utf-8"
 
@@ -18,14 +18,15 @@ def LerUD(ud_file):
 
 	#Para cada sentença na lista de sentenças,
 	for a, sentence in enumerate(arquivo):
-		#Essa sentença vai ter suas linhas segmentadas
-		arquivo[a] = arquivo[a].splitlines() #Repare que linha pode ser tanto os tokens quanto os metadados (linhas que começam com "# text = ", por exemplo)
-		#Para cada linha já segmentada nessa dada sentença (arquivo[a]),
-		for b, linha in enumerate(arquivo[a]):
-			#Se a quantidade de colunas for 10, (ou seja, garante que estou lidando com tokens, e não com metadados)
-			if '\t' in linha:
-				#Essa linha, que na verdade é um token, (sentença arquivo[a], token[b]), vai ser dividida em colunas
-				arquivo[a][b] = arquivo[a][b].split('\t')
+		if not sent_id or '# sent_id = %s\n' % sent_id in sentence:
+			#Essa sentença vai ter suas linhas segmentadas
+			arquivo[a] = arquivo[a].splitlines() #Repare que linha pode ser tanto os tokens quanto os metadados (linhas que começam com "# text = ", por exemplo)
+			#Para cada linha já segmentada nessa dada sentença (arquivo[a]),
+			for b, linha in enumerate(arquivo[a]):
+				#Se a quantidade de colunas for 10, (ou seja, garante que estou lidando com tokens, e não com metadados)
+				if '\t' in linha:
+					#Essa linha, que na verdade é um token, (sentença arquivo[a], token[b]), vai ser dividida em colunas
+					arquivo[a][b] = arquivo[a][b].split('\t')
 
 	#Retorna uma lista com sentenças, sendo cada sentença uma lista de linhas, e cada lista de linhas, se tiver 10 colunas, uma lista de 10 colunas
 	return arquivo
@@ -38,14 +39,15 @@ def EscreverUD(UD, arquivo):
 
 	#Para cada sentença na lista "UD",
 	for a, sentence in enumerate(UD):
-		#Para cada linha dentro dessa sentença,
-		for b, linha in enumerate(UD[a]):
-			#Se for um token (tiver 10 colunas) e não for um metadado (contiver "# "),
-			if isinstance(linha, list) and not '# ' in linha:
-				#Reunir as colunas adicionando um "\t"
-				UD[a][b] = "\t".join(UD[a][b])
-		#Depois de reunir todos os tokens que devem ser reunidos, reunir todas as linhas com um "\n"
-		UD[a] = "\n".join(UD[a])
+		if isinstance(UD[a], list):
+			#Para cada linha dentro dessa sentença,
+			for b, linha in enumerate(UD[a]):
+				#Se for um token (tiver 10 colunas) e não for um metadado (contiver "# "),
+				if isinstance(linha, list) and not '# ' in linha:
+					#Reunir as colunas adicionando um "\t"
+					UD[a][b] = "\t".join(UD[a][b])
+			#Depois de reunir todos os tokens que devem ser reunidos, reunir todas as linhas com um "\n"
+			UD[a] = "\n".join(UD[a])
 	#Reunidas todas as linhas, reunir as sentenças
 	UD = "\n\n".join(UD) + '\n\n' #O "\n" no final é necessário pois todo arquivo UD deve ter uma linha vazia no final, é uma exigência dos códigos de comparação, avaliação, etc.
 
