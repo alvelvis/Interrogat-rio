@@ -654,8 +654,8 @@ var translations = {
 	'Esconder opções': {
 		'en-US': 'Hide options'
 	},
-	'Abrir inquérito': {
-		'en-US': 'Open inquiry'
+	'Modificar frase': {
+		'en-US': 'Modify sentence'
 	},
 	'Você deseja': {
 		'en-US': 'Would you like to'
@@ -666,8 +666,8 @@ var translations = {
 	'Opções': {
 		'en-US': 'Options'
 	},
-	'Abrir inquérito para múltiplas sentenças': {
-		'en-US': 'Open inquiries for multiple sentences'
+	'Modificar múltiplas frases': {
+		'en-US': 'Modify multiple sentences'
 	},
 	'De:': {
 		'en-US': 'From:'
