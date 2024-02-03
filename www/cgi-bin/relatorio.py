@@ -74,13 +74,25 @@ elif 'rules' in forms:
             modifications.append(f'{tab}if sentence.sent_id == "{sent_id}" and token.id == "{token_id}":\n{tab}\ttoken.{col} = "{value}"')
     print("<pre>" + web.escape(rule + "\n".join(modifications)) + "</pre>")
     exit()
+elif 'download' in forms:
+    tag = forms['download'].value
+    interrogatorio = forms['interrogatorio'].value
+    conllu = forms['conllu'].value
+    if conllu != "*":
+        df = df[df.conllu == conllu]
+    if interrogatorio != "*":
+        df = df[df.interrogatorio == interrogatorio]
+    df = df[df.tag == tag]
+    for _id in df._id.unique():
+        html += build_modifications_html(df, _id)
+        html += "<hr><hr>"
 else:
     _ids = df._id.unique()
     dates = df.date.unique()
     conllus = df.conllu.unique()
     tags = df.tag.unique()
     interrogatorios = df.interrogatorio.unique()
-    
+    html += '''[<a href='#' onclick='download_inqueritos_manuais();'>Baixar todos os inquéritos manuais</a>]<br><br>'''
     html += "<select class='changeFilter corpusSelection'>"
     html += f'<option value="*">Todos os corpora ({len(conllus)} corpora)</option>'
     for conllu in conllus:
@@ -101,6 +113,7 @@ else:
 
     html += "<hr>"
     html += "Total de modificações: %s<hr>" % len(df)
+
     for _id in _ids:
         rows = df[df._id == _id]
         date = rows.date.iloc[0]
@@ -114,6 +127,10 @@ html += '<hr><br><br>'
 html += '<script src="../interrogar-ud/jquery-latest.js"></script>'
 html += '''
 <script>
+function download_inqueritos_manuais() {
+    $('.tagSelection').val('INQUÉRITO');
+    window.location.href = "../cgi-bin/relatorio.py?download=" + encodeURIComponent($('.tagSelection').val()) + "&interrogatorio=" + encodeURIComponent($('.interrogatorioSelection').val()) + "&conllu=" + encodeURIComponent($('.corpusSelection').val())
+}
 $('.changeFilter').change(function(){
     $('.inquerito').hide()
 

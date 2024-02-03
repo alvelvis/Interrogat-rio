@@ -59,7 +59,7 @@ def build_modifications_html(df, _id):
     output += "<br>Corpus: {ud}.conllu".format(ud=web.escape(conllu))
     output += "<hr>"
     output += "<pre>"
-    len_df = len(df)
+    len_df = len(rows.index)
     for i, idx in enumerate(rows.index):
         sent_id = str(rows["sent_id"][idx])
         text = rows["text"][idx]
