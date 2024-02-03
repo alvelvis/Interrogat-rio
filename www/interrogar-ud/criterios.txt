@@ -14,7 +14,7 @@
     </ul>
     <li class="translateHtml">(c) <a id="openQueryScript" title="Abrir interface" class="toggleCriteria translateHtml" style="cursor:pointer;" onclick="$('.normalQuery').hide(); $('.toggleSalvar').click();" href="#queryScriptTab" criterio="6">Escreva seu próprio script de busca em Python (para experts)</a></li>
 </ul>
-<h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
+<!--h3 onclick="$('.atualizacao').slideToggle();"><a style="cursor:pointer" class="translateHtml">Atualizações</a></h3>
 <ul class="atualizacao">
     <li><a href="../cgi-bin/arquivo_ud.py" class="translateHtml">Nova função: Agora é possível adicionar e remover colunas de um corpus</a></li>
     <li><a href="#" class="translateHtml">Nova função: As frases de uma busca agora podem ser filtradas manualmente em até 5 grupos de uma vez</a></li>
@@ -25,8 +25,8 @@
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: visualizar dispersão</a></li-->
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/6.-Modify-tokenization" class="translateHtml translateTitle" title="Ver documentação" target="_blank">Nova função: modificar tokenização de uma sentença</a></li-->
     <!--li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/7.-View-distribution" title="Ver documentação" class="translateHtml translateTitle" target="_blank">Nova função: visualizar distribuição dos dependentes sintáticos</a></li-->
-</ul>
-<h3 onclick="$('.linksUteis').slideToggle();"><a style="cursor:pointer" class="translateHtml">Links úteis</a></h3>
+</ul-->
+<h4><span class="translateHtml">Links úteis</span></h4>
 <ul class="linksUteis">
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a></li>
     <li><a href="../cgi-bin/relatorio.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>

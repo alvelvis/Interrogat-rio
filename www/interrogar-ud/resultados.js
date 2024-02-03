@@ -148,8 +148,8 @@ var translations = {
 	'Busca salva': {
 		'en-US': 'Saved query'
 	},
-	'Busca rápida': {
-		'en-US': 'Quick query'
+	'Busca (linhas de concordância)': {
+		'en-US': 'Search (concordance lines)'
 	},
 	'Salvar busca': {
 		'en-US': 'Save query',
