@@ -165,6 +165,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		f'{form["link_interrogatorio"].value}',
 		f'{form["parametros"].value}',
 		f'{form["fullParameters"].value}',
+		f'{form["query_script_name"].value if "query_script_name" in form else "None"}',
+		f'{form["filters"].value if "filters" in form else "None"}'
 		]
 	
 	if 'win' in sys.platform:
@@ -214,6 +216,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 		html += '<input type=hidden name="link_interrogatorio" value="' + form['link_interrogatorio'].value + '">'
 		html += '<input type=hidden name="conllu" value="' + form['conllu'].value + '">'
 		html += '<input type=hidden value="' + form['scriptName'].value.replace('"', '&quot;') + '" name="scriptName">'
+		html += '<input type=hidden name="query_script_name" value="' + web.escape(form['query_script_name'].value) + '">' if 'query_script_name' in form else ""
+		html += '<input type=hidden name="filters" value="' + web.escape(form['filters'].value) + '">' if 'filters' in form else ""
 		html += '<input type=submit value="EXECUTAR SCRIPT" id="execScript" onclick="execScript.value = \'AGUARDE...\'; execScript.disabled = true; execScriptForm.submit()"></form>'
 		html += "<hr><br>"
 
@@ -377,6 +381,10 @@ elif ((os.environ['REQUEST_METHOD'] == 'POST') or ('conllu' in form and 'texthea
 			if 'nome_interrogatorio' in form and form['nome_interrogatorio'].value not in fastsearch:
 				html1 = html1 + '<input type=hidden name=nome_interrogatorio value="' + form['nome_interrogatorio'].value.replace('"', '&quot;') + '">'
 				if 'occ' in form: html1 += '<input type=hidden name=occ value="' + form['occ'].value + '">'
+			if 'query_script_name' in form:
+				html1 += '<input type=hidden name="query_script_name" value="' + web.escape(form['query_script_name'].value) + '">'
+			if 'filters' in form:
+				html1 += '<input type=hidden name="filters" value="' + web.escape(form['filters'].value) + '">'
 			
 			with open("./cgi-bin/tree.conllu", "w") as f:
 				f.write(sentence2)
@@ -512,6 +520,8 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and form['action'].value == 'alterar
 				'interrogatorio': form['nome_interrogatorio'].value if 'nome_interrogatorio' in form else None,
 				'occurrences': form['occ'].value if 'nome_interrogatorio' in form else None,
 				'href': form['link_interrogatorio'].value if 'nome_interrogatorio' in form else None,
+				'query_script_name': form['query_script_name'].value if 'query_script_name' in form else None,
+				'filters': form['filters'].value if 'filters' in form else None,
 				})
 
 	if new_inquiries:

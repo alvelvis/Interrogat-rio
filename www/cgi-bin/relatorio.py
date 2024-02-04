@@ -92,7 +92,7 @@ else:
     conllus = df.conllu.unique()
     tags = df.tag.unique()
     interrogatorios = df.interrogatorio.unique()
-    html += '''[<a href='#' onclick='download_inqueritos_manuais();'>Baixar todos os inquéritos manuais</a>]<br><br>'''
+    html += '''[<a href='#' onclick='download_inqueritos_manuais();'>Ver todos os inquéritos manuais</a>]<br><br>'''
     html += "<select class='changeFilter corpusSelection'>"
     html += f'<option value="*">Todos os corpora ({len(conllus)} corpora)</option>'
     for conllu in conllus:
@@ -128,7 +128,8 @@ html += '<script src="../interrogar-ud/jquery-latest.js"></script>'
 html += '''
 <script>
 function download_inqueritos_manuais() {
-    $('.tagSelection').val('INQUÉRITO');
+    $('.tagSelection').val('INQUÉRITO')
+    $('.tagSelection').change()
     window.location.href = "../cgi-bin/relatorio.py?download=" + encodeURIComponent($('.tagSelection').val()) + "&interrogatorio=" + encodeURIComponent($('.interrogatorioSelection').val()) + "&conllu=" + encodeURIComponent($('.corpusSelection').val())
 }
 $('.changeFilter').change(function(){

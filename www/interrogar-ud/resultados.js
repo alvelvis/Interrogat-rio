@@ -1308,6 +1308,19 @@ function carregarPosts(){
             } else {
                 $('.pagina_filtros_br').remove();
             };
+
+			$('[name=filters]').remove()
+			formulario = $('.scriptForm')
+			if ($('.filter_name').length && !formulario.children('[name=filters]').length) {
+				var filterElements = $('.filter_name');
+				var concatenatedText = "";
+				filterElements.each(function() {
+				  concatenatedText += $(this).text() + '<sep>';
+				});
+				concatenatedText = concatenatedText.slice(0, -5);
+				formulario.append("<input type=hidden name=filters value='" + concatenatedText.replace('"', "&quot;") + "'>")
+			}
+
             if (JSON.parse(data).noMore == true){
                 $('#loadingGif').attr("src", "");
                 $('#statusLoading').html(':(');
@@ -2165,6 +2178,21 @@ function fechar_tabs() {
 }
 
 function inquerito(ide) {
+	formulario = $('#' + ide)
+	if ($('#query_script_name').length && !formulario.children('[name=query_script_name]').length) {
+		var originalElement = $('#query_script_name')
+		var clonedElement = originalElement.clone()
+		formulario.append(clonedElement)
+	}
+	if ($('.filter_name').length && !formulario.children('[name=filters]').length) {
+		var filterElements = $('.filter_name');
+		var concatenatedText = "";
+		filterElements.each(function() {
+		  concatenatedText += $(this).text() + '<sep>';
+		});
+		concatenatedText = concatenatedText.slice(0, -5);
+		formulario.append("<input type=hidden name=filters value='" + concatenatedText.replace('"', "&quot;") + "'>")
+	}
     document.getElementById(ide).submit()
 }
 

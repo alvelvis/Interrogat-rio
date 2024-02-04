@@ -51,11 +51,19 @@ def build_modifications_html(df, _id):
     conllu = rows.conllu.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
     query = rows['query'].iloc[0] if 'query' in rows.columns else None
+    query_script_name = rows.query_script_name.iloc[0] if 'query_script_name' in rows.columns else None
+    filters = rows.filters.iloc[0] if 'filters' in rows.columns else None
+
     output += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
     output += "<br>Nome da correção: %s" % tag
+    if query_script_name:
+        output += "<br>Script de busca: " + web.escape(query_script_name)
     output += "<br>Busca: " + web.escape(interrogatorio)
-    if isinstance(query, str):
+    if isinstance(query, str) and query:
         output += "<br>Expressão de busca: %s" % query
+    if filters:
+        output += "<br>Os seguintes filtros foram aplicados à busca: %s" % filters.replace("<sep>", ", ")
+
     output += "<br>Corpus: {ud}.conllu".format(ud=web.escape(conllu))
     output += "<hr>"
     output += "<pre>"

@@ -42,6 +42,8 @@ occ = int(sys.argv[6]) if sys.argv[5] not in fastsearch else ""
 href = sys.argv[7] if sys.argv[5] not in fastsearch else ""
 query = sys.argv[8]
 full_query = sys.argv[9] if query_is_python(sys.argv[9]) else ""
+query_script_name = sys.argv[10] if sys.argv[10] != "None" else None
+filters = sys.argv[11] if sys.argv[11] != "None" else None
 
 with open('./interrogar-ud/scripts/headers.txt', 'r') as f:
 	headers = f.read().splitlines()
@@ -110,11 +112,13 @@ for x, linha in enumerate(codigo):
 										'col': "{token_col}",
 										'value': {token_var}.__dict__['{token_col}'],
 										'head': get_head({token_var}, sentence), 
-										'interrogatorio': "{interrogatorio}",
+										'interrogatorio': interrogatorio,
 										'occurrences': "{occ}",
 										'href': "{href}",
 										'query': query,
 										'full_query': full_query,
+										'query_script_name': query_script_name,
+										'filters': filters,
 										}})\n''' + \
 						tab + "except Exception as e:\n" + \
 						tab + "\tsys.stderr.write(str(e))"

@@ -233,7 +233,7 @@ class paginaHtml():
 
 	def adicionarExecutarScript(self):
 		arquivoHtml = self.arquivoHtml.split("<!--script-->")
-		arquivoHtml[0] += "<input type=hidden name=criterio value=\"{}\"><input type=hidden name=parametros value=\'{}\'><input type=hidden name=nome_interrogatorio value=\"{}\"><input type=hidden name=occ value=\"{}\"><input type=hidden name=link_interrogatorio value=\"{}\"><input type=hidden name=conllu value=\"{}\"><input type=hidden name=fullParameters value='{}'>".format(
+		arquivoHtml[0] += "<!--self.script--><input type=hidden name=criterio value=\"{}\"><input type=hidden name=parametros value=\'{}\'><input type=hidden name=nome_interrogatorio value=\"{}\"><input type=hidden name=occ value=\"{}\"><input type=hidden name=link_interrogatorio value=\"{}\"><input type=hidden name=conllu value=\"{}\"><input type=hidden name=fullParameters value='{}'>".format(
 			self.criterio,
 			web.escape(self.parametros),
 			web.escape(self.nomePesquisa),
@@ -260,6 +260,8 @@ class paginaHtml():
 		#if self.script:
 			#self.arquivoHtml = self.arquivoHtml.split("<!--script-->")[0] + f"<input name=queryScript type=hidden value='{slugify(self.script)}'>" + f"<input type=hidden name=conllu value=\"{self.conllu}\">" + f"<input type=hidden name=nome_interrogatorio value=\"{web.escape(self.nomePesquisa)}\">" + f"<input type=hidden name=link_interrogatorio value=\"{self.caminhoCompletoHtml}\">" + self.arquivoHtml.split("<!--script-->")[1]
 			#self.arquivoHtml = self.arquivoHtml.replace("Correção em lote", "")
+		if self.script:
+			self.arquivoHtml = self.arquivoHtml.replace("<!--self.script-->", "<input type=hidden id=query_script_name name=query_script_name value='%s'>" % web.escape(self.script))			
 
 		return self.arquivoHtml
 

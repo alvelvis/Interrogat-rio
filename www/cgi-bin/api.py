@@ -88,7 +88,7 @@ def renderSentences(script=""):
                 filtros = [x for nome in filtros_json[pagina_html]['filtros'] for x in filtros_json[pagina_html]['filtros'][nome]['sentences']]
                 for pagina in [[x, len(filtros_json[pagina_html]['filtros'][x]['sentences'])] for x in filtros_json[pagina_html]['filtros']]:
                     filtrar_filtros += f'<li><a style="cursor:pointer;" class="translateTitle" title="Clique para adicionar ao mesmo filtro" onclick="$(\'#nome_pesquisa,#nome_pesquisa_sel\').val($(this).children(nome).text()); $(\'#filtrarsel:visible,#filtrar:visible\').click();"><span id="nome">{pagina[0]}</a> ({pagina[1]})</li>'
-                    pagina_filtros += f'<li><a style="cursor:pointer;" target="_blank" href=\'../../cgi-bin/filtrar.py?action=view&html={pagina_html}&filtro=' + encodeUrl(pagina[0]) + f'\'>{pagina[0]} ({pagina[1]})</li>'
+                    pagina_filtros += f'<li><a style="cursor:pointer;" target="_blank" class="filter_name" href=\'../../cgi-bin/filtrar.py?action=view&html={pagina_html}&filtro=' + encodeUrl(pagina[0]) + f'\'>{pagina[0]} ({pagina[1]})</li>'
             else:
                 filtros = []
 
@@ -156,7 +156,7 @@ def renderSentences(script=""):
         arquivoHtml += f"[<a href=\"javascript:void(0)\" id=mostrar_{str(startPoint+i+1)} class=\"translateHtml anotacao sentence-control\" onclick=\"mostrar('div_{str(startPoint+i+1)}', 'mostrar_{str(startPoint+i+1)}')\" style=\"margin-left:0px\">Mostrar anotação</a>] [<a href=\"javascript:void(0)\" class='translateHtml abrirInquerito sentence-control' onclick='inquerito(\"form_{str(startPoint+i+1)}\")'>Modificar frase</a>]" + '\n'
         arquivoHtml += "</p>"
         arquivoHtml += f"<span style=\"display:none; padding-left:20px;\" id=\"optdiv_{str(startPoint+i+1)}\">"
-        arquivoHtml += f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{estruturado.text}\">"
+        arquivoHtml += f"<form action=\"../../cgi-bin/inquerito.py?conllu={conllu}\" target=\"_blank\" method=POST id=form_{str(startPoint+i+1)}><input type=hidden name=sentid value=\"{estruturado.sent_id}\"><input type=hidden name=occ value=\"{numeroOcorrencias}\"><input type=hidden name=textheader value=\"{estruturado.sent_id}\"><input type=hidden name=nome_interrogatorio value=\"{web.escape(nomePesquisa)}\"><input type=hidden name=link_interrogatorio value=\"{caminhoCompletoHtml}\"><input type=hidden name=text value=\"{web.escape(estruturado.text)}\">"
         if "@BOLD" in anotado.to_str():
             arquivoHtml += f"<input type=hidden name=tokenId value=\"" + ",".join([cleanEstruturaUD(x.id) for x in anotado.tokens if '@BOLD' in x.to_str()]) + "\">"
         arquivoHtml += "</form><br>"

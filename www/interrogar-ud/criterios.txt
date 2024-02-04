@@ -238,7 +238,13 @@
 <div class="scriptQuery">
 <h3 class="translateHtml">Escreva seu código de busca Python</h3>
 <a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a>
-<h3 class="translateHtml">(a) Usando o ChatGPT:</h3>
+<h3 class="translateHtml">(a) Editando o código manualmente:</h3>
+<ol type="1">
+<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo-query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
+<li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
+<li class="translateHtml">Submeta o script de busca no botão abaixo.</li>
+</ol>
+<h3 class="translateHtml">(b) Usando o ChatGPT:</h3>
 <a href="../interrogar-ud/chatGPTQueryScript.txt" style="display:none" id="downloadChatGPTQueryScript" download>Initiate download from link</a>
 <ol type="1">
 <li><a class="translateHtml" href="#" onclick="generateQueryScript()">Escreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.</a></li>
@@ -249,12 +255,6 @@
 </ul>
 <li class="translateHtml">O código de busca gerado pela IA será baixado na sua máquina, lembre-se de revisá-lo se necessário.</li>
 <li class="translateHtml">Submeta o script de busca no botão abaixo.</a></li>
-</ol>
-<h3 class="translateHtml">(b) Editando o código manualmente:</h3>
-<ol type="1">
-<li><a class="translateHtml" target="_blank" download href="../interrogar-ud/scripts/modelo-query.txt">Baixe o modelo de script de busca em Python clicando aqui.</a></li>
-<li class="translateHtml">Edite-o de modo a encontrar as frases pretendidas.</li>
-<li class="translateHtml">Submeta o script de busca no botão abaixo.</li>
 </ol>
 <h3 class="translateHtml scriptQueryLabel">Script de busca:</h3>
 <h4 style="font-weight:normal;" class="translateHtml">Navegue até o arquivo de busca ou arraste-o até o botão abaixo:</h4>
