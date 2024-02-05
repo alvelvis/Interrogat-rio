@@ -58,7 +58,7 @@ def build_modifications_html(df, _id):
     output += "<br>Nome da correção: %s" % tag
     if query_script_name:
         output += "<br>Script de busca: " + web.escape(query_script_name)
-    output += "<br>Busca: " + web.escape(interrogatorio)
+    output += "<br>Nome da busca: " + web.escape(interrogatorio)
     if isinstance(query, str) and query:
         output += "<br>Expressão de busca: %s" % query
     if filters:
