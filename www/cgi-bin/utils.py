@@ -64,7 +64,7 @@ def build_modifications_html(df, _id):
     if filters:
         output += "<br>Os seguintes filtros foram aplicados à busca: %s" % filters.replace("<sep>", ", ")
 
-    output += "<br>Corpus: {ud}.conllu".format(ud=web.escape(conllu))
+    output += "<br>Corpus: %s.conllu" % web.escape(conllu)
     output += "<hr>"
     output += "<pre>"
     len_df = len(rows.index)

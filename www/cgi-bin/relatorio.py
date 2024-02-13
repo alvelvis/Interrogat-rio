@@ -49,19 +49,20 @@ df.fillna("", inplace=True)
 date = datetime.datetime.now().timestamp()
 html = "<title>Relatório de inquéritos</title>"
 html += "<h1>Relatório de inquéritos</h1>"
-if 'id' in forms:
-    html += "[<a href='../cgi-bin/relatorio.py' style='color:blue'>Todos os relatórios</a>] [<a href='../cgi-bin/relatorio.py?rules=%s' style='color:blue'>Transformar em regras</a>]<br><br>" % forms['id'].value
 html += "Relatório gerado {}.".format(readable_date(date))
 html += "<hr>"
 
 if 'id' in forms:
+    html += " [<a href='../cgi-bin/relatorio.py' style='color:blue'>Todos os relatórios</a>]"
+    html += " [<a href='../cgi-bin/relatorio.py?rules=%s' style='color:blue'>Transformar em regras</a>]" % forms['id'].value
+    html += "<br><br>"
     html += build_modifications_html(df, forms['id'].value)
 elif 'rules' in forms:
-    _id = forms['rules'].value
+    _ids = forms['rules'].value.split(",")
     modifications = []
-    rows = df[df._id == _id]
+    rows = df[df._id.isin(_ids)].reset_index()
     rule = ""
-    full_query = rows['full_query'].iloc[0] if 'full_query' in df.columns else ""
+    full_query = rows['full_query'].iloc[0] if 'full_query' in df.columns and len(_ids) == 1 else ""
     if full_query and isinstance(full_query, str):
         rule = "if %s:\n" % full_query
     tab = "\t" if rule else ""
@@ -70,7 +71,7 @@ elif 'rules' in forms:
         col = rows['col'][idx]
         value = rows['value'][idx] if 'value' in rows.columns else ""
         token_id = rows['token_id'][idx] if 'token_id' in rows.columns else ""
-        if value and token_id:
+        if isinstance(value, str) and value and isinstance(token_id, str) and token_id:
             modifications.append(f'{tab}if sentence.sent_id == "{sent_id}" and token.id == "{token_id}":\n{tab}\ttoken.{col} = "{value}"')
     print("<pre>" + web.escape(rule + "\n".join(modifications)) + "</pre>")
     exit()
@@ -83,7 +84,12 @@ elif 'download' in forms:
     if interrogatorio != "*":
         df = df[df.interrogatorio == interrogatorio]
     df = df[df.tag == tag]
-    for _id in df._id.unique():
+    _ids = df._id.unique()
+    html += " [<a href='../cgi-bin/relatorio.py' style='color:blue'>Todos os relatórios</a>]"
+    html += " [<a href='../cgi-bin/relatorio.py?rules=%s' style='color:blue'>Transformar em regras</a>]" % ",".join(_ids)
+    html += "<br><br>"
+    html += "Soma de modificações: %s<hr><hr>" % len(df)
+    for _id in _ids:
         html += build_modifications_html(df, _id)
         html += "<hr><hr>"
 else:
