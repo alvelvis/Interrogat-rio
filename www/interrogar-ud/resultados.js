@@ -651,8 +651,8 @@ var translations = {
 	'Esconder opções': {
 		'en-US': 'Hide options'
 	},
-	'Modificar frase': {
-		'en-US': 'Modify sentence'
+	'Editar anotação': {
+		'en-US': 'Edit annotation'
 	},
 	'Você deseja': {
 		'en-US': 'Would you like to'
