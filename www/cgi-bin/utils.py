@@ -56,12 +56,12 @@ def build_modifications_html(df, _id):
 
     output += f"<b>{readable_date(date)} ({len(rows)} tokens modificados)</b>"
     output += "<br>Nome da correção: %s" % tag
-    if query_script_name:
+    if isinstance(query_script_name, str) and query_script_name:
         output += "<br>Script de busca: " + web.escape(query_script_name)
     output += "<br>Nome da busca: " + web.escape(interrogatorio)
     if isinstance(query, str) and query:
         output += "<br>Expressão de busca: %s" % query
-    if filters:
+    if isinstance(filters, str) and filters:
         output += "<br>Os seguintes filtros foram aplicados à busca: %s" % filters.replace("<sep>", ", ")
 
     output += "<br>Corpus: %s.conllu" % web.escape(conllu)
