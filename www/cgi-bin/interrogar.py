@@ -114,8 +114,8 @@ def sendPOSTInterrogar():
 	if nomePesquisa in fastsearch:
 		print(re.sub(r'<button.*?filtrar.*?</button>', '', re.sub(r'<button.*?conllu.*?\n.*?</button>', '', re.sub(r'<input.*?checkbox.*?>', '', arquivoHtml))).replace("../../", "../").replace("<br>\n<br>", "").replace('<!--savequery', '').replace('savequery-->', ''))
 		exit()
-	if script:
-		arquivoHtml = arquivoHtml.replace('Exportar resultados para .html', '')
+	#if script:
+		#arquivoHtml = arquivoHtml.replace('Exportar resultados para .html', '')
 
 	with open(caminhoCompletoHtml, "w") as f:
 		f.write(arquivoHtml)

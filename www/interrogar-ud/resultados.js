@@ -663,8 +663,8 @@ var translations = {
 	'Opções': {
 		'en-US': 'Options'
 	},
-	'Modificar múltiplas frases': {
-		'en-US': 'Modify multiple sentences'
+	'Editar anotação de múltiplas frases': {
+		'en-US': 'Edit annotation of multiple sentences'
 	},
 	'De:': {
 		'en-US': 'From:'
