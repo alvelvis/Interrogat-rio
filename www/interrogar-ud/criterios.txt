@@ -29,6 +29,7 @@
 <h4><span class="translateHtml">Links úteis</span></h4>
 <ul class="linksUteis">
     <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote" target="_blank" class="translateHtml">Exemplos de busca e de correção em lote</a></li>
+    <li><a href="https://github.com/alvelvis/Interrogat-rio/wiki/Exemplos-de-busca-e-de-corre%C3%A7%C3%A3o-em-lote#5-busca-para-resentencia%C3%A7%C3%A3o-e-retokeniza%C3%A7%C3%A3o" target="_blank" class="translateHtml">Exemplos de busca para (re)sentenciação e (re)tokenização</a></li>
     <li><a href="../cgi-bin/relatorio.py" target="_blank" class="translateHtml">Relatório de inquéritos finalizados</a></li>
     <li><a href="http://github.com/alvelvis/Julgamento" target="_blank" class="translateHtml">Julgamento - ambiente para avaliação de corpora anotados</a></li>
     <li><a href="http://github.com/alvelvis/Interrogat-rio" target="_blank" class="translateHtml">Código fonte do Interrogatório no GitHub</a></li>
