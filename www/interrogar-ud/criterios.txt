@@ -135,9 +135,9 @@
     <li class="translateHtml">Para consultar as categorias do Universal Dependencies, veja <a target="_blank" href="https://universaldependencies.org/u/pos/index.html">part-of-speech</a>, <a target="_blank" href="https://universaldependencies.org/u/feat/index.html">features</a> e <a target="_blank" href="https://universaldependencies.org/u/dep/index.html">dependency relation</a>.</li>
 </ol>
 
-<hr><b><div onclick="$('.stringToToken').slideToggle();"><a style="cursor:pointer" class="translateHtml">Transformar texto em tokens</a></div></b>
+<hr><b><div onclick="$('.stringToToken').slideToggle();"><a style="cursor:pointer" class="translateHtml">Transformar texto em busca por sequência de tokens</a></div></b>
 <ul class="stringToToken" style="display:none">
-    <li class="translateHtml">Insira palavras separadas por espaço para transformar o texto em estrutura de tokens.</li>
+    <li class="translateHtml">Insira palavras (ou lemmas, ou upos, ou feats etc.) separadas por espaço para transformar o texto em estrutura de sequência de tokens. A transformação será sempre para uma sequência linear (token, token.next_token, token.next_next.next_token etc.).</li>
     <li>
         <input type="radio" name="query" value="query" id="queryToStringQuery" checked><label class="translateHtml" for="queryToStringQuery">apenas busca</label>
         <select id="stringToTokenCol2">

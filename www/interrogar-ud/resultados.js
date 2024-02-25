@@ -342,11 +342,11 @@ var translations = {
 	'Separar sentença em duas': {
 		'en-US': 'Split sentence in two'
 	},
-	'Transformar texto em tokens': {
-		'en-US': 'Transform text into tokens'
+	'Transformar texto em busca por sequência de tokens': {
+		'en-US': 'Transform text in a search for a sequence of tokens'
 	},
-	'Insira palavras separadas por espaço para transformar o texto em estrutura de tokens.': {
-		'en-US': 'Enter space-separated words to turn the text into a token structure.'
+	'Insira palavras (ou lemmas, ou upos, ou feats etc.) separadas por espaço para transformar o texto em estrutura de sequência de tokens. A transformação será sempre para uma sequência linear (token, token.next_token, token.next_next.next_token etc.).': {
+		'en-US': 'Insert words (or lemmas, or upos, or feats, etc.) separated by space to transform the text into token sequence structure. The transformation will always be to a linear sequence (token, token.next_token, token.next_next.next_token etc.).'
 	},
 	'apenas busca': {
 		'en-US': 'only query'
