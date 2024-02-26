@@ -73,9 +73,13 @@ def regex(exp, col):
     return re.search(r'^(' + exp + r")$", col)
 
 srcfile = './interrogar-ud/scripts/' + script_file
-file_content = str(charset_normalizer.from_path(srcfile).best())
-with open(srcfile, 'w', encoding='utf-8') as e:
-	e.write(file_content)
+try:
+	with open(srcfile, encoding="utf-8") as f:
+		file_content = f.read()
+except:
+	file_content = str(charset_normalizer.from_path(srcfile).best())
+	with open(srcfile, 'w', encoding='utf-8') as e:
+		e.write(file_content)
 codigo = [x for x in file_content.splitlines() if x.strip() and x.strip()[0] != "#"]
 
 keywords = []
