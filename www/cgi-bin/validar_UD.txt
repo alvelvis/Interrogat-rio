@@ -1,21 +1,51 @@
+# [ENGLISH BELOW]
+# Este arquivo contém regras para detecção de erros.
+# As regras são lidas pelo módulo de inquéritos do Interrogatório e pelo Julgamento.
+# Fique à vontade para editar as regras, remover ou acrescentar novas.
+# As regras são divididas em tipos, que são separados por uma linha em branco.
+# Cada tipo de erro deve ter um cabeçalho contendo uma descrição e o nome da coluna que deve ser corrigida pelo usuário.
+# Em seguida, cada linha abaixo deste cabeçalho corresponde a uma regra, que deve ser escrita na sintaxe de busca do Interrogatório.
+# Os blocos de erro devem seguir esse formato:
+# <nome da coluna>|error: <descrição do erro>
+# regra 1
+# regra 2
+# regra 3
+# <linha em branco>
+#
+# [ENGLISH]
+# This file contains rules for error detection.
+# The rules are read by the Interrogatório and Julgamento inquiry module.
+# Feel free to edit the rules, remove or add new ones.
+# Rules are divided into types, which are separated by a blank line.
+# Each type of error must have a title containing a description and the name of the column that must be corrected by the user.
+# Then, each line below this title corresponds to a rule, which must be written in the Interrogatório search syntax.
+# Error blocks must follow this format:
+# <column name>|error: <error description>
+# rule 1
+# rule 2
+# rule 3
+# <blank line>
+
 # FORMAT VALIDATION
-dephead|erro: 1 - Token dependent on itself
+dephead|error: 1 - Token dependent on itself
 token.head_token.id == token.id
 
-dephead|erro: 2 - There is a cycle in the sentence
+dephead|error: 2 - There is a cycle in the sentence
 dephead == head_token.id and head_token.dephead == id and dephead != id
 
-deprel|erro: 3 - Dephead 0 must be "root"
+deprel|error: 3 - Dephead 0 must be "root"
 dephead == "0" and deprel != "root"
+
+dephead|error: 3 - Deprel can't be root if dephead is not 0
 dephead != "0" and deprel == "root"
 
-dephead|erro: 4 - Invalid dephead
+dephead|error: 4 - Invalid dephead
 dephead != "\d+"
 
-id|erro: 5 - Invalid ID
+id|error: 5 - Invalid ID
 id != "[0-9\-]+"
 
-word|erro: 6 - Empty annotation should have an underline
+word|error: 6 - Empty annotation should have an underline
 id == ""
 word == ""
 lemma == ""
@@ -26,16 +56,16 @@ deprel == ""
 deps == ""
 misc == ""
 
-upos|erro: 7 - Invalid UPOS
+upos|error: 7 - Invalid UPOS
 upos != "(ADJ|ADV|AUX|CCONJ|INTJ|ADP|SCONJ|PUNCT|SYM|_|DET|NOUN|NUM|PART|PRON|PROPN|VERB|X)"
 
-deprel|erro: 8 - Invalid deprel
+deprel|error: 8 - Invalid deprel
 deprel != "(root|_|case|det|nmod|parataxis|nsubj|flat:name|acl|advmod|obj|amod|punct|appos|nummod|acl:relcl|ccomp|fixed|obl|cop|cc|conj|mark|expl|expl:pass|expl:pv|expl:impers|xcomp|aux|nsubj:pass|aux:pass|obl:agent|iobj|csubj|compound|advcl|flat|dep|flat:foreign|discourse|vocative|orphan|dislocated|reparandum|goeswith|appos:parataxis|ccomp:parataxis|appos:transl|nmod:appos|obl:arg)"
 
-misc|erro: 9 - Invalid misc
+misc|error: 9 - Invalid misc
 misc !== ".*MWE=.*|.*MWEPOS=.*|.*Spaces?After=.*|.*d2d:.*|.*ChangedBy=.*|_|.*start_char=.*|.*end_char=.*|.*Se=.*"
 
-feats|erro: 10 - Features are incompatible with POS
+feats|error: 10 - Features are incompatible with POS
 upos = "ADJ" and feats !== "Gender=Masc|Gender=Fem|Gender=Unsp|Number=Sing|Number=Plur|NumType=Ord"
 upos = "ADV" and feats !== "_|Polarity=Neg"
 upos = "AUX" and feats !== "Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Number=Plur|VerbForm=Inf|VerbForm=Ger|Tense=Fut|Mood=Cnd|Tense=Imp|Tense=Past|VerbForm=Part|Person=1|Mood=Sub|Mood=Imp|Person=2|Gender=Masc|Tense=Pqp"
@@ -48,51 +78,51 @@ upos = "PRON" and feats !== "Gender=Masc|Number=Sing|PronType=Dem|PronType=Rel|C
 upos = "VERB" and feats !== "Number=Sing|VerbForm=Part|Mood=Ind|Person=3|Tense=Pres|VerbForm=Fin|VerbForm=Ger|Number=Plur|VerbForm=Inf|Voice=Pass|Tense=Past|Tense=Fut|Gender=Masc|Gender=Fem|Mood=Sub|Tense=Imp|Person=1|Mood=Cnd|Tense=Pqp|Person=2|Mood=Imp"
 upos = "X" and feats !== "_|Gender=Masc|Number=Sing|Gender=Fem|Number=Plur"
 
-deprel|erro: Expletive "se" should have a subtype in its deprel and in its head verb misc
+deprel|error: Expletive "se" should have a subtype in its deprel and in its head verb misc
 lemma = "se" and deprel = "expl:pass" and head_token.misc != ".*Se=pass.*"
 lemma = "se" and deprel = "expl:impers" and head_token.misc != ".*Se=impers.*"
 lemma = "se" and deprel = "expl:pv" and head_token.misc != ".*Se=pv.*"
 
 # SEMIAUTOMATIC REVISION
-deprel|erro: Token's head can not govern any relation
+deprel|error: Token's head can not govern any relation
 head_token.deprel == "(cc|case|det|flat:name|fixed|compound)" and @deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
-upos|erro: "<" or ">" followed by a hyperlink should be dependent on the hyperlink
+upos|error: "<" or ">" followed by a hyperlink should be dependent on the hyperlink
 word = ">" and previous_token.word = "http.*" and dephead != previous_token.id
 word = "<" and next_token.word = "http.*" and dephead != next_token.id
 
-upos|erro: ADP and DET should be dependent on a noun to the right
+upos|error: ADP and DET should be dependent on a noun to the right
 @upos = "DET|ADP" and next_token.upos = "NOUN" and token.deprel != "fixed" and next_token.deprel != "fixed" and head_token.id != next_token.id
 
-feats|erro: VERB should have the "VerbForm" feature
+feats|error: VERB should have the "VerbForm" feature
 upos = "(AUX|VERB)" and feats != ".*VerbForm=.*"
 
 # LINGUISTIC REVISION
-deprel|erro: Determiners can not be dependent of adjectives
+deprel|error: Determiners can not be dependent of adjectives
 deprel = "det" and head_token.upos == "ADJ"
 
-deprel|erro: Adjective has wrong gender
+deprel|error: Adjective has wrong gender
 deprel = "amod" and head_token.gender != gender and misc != ".*MWE.*"
 deprel = "acl" and feats = ".*VerbForm=Part.*" and head_token.gender != gender
 
-deprel|erro: Adjective has wrong number
+deprel|error: Adjective has wrong number
 deprel = "amod" and head_token.number != number and misc != ".*MWE.*"
 deprel = "acl" and feats = ".*VerbForm=Part.*" and head_token.number != number
 
-upos|erro: Acl:relcl should be dependent on a nominal
+upos|error: Acl:relcl should be dependent on a nominal
 @head_token.upos != "NOUN|PRON|PROPN|SYM" and deprel = "acl:relcl"
 
-upos|erro: When "algum" is followed by ADP, "algum" should be an indefinite pronoun
+upos|error: When "algum" is followed by ADP, "algum" should be an indefinite pronoun
 lemma = "algum" and next_token.upos = "ADP" and upos != "PRON"
 
-upos|erro: "Algum" should be a determiner or an indefinite pronoun
+upos|error: "Algum" should be a determiner or an indefinite pronoun
 lemma = "algum" and upos != "PRON|DET"
 lemma = "algum" and feats != ".*PronType=Ind.*"
 
-deprel|erro: Possibly a passive voice without an "obl:agent"
+deprel|error: Possibly a passive voice without an "obl:agent"
 lemma = "por" and @head_token.deprel != "obl:agent" and head_token.head_token.feats = ".*VerbForm=Part.*"
 
-feats|erro: DET and PRON should have the "PronType" and/or "Definite" features
+feats|error: DET and PRON should have the "PronType" and/or "Definite" features
 upos = "DET|PRON" and feats != ".*PronType=.*" and deprel != "expl.*"
 upos != "DET|PRON" and feats = ".*PronType=.*"
 upos != "DET|PRON.*" and feats = ".*Definite=.*"
@@ -100,53 +130,53 @@ feats = ".*PronType=Art.*" and feats != ".*Definite=.*"
 feats = ".*Definite=.*" and feats != ".*PronType=Art.*"
 
 # NEED THOROUGH ANALYSIS OF THE TREE
-upos|erro: This deprel should be NOUN, PRON, PROPN, SYM or NUM
+upos|error: This deprel should be NOUN, PRON, PROPN, SYM or NUM
 @head_token.deprel = "obl" and head_token.upos != "(NOUN|PRON|PROPN|SYM|NUM)" and deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
-deprel|erro: DET should have the "det" relation
+deprel|error: DET should have the "det" relation
 upos = "DET" and deprel != "det|fixed|flat:name" and misc != ".*MWE.*"
 
-deprel|erro: ADP should have the "case" relation
+deprel|error: ADP should have the "case" relation
 upos = "ADP" and deprel != "case|fixed|flat:name|compound|mark" and misc != ".*MWE.*"
 
-deprel|erro: SCONJ should have the "mark" relation
+deprel|error: SCONJ should have the "mark" relation
 upos = "SCONJ" and deprel != "mark|fixed" and misc != ".*MWE.*"
 
-deprel|erro: CCONJ should have the "cc" relation
+deprel|error: CCONJ should have the "cc" relation
 upos = "CCONJ" and deprel != "cc|fixed|flat:name" and misc != ".*MWE.*"
 
-deprel|erro: AUX should have the "aux" or "cop" relations
+deprel|error: AUX should have the "aux" or "cop" relations
 upos = "AUX" and deprel != "(aux|aux:pass|cop|fixed|compound|flat:name)" and misc != ".*MWE.*"
 
-deprel|erro: ADV should have the "advmod" relation
+deprel|error: ADV should have the "advmod" relation
 deprel = "advmod" and upos != "ADV" and misc != ".*MWE.*"
 deprel != "advmod|fixed|compound" and upos = "ADV" and misc != ".*MWE.*"
 
-deprel|erro: Token is dependent on the wrong direction
+deprel|error: Token is dependent on the wrong direction
 deprel = "(appos|conj|fixed|compound|flat|flat:name)" and dephead > id
 deprel = "(case|cc|mark|det|cop|aux)" and dephead < id and misc != ".*MWE.*"
 
-deprel|erro: ADP should not govern any relation
+deprel|error: ADP should not govern any relation
 head_token.upos = "ADP" and @deprel != "(fixed|compound|flat|flat:name)" and head_token.misc != ".*MWE.*"
 
-deprel|erro: Verbs should not have a "nmod" relation dependent on them
+deprel|error: Verbs should not have a "nmod" relation dependent on them
 @deprel = "nmod" and head_token.upos = "VERB"
 
-upos|erro: Conj should be dependent on same POS
+upos|error: Conj should be dependent on same POS
 @deprel = "conj" and head_token.upos != upos
 
-deprel|erro: CCONJ should be dependent on a "conj"
+deprel|error: CCONJ should be dependent on a "conj"
 upos = "CCONJ" and @head_token.deprel != "conj" and deprel != "fixed|flat:name"
 deprel = "cc" and @head_token.deprel != "conj" and deprel != "fixed|flat:name"
 
-upos|erro: This POS can not have the "mark" relation
+upos|error: This POS can not have the "mark" relation
 upos != "SCONJ|ADP" and deprel = "mark" and misc != ".*MWE.*"
 
-upos|erro: This POS can not have the "cc" relation
+upos|error: This POS can not have the "cc" relation
 upos != "CCONJ" and deprel == "cc" and misc != ".*MWE.*"
 
-upos|erro: This POS can not have the "aux" relation
+upos|error: This POS can not have the "aux" relation
 upos != "AUX" and deprel == "aux" and misc != ".*MWE.*"
 
-upos|erro: This POS can not have the "det" relation
+upos|error: This POS can not have the "det" relation
 upos != "DET" and deprel = "det"

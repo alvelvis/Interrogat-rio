@@ -64,10 +64,10 @@ def validate(conllu, sent_id = None, errorList = "validar_UD.txt", noMissingToke
 
     for error in errorList:
         if error and error[0] != "#":
-            if "erro: " in error:
-                comment = error.split("erro: ")[1]
+            if "error: " in error:
+                comment = error.split("error: ")[1]
                 comment = comment.strip()
-                coluna = error.split("|", 1)[0] if "|" in error.split("erro: ")[0] else ""
+                coluna = error.split("|", 1)[0] if "|" in error.split("error: ")[0] else ""
                 continue
 
             parameters = error.strip()
