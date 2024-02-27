@@ -32,7 +32,7 @@ def main():
         #repo.config_writer().set_value("core", "autocrlf", "true").release()
         repo.git.pull()
         if current != repo.head.commit:
-            print("\n=== INTERROGATÓRIO ===\n\n>>> Interrogatório was updated. Please, open it again.")
+            print("\n=== INTERROGATÓRIO ===\n\n>>> Interrogatório was updated.\n>>> Please, close this window and open Interrogatório again.")
             sys.exit()
         if branch:
             repo.git.checkout(branch)

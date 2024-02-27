@@ -7,4 +7,4 @@ if exist Python39\ (
     echo 2. Make sure to open Interrogatorio from the file interrogatorio_for_windows only after extracting the zipped downloaded file Interrogat-rio.zip to a folder of your choice.
     echo 3. Avoid extracting the file to a folder shared in the cloud ^(Dropbox, Google Drive, etc.^), as some of the files may not be synchronized correctly, making it impossible to run the program correctly.
 )
-pause
+pause>null
