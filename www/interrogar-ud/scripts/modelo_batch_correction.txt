@@ -3,7 +3,7 @@
 # Dentro de cada "sentence", é realizado ainda um outro loop para acessar cada "token" de "sentence.tokens" (lista de tokens dessa frase), momento em que é aplicada a regra que poderá ser editada abaixo.
 # Não utilize as abreviações disponíveis apenas para busca, como "nt", "pt" e "ht"
 # Para adicionar novos valores a colunas com múltiplos valores (features, misc), utilize as funções append_to() e remove_from(), como no exemplo abaixo
-# Ex: append_to(token.feats, "Gender=Masc|Number=Sing)
+# Ex: append_to(token.feats, "Gender=Masc|Number=Sing")
 # Para buscar utilizando expressão regular, utilize a função regex(), como no exemplo abaixo
 # Ex: regex(".*mod", token.deprel)
 

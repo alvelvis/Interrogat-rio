@@ -497,7 +497,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 
 		start = time.time()
 		if not query_is_tokens(parametros):
-			n_process = multiprocessing.cpu_count()*2
+			n_process = multiprocessing.cpu_count()
 			args = []
 			for sent_id in sentences.keys():
 				sentence = corpus.sentences[sent_id]
