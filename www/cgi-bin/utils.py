@@ -146,7 +146,7 @@ def slugify(value):
 	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
 
 def cleanEstruturaUD(s):
-    return re.sub(r"<[^\s]+?>", "", re.sub(r"@[^\s]+?/", "", s))
+    return re.sub(r"<[^\s]+?>", "", re.sub(r"@[^\s]+?/", "", s)).replace("/FONT", "")
 
 def fromInterrogarToHtml(s):
     return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabela['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabela['purple'] + '>').replace('@BLUE/', '<font color=' + tabela['blue'] + '>').replace('@RED/', '<font color=' + tabela['red'] + '>').replace('@CYAN/', '<font color=' + tabela['cyan'] + '>').replace('/FONT', '</font>')

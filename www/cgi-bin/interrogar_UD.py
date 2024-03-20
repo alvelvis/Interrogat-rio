@@ -6,7 +6,7 @@ import os
 import html as web
 import multiprocessing
 from collections import defaultdict
-from utils import query_is_python, query_is_tokens
+from utils import query_is_python, query_is_tokens, cleanEstruturaUD
 from estrutura_ud import col_to_idx
 
 tabelaf = {
@@ -23,12 +23,6 @@ def shortcuts(s):
 
 def slugify(value):
 	return "".join(x if x.isalnum() or x == '.' or x == '-' else "_" for x in value)
-
-def cleanEstruturaUD(s):
-	return re.sub(r"<.*?>", "", re.sub(r"@.*?/", "", s))
-
-def fromInterrogarToHtml(s):
-	return s.replace('/BOLD', '</b>').replace('@BOLD', '<b>').replace('@YELLOW/', '<font color=' + tabelaf['yellow'] + '>').replace('@PURPLE/', '<font color=' + tabelaf['purple'] + '>').replace('@BLUE/', '<font color=' + tabelaf['blue'] + '>').replace('@RED/', '<font color=' + tabelaf['red'] + '>').replace('@CYAN/', '<font color=' + tabelaf['cyan'] + '>').replace('/FONT', '</font>')
 
 different_distribution = ["dependentes", "children"]
 
