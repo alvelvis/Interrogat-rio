@@ -151,22 +151,32 @@ elif os.environ['REQUEST_METHOD'] == 'POST' and 'action' in form.keys() and form
 	with open('./interrogar-ud/scripts/headers.txt', 'w') as f:
 		f.write("\n".join(headers))
 	
+	call_batch_data = {
+		'conllu': form["conllu"].value,
+		'action': form["executar"].value,
+		'script_file': estrutura_dados.slugify(form["scriptName"].value),
+		'script_name': form["scriptName"].value,
+		'interrogatorio': form["nome_interrogatorio"].value,
+		'occ': form["occ"].value,
+		'href': form["link_interrogatorio"].value,
+		'query': form["parametros"].value,
+		'full_query': form["fullParameters"].value,
+		'query_script_name': form["query_script_name"].value if "query_script_name" in form else "None",
+		'filters': form["filters"].value if "filters" in form else "None"
+	}
+
+	call_batch_id = str(uuid.uuid4())
+	if not os.path.isdir("./interrogar-ud/call_batch"):
+		os.mkdir("./interrogar-ud/call_batch")
+	with open("./interrogar-ud/call_batch/%s.json" % call_batch_id, "w") as f:
+		f.write(json.dumps(call_batch_data))
+
 	start = time.time()
 	call_python = "python3" if not 'win' in sys.platform else os.path.join("..", "Python39", "python.exe")
 	command = [
-		f'{call_python}',
-		f'./interrogar-ud/scripts/batch_correction.py',
-		f'{form["conllu"].value}',
-		f'{form["executar"].value}',
-		f'{estrutura_dados.slugify(form["scriptName"].value)}',
-		f'{form["scriptName"].value}',
-		f'{form["nome_interrogatorio"].value}',
-		f'{form["occ"].value}',
-		f'{form["link_interrogatorio"].value}',
-		f'{form["parametros"].value}',
-		f'{form["fullParameters"].value}',
-		f'{form["query_script_name"].value if "query_script_name" in form else "None"}',
-		f'{form["filters"].value if "filters" in form else "None"}'
+		call_python,
+		'./interrogar-ud/scripts/batch_correction.py',
+		call_batch_id,
 		]
 	
 	if 'win' in sys.platform:

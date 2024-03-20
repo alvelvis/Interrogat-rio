@@ -32,18 +32,24 @@ import pandas as pd
 import copy
 import html
 import uuid
+import json
 
-conllu = sys.argv[1]
-action = sys.argv[2]
-script_file = sys.argv[3]
-script_name = sys.argv[4]
-interrogatorio = sys.argv[5]
-occ = int(sys.argv[6]) if sys.argv[5] not in fastsearch else ""
-href = sys.argv[7] if sys.argv[5] not in fastsearch else ""
-query = sys.argv[8]
-full_query = sys.argv[9] if query_is_python(sys.argv[9]) else ""
-query_script_name = sys.argv[10] if sys.argv[10] != "None" else None
-filters = sys.argv[11] if sys.argv[11] != "None" else None
+call_batch_id = sys.argv[1]
+
+with open("./interrogar-ud/call_batch/%s.json" % call_batch_id) as f:
+	call_batch_data = json.load(f)
+
+conllu = call_batch_data['conllu']
+action = call_batch_data['action']
+script_file = call_batch_data['script_file']
+script_name = call_batch_data['script_name']
+interrogatorio = call_batch_data['interrogatorio']
+occ = call_batch_data['occ'] if interrogatorio not in fastsearch else ""
+href = call_batch_data['href'] if interrogatorio not in fastsearch else ""
+query = call_batch_data['query']
+full_query = call_batch_data['full_query'] if query_is_python(call_batch_data['full_query']) else ""
+query_script_name = call_batch_data['query_script_name'] if call_batch_data['query_script_name'] != "None" else None
+filters = call_batch_data['filters'] if call_batch_data['filters'] != "None" else None
 
 with open('./interrogar-ud/scripts/headers.txt', 'r') as f:
 	headers = f.read().splitlines()

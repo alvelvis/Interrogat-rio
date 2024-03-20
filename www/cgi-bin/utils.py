@@ -50,6 +50,7 @@ def build_modifications_html(df, _id):
     tag = rows.tag.iloc[0]
     conllu = rows.conllu.iloc[0]
     interrogatorio = rows.interrogatorio.iloc[0]
+    occurrences = rows.occurrences.iloc[0] if 'occurrences' in rows.columns else None
     query = rows['query'].iloc[0] if 'query' in rows.columns else None
     query_script_name = rows.query_script_name.iloc[0] if 'query_script_name' in rows.columns else None
     filters = rows.filters.iloc[0] if 'filters' in rows.columns else None
@@ -58,7 +59,7 @@ def build_modifications_html(df, _id):
     output += "<br>Nome da correção: %s" % tag
     if isinstance(query_script_name, str) and query_script_name:
         output += "<br>Script de busca: " + web.escape(query_script_name)
-    output += "<br>Nome da busca: " + web.escape(interrogatorio)
+    output += "<br>Nome da busca: " + web.escape(interrogatorio) + (" (" + str(occurrences) + ")" if occurrences and interrogatorio not in fastsearch else "")
     if isinstance(query, str) and query:
         output += "<br>Expressão de busca: %s" % query
     if isinstance(filters, str) and filters:
