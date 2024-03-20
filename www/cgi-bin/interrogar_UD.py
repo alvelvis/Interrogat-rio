@@ -55,11 +55,11 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 		if sentence:
 			if coluna in different_distribution:
 				sent = estrutura_ud.Sentence()
-				sent.build(sentence['resultado'].replace(f"@YELLOW/", "").replace(f"@RED/", "").replace(f"@CYAN/", "").replace(f"@BLUE/", "").replace(f"@PURPLE/", "").replace("/FONT", ""))
+				sent.build(cleanEstruturaUD(sentence['resultado']))
 				sent_id = sent.sent_id
 			else:
 				sent = sentence['resultado']
-				sent_id = re.findall(r"# sent_id = (.*?)\n", re.sub(r'<.*?>', '', sent))[0]
+				sent_id = cleanEstruturaUD(sent).split("# sent_id = ")[1].split("\n")[0]
 			if sent_id not in filtros:
 				corpus.append(sent)
 	
@@ -68,18 +68,15 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	lista = {}
 	dispersion_files = {}
 	for sentence in corpus:
-		sent_id = ""
+		sent_id = sentence.split("# sent_id = ")[1].split("\n")[0]
 		if not coluna in different_distribution:
 			for t, token in enumerate(sentence.splitlines()):
-				if not sent_id:
-					if token.startswith("# sent_id = "):
-						sent_id = token.split("# sent_id = ")[1]
-				if ('<b>' in token or '</b>' in token) and len(token.split("\t")) > 5:
+				if ('<b>' in token or '</b>' in token) and '\t' in token:
 					if coluna in col_to_idx:
 						idx = col_to_idx[coluna]
 					else:
 						idx = int(coluna.split("col")[1])-1
-					entrada = re.sub(r'@.*?/', '', re.sub(r'<.*?>', '', token.split("\t")[idx].replace("/FONT", "")))
+					entrada = cleanEstruturaUD(token.split("\t")[idx])
 					dist.append(entrada)
 					if not entrada in lista:
 						lista[entrada] = 0
@@ -540,7 +537,9 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 						casos.append(token)
 						if token.id in map_id:
 							text_tokens[map_id[token.id]] = "<b>" + text_tokens[map_id[token.id]] + "</b>"
-						tokens = tokens.replace(token.string, "<b>" + token.string + "</b>")
+						token_new_string = "<b>" + token.string + "</b>"
+						tokens = tokens.replace(token.string, token_new_string)
+						token.string = token_new_string
 					final = "# text_tokens = " + " ".join(text_tokens) + "\n" + sentence.metadados_to_str() + "\n" + tokens
 					output.append(final)
 		casos = len(casos)
@@ -596,20 +595,21 @@ def process_sentences(args, pesquisa, arroba, limit):
 				if (not "-" in token.id and not '.' in token.id and eval(pesquisa)):
 					corresponde = True
 					text_tokens[map_id[token.id]] = "@BLUE/" + text_tokens[map_id[token.id]] + "/FONT"
-					tokens = tokens.replace(token.string, "@BLUE/" + token.string + "/FONT")
+					token_new_string = "@BLUE/" + token.string + "/FONT"
+					tokens = tokens.replace(token.string, token_new_string)
+					token.string = token_new_string
 
 					if "token.head_token" in pesquisa and not "_token.head_token" in pesquisa:
 						text_tokens[map_id[token.head_token.id]] = "@RED/" + text_tokens[map_id[token.head_token.id]] + "/FONT"
-						tokens = tokens.replace(token.head_token.string, "@RED/" + token.head_token.string + "/FONT")
+						token_new_string = "@RED/" + token.head_token.string + "/FONT"
+						tokens = tokens.replace(token.head_token.string, token_new_string)
+						token.head_token.string = token_new_string
 						
 					text_tokens[map_id[eval(arroba).id]] = "<b>" + text_tokens[map_id[eval(arroba).id]] + "</b>"
 					casos.append(1)
-					arroba_id = eval(arroba).id
-					tokens = tokens.splitlines()
-					for l, linha in enumerate(tokens):
-						if linha.split("\t")[0] == arroba_id or ("/" in linha.split("\t")[0] and linha.split("\t")[0].split("/")[1] == arroba_id):
-							tokens[l] = "<b>" + tokens[l] + "</b>"
-					tokens = "\n".join(tokens)
+					token_new_string = "<b>" + eval(arroba).string + "</b>"
+					tokens = tokens.replace(eval(arroba).string, token_new_string)
+					eval(arroba).string = token_new_string
 					
 			except Exception as e:
 				sys.stderr.write("\n" + str(e) + ': ' + token.to_str())
