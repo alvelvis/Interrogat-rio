@@ -47,13 +47,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	corpus = list()
 	for sentence in sentences:
 		if sentence:
-			if coluna in different_distribution:
-				sent = estrutura_ud.Sentence()
-				sent.build(cleanEstruturaUD(sentence['resultado']))
-				sent_id = sent.sent_id
-			else:
-				sent = sentence['resultado']
-				sent_id = cleanEstruturaUD(sent).split("# sent_id = ")[1].split("\n")[0]
+			sent = sentence['resultado']
 			if sent_id not in filtros:
 				corpus.append(sent)
 	
@@ -62,7 +56,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	lista = {}
 	dispersion_files = {}
 	for sentence in corpus:
-		sent_id = sentence.split("# sent_id = ")[1].split("\n")[0]
+		sent_id = cleanEstruturaUD(sentence).split("# sent_id = ")[1].split("\n")[0]
 		if not coluna in different_distribution:
 			for t, token in enumerate(sentence.splitlines()):
 				if ('<b>' in token or '</b>' in token) and '\t' in token:
@@ -82,40 +76,41 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 						if not filename in dispersion_files[entrada]:
 							dispersion_files[entrada].append(filename)
 		elif coluna in different_distribution:
+			frase = estrutura_ud.Sentence()
+			frase.build(cleanEstruturaUD(sentence))
+			bold_tokens = [cleanEstruturaUD(x).split("\t")[0] for x in sentence.splitlines() if '\t' in x and '<b>' in x]
+			sentence = frase
 			for t, token in enumerate(sentence.tokens):
-				if '<b>' in token.to_str() or "</b>" in token.to_str():
-					if not coluna in different_distribution:
-						dist.append(re.sub(r'<.*?>', '', token.__dict__[coluna]))
-					elif coluna in ["dependentes", "children"]:
-						children = [t]
-						children_already_seen = []
+				if token.id in bold_tokens:
+					children = [t]
+					children_already_seen = []
+					children_future = []
+					while children_already_seen != children:
+						for child in children:
+							if not child in children_already_seen:
+								children_already_seen.append(child)
+							for _t, _token in enumerate(sentence.tokens):
+								if cleanEstruturaUD(_token.dephead) == cleanEstruturaUD(sentence.tokens[child].id):
+									children_future.append(_t)
+						[children.append(x) for x in children_future if x not in children]
 						children_future = []
-						while children_already_seen != children:
-							for child in children:
-								if not child in children_already_seen:
-									children_already_seen.append(child)
-								for _t, _token in enumerate(sentence.tokens):
-									if cleanEstruturaUD(_token.dephead) == cleanEstruturaUD(sentence.tokens[child].id):
-										children_future.append(_t)
-							[children.append(x) for x in children_future if x not in children]
-							children_future = []
-						children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
-						if len(children_list) > 1:
-							entrada = " ".join(children_list)
-							dist.append(entrada)
-							if not entrada in lista:
-								lista[entrada] = 0
-							lista[entrada] += 1
-							if '-' in sentence.sent_id:
-								filename = sentence.sent_id.rsplit("-", 1)[0]
-								if not entrada in dispersion_files:
-									dispersion_files[entrada] = []
-								if not filename in dispersion_files[entrada]:
-									dispersion_files[entrada].append(filename)
-							if children_list:
-								if not entrada in all_children:
-									all_children[entrada] = []
-								all_children[entrada].append(sentence.sent_id)
+					children_list = [cleanEstruturaUD(sentence.tokens[x].word) if x != t else "<b>" + cleanEstruturaUD(sentence.tokens[x].word) + "</b>" for x in sorted(children)]
+					if len(children_list) > 1:
+						entrada = " ".join(children_list)
+						dist.append(entrada)
+						if not entrada in lista:
+							lista[entrada] = 0
+						lista[entrada] += 1
+						if '-' in sentence.sent_id:
+							filename = sentence.sent_id.rsplit("-", 1)[0]
+							if not entrada in dispersion_files:
+								dispersion_files[entrada] = []
+							if not filename in dispersion_files[entrada]:
+								dispersion_files[entrada].append(filename)
+						if children_list:
+							if not entrada in all_children:
+								all_children[entrada] = []
+							all_children[entrada].append(sentence.sent_id)
 
 
 	#dicionario = dict()
