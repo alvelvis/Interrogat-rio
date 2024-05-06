@@ -392,7 +392,8 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 			pesquisa = pesquisa.replace(" or ", " or token.")
 			pesquisa = pesquisa.replace(" in ", " in token.")
 			pesquisa = pesquisa.replace(" text ", " sentence.text ")
-			pesquisa = pesquisa.replace(" sent_id ", " sentence.sent_id ")
+			#pesquisa = pesquisa.replace(" sent_id ", " sentence.sent_id ")
+			pesquisa = pesquisa.replace("sentence.sent_id ", "sent_id ")
 			pesquisa = pesquisa.replace('token."', '"')
 			pesquisa = pesquisa.replace('token.[', '[')
 			pesquisa = pesquisa.replace('token.(', '(')
@@ -401,7 +402,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 			pesquisa = pesquisa.replace('token.token.', 'token.')
 			pesquisa = pesquisa.replace('token.sentence.', 'sentence.')
 			pesquisa = pesquisa.replace("token.text", "sentence.text")
-			pesquisa = pesquisa.replace("token.sent_id", "sentence.sent_id")
+			pesquisa = pesquisa.replace("token.sent_id", "sent_id")
 			pesquisa = pesquisa.replace('token.int(', 'int(')
 			#pesquisa = pesquisa.replace("token.and", "and")
 			#pesquisa = pesquisa.replace("== int(", "==int(")
@@ -495,6 +496,7 @@ def main(arquivoUD, criterio, parametros, limit=0, sent_id="", fastSearch=False)
 					'sentence_tokens': sentence.tokens,
 					'sentence_metadados': sentence.metadados_to_str(),
 					'map_id': {x: t for t, x in enumerate(clean_id)},
+					'sent_id': sent_id,
 					})
 			args = chunks(args, n_process)
 			if not 'win' in sys.platform:
@@ -573,6 +575,7 @@ def process_sentences(args, pesquisa, arroba, limit):
 		tokens = arg['tokens']
 		sentence_tokens = arg['sentence_tokens']
 		sentence_metadados = arg['sentence_metadados']
+		sent_id = arg['sent_id']
 		map_id = arg['map_id']
 		
 		corresponde = False
