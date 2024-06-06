@@ -1,6 +1,6 @@
 # Interrogatório
 
-Interrogatório is an enviroment for querying and editing annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is available in Portuguese and English, depending on the user's web browser language, and it's been used in several research projects at PUC-Rio, including **Linguistic resources for Portuguese Natural Language Processing** from the Linguistics Department of PUC-Rio, in Brazil, under the supervision of Prof. Cláudia Freitas, and project [**Petrolês**](https://petroles.puc-rio.ai), at the Applied Computational Intelligence Laboratory from PUC-Rio.
+Interrogatório is an environment for querying and editing annotated corpora in the [CoNLL-U](https://universaldependencies.org/format.html) format. It is available in Portuguese and English, based on the user's web browser language. It was developed under the supervision of Prof. Cláudia Freitas and it's been used in several research projects, including **Linguistic resources for Portuguese Natural Language Processing** from the Linguistics Department of PUC-Rio (Brazil), project [**Petrolês**](https://petroles.puc-rio.ai), at the Applied Computational Intelligence Laboratory from PUC-Rio, and [**POeTiSA**](https://sites.google.com/icmc.usp.br/poetisa/the-project?authuser=0), at the [Center for Artificial Intelligence (C4AI)](https://c4ai.inova.usp.br/) of the University of São Paulo.
 
 [Live demo](https://interrogatorio.souelvis.dev)
 
