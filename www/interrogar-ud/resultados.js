@@ -1898,6 +1898,12 @@ $(document).ready(function(){
 
 	$('#scriptQueryFile,#fileScript').val('')
 
+	$('#scriptQueryFile').change(function(){
+		if ($('#nome').val() == "Busca salva") {
+			$('#nome').val($('#scriptQueryFile').val().split("\\").slice(-1)[0].split(".txt")[0])
+		}
+	})
+
 	$('#viewTree').click(function(){
 		$('.treeDiv').slideToggle()
 	})
