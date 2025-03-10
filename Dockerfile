@@ -29,4 +29,4 @@ WORKDIR /app/Interrogat-rio/www
 
 RUN chmod -R a+rwx /app/Interrogat-rio/www
 
-CMD ["sh", "-c", "python -m http.server --cgi ${PORT:-8000}"]
+CMD ["sh", "-c", "python -m CGIHTTPServer ${PORT:-8000}"]
