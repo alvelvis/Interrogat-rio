@@ -1,3 +1,12 @@
+backup
+call_batch
+inqueritos
+queries.txt
+debug*
+www/cgi-bin/json
+www/interrogar-ud/conllu.json
+queryScript.py
+scripts/
 *.pyc
 .interrogatorio
 Python39
@@ -5,3 +14,4 @@ PortableGit
 *.html
 *.inProgress
 *.conllu
+*.log
