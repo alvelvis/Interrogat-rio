@@ -13,7 +13,10 @@ def main():
     # it's necessary to put this same package here, in requirements.txt and in run_interrogatorio.sh
     new_packages = "GitPython==3.1.24 udapi==0.3.0 openai==0.28 pandas==2.2.2 pyarrow==16.0.0".split(" ")
     try:
-        exec("import {}".format(new_packages[-1]))
+        exec("import {}".format(new_packages[-1].split("==")[0]))
+        import openai
+        if not getattr(openai, "__version__", "").startswith("0.28"):
+            raise ImportError("openai version is not 0.28")
     except:
         for package in new_packages:
             os.system("\"{}\\python.exe\" -m pip install --no-warn-script-location --disable-pip-version-check {}".format(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Python39"), package))
