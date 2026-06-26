@@ -11,7 +11,7 @@ def main():
 
     # to make a new update that requires new packages: append the name of the package in the list and try to import it
     # it's necessary to put this same package here, in requirements.txt and in run_interrogatorio.sh
-    new_packages = "GitPython udapi openai pandas pyarrow".split(" ")
+    new_packages = "GitPython==3.1.24 udapi==0.3.0 openai==0.28 pandas==2.2.2 pyarrow==16.0.0".split(" ")
     try:
         exec("import {}".format(new_packages[-1]))
     except:

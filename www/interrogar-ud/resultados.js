@@ -190,11 +190,11 @@ var translations = {
 	'Submeta o script de busca no botão abaixo.': {
 		'en-US': 'Submit the query script in the button below.'
 	},
-	'(b) Editando o código manualmente:': {
-		'en-US': '(b) Editing the code manually:'
+	'(a) Editando o código manualmente:': {
+		'en-US': '(a) Editing the code manually:'
 	},
-	'(a) Usando o ChatGPT:': {
-		'en-US': '(a) Using ChatGPT:'
+	'(b) Usando o ChatGPT:': {
+		'en-US': '(b) Using ChatGPT:'
 	},
 	'Escreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.': {
 		'pt-BR': 'Descreva, em português ou em inglês, qual a busca que deseja fazer clicando aqui.',
@@ -621,9 +621,9 @@ var translations = {
 	'Escolha quantas sentenças deseja selecionar': {
 		'en-US': 'Choose how many sentences you wish to select'
 	},
-	'Abrir inqueritos': {
-		'pt-BR': 'Abrir inquéritos',
-		'en-US': 'Open inquiries'
+	'Abrir inquérito': {
+		'pt-BR': 'Abrir inquérito',
+		'en-US': 'Open inquiry'
 	},
 	'Simular alterações': {
 		'en-US': 'Simulate changes'
@@ -820,6 +820,9 @@ var translations = {
 	},
 	'Exemplos de busca e de correção em lote': {
 		'en-US': 'Query and batch correction examples'
+	},
+	'Exemplos de busca para (re)sentenciação e (re)tokenização': {
+		'en-US': 'Examples of queries for (re)sentencing and (re)tokenization'
 	},
 	'Dependentes sintáticos': {
 		'en-US': 'Syntactic children'

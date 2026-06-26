@@ -15,3 +15,5 @@ PortableGit
 *.inProgress
 *.conllu
 *.log
+chatGPTQueryScript*
+openai_key.txt
