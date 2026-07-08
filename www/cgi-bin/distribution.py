@@ -26,6 +26,7 @@ if not 'corpus' in form:
 	exit()
 
 filtros = []
+n_filtros = 0
 nome_interrogatorio = ""
 if "link_dist" in form and os.path.isfile("./cgi-bin/json/filtros.json"):
 	link_interrogatorio = form['link_dist'].value.rsplit(".", 1)[0].rsplit("/", 1)[1]
@@ -33,7 +34,8 @@ if "link_dist" in form and os.path.isfile("./cgi-bin/json/filtros.json"):
 	with open("./cgi-bin/json/filtros.json") as f:
 		filtros = json.load(f)
 	if link_interrogatorio in filtros:
-		filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]
+		n_filtros = len(filtros[link_interrogatorio]['filtros'])
+		filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]		
 	else:
 		filtros = []
 
@@ -138,6 +140,8 @@ pagina += "<span class='translateHtml'>Corpus:</span></a> " + form["corpus"].val
 pagina += "<hr><span class='translateHtml'>Quantidade de ocorrências:</span></a> "+str(dic_dist["dist"])+"<br><span class='translateHtml'>Quantidade de</span> <b>" + coluna + "</b> diferentes: "+str(len(dic_dist["lista"]))
 if nome_interrogatorio and nome_interrogatorio not in fastsearch:
 	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
+	if filtros and n_filtros:
+		pagina += f"<br><span class='translateHtml'>Filtros</span>: {n_filtros}"
 pagina += "<hr>"
 
 expressao = form['expressao'].value.replace("'", '"')

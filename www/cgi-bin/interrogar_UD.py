@@ -48,6 +48,7 @@ def getDistribution(arquivoUD, parametros, coluna="lemma", filtros=[], sent_id="
 	for sentence in sentences:
 		if sentence:
 			sent = sentence['resultado']
+			sent_id = cleanEstruturaUD(sent).split("# sent_id = ")[1].split("\n")[0]
 			if sent_id not in filtros:
 				corpus.append(sent)
 	
