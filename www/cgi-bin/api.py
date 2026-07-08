@@ -100,8 +100,10 @@ def renderSentences(script=""):
         for sentence in resultadosBusca['output']:
             sentence = sentence['resultado']
             sent_id = re.sub(r'<.*?>', '', cleanEstruturaUD(sentence).split("# sent_id = ")[1].split("\n")[0])
+            text = re.sub(r'<.*?>', '', cleanEstruturaUD(sentence).split("# text = ")[1].split("\n")[0])
             tokens = [re.sub(r'<.*?>', '', cleanEstruturaUD(token.split("\t")[0])) for token in sentence.splitlines() if token.count("\t") >= 9 and ("<b>" in token or "@BOLD" in token)]
-            sent_id_list.append("%s:%s" % (sent_id, ",".join(tokens)))
+            if not sent_id in filtros and not text in filtros:
+                sent_id_list.append("%s:%s" % (sent_id, ",".join(tokens)))
 
     numeroOcorrencias = len(resultadosBusca['output']) - len(filtros)
     if numeroOcorrencias > startPoint + 21 and numeroOcorrencias >= 1:

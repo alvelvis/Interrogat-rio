@@ -34,7 +34,7 @@ if "link_dist" in form and os.path.isfile("./cgi-bin/json/filtros.json"):
 	with open("./cgi-bin/json/filtros.json") as f:
 		filtros = json.load(f)
 	if link_interrogatorio in filtros:
-		n_filtros = len(filtros[link_interrogatorio]['filtros'])
+		n_filtros = len([x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']])
 		filtros = [x for filtro in filtros[link_interrogatorio]['filtros'] for x in filtros[link_interrogatorio]['filtros'][filtro]['sentences']]		
 	else:
 		filtros = []
@@ -141,7 +141,7 @@ pagina += "<hr><span class='translateHtml'>Quantidade de ocorrências:</span></a
 if nome_interrogatorio and nome_interrogatorio not in fastsearch:
 	pagina += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link_interrogatorio}.html'>{nome_interrogatorio}</a>"
 	if filtros and n_filtros:
-		pagina += f"<br><span class='translateHtml'>Filtros</span>: {n_filtros}"
+		pagina += f"<br><span class='translateHtml'>Filtros</span>: {n_filtros} frases"
 pagina += "<hr>"
 
 expressao = form['expressao'].value.replace("'", '"')

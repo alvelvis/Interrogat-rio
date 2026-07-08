@@ -38,7 +38,7 @@ numeroOcorrencias = len(ocorrencias)
 html = f"<title>Exportar resultados para .html: Interrogatório</title><h1 class='translateHtml'>Exportar resultados para .html</h1><!--a class='translateHtml' href='javascript:window.close()'>Fechar</a--><hr><span class='translateHtml'>Página gerada dia</span> {prettyDate(datetime.now()).beautifyDateDMAH()}<br><span class='translateHtml'>Corpus:</span> {corpus}<br><span class='translateHtml'>Busca:</span> {pesquisa}<br><span class='translateHtml'>Resultados</span>: {numeroOcorrencias_antes}"
 if nome not in fastsearch:
     if filtros and link in filtros:
-        html += f"<br><span class='translateHtml'>Filtros</span>: {len([x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']])}"
+        html += f"<br><span class='translateHtml'>Filtros</span>: {len([x for filtro in filtros[link]['filtros'] for x in filtros[link]['filtros'][filtro]['sentences']])} frases"
     html += f"<br><span class='translateHtml'>Busca salva em</span> <a href='../interrogar-ud/resultados/{link}.html'>{nome}</a>"
 html += "<hr>"
 html += "\n".join(['<b>' + str(i+1) + '/' + str(numeroOcorrencias) + ' - ' + fromInterrogarToHtml(x['resultadoAnotado'].sent_id) + '</b><br>' + fromInterrogarToHtml(x['resultadoAnotado'].metadados['text_tokens'] if 'text_tokens' in x['resultadoAnotado'].metadados else x['resultadoAnotado'].text) + '<hr>' for i, x in enumerate(ocorrencias)])
